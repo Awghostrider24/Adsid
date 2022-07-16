@@ -4,19 +4,19 @@
   [
     {
       "id":1,
-      "judul":"Air Terjun 01",
+      "judul":"Air Terjun Niagara",
       "image":"https://awghostrider24.github.io/Adsid/assets/fall1.gif",
       "link":"https://github.com/Awghostrider24/Adsid/tree/main/assets/"
     },
     {
       "id":2,
-      "judul":"Air Terjun 02",
+      "judul":"Air Terjun Kembar",
       "image":"https://raw.githubusercontent.com/Awghostrider24/Adsid/main/assets/fall3.gif",
       "link":"https://github.com/Awghostrider24/Adsid/tree/main/assets/"
     },
     {
     "id":3,
-    "judul":"Air Terjun 03",
+    "judul":"Air Terjun Curug",
     "image":"https://awghostrider24.github.io/Adsid/assets/fall3.gif",
     "link":"file:///android_asset/"
     },
