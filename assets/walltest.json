@@ -30,25 +30,25 @@
       "id":5,
       "judul":"Air Terjun 05",
       "image":"fall5.gif",
-      "link":"file:///android_asset/"
+      "link":"https://github.com/Awghostrider24/Adsid/tree/main/assets/"
     },
     {
       "id":6,
       "judul":"Air Terjun 06",
       "image":"fall6.gif",
-      "link":"file:///android_asset/"
+      "link":"https://github.com/Awghostrider24/Adsid/tree/main/assets/"
     },
     {
       "id":7,
       "judul":"Air Terjun 07",
       "image":"fall7.gif",
-      "link":"file:///android_asset/"
+      "link":"https://github.com/Awghostrider24/Adsid/tree/main/assets/"
     },
     {
       "id":8,
       "judul":"Air Terjun 08",
       "image":"fall8.gif",
-      "link":"file:///android_asset/"
+      "link":"https://github.com/Awghostrider24/Adsid/tree/main/assets/"
     }
   ]
 }
