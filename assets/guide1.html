@@ -1,0 +1,12 @@
+<h1 style="text-align: center;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h1>
+<p style="text-align: justify;">&nbsp;</p>
+<p style="text-align: justify;"><code></code></p>
+<p style="text-align: justify;">Hallo om pengguna Source Code Aliendroid, Akhir-akhir ini banyak sekali aplikasi yang mendapatkan peringatan terkait pengisian kemanan data / data safety. Keamanan data akan diwajibkan pada bulan April 2022, sehingga seluruh aplikasi/game yang terdeteksi terkait adanya pengumpulan data wajib untuk melakukan update. Merujuk pada artikel <span style="text-decoration: underline;"><strong><a href="https://support.google.com/googleplay/android-developer/answer/10787469?hl=en#types&amp;zippy=%2Cdata-types">Data Safety</a></strong></span>, maka penulis coba uraikan pengisian sesuai sc alien atau non alien dengan melihat poin berikut:</p>
+<p style="text-align: justify;">1. Dasar pengisian form</p>
+<p style="text-align: justify;">Untuk mengisi form data safety, penulis merujuk pada bagian AndroidManifest.xml (penggunaan permisi) dan SDK/Libs apa saja yang digunakan sesuai keterangan "Provide information for Google Play's Data safety section". Untuk kasus sc Alien maka permintaan permisi hanya ijin baca dan tulis file kedalama memory Smartphone.</p>
+<p><img src="https://aliendro.id/uploads/blog/202202/img_61fe30715e6480-24891739-26995764.jpg" alt="" width="322" height="81" /></p>
+<p><img src="https://aliendro.id/uploads/blog/202202/img_61fe30ecc67d07-34264692-82894367.jpg" alt="" width="320" height="132" /></p>
+<p>Meskipun pada bagian AndroidManifest.xml tidak dituliskan pelacakan user sesuai lokasi, akan tetapi SC alien tetap melacak lokasi pengguna dikarenakan penggunaan SDK iklan (Admob, dll) dan firebase. Ijin pelacakan&nbsp; terdapat di sdk yang digunakan.</p>
+<p><img src="https://aliendro.id/uploads/blog/202202/img_61fe322ebe7959-83703368-11700062.jpg" alt="" width="323" height="96" /></p>
+<p>2. Cara Pengisian</p>
+<p>Dengan gambaran di atas, maka pengisian data safety akan mudah dilakukan apa saja yang harus kita isi. Silahkan ikuti panduan dibawah</p>
