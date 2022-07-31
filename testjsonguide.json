@@ -18,7 +18,8 @@
       "high_paying_keyword_5": "",
       "status_app": "0",
       "link_redirect": "https://"
-    },
+    }  
+  ],
  
   "Categories": [
     {
@@ -35,7 +36,7 @@
       "id": 3,
       "name_category": "Kategpri Tiga",
       "image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
-    }
+    },
 {
       "id": 4,
       "name_category": "Kategpri Empat",
