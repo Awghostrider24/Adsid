@@ -21,29 +21,29 @@
 
 	"Categories": [{
 			"id": 1,
-			"name_category": "Kategpri Satu",
+			"name_category": "Kategori Satu",
 			"image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg"
 		},
 		{
 			"id": 2,
-			"name_category": "Kategpri Dua",
+			"name_category": "Kategori Dua",
 			"image": "file:///android_asset/image/image2.webp"
 		},
 		{
 			"id": 3,
-			"name_category": "Kategpri Tiga",
+			"name_category": "Kategori Tiga",
 			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
 		},
 		{
 			"id": 4,
-			"name_category": "Kategpri Empat",
+			"name_category": "Kategori Empat",
 			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
 		}
 
 	],
 	"Data": [{
 			"id": 1,
-			"name_category": "Kategpri Satu",
+			"name_category": "Kategori Satu",
 			"title": "Judul Kontent Pertama",
 			"image": "https://awghostrider24.github.io/Adsid/sample/1gy4Fkq.jpg",
 			"description": "isi konten yang akan di jadikan guide",
@@ -51,7 +51,7 @@
 		},
 		{
 			"id": 2,
-			"name_category": "Tutorial",
+			"name_category": "Kategori Dua",
 			"title": "Cara beriklan google ads cuan banyak",
 			"image": "https://raw.githubusercontent.com/Awghostrider24/Adsid/main/assets/08-coffee-death-wish-shock.w710.h473.jpg",
 			"description": "Tulisan ini sebenarnya tidak akan di share dan direkam sesuai permintaan member lain, akan tetapi banyaknya yang PM penulis dan tidak mungkin harus dibalas satu persatu akhirnya tulisan ini penulis post.",
@@ -59,7 +59,7 @@
 		},
 		{
 			"id": 3,
-			"name_category": "Tutorial",
+			"name_category": "Kategori Empat",
 			"title": "Modul Simpan Json di Hosting dan Google Drive",
 			"image": "https://aliendro.id/uploads/blog/202105/img_608ff8501e0194-32209729-64468304.jpg",
 			"description": "Sesuai dengan permintaan member Alien yang membutuhkan fasilitas google drive untuk menyimpan json, Insya Allah saya coba buatkan panduannya dengan menggunakan Free SC Aliendroid Live Wallpaper, ",
@@ -67,7 +67,7 @@
 		},
 		{
 			"id": 4,
-			"name_category": "Reskin",
+			"name_category": "Kategori Tiga",
 			"title": "Cara menggunakan Alien SDK Ads",
 			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_616ec085d59259-83419139-77466732.jpg",
 			"description": "Alhamdulillah projek Alien Sdk Ads sudah tahap versi Jupiter-04. Bagi pengguna SC Aliendroid mungkin sudah tidak asing lagi dengan istilah Alien Sdk Ads.",
@@ -75,7 +75,7 @@
 		},
 		{
 			"id": 5,
-			"name_category": "Reskin",
+			"name_category": "Kategori Dua",
 			"title": "Cara menggunakan Alien SDK Ads",
 			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_616ec085d59259-83419139-77466732.jpg",
 			"description": "Alhamdulillah projek Alien Sdk Ads sudah tahap versi Jupiter-04. Bagi pengguna SC Aliendroid mungkin sudah tidak asing lagi dengan istilah Alien Sdk Ads.",
