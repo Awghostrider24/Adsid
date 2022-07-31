@@ -19,82 +19,38 @@
       "status_app": "0",
       "link_redirect": "https://"
     }
-  ],
-   "More": [
-    {
-      "id": 1,
-      "title": "IQ Test vs The Moron Test",
-      "image": "https://play-lh.googleusercontent.com/-hbyzqqYI7QzD_m0QwQrawyqaydnWMgR0Lht24oSSBYjj_YkVmImcId_KFunuWQuWAE=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.squidiqgame"
-    },
-    {
-      "id": 2,
-      "title": "Skins Editor for Minecraft PE",
-      "image": "https://play-lh.googleusercontent.com/cYR5MGCN1wmwJ4iPFnLY8VRrysIctw90JUxkTQkkB-utrSFLd2j5vNX7NsUs4xL5Gw=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.skinforminecraft"
-    },
-    {
-      "id": 3,
-      "title": "Nova Skin for Minecraft PE",
-      "image": "https://play-lh.googleusercontent.com/WfMISX2KSNgtyCOB7Xp4eTdG1Ic1uUDLMet_mb8dSP9u9tEnus4jCnfM7Gf-H5YLZ4Y=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.novaskinformcpe"
-    },
-    {
-      "id": 4,
-      "title": "Scanner Document App - HD PDF",
-      "image": "https://play-lh.googleusercontent.com/pIDr4jeoEtbwOoYWanvAQRDHI3EYoJrt66XQwBCZpnVNi6t1XSEYy_O7vo8OgaWerg=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.pdfscanner"
-    },
-    {
-      "id": 6,
-      "title": "Super Math Solver Calculator",
-      "image": "https://play-lh.googleusercontent.com/v_BaqS10DTTxIQ6tpE3xbITicy-sfa0Xr0l72EZ0C6Oh70U8wTTiNuVfEMzm3cc0Pec=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.calculator"
-    },
-    {
-      "id": 8,
-      "title": "Twibbon Maker",
-      "image": "https://play-lh.googleusercontent.com/SKzgotlXDUORcqorDrrTmv4MDs0A35r-qRmavl-cEQYzBXsRelQc84-Z2mtpQoJ9aFA=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.twibbonmaker"
-    },
-    {
-      "id": 9,
-      "title": "Kamus Bahasa Indonesia",
-      "image": "https://play-lh.googleusercontent.com/IVpIzBITIgelJ6jV1Ht1TlxaRLzEX42treUbB0__ceWRfIqipLjSiSvUdZWibdVMdCu_=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.kamusbahasaindonesia"
-    },
-    {
-      "id": 10,
-      "title": "Data Gempabumi Terbuka",
-      "image": "https://play-lh.googleusercontent.com/vT2w77gQj8WMKxYri7uaz-lrQYXILNbhAWJlFj1DWNbVpy2Hv-ZNEO-rISKyLi_ui6o=s180-rw",
-      "link": "https://play.google.com/store/apps/details?id=com.aliendroid.datagempaindonesia"
-    }
-  ],
+ 
   "Categories": [
     {
       "id": 1,
-      "name_category": "Playstore",
-      "image": "file:///android_asset/image/image1.png"
+      "name_category": "Kategpri Satu",
+      "image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg"
     },
     {
       "id": 2,
-      "name_category": "Tutorial",
+      "name_category": "Kategpri Dua",
       "image": "file:///android_asset/image/image2.webp"
     },
     {
       "id": 3,
-      "name_category": "Reskin",
+      "name_category": "Kategpri Tiga",
       "image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
     }
+{
+      "id": 4,
+      "name_category": "Kategpri Empat",
+      "image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
+    }
+
   ],
   "Data": [
     {
       "id": 1,
-      "name_category": "Playstore",
-      "title": "Cara mengisi Form Data Safety Banget",
-      "image": "https://github.com/Awghostrider24/Adsid/blob/main/assets/fall1.gif",
-      "description": "Akhir-akhir ini banyak sekali aplikasi yang mendapatkan peringatan terkait pengisian kemanan data / data safety. Keamanan data akan diwajibkan pada bulan April 2022, ",
-      "link": "file:///android_asset/guide/guide1.html"
+      "name_category": "Kategpri Satu",
+      "title": "Judul Kontent Pertama",
+      "image": "https://awghostrider24.github.io/Adsid/sample/1gy4Fkq.jpg",
+      "description": "isi konten yang akan di jadikan guide",
+      "link": "https://awghostrider24.github.io/Adsid/assets/guide1.html"
     },
     {
       "id": 2,
