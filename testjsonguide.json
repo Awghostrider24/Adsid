@@ -5,7 +5,7 @@
       "select_backup_ads":"APPLOVIN-M",
       "main_ads_banner": "ca-app-pub-3940256099942544/6300978111",
       "main_ads_intertitial":"ca-app-pub-3940256099942544/1033173712",
-      "native_for_admob":"ca-app-pub-3940256099942544/2247696110x",
+      "native_for_admob":"ca-app-pub-3940256099942544/2247696110",
       "backup_ads_banner":"db4d5e8718b97d78",
       "backup_ads_intertitial":"518cd97722c60b52",
       "interval_intertitial": 5,
@@ -70,6 +70,14 @@
     },
     {
       "id": 4,
+      "name_category": "Reskin",
+      "title": "Cara menggunakan Alien SDK Ads",
+      "image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_616ec085d59259-83419139-77466732.jpg",
+      "description": "Alhamdulillah projek Alien Sdk Ads sudah tahap versi Jupiter-04. Bagi pengguna SC Aliendroid mungkin sudah tidak asing lagi dengan istilah Alien Sdk Ads.",
+      "link": "file:///android_asset/guide/guide2.html"
+    },
+    {
+      "id": 5,
       "name_category": "Reskin",
       "title": "Cara menggunakan Alien SDK Ads",
       "image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_616ec085d59259-83419139-77466732.jpg",
