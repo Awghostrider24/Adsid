@@ -22,61 +22,66 @@
 	"Categories": [{
 			"id": 1,
 			"name_category": "Kemanusiaan",
-			"image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg"
+			"image": "https://awghostrider24.github.io/Adsid/sample/kemanusiaan.png"
 		},
 		{
 			"id": 2,
 			"name_category": "Pendidikan",
-			"image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg"
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png"
 		},
 		{
 			"id": 3,
 			"name_category": "Ekonomi",
-			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
+			"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png"
 		},
 		{
 			"id": 4,
 			"name_category": "Dakwah & Advokasi",
-			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
+			"image": "https://awghostrider24.github.io/Adsid/sample/dakwahadv.png"
+		},
+		{
+			"id": 5,
+			"name_category": "Kesehatan",
+			"image": "https://awghostrider24.github.io/Adsid/sample/kesehatan.png"
 		}
 
 	],
 	"Data": [{
 			"id": 1,
-			"name_category": "Kemanusiaan",
+			"name_category": "Ekonomi",
 			"title": "Lumbung Pangan",
-			"image": "https://awghostrider24.github.io/Adsid/assets/0008.jpg",
-			"description": "isi konten yang akan di jadikan guide",
+			"image": "https://awghostrider24.github.io/Adsid/assets/ekonomi.png",
+			"description": "Pemberdayaan Ekonomi Petani",
 			"link": "https://awghostrider24.github.io/Adsid/sample/kontentsatu.html"
 		},
 		{
 			"id": 2,
 			"name_category": "Kemanusiaan",
-			"title": "Cara beriklan google ads cuan banyak",
-			"image": "https://awghostrider24.github.io/Adsid/sample/Fresh-Leaves-Desktop-Background-1024x640.jpg",
-			"description": "isi konten yang akan di jadikan guide",
+			"title": "Bhakti Cinta Lansia",
+			"image": "https://awghostrider24.github.io/Adsid/assets/kemanusiaan.png",
+			"description": "Wujud Kepedulian terhadap Lansia",
 			"link": "https://awghostrider24.github.io/Adsid/sample/kontentsatu.html"
 		},
 		{
 			"id": 3,
-			"name_category": "Ekonomi",
-			"title": "Modul Simpan Json di Hosting dan Google Drive",
-			"image": "https://awghostrider24.github.io/Adsid/sample/full-hd-background-wallpaper-download.jpg",
-			"description": "isi konten yang akan di jadikan guide",
+			"name_category": "Kesehatan",
+			"title": "Bantuan Pengobatan",
+			"image": "https://awghostrider24.github.io/Adsid/assets/kesehatan.png",
+			"description": "Bantuan pengobatan untuk Mustahik",
 			"link": "https://awghostrider24.github.io/Adsid/sample/kontentsatu.html"
 		},
 		{
 			"id": 4,
 			"name_category": "Dakwah & Advokasi",
-			"title": "Cara menggunakan Alien SDK Ads",
-			"image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg",
-			"description": "isi konten yang akan di jadikan guide",
+			"title": "Insentif untuk GTT/PTT dan Kyai/Ustadz",
+			"image": "https://awghostrider24.github.io/Adsid/sample/dakwahadv.png",
+			"description": "Pemberian honor untuk guru tidak tetap dan usstadz",
 			"link": "https://awghostrider24.github.io/Adsid/sample/kontentsatu.html"
 		},
 		{
 			"id": 5,
-			"name_category": "Ekonomi",
-			"title": "Cara menggunakan Alien SDK Ads",
+			"name_category": "Pendidikan",
+			"title": "Bantuan Pendidikan anak Yatim Piatu",
 			"image": "https://awghostrider24.github.io/Adsid/sample/waterfall-lake-forest-mountain.jpg",
 			"description": "isi konten yang akan di jadikan guide",
 			"link": "https://awghostrider24.github.io/Adsid/sample/kontentsatu.html"
