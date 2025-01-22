@@ -21,22 +21,22 @@
 
 	"Categories": [{
 			"id": 1,
-			"name_category": "Kategori Satu",
+			"name_category": "Kemanusiaan",
 			"image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg"
 		},
 		{
 			"id": 2,
-			"name_category": "Kategori Dua",
+			"name_category": "Pendidikan",
 			"image": "file:///android_asset/image/image2.webp"
 		},
 		{
 			"id": 3,
-			"name_category": "Kategori Tiga",
+			"name_category": "Ekonomi",
 			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
 		},
 		{
 			"id": 4,
-			"name_category": "Kategori Empat",
+			"name_category": "Dakwah & Advokasi",
 			"image": "https://s3.ap-southeast-1.amazonaws.com/aliendroid/uploads/blog/202110/img_thumb_616ec085f3a296-86862239-28733081.jpg"
 		}
 
@@ -44,8 +44,8 @@
 	"Data": [{
 			"id": 1,
 			"name_category": "Kategori Satu",
-			"title": "Judul Kontent Pertama",
-			"image": "https://awghostrider24.github.io/Adsid/sample/1gy4Fkq.jpg",
+			"title": "Lumbung Pangan",
+			"image": "https://drive.google.com/file/d/1lUKhR8-fTD6XlPxKrISrXhAzrMLPWja3/view?usp=sharing",
 			"description": "isi konten yang akan di jadikan guide",
 			"link": "https://awghostrider24.github.io/Adsid/sample/kontentsatu.html"
 		},
