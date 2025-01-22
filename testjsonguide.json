@@ -50,7 +50,7 @@
 			"id": 1,
 			"name_category": "Ekonomi",
 			"title": "Lumbung Pangan",
-			"image": "https://awghostrider24.github.io/Adsid/assets/ekonomi.png",
+			"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
 			"description": "Pemberdayaan Ekonomi Petani",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
@@ -58,7 +58,7 @@
 			"id": 2,
 			"name_category": "Kemanusiaan",
 			"title": "Bhakti Cinta Lansia",
-			"image": "https://awghostrider24.github.io/Adsid/assets/kemanusiaan.png",
+			"image": "https://awghostrider24.github.io/Adsid/sample/kemanusiaan.png",
 			"description": "Wujud Kepedulian terhadap Lansia",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
@@ -66,7 +66,7 @@
 			"id": 3,
 			"name_category": "Kesehatan",
 			"title": "Bantuan Pengobatan",
-			"image": "https://awghostrider24.github.io/Adsid/assets/kesehatan.png",
+			"image": "https://awghostrider24.github.io/Adsid/sample/kesehatan.png",
 			"description": "Bantuan pengobatan untuk Mustahik",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
@@ -82,7 +82,7 @@
 			"id": 5,
 			"name_category": "Pendidikan",
 			"title": "Bantuan Pendidikan anak Yatim Piatu",
-			"image": "https://awghostrider24.github.io/Adsid/sample/waterfall-lake-forest-mountain.jpg",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
 			"description": "isi konten yang akan di jadikan guide",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		}
