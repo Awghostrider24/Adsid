@@ -43,7 +43,7 @@
 	],
 	"Data": [{
 			"id": 1,
-			"name_category": "Kategori Satu",
+			"name_category": "Kemanusiaan",
 			"title": "Lumbung Pangan",
 			"image": "https://awghostrider24.github.io/Adsid/assets/0008.jpg",
 			"description": "isi konten yang akan di jadikan guide",
@@ -51,7 +51,7 @@
 		},
 		{
 			"id": 2,
-			"name_category": "Kategori Dua",
+			"name_category": "Kemanusiaan",
 			"title": "Cara beriklan google ads cuan banyak",
 			"image": "https://awghostrider24.github.io/Adsid/sample/Fresh-Leaves-Desktop-Background-1024x640.jpg",
 			"description": "isi konten yang akan di jadikan guide",
@@ -59,7 +59,7 @@
 		},
 		{
 			"id": 3,
-			"name_category": "Kategori Empat",
+			"name_category": "Ekonomi",
 			"title": "Modul Simpan Json di Hosting dan Google Drive",
 			"image": "https://awghostrider24.github.io/Adsid/sample/full-hd-background-wallpaper-download.jpg",
 			"description": "isi konten yang akan di jadikan guide",
@@ -67,7 +67,7 @@
 		},
 		{
 			"id": 4,
-			"name_category": "Kategori Tiga",
+			"name_category": "Dakwah & Advokasi",
 			"title": "Cara menggunakan Alien SDK Ads",
 			"image": "https://awghostrider24.github.io/Adsid/sample/urPswg.jpg",
 			"description": "isi konten yang akan di jadikan guide",
@@ -75,7 +75,7 @@
 		},
 		{
 			"id": 5,
-			"name_category": "Kategori Dua",
+			"name_category": "Ekonomi",
 			"title": "Cara menggunakan Alien SDK Ads",
 			"image": "https://awghostrider24.github.io/Adsid/sample/waterfall-lake-forest-mountain.jpg",
 			"description": "isi konten yang akan di jadikan guide",
