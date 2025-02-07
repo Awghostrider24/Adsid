@@ -94,13 +94,21 @@
 	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 2,000,005"
     },
-		{
+	{
         "id": 7,
         "nama": "Vivi Anggraini",
         "alamat": "Kalijambe",
         "usaha": "Nasi Goreng Pedas",
 	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 6,000,005"
+    },
+		{
+        "id": 8,
+        "nama": "Dewi Nuraini",
+        "alamat": "Bogor Berseri Kota Hujan",
+        "usaha": "Nasi Goreng Kriuk",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+        "nominal": "Rp 2,000,005"
     }
 
 	],
