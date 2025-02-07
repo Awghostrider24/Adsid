@@ -109,6 +109,13 @@
         "usaha": "Nasi Goreng Kriuk",
 	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 2,000,005"
+    },{
+        "id":9,
+        "nama": "Dewi Purwantiningsih",
+        "alamat": "Sragen belakang RSUD Sragen",
+        "usaha": "Mi Ayam Subur makmur",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+        "nominal": "Rp 3,000,005"
     }
 
 	],
