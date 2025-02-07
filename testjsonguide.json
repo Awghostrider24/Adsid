@@ -47,7 +47,7 @@
 
 	],
 	"Tasharuf": [{
-        "id": "1",
+        "id": 1,
         "nama": "agus",
         "alamat": "sukodono",
         "usaha": "zchicken",
@@ -55,7 +55,7 @@
         "nominal": "Rp 2,000,000"
     },
     {
-        "id": "2",
+        "id": 2,
         "nama": "anwar",
         "alamat": "kalijambe",
         "usaha": "pentol",
@@ -63,7 +63,7 @@
         "nominal": "Rp 1,000,001"
     },
     {
-        "id": "3",
+        "id": 3,
         "nama": "ratih",
         "alamat": "kedawung",
         "usaha": "sayur",
@@ -71,7 +71,7 @@
         "nominal": "Rp 5,000,002"
     },
     {
-        "id": "4",
+        "id": 4,
         "nama": "anto",
         "alamat": "Ngrampal",
         "usaha": "Bakso",
@@ -79,7 +79,7 @@
         "nominal": "Rp 7,000,003"
     },
     {
-        "id": "5",
+        "id": 5,
         "nama": "Seby",
         "alamat": "Teguhan",
         "usaha": "Warmindo",
@@ -87,7 +87,7 @@
         "nominal": "Rp 1,000,004"
     },
     {
-        "id": "6",
+        "id": 6,
         "nama": "Ira",
         "alamat": "Singopadu",
         "usaha": "Es The Jumbo",
