@@ -49,7 +49,7 @@
 	"Tasharuf": [{
         "id": 1,
         "nama": "agus",
-        "alamat": "sukodono",
+        "alamat": "Katongan,RT 01/00,Kel.Bendo,Kec.Sukodono,Kab.Sragen",
         "usaha": "zchicken",
 	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 2,000,000"
@@ -93,6 +93,14 @@
         "usaha": "Es The Jumbo",
 	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 2,000,005"
+    },
+		{
+        "id": 7,
+        "nama": "Vivi Anggraini",
+        "alamat": "Kalijambe",
+        "usaha": "Nasi Goreng Pedas",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+        "nominal": "Rp 6,000,005"
     }
 
 	],
