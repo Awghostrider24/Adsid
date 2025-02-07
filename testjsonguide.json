@@ -46,12 +46,12 @@
 		}
 
 	],
-	"Tasharuf": [
-    {
+	"Tasharuf": [{
         "id": "1",
         "nama": "agus",
         "alamat": "sukodono",
         "usaha": "zchicken",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 2,000,000"
     },
     {
@@ -59,6 +59,7 @@
         "nama": "anwar",
         "alamat": "kalijambe",
         "usaha": "pentol",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 1,000,001"
     },
     {
@@ -66,6 +67,7 @@
         "nama": "ratih",
         "alamat": "kedawung",
         "usaha": "sayur",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 5,000,002"
     },
     {
@@ -73,6 +75,7 @@
         "nama": "anto",
         "alamat": "Ngrampal",
         "usaha": "Bakso",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 7,000,003"
     },
     {
@@ -80,6 +83,7 @@
         "nama": "Seby",
         "alamat": "Teguhan",
         "usaha": "Warmindo",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 1,000,004"
     },
     {
@@ -87,6 +91,7 @@
         "nama": "Ira",
         "alamat": "Singopadu",
         "usaha": "Es The Jumbo",
+	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
         "nominal": "Rp 2,000,005"
     }
 
