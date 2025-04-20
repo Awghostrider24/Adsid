@@ -1,76 +1,76 @@
 {
-	"Beasiswa":
-  [{
-        "id": 1,
-        "nama": "Nama Siswa 1",
-        "alamat": "Ngrampal",
-        "sekolah": "SD N 1 Sragen",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },
-    {
-        "id": 2,
-        "nama": "Nama Siswa 2",
-        "alamat": "kalijambe",
-        "sekolah": "SD 2 Tangen",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu1"
-    },
-    {
-        "id": 3,
-        "nama": "Siswa 3",
-        "alamat": "kedawung",
-        "sekolah": "SMP Gesi",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },
-    {
-        "id": 4,
-        "nama": "Siswa 4",
-        "alamat": "Ngrampal",
-        "sekolah": "SMP Skdn",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },
-    {
-        "id": 5,
-        "nama": "Siswa 5",
-        "alamat": "Teguhan",
-        "sekolah": "SMP favorit",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },
-    {
-        "id": 6,
-        "nama": "Siswa 6",
-        "alamat": "Singopadu",
-        "sekolah": "SMP Nusa Bangsa",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },
-	{
-        "id": 7,
-        "nama": "Siswa 7",
-        "alamat": "Kalijambe",
-        "sekolah": "SD Gemolong",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },
-		{
-        "id": 8,
-        "nama": "Siswa 8",
-        "alamat": "Plupuh",
-        "sekolah": "SMP Tunas",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    },{
-        "id":9,
-        "nama": "Siswa 9",
-        "alamat": "Sragen Sukowati",
-        "sekolah": "SD Sragen Wetan",
-	"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
-        "status": "Yatim Piatu"
-    }
-
-	]
+    "Beasiswa": [
+        {
+            "id": 1,
+            "nama": "Nama Siswa 1",
+            "alamat": "Ngrampal",
+            "sekolah": "SD N 1 Sragen",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 2,
+            "nama": "Nama Siswa 2",
+            "alamat": "kalijambe",
+            "sekolah": "SD 2 Tangen",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu1"
+        },
+        {
+            "id": 3,
+            "nama": "Siswa 3",
+            "alamat": "kedawung",
+            "sekolah": "SMP Gesi",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 4,
+            "nama": "Siswa 4",
+            "alamat": "Ngrampal",
+            "sekolah": "SMP Skdn",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 5,
+            "nama": "Siswa 5",
+            "alamat": "Teguhan",
+            "sekolah": "SMP favorit",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 6,
+            "nama": "Siswa 6",
+            "alamat": "Singopadu",
+            "sekolah": "SMP Nusa Bangsa",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 7,
+            "nama": "Siswa 7",
+            "alamat": "Kalijambe",
+            "sekolah": "SD Gemolong",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 8,
+            "nama": "Siswa 8",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        },
+        {
+            "id": 9,
+            "nama": "Siswa 9",
+            "alamat": "Sragen Sukowati",
+            "sekolah": "SD Sragen Wetan",
+            "image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
+            "status": "Yatim Piatu"
+        }
+    ]
 }
