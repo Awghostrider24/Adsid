@@ -15,7 +15,7 @@
             "alamat": "kalijambe",
             "sekolah": "SD 2 Tangen",
             "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
-            "status": "Yatim Piatu1",
+            "status": "Yatim Piatu",
             "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
@@ -24,7 +24,8 @@
             "alamat": "kedawung",
             "sekolah": "SMP Gesi",
             "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
             "id": 4,
@@ -32,7 +33,8 @@
             "alamat": "Ngrampal",
             "sekolah": "SMP Skdn",
             "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
             "id": 5,
@@ -40,7 +42,8 @@
             "alamat": "Teguhan",
             "sekolah": "SMP favorit",
             "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
             "id": 6,
@@ -48,7 +51,8 @@
             "alamat": "Singopadu",
             "sekolah": "SMP Nusa Bangsa",
             "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
             "id": 7,
@@ -56,7 +60,8 @@
             "alamat": "Kalijambe",
             "sekolah": "SD Gemolong",
             "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
             "id": 8,
@@ -64,7 +69,8 @@
             "alamat": "Plupuh",
             "sekolah": "SMP Tunas",
             "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         },
         {
             "id": 9,
@@ -72,7 +78,8 @@
             "alamat": "Sragen Sukowati",
             "sekolah": "SD Sragen Wetan",
             "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
-            "status": "Yatim Piatu"
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
         }
     ]
 }
