@@ -15,38 +15,6 @@
             "deskripsi": "SD 2 Tangen",
             "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
             "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
-        },
-        {
-            "id": 3,
-            "judul": "Siswa 3",
-            "penulis": "kedawung",
-            "deskripsi": "SMP Gesi",
-            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
-        },
-        {
-            "id": 4,
-            "judul": "Siswa 4",
-            "penulis": "Ngrampal",
-            "deskripsi": "SMP Skdn",
-            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
-        },
-        {
-            "id": 5,
-            "judul": "Siswa 5",
-            "penulis": "Teguhan",
-            "deskripsi": "SMP favorit",
-            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
-        },
-        {
-            "id": 6,
-            "judul": "Siswa 6",
-            "penulis": "Singopadu",
-            "deskripsi": "SMP Nusa Bangsa",
-            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
-            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
         }
     ]
 }
