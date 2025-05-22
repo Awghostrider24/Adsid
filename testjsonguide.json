@@ -121,8 +121,8 @@
 	],
 	"Data": [{
 			"id": 1,
-			"name_category": "Ekonomi",
-			"title": "Lumbung Pangan",
+			"name_category": "Kemanusiaan",
+			"title": "Bantuan Biaya Hidup",
 			"image": "https://awghostrider24.github.io/Adsid/sample/ekonomi.png",
 			"description": "Pemberdayaan Ekonomi Petani",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
@@ -130,31 +130,127 @@
 		{
 			"id": 2,
 			"name_category": "Kemanusiaan",
-			"title": "Bhakti Cinta Lansia",
+			"title": "Bantuan Makanan",
 			"image": "https://awghostrider24.github.io/Adsid/sample/kemanusiaan.png",
 			"description": "Wujud Kepedulian terhadap Lansia",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
 			"id": 3,
-			"name_category": "Kesehatan",
-			"title": "Bantuan Pengobatan",
-			"image": "https://scontent.fsoc16-1.fna.fbcdn.net/v/t39.30808-6/367015300_604313645191324_6934686521655444905_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHgpV4c7TDWFiuyb7_7Dvf-hjSYuhcWAkeGNJi6FxYCRw4_iUx4jPA4UupP4uKJMrv2b5M1ATW-S1a3d-ZVjX8D&_nc_ohc=JSqDV5_WqN8Q7kNvwGri1n3&_nc_oc=Adm1LECNMk_Q2KbovyUeT57YFfYi4HDClBBYRpCC8mg6UKoZpGFHPJJCekThFlG5RrM&_nc_zt=23&_nc_ht=scontent.fsoc16-1.fna&_nc_gid=CHI_9BXYEO700DzelFxCZg&oh=00_AfE9j36kr5P9SCIUEfw6EqWBzlQPRyuRKvfI3-pIKwl0nQ&oe=680A92B5",
-			"description": "Bantuan pengobatan untuk Mustahik",
+			"name_category": "Kemanusiaan",
+			"title": "Perbaikan Rumah Tidak Layak Huni (RTLH)",
+			"image": "https://awghostrider24.github.io/Adsid/sample/kemanusiaan.png",
+			"description": "Wujud Kepedulian terhadap Lansia",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
 			"id": 4,
-			"name_category": "Dakwah & Advokasi",
-			"title": "Insentif untuk GTT/PTT dan Kyai/Ustadz",
+			"name_category": "Kemanusiaan",
+			"title": "Bantuan Pelunasan Hutang",
+			"image": "https://awghostrider24.github.io/Adsid/sample/dakwahadv.png',
+			"description": "Bantuan pengobatan untuk Mustahik",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 5,
+			"name_category": "Kemanusiaan",
+			"title": "Ibnu Sabil/Musafir",
 			"image": "https://awghostrider24.github.io/Adsid/sample/dakwahadv.png",
 			"description": "Pemberian honor untuk guru tidak tetap dan ustadz",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 5,
+			"id": 6,
 			"name_category": "Pendidikan",
-			"title": "Bantuan Pendidikan anak Yatim Piatu",
+			"title": "Bantuan Pendidikan SD",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 7,
+			"name_category": "Pendidikan",
+			"title": "Bantuan Pendidikan SMP",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 8,
+			"name_category": "Pendidikan",
+			"title": "Bantuan Pendidikan SMA",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 9,
+			"name_category": "Pendidikan",
+			"title": "Bantuan Pendidikan Santri",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 10,
+			"name_category": "Pendidikan",
+			"title": "Beasiswa Perguruan Tinggi",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 11,
+			"name_category": "Pendidikan",
+			"title": "Beasiswa Untuk Yatim & Piatu",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 12,
+			"name_category": "Pendidikan",
+			"title": "Bantuan Pendidikan Santri Tahfid",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 13,
+			"name_category": "Ekonomi",
+			"title": "Bantuan Keterampilan",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 14,
+			"name_category": "Ekonomi",
+			"title": "Bantuan Modal Usaha",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 15,
+			"name_category": "Ekonomi",
+			"title": "Bantuam Infrastruktur Keterampilan Kerja",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 16,
+			"name_category": "Ekonomi",
+			"title": "Lumbung Pangan",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 17,
+			"name_category": "Ekonomi",
+			"title": "Program Pembinaan Kompetensi",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
 			"description": "isi konten yang akan di jadikan guide",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
