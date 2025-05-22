@@ -1,0 +1,195 @@
+{
+    "Kecamatan": [
+        {
+            "id": 1,
+            "nama": "Kecamatan Sragen",
+            "alamat": "Ngrampal",
+            "sekolah": "SD N 1 Sragen",
+            "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 2,
+            "nama": "Kecamatan Ngrampal",
+            "alamat": "kalijambe",
+            "sekolah": "SD 2 Tangen",
+            "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 3,
+            "nama": "Kecamatan Karangmalang",
+            "alamat": "kedawung",
+            "sekolah": "SMP Gesi",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 4,
+            "nama": "Kecamatan Kedawung",
+            "alamat": "Ngrampal",
+            "sekolah": "SMP Skdn",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 5,
+            "nama": "Kecamatan Gondang",
+            "alamat": "Teguhan",
+            "sekolah": "SMP favorit",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 6,
+            "nama": "Kecamatan Sambungmacan",
+            "alamat": "Singopadu",
+            "sekolah": "SMP Nusa Bangsa",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 7,
+            "nama": "Kecamatan Sambirejo",
+            "alamat": "Kalijambe",
+            "sekolah": "SD Gemolong",
+            "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 8,
+            "nama": "Kecamatan Jenar",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 9,
+            "nama": "Kecamatan Masaran",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 10,
+            "nama": "Sidoharjo",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 11,
+            "nama": "Kecamatan Gesi",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 12,
+            "nama": "Kecamatan Sukodono",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 13,
+            "nama": "Kecamatan Mondokan",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 14,
+            "nama": "Kecamatan Tanon",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 15,
+            "nama": "Kecamatan Plupuh",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 16,
+            "nama": "Kecamatan Kalijambe",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 17,
+            "nama": "Kecamatan Gemolong",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 18,
+            "nama": "Kecamatan Sumberalawang",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+		},
+        {
+            "id": 19,
+            "nama": "Kecamatan Miri",
+            "alamat": "Plupuh",
+            "sekolah": "SMP Tunas",
+            "image": "https://awghostrider24.github.io/Adsid/sample/smp.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        },
+        {
+            "id": 20,
+            "nama": "Kecamatan Tangen",
+            "alamat": "Sragen Sukowati",
+            "sekolah": "SD Sragen Wetan",
+            "image": "https://awghostrider24.github.io/Adsid/sample/sd.jpg",
+            "status": "Yatim Piatu",
+            "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
+        }
+    ]
+}
