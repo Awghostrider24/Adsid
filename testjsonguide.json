@@ -143,16 +143,9 @@
 			"description": "Wujud Kepedulian terhadap Lansia",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
+		
 		{
 			"id": 4,
-			"name_category": "Kemanusiaan",
-			"title": "Bantuan Pelunasan Hutang",
-			"image": "https://awghostrider24.github.io/Adsid/sample/dakwahadv.png',
-			"description": "Bantuan pengobatan untuk Mustahik",
-			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
-		},
-		{
-			"id": 5,
 			"name_category": "Kemanusiaan",
 			"title": "Ibnu Sabil/Musafir",
 			"image": "https://awghostrider24.github.io/Adsid/sample/dakwahadv.png",
@@ -160,7 +153,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 6,
+			"id": 5,
 			"name_category": "Pendidikan",
 			"title": "Bantuan Pendidikan SD",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -168,7 +161,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 7,
+			"id": 6,
 			"name_category": "Pendidikan",
 			"title": "Bantuan Pendidikan SMP",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -176,7 +169,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 8,
+			"id": 7,
 			"name_category": "Pendidikan",
 			"title": "Bantuan Pendidikan SMA",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -184,7 +177,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 9,
+			"id": 8,
 			"name_category": "Pendidikan",
 			"title": "Bantuan Pendidikan Santri",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -192,7 +185,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 10,
+			"id": 9,
 			"name_category": "Pendidikan",
 			"title": "Beasiswa Perguruan Tinggi",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -200,7 +193,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 11,
+			"id": 10,
 			"name_category": "Pendidikan",
 			"title": "Beasiswa Untuk Yatim & Piatu",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -208,7 +201,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 12,
+			"id": 11,
 			"name_category": "Pendidikan",
 			"title": "Bantuan Pendidikan Santri Tahfid",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -216,7 +209,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 13,
+			"id": 12,
 			"name_category": "Ekonomi",
 			"title": "Bantuan Keterampilan",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -224,7 +217,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 14,
+			"id": 13,
 			"name_category": "Ekonomi",
 			"title": "Bantuan Modal Usaha",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -232,7 +225,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 15,
+			"id": 14,
 			"name_category": "Ekonomi",
 			"title": "Bantuam Infrastruktur Keterampilan Kerja",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -240,7 +233,7 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 16,
+			"id": 15,
 			"name_category": "Ekonomi",
 			"title": "Lumbung Pangan",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
@@ -248,13 +241,79 @@
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		},
 		{
-			"id": 17,
+			"id": 16,
 			"name_category": "Ekonomi",
 			"title": "Program Pembinaan Kompetensi",
 			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
 			"description": "isi konten yang akan di jadikan guide",
 			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 17,
+			"name_category": "Kesehatan",
+			"title": "Bantuan Pengobatan",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 18,
+			"name_category": "Kesehatan",
+			"title": "Klinik RSB",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 19,
+			"name_category": "Dakwah Advokasi",
+			"title": "Pembinaan Advokasi Muallaf",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 20,
+			"name_category": "Dakwah Advokasi",
+			"title": "Insntif GTT/PTT",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+{
+			"id": 21,
+			"name_category": "Dakwah Advokasi",
+			"title": "Insentif Kyai/Ustad",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 22,
+			"name_category": "Dakwah Advokasi",
+			"title": "Insentif Penjaga Masjid/Marbot",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 23,
+			"name_category": "Dakwah Advokasi",
+			"title": "Bantuan untuk Masjid",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
+		},
+		{
+			"id": 24,
+			"name_category": "Dakwah Advokasi",
+			"title": "Kegiatan Keagamaan",
+			"image": "https://awghostrider24.github.io/Adsid/sample/pendidikan.png",
+			"description": "isi konten yang akan di jadikan guide",
+			"link": "https://awghostrider24.github.io/Adsid/sample/gttptt.html"
 		}
+
+
 
 	]
 }
