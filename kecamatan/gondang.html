@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar Bantuan Usaha</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 20px;
+    }
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .card-content {
+      flex: 1;
+    }
+    .card-content h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #333;
+    }
+    .card-content p {
+      margin: 4px 0;
+      color: #555;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Daftar Penerima Manfaat di Kecamatan Gondang</h2>
+  <div class="card-list" id="card-list"></div>
+
+  <script>
+    fetch('https://script.google.com/macros/s/AKfycbw8Tz0f396M3Wz-VUeC9JQJm-JLF3yaQoirkP9fSaUwf1TvkCJ0AozzpD8kZTARnlbf/exec') // Ganti dengan URL Web App dari langkah sebelumnya
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("card-list");
+        data.forEach(row => {
+          container.innerHTML += `
+            <div class="card">
+              <img src="https://awghostrider24.github.io/Adsid/sample/sd.jpg" alt="Foto ${row.NAMA}" />
+              <div class="card-content">
+                <h3>${row.NAMA}</h3>
+                <p><strong>Alamat:</strong> ${row.ALAMAT}</p>
+                <p><strong>Jenis Bantuan:</strong> ${row["JENIS BANTUAN"]}</p>
+                <p><strong>Nominal:</strong> ${row.NOMINAL || '-'}</p>
+                <p><strong>Desa/Kecamatan:</strong> ${row.Desa}, ${row.Kecamatan}</p>
+              </div>
+            </div>`;
+        });
+      })
+      .catch(error => console.error('Error:', error));
+  </script>
+</body>
+</html>
