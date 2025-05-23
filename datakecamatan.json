@@ -2,7 +2,7 @@
     "Kecamatan": [
         {
             "id": 1,
-            "nama": "Kecamatan Sragen",
+            "nama": "Kec.Sragen",
             "alamat": "3 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -11,7 +11,7 @@
         },
         {
             "id": 2,
-            "nama": "Kecamatan Ngrampal",
+            "nama": "Kec.Ngrampal",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -20,7 +20,7 @@
         },
         {
             "id": 3,
-            "nama": "Kecamatan Karangmalang",
+            "nama": "Kec.Karangmalang",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -29,16 +29,16 @@
         },
         {
             "id": 4,
-            "nama": "Kecamatan Kedawung",
+            "nama": "Kec.Kedawung",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
-            "bantuan": "Yatim Piatu",
+            "bantuan": "BAZNAS",
             "link": "https://awghostrider24.github.io/Adsid/sample/siswaasuhbaznas.html"
         },
         {
             "id": 5,
-            "nama": "Kecamatan Gondang",
+            "nama": "Kec.Gondang",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -47,7 +47,7 @@
         },
         {
             "id": 6,
-            "nama": "Kecamatan Sambungmacan",
+            "nama": "Kec.Sambungmacan",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -56,7 +56,7 @@
         },
         {
             "id": 7,
-            "nama": "Kecamatan Sambirejo",
+            "nama": "Kec.Sambirejo",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -65,7 +65,7 @@
         },
         {
             "id": 8,
-            "nama": "Kecamatan Jenar",
+            "nama": "Kec.Jenar",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -74,7 +74,7 @@
         },
         {
             "id": 9,
-            "nama": "Kecamatan Masaran",
+            "nama": "Kec.Masaran",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -92,7 +92,7 @@
         },
         {
             "id": 11,
-            "nama": "Kecamatan Gesi",
+            "nama": "Kec.Gesi",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -101,7 +101,7 @@
         },
         {
             "id": 12,
-            "nama": "Kecamatan Sukodono",
+            "nama": "Kec.Sukodono",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -110,7 +110,7 @@
         },
         {
             "id": 13,
-            "nama": "Kecamatan Mondokan",
+            "nama": "Kec.Mondokan",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -119,7 +119,7 @@
         },
         {
             "id": 14,
-            "nama": "Kecamatan Tanon",
+            "nama": "Kec.Tanon",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -128,7 +128,7 @@
         },
         {
             "id": 15,
-            "nama": "Kecamatan Plupuh",
+            "nama": "Kec.Plupuh",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -137,7 +137,7 @@
         },
         {
             "id": 16,
-            "nama": "Kecamatan Kalijambe",
+            "nama": "Kec.Kalijambe",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -146,7 +146,7 @@
         },
         {
             "id": 17,
-            "nama": "Kecamatan Gemolong",
+            "nama": "Kec.Gemolong",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -155,7 +155,7 @@
         },
         {
             "id": 18,
-            "nama": "Kecamatan Sumberalawang",
+            "nama": "Kec.Sumberalawang",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -164,7 +164,7 @@
         },
         {
             "id": 19,
-            "nama": "Kecamatan Miri",
+            "nama": "Kec.Miri",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
@@ -173,7 +173,7 @@
         },
         {
             "id": 20,
-            "nama": "Kecamatan Tangen",
+            "nama": "Kec.Tangen",
             "alamat": "6 Program",
             "desa": "50 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
