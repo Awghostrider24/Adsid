@@ -1,4 +1,6 @@
 [
-  { "label": "Pengumplan Zakat", "value": 30 },
-  { "label": "Pengeluaran", "value": 15 }
+  { "label": "Jan", "value": 12 },
+   { "label": "Feb", "value": 14 },
+   { "label": "Mar", "value": 11 },
+  { "label": "Apr", "value": 15 }
 ]
