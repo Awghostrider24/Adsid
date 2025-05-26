@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chart dari Google Sheets CSV</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+  <h2>Chart dari Google Sheets CSV</h2>
+  <canvas id="barChart"></canvas>
+
+  <script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlHKLLhtNEqpAuUriKExDbPO-yicC4a2dDNc2DaAL5FKD4Xna49Yk9PxOA3eqlcgXpFtbV15KY3QL4/pub?output=csv'; // Ganti dengan link CSV kamu
+
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvText => {
+        const parsedData = Papa.parse(csvText, { header: true });
+        const labels = [];
+        const data = [];
+
+        // Misal kolom pertama nama bulan, kolom kedua angka penjualan
+        parsedData.data.forEach(row => {
+          if (row.Bulan && row.Penjualan) {
+            labels.push(row.Bulan);
+            data.push(Number(row.Penjualan));
+          }
+        });
+
+        const ctx = document.getElementById('barChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Penjualan',
+              data: data,
+              backgroundColor: 'rgba(75, 192, 192, 0.7)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      });
+  </script>
+</body>
+</html>
