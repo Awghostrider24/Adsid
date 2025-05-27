@@ -2,61 +2,30 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Chart Keuangan 2025</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Chart 3D Keuangan 2025</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: 40px auto;
       text-align: center;
     }
-    canvas {
-      max-width: 100%;
-      height: 400px;
+    #chart3d {
+      width: 100%;
+      height: 500px;
     }
     .totals {
       margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
     }
-    .progress-container {
-      width: 100%;
-      background-color: #f3f3f3;
-      border-radius: 8px;
-      margin: 20px auto;
-      overflow: hidden;
-      height: 20px;
-      max-width: 400px;
-    }
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background-color: #4caf50;
-      animation: loading 2s linear infinite;
-    }
-    @keyframes loading {
-      0% { width: 0%; }
-      50% { width: 80%; }
-      100% { width: 100%; }
-    }
-    #progressWrapper {
-      display: block;
-    }
   </style>
 </head>
 <body>
-  <h2>Chart Pengumpulan dan Penyaluran 2025</h2>
-
-  <div id="progressWrapper">
-    <div class="progress-container">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-    <p>Memuat data...</p>
-  </div>
-
-  <canvas id="barChart" style="display:none;"></canvas>
+  <h2>Pengumpulan dan Penyaluran 2025</h2>
+  <div id="chart3d"></div>
   <div class="totals" id="totalInfo"></div>
 
   <script>
@@ -66,15 +35,15 @@
       .then(response => response.text())
       .then(csvText => {
         const parsedData = Papa.parse(csvText, { header: true });
-        const labels = [];
-        const pengumpulanData = [];
-        const penyaluranData = [];
+        const bulan = [];
+        const pengumpulan = [];
+        const penyaluran = [];
 
         parsedData.data.forEach(row => {
           if (row.Bulan) {
-            labels.push(row.Bulan);
+            bulan.push(row.Bulan);
 
-            const cleanPengumpulan = row.Penyaluran
+            const cleanPengumpulan = row.Pengumpulan
               ? Number(row.Pengumpulan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
@@ -82,71 +51,59 @@
               ? Number(row.Penyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
-            pengumpulanData.push(cleanPengumpulan);
-            penyaluranData.push(cleanPenyaluran);
+            pengumpulan.push(cleanPengumpulan);
+            penyaluran.push(cleanPenyaluran);
           }
         });
 
-        const totalPengumpulan = pengumpulanData.reduce((sum, val) => sum + val, 0);
-        const totalPenyaluran = penyaluranData.reduce((sum, val) => sum + val, 0);
+        const totalPengumpulan = pengumpulan.reduce((sum, val) => sum + val, 0);
+        const totalPenyaluran = penyaluran.reduce((sum, val) => sum + val, 0);
 
-        const totalInfo = document.getElementById('totalInfo');
-        totalInfo.innerHTML = `
+        document.getElementById('totalInfo').innerHTML = `
           Total Pengumpulan: Rp ${totalPengumpulan.toLocaleString('id-ID')}<br>
           Total Penyaluran: Rp ${totalPenyaluran.toLocaleString('id-ID')}
         `;
 
-        const ctx = document.getElementById('barChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: 'Pengumpulan (Rp)',
-                data: pengumpulanData,
-                backgroundColor: 'rgba(75, 192, 192, 0.7)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-              },
-              {
-                label: 'Penyaluran (Rp)',
-                data: penyaluranData,
-                backgroundColor: 'rgba(255, 99, 132, 0.7)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return context.dataset.label + ': Rp ' + context.raw.toLocaleString('id-ID');
-                  }
-                }
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  callback: value => 'Rp ' + value.toLocaleString('id-ID')
-                }
-              }
-            }
+        const trace1 = {
+          x: bulan,
+          y: pengumpulan,
+          z: pengumpulan.map(() => 1), // Ketinggian z tetap untuk tiap kategori
+          mode: 'markers',
+          type: 'scatter3d',
+          name: 'Pengumpulan',
+          marker: {
+            size: 8,
+            color: 'blue'
           }
-        });
+        };
 
-        // Sembunyikan progress bar dan tampilkan chart
-        document.getElementById('progressWrapper').style.display = 'none';
-        document.getElementById('barChart').style.display = 'block';
+        const trace2 = {
+          x: bulan,
+          y: penyaluran,
+          z: penyaluran.map(() => 2),
+          mode: 'markers',
+          type: 'scatter3d',
+          name: 'Penyaluran',
+          marker: {
+            size: 8,
+            color: 'red'
+          }
+        };
+
+        const layout = {
+          scene: {
+            xaxis: { title: 'Bulan' },
+            yaxis: { title: 'Jumlah (Rp)', tickprefix: 'Rp ' },
+            zaxis: { title: 'Kategori (1 = Pengumpulan, 2 = Penyaluran)' }
+          },
+          margin: { t: 10 },
+          legend: { x: 0, y: 1 }
+        };
+
+        Plotly.newPlot('chart3d', [trace1, trace2], layout);
       })
       .catch(err => {
-        console.error('Gagal mengambil atau parsing CSV:', err);
-        document.getElementById('progressWrapper').innerHTML = "<p style='color:red;'>Gagal memuat data.</p>";
+        console.error('Gagal memuat data CSV:', err);
       });
   </script>
 </body>
