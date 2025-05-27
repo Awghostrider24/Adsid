@@ -16,11 +16,17 @@
       max-width: 100%;
       height: 400px;
     }
+    .totals {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h2>Chart Pemasukan dan Penyaluran 2025</h2>
+  <h2>Chart Pemasukan dan Pengeluaran 2025</h2>
   <canvas id="barChart"></canvas>
+  <div class="totals" id="totalInfo"></div>
 
   <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlHKLLhtNEqpAuUriKExDbPO-yicC4a2dDNc2DaAL5FKD4Xna49Yk9PxOA3eqlcgXpFtbV15KY3QL4/pub?output=csv';
@@ -31,26 +37,34 @@
         const parsedData = Papa.parse(csvText, { header: true });
         const labels = [];
         const pemasukanData = [];
-        const penyaluranData = [];
+        const pengeluaranData = [];
 
         parsedData.data.forEach(row => {
           if (row.Bulan) {
             labels.push(row.Bulan);
 
-            // Bersihkan dan parsing Pemasukan
             const cleanPemasukan = row.Pemasukan
               ? Number(row.Pemasukan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
-            // Bersihkan dan parsing Pengeluaran
-            const cleanPenyaluran = row.Penyaluran
-              ? Number(row.Penyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+            const cleanPengeluaran = row.Pengeluaran
+              ? Number(row.Pengeluaran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
             pemasukanData.push(cleanPemasukan);
-            penyaluranData.push(cleanPenyaluran);
+            pengeluaranData.push(cleanPengeluaran);
           }
         });
+
+        const totalPemasukan = pemasukanData.reduce((sum, val) => sum + val, 0);
+        const totalPengeluaran = pengeluaranData.reduce((sum, val) => sum + val, 0);
+
+        // Tampilkan total
+        const totalInfo = document.getElementById('totalInfo');
+        totalInfo.innerHTML = `
+          Total Pemasukan: Rp ${totalPemasukan.toLocaleString('id-ID')}<br>
+          Total Pengeluaran: Rp ${totalPengeluaran.toLocaleString('id-ID')}
+        `;
 
         const ctx = document.getElementById('barChart').getContext('2d');
         new Chart(ctx, {
@@ -66,8 +80,8 @@
                 borderWidth: 1
               },
               {
-                label: 'Penyaluran (Rp)',
-                data: penyaluranData,
+                label: 'Pengeluaran (Rp)',
+                data: pengeluaranData,
                 backgroundColor: 'rgba(255, 99, 132, 0.7)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
