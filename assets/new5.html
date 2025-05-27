@@ -19,7 +19,7 @@
   </style>
 </head>
 <body>
-  <h2>Chart Pemasukan dan Pengeluaran 2025</h2>
+  <h2>Chart Pemasukan dan Penyaluran 2025</h2>
   <canvas id="barChart"></canvas>
 
   <script>
@@ -31,7 +31,7 @@
         const parsedData = Papa.parse(csvText, { header: true });
         const labels = [];
         const pemasukanData = [];
-        const pengeluaranData = [];
+        const penyaluranData = [];
 
         parsedData.data.forEach(row => {
           if (row.Bulan) {
@@ -43,12 +43,12 @@
               : 0;
 
             // Bersihkan dan parsing Pengeluaran
-            const cleanPengeluaran = row.Pengeluaran
-              ? Number(row.Pengeluaran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+            const cleanPenyaluran = row.Penyaluran
+              ? Number(row.Pennyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
             pemasukanData.push(cleanPemasukan);
-            pengeluaranData.push(cleanPengeluaran);
+            penyaluranData.push(cleanPenyaluran);
           }
         });
 
@@ -66,8 +66,8 @@
                 borderWidth: 1
               },
               {
-                label: 'Pengeluaran (Rp)',
-                data: pengeluaranData,
+                label: 'Penyaluran (Rp)',
+                data: penyaluranData,
                 backgroundColor: 'rgba(255, 99, 132, 0.7)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
