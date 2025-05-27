@@ -2,19 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Chart 3D Keuangan 2025</title>
+  <title>Chart 3D Pengumpulan dan Penyaluran 2025</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 40px auto;
       text-align: center;
     }
-    #chart3d {
+    #bar3dChart {
       width: 100%;
-      height: 500px;
+      height: 600px;
     }
     .totals {
       margin-top: 20px;
@@ -25,7 +25,7 @@
 </head>
 <body>
   <h2>Chart 3D Pengumpulan dan Penyaluran 2025</h2>
-  <div id="chart3d"></div>
+  <div id="bar3dChart"></div>
   <div class="totals" id="totalInfo"></div>
 
   <script>
@@ -56,54 +56,67 @@
           }
         });
 
-        const totalPengumpulan = pengumpulan.reduce((sum, val) => sum + val, 0);
-        const totalPenyaluran = penyaluran.reduce((sum, val) => sum + val, 0);
+        const totalPengumpulan = pengumpulan.reduce((a, b) => a + b, 0);
+        const totalPenyaluran = penyaluran.reduce((a, b) => a + b, 0);
 
         document.getElementById('totalInfo').innerHTML = `
           Total Pengumpulan: Rp ${totalPengumpulan.toLocaleString('id-ID')}<br>
           Total Penyaluran: Rp ${totalPenyaluran.toLocaleString('id-ID')}
         `;
 
-        const trace1 = {
-          x: bulan,
-          y: pengumpulan,
-          z: pengumpulan.map(() => 1), // Ketinggian z tetap untuk tiap kategori
-          mode: 'markers',
-          type: 'scatter3d',
-          name: 'Pengumpulan',
-          marker: {
-            size: 8,
-            color: 'blue'
-          }
-        };
+        // Konversi data untuk 3D posisi bar
+        const x = [];
+        const y = [];
+        const z = [];
+        const values = [];
+        const colors = [];
 
-        const trace2 = {
-          x: bulan,
-          y: penyaluran,
-          z: penyaluran.map(() => 2),
-          mode: 'markers',
-          type: 'scatter3d',
-          name: 'Penyaluran',
+        bulan.forEach((bln, i) => {
+          // Bar 1: Pengumpulan
+          x.push(bln);
+          y.push('Pengumpulan');
+          z.push(0);
+          values.push(pengumpulan[i]);
+          colors.push('rgb(0, 128, 255)');
+
+          // Bar 2: Penyaluran
+          x.push(bln);
+          y.push('Penyaluran');
+          z.push(0);
+          values.push(penyaluran[i]);
+          colors.push('rgb(255, 99, 132)');
+        });
+
+        const trace = {
+          type: 'bar3d',
+          x: x,
+          y: y,
+          z: z,
+          dx: 0.8,
+          dy: 0.8,
+          dz: values,
           marker: {
-            size: 8,
-            color: 'red'
-          }
+            color: colors
+          },
+          hovertemplate:
+            '<b>Bulan</b>: %{x}<br>' +
+            '<b>Kategori</b>: %{y}<br>' +
+            '<b>Jumlah</b>: Rp %{dz:,}<extra></extra>'
         };
 
         const layout = {
           scene: {
             xaxis: { title: 'Bulan' },
-            yaxis: { title: 'Jumlah (Rp)', tickprefix: 'Rp ' },
-            zaxis: { title: 'Kategori (1 = Pengumpulan, 2 = Penyaluran)' }
+            yaxis: { title: 'Kategori' },
+            zaxis: { title: 'Jumlah (Rp)', tickprefix: 'Rp ' }
           },
-          margin: { t: 10 },
-          legend: { x: 0, y: 1 }
+          margin: { l: 0, r: 0, b: 0, t: 0 }
         };
 
-        Plotly.newPlot('chart3d', [trace1, trace2], layout);
+        Plotly.newPlot('bar3dChart', [trace], layout);
       })
-      .catch(err => {
-        console.error('Gagal memuat data CSV:', err);
+      .catch(error => {
+        console.error('Gagal memuat data:', error);
       });
   </script>
 </body>
