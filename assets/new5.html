@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Chart Pengumpulan Tahun 2025</title>
+  <title>Chart Keuangan 2025</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
@@ -19,7 +19,7 @@
   </style>
 </head>
 <body>
-  <h2>Chart Pengumpulan Tahun 2025</h2>
+  <h2>Chart Pemasukan dan Pengeluaran 2025</h2>
   <canvas id="barChart"></canvas>
 
   <script>
@@ -30,19 +30,25 @@
       .then(csvText => {
         const parsedData = Papa.parse(csvText, { header: true });
         const labels = [];
-        const data = [];
+        const pemasukanData = [];
+        const pengeluaranData = [];
 
         parsedData.data.forEach(row => {
-          if (row.Bulan && row.Pemasukan) {
+          if (row.Bulan) {
             labels.push(row.Bulan);
 
-            // Bersihkan format currency: hapus "Rp", koma, dan titik desimal
-            const cleanedValue = row.Pemasukan
-              .replace(/Rp/g, '')
-              .replace(/,/g, '')
-              .replace(/\.00$/, '');
+            // Bersihkan dan parsing Pemasukan
+            const cleanPemasukan = row.Pemasukan
+              ? Number(row.Pemasukan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+              : 0;
 
-            data.push(Number(cleanedValue));
+            // Bersihkan dan parsing Pengeluaran
+            const cleanPengeluaran = row.Pengeluaran
+              ? Number(row.Pengeluaran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+              : 0;
+
+            pemasukanData.push(cleanPemasukan);
+            pengeluaranData.push(cleanPengeluaran);
           }
         });
 
@@ -51,13 +57,22 @@
           type: 'bar',
           data: {
             labels: labels,
-            datasets: [{
-              label: 'Pemasukan (Rp)',
-              data: data,
-              backgroundColor: 'rgba(75, 192, 192, 0.7)',
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 1
-            }]
+            datasets: [
+              {
+                label: 'Pemasukan (Rp)',
+                data: pemasukanData,
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+              },
+              {
+                label: 'Pengeluaran (Rp)',
+                data: pengeluaranData,
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -65,8 +80,7 @@
               tooltip: {
                 callbacks: {
                   label: function(context) {
-                    const value = context.raw;
-                    return 'Rp ' + value.toLocaleString('id-ID');
+                    return context.dataset.label + ': Rp ' + context.raw.toLocaleString('id-ID');
                   }
                 }
               }
