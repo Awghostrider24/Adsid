@@ -2,33 +2,23 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chart Keuangan 2025</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 16px;
+      max-width: 800px;
+      margin: 40px auto;
       text-align: center;
-      box-sizing: border-box;
     }
-
     canvas {
-      width: 100% !important;
       max-width: 100%;
-      height: auto !important;
+      height: 400px;
     }
-
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-
     .totals {
       margin-top: 20px;
-      font-size: 1.1rem;
+      font-size: 18px;
       font-weight: bold;
     }
   </style>
@@ -53,15 +43,15 @@
           if (row.Bulan) {
             labels.push(row.Bulan);
 
-            const cleanPengumpulan = row.Pemasukan
-              ? Number(row.Pemasukan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+            const cleanPengumpulan = row.Penyaluran
+              ? Number(row.Pengumpulan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
-            const cleanPenyaluran = row.Pengeluaran
-              ? Number(row.Pengeluaran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+            const cleanPenyaluran = row.Penyaluran
+              ? Number(row.Penyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
-            pengumpulanData.push(cleanPengumpulan);
+            pengumpulanData.push(cleanPngumpulan);
             penyaluranData.push(cleanPenyaluran);
           }
         });
@@ -69,6 +59,7 @@
         const totalPengumpulan = pengumpulanData.reduce((sum, val) => sum + val, 0);
         const totalPenyaluran = penyaluranData.reduce((sum, val) => sum + val, 0);
 
+        // Tampilkan total
         const totalInfo = document.getElementById('totalInfo');
         totalInfo.innerHTML = `
           Total Pengumpulan: Rp ${totalPengumpulan.toLocaleString('id-ID')}<br>
