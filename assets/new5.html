@@ -24,7 +24,7 @@
   </style>
 </head>
 <body>
-  <h2>Chart Pemasukan dan Pengeluaran 2025</h2>
+  <h2>Chart Pengumpulan dan Penyaluran 2025</h2>
   <canvas id="barChart"></canvas>
   <div class="totals" id="totalInfo"></div>
 
@@ -36,34 +36,34 @@
       .then(csvText => {
         const parsedData = Papa.parse(csvText, { header: true });
         const labels = [];
-        const pemasukanData = [];
-        const pengeluaranData = [];
+        const pengumpulanData = [];
+        const penyaluranData = [];
 
         parsedData.data.forEach(row => {
           if (row.Bulan) {
             labels.push(row.Bulan);
 
-            const cleanPemasukan = row.Pemasukan
-              ? Number(row.Pemasukan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+            const cleanPengumpulan = row.Penyaluran
+              ? Number(row.Pengumpulan.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
-            const cleanPengeluaran = row.Pengeluaran
-              ? Number(row.Pengeluaran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+            const cleanPenyaluran = row.Penyaluran
+              ? Number(row.Penyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
-            pemasukanData.push(cleanPemasukan);
-            pengeluaranData.push(cleanPengeluaran);
+            pengumpulanData.push(cleanPngumpulan);
+            penyaluranData.push(cleanPenyaluran);
           }
         });
 
-        const totalPemasukan = pemasukanData.reduce((sum, val) => sum + val, 0);
-        const totalPengeluaran = pengeluaranData.reduce((sum, val) => sum + val, 0);
+        const totalPengumpulan = pengumpulanData.reduce((sum, val) => sum + val, 0);
+        const totalPenyaluran = penyaluranData.reduce((sum, val) => sum + val, 0);
 
         // Tampilkan total
         const totalInfo = document.getElementById('totalInfo');
         totalInfo.innerHTML = `
-          Total Pemasukan: Rp ${totalPemasukan.toLocaleString('id-ID')}<br>
-          Total Pengeluaran: Rp ${totalPengeluaran.toLocaleString('id-ID')}
+          Total Pengumpulan: Rp ${totalPengumpulan.toLocaleString('id-ID')}<br>
+          Total Penyaluran: Rp ${totalPenyaluran.toLocaleString('id-ID')}
         `;
 
         const ctx = document.getElementById('barChart').getContext('2d');
@@ -73,15 +73,15 @@
             labels: labels,
             datasets: [
               {
-                label: 'Pemasukan (Rp)',
-                data: pemasukanData,
+                label: 'Pengumpulan (Rp)',
+                data: pengumpulanData,
                 backgroundColor: 'rgba(75, 192, 192, 0.7)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
               },
               {
-                label: 'Pengeluaran (Rp)',
-                data: pengeluaranData,
+                label: 'Penyaluran (Rp)',
+                data: penyaluranData,
                 backgroundColor: 'rgba(255, 99, 132, 0.7)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
