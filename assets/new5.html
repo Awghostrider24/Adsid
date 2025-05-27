@@ -44,7 +44,7 @@
 
             // Bersihkan dan parsing Pengeluaran
             const cleanPenyaluran = row.Penyaluran
-              ? Number(row.Pennyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
+              ? Number(row.Penyaluran.replace(/Rp/g, '').replace(/,/g, '').replace(/\.00$/, ''))
               : 0;
 
             pemasukanData.push(cleanPemasukan);
