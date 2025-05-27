@@ -35,7 +35,14 @@
         parsedData.data.forEach(row => {
           if (row.Bulan && row.Pemasukan) {
             labels.push(row.Bulan);
-            data.push(Number(row.Pemasukan));
+
+            // Bersihkan format currency: hapus "Rp", koma, dan titik desimal
+            const cleanedValue = row.Pemasukan
+              .replace(/Rp/g, '')
+              .replace(/,/g, '')
+              .replace(/\.00$/, '');
+
+            data.push(Number(cleanedValue));
           }
         });
 
@@ -54,6 +61,16 @@
           },
           options: {
             responsive: true,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const value = context.raw;
+                    return 'Rp ' + value.toLocaleString('id-ID');
+                  }
+                }
+              }
+            },
             scales: {
               y: {
                 beginAtZero: true,
