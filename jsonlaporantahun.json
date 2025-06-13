@@ -5,7 +5,22 @@
     "jsonUrl": "https://awghostrider24.github.io/Adsid/jsonpdfview.json"
   },
   {
-    "title": "Laporan Desa",
+    "title": "Pelaporan Tahun 2024",
+    "image": "https://awghostrider24.github.io/Adsid/sample/lkfeb.jpg",
+    "jsonUrl": "https://awghostrider24.github.io/Adsid/jsonpdfview.json"
+  },
+  {
+    "title": "Pelaporan Tahun 2023",
+    "image": "https://awghostrider24.github.io/Adsid/sample/lkfeb.jpg",
+    "jsonUrl": "https://awghostrider24.github.io/Adsid/jsonpdfview.json"
+  },
+  {
+    "title": "Pelaporan Tahun 2022",
+    "image": "https://awghostrider24.github.io/Adsid/sample/lkfeb.jpg",
+    "jsonUrl": "https://awghostrider24.github.io/Adsid/jsonpdfview.json"
+  },
+  {
+    "title": "Pelaporan Tahun 2021",
     "image": "https://awghostrider24.github.io/Adsid/sample/lkfeb.jpg",
     "jsonUrl": "https://awghostrider24.github.io/Adsid/jsonpdfview.json"
   }
