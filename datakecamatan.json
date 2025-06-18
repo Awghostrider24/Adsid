@@ -3,7 +3,7 @@
         {
             "id": 1,
             "nama": "Kec.Sragen",
-            "alamat": "22 Penerima Manfaat",
+            "alamat": "37 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/sragen.html"
@@ -11,7 +11,7 @@
         {
             "id": 2,
             "nama": "Kec.Ngrampal",
-            "alamat": "13 Penerima Manfaat",
+            "alamat": "15 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/ngrampal.html"
@@ -19,7 +19,7 @@
         {
             "id": 3,
             "nama": "Kec.Karangmalang",
-            "alamat": "16 Penerima Manfaat",
+            "alamat": "19 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/karangmalang.html"
@@ -27,7 +27,7 @@
         {
             "id": 4,
             "nama": "Kec.Kedawung",
-            "alamat": "17 Penerima Manfaat",
+            "alamat": "22 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/kedawung.html"
@@ -35,7 +35,7 @@
         {
             "id": 5,
             "nama": "Kec.Gondang",
-            "alamat": "11 Penerima Manfaat",
+            "alamat": "14 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/gondang.html"
@@ -43,21 +43,21 @@
         {
             "id": 6,
             "nama": "Kec.Sambungmacan",
-            "alamat": "7 Penerima Manfaat",
+            "alamat": "10 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/sambungmacan.html"
         },
         {
             "id": 7,
             "nama": "Kec.Sambirejo",
-            "alamat": "17 Penerima Manfaat",
+            "alamat": "36 Penerima Manfaat",
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/sambirejo.html"
         },
         {
             "id": 8,
             "nama": "Kec.Jenar",
-            "alamat": "3 Penerima Manfaat",
+            "alamat": "4 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/jenar.html"
@@ -65,7 +65,7 @@
         {
             "id": 9,
             "nama": "Kec.Masaran",
-            "alamat": "1 Penerima Manfaat",
+            "alamat": "3 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/masaran.html"
@@ -73,7 +73,7 @@
         {
             "id": 10,
             "nama": "Sidoharjo",
-            "alamat": "8 Penerima Manfaat",
+            "alamat": "12 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/sidoharjo.html"
@@ -81,7 +81,7 @@
         {
             "id": 11,
             "nama": "Kec.Gesi",
-            "alamat": "0 Penerima Manfaat",
+            "alamat": "2 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/gesi.html"
@@ -89,7 +89,7 @@
         {
             "id": 12,
             "nama": "Kec.Sukodono",
-            "alamat": "3 Penerima Manfaat",
+            "alamat": "7 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/sukodono.html"
@@ -97,7 +97,7 @@
         {
             "id": 13,
             "nama": "Kec.Mondokan",
-            "alamat": "1 Penerima Manfaat",
+            "alamat": "4 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/mondokan.html"
@@ -105,7 +105,7 @@
         {
             "id": 14,
             "nama": "Kec.Tanon",
-            "alamat": "6 Penerima Manfaat",
+            "alamat": "7 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/tanon.html"
@@ -121,7 +121,7 @@
         {
             "id": 16,
             "nama": "Kec.Kalijambe",
-            "alamat": "1 Penerima Manfaat",
+            "alamat": "2 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/kalijambe.html"
@@ -129,7 +129,7 @@
         {
             "id": 17,
             "nama": "Kec.Gemolong",
-            "alamat": "7 Penerima Manfaat",
+            "alamat": "8 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/gemolong.html"
@@ -145,7 +145,7 @@
         {
             "id": 19,
             "nama": "Kec.Miri",
-            "alamat": "4 Penerima Manfaat",
+            "alamat": "5 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/miri.html"
@@ -153,7 +153,7 @@
         {
             "id": 20,
             "nama": "Kec.Tangen",
-            "alamat": "4 Penerima Manfaat",
+            "alamat": "5 Penerima Manfaat",
            
             "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
             "link": "https://awghostrider24.github.io/Adsid/kecamatan/tangen.html"
