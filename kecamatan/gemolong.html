@@ -10,6 +10,18 @@
       background: #f4f4f4;
       margin: 20px;
     }
+    .search-box {
+      max-width: 400px;
+      margin: 20px auto;
+      text-align: center;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
     .card-list {
       display: flex;
       flex-direction: column;
@@ -49,28 +61,47 @@
 </head>
 <body>
   <h2 style="text-align:center;">Daftar Penerima Manfaat di Kecamatan Gemolong</h2>
+
+  <div class="search-box">
+    <input type="text" id="searchId" placeholder="Masukkan ID Penerima...">
+  </div>
+
   <div class="card-list" id="card-list"></div>
 
   <script>
-    fetch('https://script.google.com/macros/s/AKfycbw5WbbmLQVQpwtrHE0jCmp1csmhsOipb7pvkpuFcrt4Qv5WNigWQ0dT2ayreMwqgmmz/exec') // Ganti dengan URL Web App dari langkah sebelumnya
+    let allData = [];
+
+    fetch('https://script.google.com/macros/s/AKfycbw5WbbmLQVQpwtrHE0jCmp1csmhsOipb7pvkpuFcrt4Qv5WNigWQ0dT2ayreMwqgmmz/exec')
       .then(response => response.json())
       .then(data => {
-        const container = document.getElementById("card-list");
-        data.forEach(row => {
-          container.innerHTML += `
-            <div class="card">
-              <img src="https://awghostrider24.github.io/Adsid/sample/sd.jpg" alt="Foto ${row.NAMA}" />
-              <div class="card-content">
-                <h3>${row.NAMA}</h3>
-                <p><strong>Alamat:</strong> ${row.ALAMAT}</p>
-                <p><strong>Jenis Bantuan:</strong> ${row["JENIS BANTUAN"]}</p>
-                <p><strong>Nominal:</strong> ${row.NOMINAL || '-'}</p>
-                <p><strong>Desa/Kecamatan:</strong> ${row.Desa}, ${row.Kecamatan}</p>
-              </div>
-            </div>`;
-        });
+        allData = data; // simpan semua data
       })
       .catch(error => console.error('Error:', error));
+
+    document.getElementById('searchId').addEventListener('input', function () {
+      const input = this.value.trim().toLowerCase();
+      const container = document.getElementById("card-list");
+      container.innerHTML = '';
+
+      if (input === '') return;
+
+      const result = allData.find(row => String(row.ID).toLowerCase() === input);
+
+      if (result) {
+        container.innerHTML = `
+          <div class="card">
+            <img src="https://awghostrider24.github.io/Adsid/sample/sd.jpg" alt="Foto ${result.NAMA}" />
+            <div class="card-content">
+              <h3>${result.NAMA}</h3>
+              <p><strong>Alamat:</strong> ${result.ALAMAT}</p>
+              <p><strong>Jenis Bantuan:</strong> ${result["JENIS BANTUAN"]}</p>
+              <p><strong>Nominal:</strong> ${result.NOMINAL || '-'}</p>
+              <p><strong>Desa/Kecamatan:</strong> ${result.Desa}, ${result.Kecamatan}</p>
+            </div>
+          </div>
+        `;
+      }
+    });
   </script>
 </body>
 </html>
