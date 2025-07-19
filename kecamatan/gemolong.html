@@ -8,141 +8,69 @@
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      margin: 0;
-      padding: 0;
+      margin: 20px;
     }
-
-    h2 {
-      text-align: center;
-      padding: 16px;
-      font-size: 20px;
-    }
-
-    .search-box {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-
-    .search-box input {
-      width: 100%;
-      max-width: 300px;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-
     .card-list {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      padding: 0 16px 32px;
       max-width: 800px;
       margin: auto;
     }
-
     .card {
       background: white;
       padding: 16px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       display: flex;
-      flex-direction: row;
       gap: 16px;
       align-items: flex-start;
     }
-
     .card img {
       width: 80px;
       height: 80px;
       border-radius: 8px;
       object-fit: cover;
-      flex-shrink: 0;
     }
-
     .card-content {
       flex: 1;
     }
-
     .card-content h3 {
       margin: 0 0 8px;
       font-size: 18px;
       color: #333;
     }
-
     .card-content p {
       margin: 4px 0;
       color: #555;
       font-size: 14px;
     }
-
-    @media (max-width: 600px) {
-      .card {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .card img {
-        width: 100px;
-        height: 100px;
-      }
-
-      .card-content h3 {
-        font-size: 16px;
-      }
-
-      .card-content p {
-        font-size: 13px;
-      }
-    }
   </style>
 </head>
 <body>
-  <h2>Daftar Penerima Manfaat di Kecamatan Gemolong</h2>
-
-  <div class="search-box">
-    <input type="text" id="searchId" placeholder="Masukkan ID Penerima...">
-  </div>
-
+  <h2 style="text-align:center;">Daftar Penerima Manfaat di Kecamatan Gemolong</h2>
   <div class="card-list" id="card-list"></div>
 
   <script>
-    let allData = [];
-
-    fetch('https://script.google.com/macros/s/AKfycbw5WbbmLQVQpwtrHE0jCmp1csmhsOipb7pvkpuFcrt4Qv5WNigWQ0dT2ayreMwqgmmz/exec')
+    fetch('https://script.google.com/macros/s/AKfycbw5WbbmLQVQpwtrHE0jCmp1csmhsOipb7pvkpuFcrt4Qv5WNigWQ0dT2ayreMwqgmmz/exec') // Ganti dengan URL Web App dari langkah sebelumnya
       .then(response => response.json())
       .then(data => {
-        allData = data;
+        const container = document.getElementById("card-list");
+        data.forEach(row => {
+          container.innerHTML += `
+            <div class="card">
+              <img src="https://awghostrider24.github.io/Adsid/sample/sd.jpg" alt="Foto ${row.NAMA}" />
+              <div class="card-content">
+                <h3>${row.NAMA}</h3>
+                <p><strong>Alamat:</strong> ${row.ALAMAT}</p>
+                <p><strong>Jenis Bantuan:</strong> ${row["JENIS BANTUAN"]}</p>
+                <p><strong>Nominal:</strong> ${row.NOMINAL || '-'}</p>
+                <p><strong>Desa/Kecamatan:</strong> ${row.Desa}, ${row.Kecamatan}</p>
+              </div>
+            </div>`;
+        });
       })
       .catch(error => console.error('Error:', error));
-
-    document.getElementById('searchId').addEventListener('input', function () {
-      const input = this.value.trim().toLowerCase();
-      const container = document.getElementById("card-list");
-      container.innerHTML = '';
-
-      if (input === '') return;
-
-      const result = allData.find(row => String(row.ID).toLowerCase() === input);
-
-      if (result) {
-        container.innerHTML = `
-          <div class="card">
-            <img src="https://awghostrider24.github.io/Adsid/sample/sd.jpg" alt="Foto ${result.NAMA}" />
-            <div class="card-content">
-              <h3>${result.NAMA}</h3>
-              <p><strong>Alamat:</strong> ${result.ALAMAT}</p>
-              <p><strong>Jenis Bantuan:</strong> ${result["JENIS BANTUAN"]}</p>
-              <p><strong>Nominal:</strong> ${result.NOMINAL || '-'}</p>
-              <p><strong>Desa/Kecamatan:</strong> ${result.Desa}, ${result.Kecamatan}</p>
-            </div>
-          </div>
-        `;
-      }
-    });
   </script>
 </body>
 </html>
