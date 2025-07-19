@@ -19,13 +19,14 @@
     }
 
     .search-box {
-      padding: 0 16px 16px;
-      max-width: 600px;
-      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
     }
 
     .search-box input {
       width: 100%;
+      max-width: 300px;
       padding: 12px;
       font-size: 16px;
       border-radius: 8px;
@@ -114,7 +115,7 @@
     fetch('https://script.google.com/macros/s/AKfycbw5WbbmLQVQpwtrHE0jCmp1csmhsOipb7pvkpuFcrt4Qv5WNigWQ0dT2ayreMwqgmmz/exec')
       .then(response => response.json())
       .then(data => {
-        allData = data; // Simpan semua data
+        allData = data;
       })
       .catch(error => console.error('Error:', error));
 
