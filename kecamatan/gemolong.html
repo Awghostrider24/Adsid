@@ -8,59 +8,99 @@
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
     }
-    .search-box {
-      max-width: 400px;
-      margin: 20px auto;
+
+    h2 {
       text-align: center;
+      padding: 16px;
+      font-size: 20px;
     }
+
+    .search-box {
+      padding: 0 16px 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
     .search-box input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
+
     .card-list {
       display: flex;
       flex-direction: column;
       gap: 15px;
+      padding: 0 16px 32px;
       max-width: 800px;
       margin: auto;
     }
+
     .card {
       background: white;
       padding: 16px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
       display: flex;
+      flex-direction: row;
       gap: 16px;
       align-items: flex-start;
     }
+
     .card img {
       width: 80px;
       height: 80px;
       border-radius: 8px;
       object-fit: cover;
+      flex-shrink: 0;
     }
+
     .card-content {
       flex: 1;
     }
+
     .card-content h3 {
       margin: 0 0 8px;
       font-size: 18px;
       color: #333;
     }
+
     .card-content p {
       margin: 4px 0;
       color: #555;
       font-size: 14px;
     }
+
+    @media (max-width: 600px) {
+      .card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .card img {
+        width: 100px;
+        height: 100px;
+      }
+
+      .card-content h3 {
+        font-size: 16px;
+      }
+
+      .card-content p {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;">Daftar Penerima Manfaat di Kecamatan Gemolong</h2>
+  <h2>Daftar Penerima Manfaat di Kecamatan Gemolong</h2>
 
   <div class="search-box">
     <input type="text" id="searchId" placeholder="Masukkan ID Penerima...">
@@ -74,7 +114,7 @@
     fetch('https://script.google.com/macros/s/AKfycbw5WbbmLQVQpwtrHE0jCmp1csmhsOipb7pvkpuFcrt4Qv5WNigWQ0dT2ayreMwqgmmz/exec')
       .then(response => response.json())
       .then(data => {
-        allData = data; // simpan semua data
+        allData = data; // Simpan semua data
       })
       .catch(error => console.error('Error:', error));
 
