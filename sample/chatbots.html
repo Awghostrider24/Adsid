@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASBAS Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .chatbox {
+      width: 360px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header {
+      background: #006400;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+    }
+    .chat-messages {
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+    button {
+      background: #ffc107;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .user-message {
+      text-align: right;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .bot-message {
+      text-align: left;
+      color: #006400;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chatbox">
+    <div class="chat-header">ASBAS - Asisten BAZNAS Surakarta</div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="bot-message">
+        Selamat datang! Saya ASBAS. Saya siap bantu info mengenai:
+        <br>- Zakat (Fitrah & Maal)
+        <br>- Infaq & Sedekah
+        <br>- Program DSKL
+        <br>- Layanan BAZNAS Surakarta
+        <br><br>Apa yang bisa saya bantu hari ini?
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Tulis pesan..." />
+      <button onclick="sendMessage()">Kirim</button>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const message = input.value.trim();
+      if (message === "") return;
+
+      const chat = document.getElementById("chatMessages");
+
+      // Tambah pesan pengguna
+      const userMsg = document.createElement("div");
+      userMsg.className = "user-message";
+      userMsg.innerText = message;
+      chat.appendChild(userMsg);
+
+      // Respons sederhana
+      const botMsg = document.createElement("div");
+      botMsg.className = "bot-message";
+      botMsg.innerText = getBotResponse(message);
+      chat.appendChild(botMsg);
+
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+      input = input.toLowerCase();
+      if (input.includes("zakat")) {
+        return "Zakat terbagi menjadi Zakat Fitrah dan Zakat Maal. Zakat Fitrah dibayarkan menjelang Idul Fitri.";
+      } else if (input.includes("infaq") || input.includes("sedekah")) {
+        return "Infaq dan sedekah adalah bentuk amal sunnah yang dapat dilakukan kapan saja.";
+      } else if (input.includes("dskl")) {
+        return "Program DSKL adalah program pendistribusian dan pendayagunaan dana zakat BAZNAS.";
+      } else if (input.includes("layanan") || input.includes("baznas")) {
+        return "BAZNAS Surakarta menyediakan layanan konsultasi zakat dan pengajuan bantuan.";
+      } else {
+        return "Maaf, saya belum mengerti. Silakan ketik kata kunci seperti: zakat, infaq, DSKL, atau layanan.";
+      }
+    }
+  </script>
+</body>
+</html>
