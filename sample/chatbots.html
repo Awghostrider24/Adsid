@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASBAS Chatbot</title>
+  <title>AZaM Chatbot</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -64,14 +64,14 @@
 </head>
 <body>
   <div class="chatbox">
-    <div class="chat-header">ASBAS - Asisten BAZNAS Surakarta</div>
+    <div class="chat-header">AZaM  - Asisten Zakat Muzakki</div>
     <div class="chat-messages" id="chatMessages">
       <div class="bot-message">
-        Selamat datang! Saya ASBAS. Saya siap bantu info mengenai:
+        Selamat datang! Saya AZaM. Saya siap bantu info mengenai:
         <br>- Zakat (Fitrah & Maal)
         <br>- Infaq & Sedekah
         <br>- Program DSKL
-        <br>- Layanan BAZNAS Surakarta
+        <br>- Layanan BAZNAS Sragen
         <br><br>Apa yang bisa saya bantu hari ini?
       </div>
     </div>
@@ -114,7 +114,7 @@
       } else if (input.includes("dskl")) {
         return "Program DSKL adalah program pendistribusian dan pendayagunaan dana zakat BAZNAS.";
       } else if (input.includes("layanan") || input.includes("baznas")) {
-        return "BAZNAS Surakarta menyediakan layanan konsultasi zakat dan pengajuan bantuan.";
+        return "BAZNAS Sragen menyediakan layanan konsultasi zakat dan pengajuan bantuan.";
       } else {
         return "Maaf, saya belum mengerti. Silakan ketik kata kunci seperti: zakat, infaq, DSKL, atau layanan.";
       }
