@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutiara Regency - Wujudkan Rumah Impianmu!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+
+    header {
+      background-color: #e0f2fe;
+      padding: 20px 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    header h1 {
+      color: #0284c7;
+      font-size: 1.5rem;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #0369a1;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    nav ul li a:hover {
+      color: #0284c7;
+    }
+
+    .login-btn, .contact-btn {
+      background-color: #0284c7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover, .contact-btn:hover {
+      background-color: #0369a1;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 60px 10%;
+      background-color: white;
+    }
+
+    .hero-text {
+      max-width: 500px;
+    }
+
+    .hero-text h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+
+    .hero-text p {
+      margin-bottom: 20px;
+      color: #475569;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box input, .search-box button {
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+
+    .search-box button {
+      background-color: #0284c7;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .stats {
+      background-color: #f0f9ff;
+      display: flex;
+      justify-content: space-around;
+      padding: 40px 0;
+    }
+
+    .stats div {
+      text-align: center;
+    }
+
+    .stats h3 {
+      color: #0284c7;
+      margin-bottom: 5px;
+    }
+
+    .properties {
+      padding: 60px 10%;
+    }
+
+    .properties h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #0f172a;
+    }
+
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .property-card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+
+    .property-card:hover {
+      transform: scale(1.03);
+    }
+
+    .property-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .property-info {
+      padding: 15px;
+    }
+
+    .property-info h4 {
+      color: #0284c7;
+      margin-bottom: 8px;
+    }
+
+    .property-info p {
+      font-size: 0.9rem;
+      color: #475569;
+    }
+
+    footer {
+      background-color: #0284c7;
+      color: white;
+      text-align: center;
+      padding: 25px;
+      margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏠 Adana Property</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Property</a></li>
+        <li><a href="#">Layanan</a></li>
+        <li><a href="#">Produk</a></li>
+        <li><a href="#">Lokasi</a></li>
+        <li><a href="#">About Us</a></li>
+      </ul>
+    </nav>
+    <div>
+      <button class="contact-btn" onclick="window.open('https://wa.me/6281330284747','_blank')">Contact</button>
+      <button class="login-btn">Login</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Wujudkan Rumah Impianmu</h2>
+      <p>Cari rumah, apartemen, atau hunian terbaik untuk masa depanmu. Kami bantu wujudkan dengan mudah dan transparan.</p>
+      <div class="search-box">
+        <input type="text" placeholder="Lokasi">
+        <input type="date">
+        <button>Cari</button>
+      </div>
+    </div>
+    <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Property" width="400" style="border-radius:16px;">
+  </section>
+
+  <section class="stats">
+    <div>
+      <h3>5.6K+</h3>
+      <p>Premium Product</p>
+    </div>
+    <div>
+      <h3>2.3K+</h3>
+      <p>Happy Customers</p>
+    </div>
+    <div>
+      <h3>268+</h3>
+      <p>Total Constructions</p>
+    </div>
+    <div>
+      <h3>197K+</h3>
+      <p>Apartments Sold</p>
+    </div>
+  </section>
+
+  <section class="properties">
+    <h2>🏡 Type Rumah </h2>
+    <div class="property-grid">
+      <a href="property-detail.html?id=1" class="property-card">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 1">
+        <div class="property-info">
+          <h4>Rp 450 Juta - 2552 Sqft</h4>
+          <p>Madiun, Madiun</p>
+        </div>
+      </a>
+      <a href="property-detail.html?id=2" class="property-card">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 2">
+        <div class="property-info">
+          <h4>Rp 1.2 M - 1635 Sqft</h4>
+          <p>Gambiran, Sragen</p>
+        </div>
+      </a>
+      <a href="property-detail.html?id=3" class="property-card">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 3">
+        <div class="property-info">
+          <h4>Rp 680 Juta - 3697 Sqft</h4>
+          <p>Tanon, Sragen</p>
+        </div>
+      </a>
+      <a href="property-detail.html?id=4" class="property-card">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 4">
+        <div class="property-info">
+          <h4>Rp 1.1 M - 1756 Sqft</h4>
+          <p>Gemolong, Sragen</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 HomeProperty. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

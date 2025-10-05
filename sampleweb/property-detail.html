@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Properti - HomeProperty</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+
+    header {
+      background-color: #e0f2fe;
+      padding: 20px 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    header h1 {
+      color: #0284c7;
+      font-size: 1.5rem;
+    }
+
+    header button {
+      background-color: #0284c7;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    header button:hover {
+      background-color: #0369a1;
+    }
+
+    .container {
+      padding: 50px 10%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .gallery {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .gallery img.main-img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .thumbnail-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .thumbnail-row img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .thumbnail-row img:hover {
+      border: 2px solid #0284c7;
+    }
+
+    .details {
+      flex: 1;
+      min-width: 300px;
+      background-color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .details h2 {
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .details .price {
+      color: #0284c7;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .details .info {
+      margin-bottom: 20px;
+    }
+
+    .details .info p {
+      margin-bottom: 5px;
+      color: #475569;
+    }
+
+    .details .description {
+      margin-bottom: 30px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .details button {
+      background-color: #0284c7;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-right: 10px;
+    }
+
+    .details button:hover {
+      background-color: #0369a1;
+    }
+
+    footer {
+      background-color: #0284c7;
+      color: white;
+      text-align: center;
+      padding: 25px;
+      margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏠 HomeProperty</h1>
+    <button onclick="window.location.href='index.html'">Kembali ke Beranda</button>
+  </header>
+
+  <section class="container">
+    <div class="gallery">
+      <img src="https://cdn.pixabay.com/photo/2017/08/06/22/01/house-2593570_1280.jpg" alt="Properti" class="main-img" id="mainImage">
+      <div class="thumbnail-row">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="thumb1" onclick="changeImage(this)">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="thumb2" onclick="changeImage(this)">
+        <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="thumb3" onclick="changeImage(this)">
+      </div>
+    </div>
+
+    <div class="details">
+      <h2>Rumah Mewah di Shilaj Road, Sragen</h2>
+      <div class="price">Rp 450.000.000</div>
+      <div class="info">
+        <p><strong>Luas:</strong> 2552 Sqft</p>
+        <p><strong>Kamar Tidur:</strong> 3</p>
+        <p><strong>Kamar Mandi:</strong> 2</p>
+        <p><strong>Lokasi:</strong> Sragen, Jawa Tengah</p>
+      </div>
+      <div class="description">
+        Rumah dengan desain modern minimalis yang berlokasi strategis di kawasan Sragen.  
+        Cocok untuk keluarga muda, dekat dengan sekolah, pusat perbelanjaan, dan akses mudah ke jalan utama.
+      </div>
+      <button onclick="window.open('https://wa.me/6281234567890?text=Halo%20saya%20tertarik%20dengan%20properti%20di%20Sragen','_blank')">💬 Hubungi CS</button>
+      <button onclick="window.location.href='index.html'">⬅️ Kembali</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 HomeProperty. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    function changeImage(img) {
+      document.getElementById("mainImage").src = img.src;
+    }
+  </script>
+</body>
+</html>
