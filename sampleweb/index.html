@@ -52,6 +52,22 @@
       color: #0284c7;
     }
 
+    /* Hamburger Icon */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: #0284c7;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
     /* === IMAGE SLIDER === */
     .slider {
       position: relative;
@@ -252,13 +268,26 @@
       transform: scale(1.1);
     }
 
+    /* Responsive */
     @media (max-width: 768px) {
       nav ul {
         display: none;
+        flex-direction: column;
+        background-color: #e0f2fe;
+        position: absolute;
+        top: 60px;
+        right: 5%;
+        width: 180px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       }
 
-      header h1 {
-        font-size: 1.2rem;
+      nav ul.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: flex;
       }
 
       .hero-text h2 {
@@ -274,8 +303,9 @@
 <body>
   <header>
     <h1>🏠 Adana Property</h1>
+
     <nav>
-      <ul>
+      <ul id="nav-menu">
         <li><a href="#">Property</a></li>
         <li><a href="#">Layanan</a></li>
         <li><a href="#">Produk</a></li>
@@ -283,14 +313,21 @@
         <li><a href="#">About Us</a></li>
       </ul>
     </nav>
+
+    <!-- Hamburger -->
+    <div class="menu-toggle" id="menu-toggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </header>
 
   <!-- === AUTO IMAGE SLIDER === -->
   <div class="slider">
     <div class="slides" id="slideContainer">
       <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Slide 1">
-      <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Slide 2">
-      <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Slide 3">
+      <img src="https://source.unsplash.com/1600x600/?modern-house" alt="Slide 2">
+      <img src="https://source.unsplash.com/1600x600/?real-estate" alt="Slide 3">
     </div>
     <div class="slider-dots">
       <div class="dot active" onclick="setSlide(0)"></div>
@@ -334,28 +371,28 @@
   <section class="properties">
     <h2>🏡 Type Rumah </h2>
     <div class="property-grid">
-      <a href="property-detail.html?id=1" class="property-card">
+      <a href="property-detail.html" class="property-card">
         <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 1">
         <div class="property-info">
           <h4>Rp 450 Juta - 2552 Sqft</h4>
           <p>Madiun, Madiun</p>
         </div>
       </a>
-      <a href="property-detail.html?id=2" class="property-card">
+      <a href="property-detail.html" class="property-card">
         <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 2">
         <div class="property-info">
           <h4>Rp 1.2 M - 1635 Sqft</h4>
           <p>Gambiran, Sragen</p>
         </div>
       </a>
-      <a href="property-detail.html?id=3" class="property-card">
+      <a href="property-detail.html" class="property-card">
         <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 3">
         <div class="property-info">
           <h4>Rp 680 Juta - 3697 Sqft</h4>
           <p>Tanon, Sragen</p>
         </div>
       </a>
-      <a href="property-detail.html?id=4" class="property-card">
+      <a href="property-detail.html" class="property-card">
         <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/refs/heads/main/assets/mutiarasample.jpg" alt="Properti 4">
         <div class="property-info">
           <h4>Rp 1.1 M - 1756 Sqft</h4>
@@ -374,8 +411,9 @@
     💬
   </button>
 
-  <!-- === SLIDER SCRIPT === -->
+  <!-- === SCRIPT === -->
   <script>
+    // === Slider ===
     let currentSlide = 0;
     const slides = document.querySelector('.slides');
     const dots = document.querySelectorAll('.dot');
@@ -396,6 +434,14 @@
       currentSlide = (currentSlide + 1) % totalSlides;
       updateSlider();
     }, 4000);
+
+    // === Hamburger Menu ===
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
   </script>
 </body>
 </html>
