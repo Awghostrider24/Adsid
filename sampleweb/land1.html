@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutiara Regency - Hunian Nyaman di Kota Sragen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #e8f4ff;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      overflow: hidden;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slides {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      left: 0;
+      top: 0;
+      animation: fade 1.5s ease-in-out;
+    }
+
+    @keyframes fade {
+      from {opacity: .4} 
+      to {opacity: 1}
+    }
+
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.3s;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover, .next:hover {
+      background: rgba(0,0,0,0.6);
+    }
+
+    .dots {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      height: 12px;
+      width: 12px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+      cursor: pointer;
+    }
+
+    .active, .dot:hover {
+      background-color: #009dff;
+    }
+
+    main {
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #007acc;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .benefit {
+      background: #f0faff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: all 0.8s ease;
+      opacity: 0;
+      transform: translateY(25px);
+    }
+
+    .benefit.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cta {
+      display: inline-block;
+      background: #00a2ff;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .cta.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 1s ease;
+    }
+
+    .cta:hover {
+      background: #007acc;
+    }
+
+    @media (max-width: 768px) {
+      h1 {font-size: 24px;}
+      .cta {padding: 10px 20px; font-size: 14px;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="slider">
+      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/1.jpg" alt="Rumah 1">
+      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/2.jpg" alt="Rumah 2">
+      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/3.jpg" alt="Rumah 3">
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      <div class="dots">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1 class="fade-in">Mutiara Regency Sragen</h1>
+    <p class="fade-in"><strong>Hunian Nyaman, Aman, dan Strategis di Pusat Kota Sragen</strong></p>
+
+    <div class="card fade-in">
+      <p><strong>Harga KPR hanya Rp160 juta</strong> (setelah subsidi pemerintah & PT).<br>
+      Tersedia juga pilihan <strong>Cash Keras Rp162 juta</strong> dan <strong>Cash Tempo Rp164 juta</strong> hingga 18 bulan.<br>
+      Jenis angsuran <strong>flat hingga 20 tahun</strong> tanpa kenaikan. Dapatkan sekarang dengan <strong>DP 0%</strong>!</p>
+    </div>
+
+    <h2>Keunggulan Lokasi</h2>
+    <div class="benefits">
+      <div class="benefit">🏠 Rumah 1 Lantai</div>
+      <div class="benefit">🚗 Akses Jalan Lebar</div>
+      <div class="benefit">🕒 5 Menit ke Alun-alun Sragen</div>
+      <div class="benefit">🏙️ 5 Menit ke Pusat Kota</div>
+      <div class="benefit">🏥 5 Menit ke Pusat Kesehatan</div>
+    </div>
+
+    <a class="cta" href="https://wa.me/6281330284747?text=Halo%20saya%20tertarik%20dengan%20Mutiara%20Regency%20Sragen" target="_blank">💬 Hubungi Kami via WhatsApp</a>
+  </main>
+
+  <script>
+    let slideIndex = 0;
+    let slides = document.getElementsByClassName("slides");
+    let dots = document.getElementsByClassName("dot");
+
+    function showSlides(n) {
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+      }
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}
+      slides[slideIndex-1].style.display = "block";  
+      dots[slideIndex-1].className += " active";
+      setTimeout(showSlides, 4000);
+    }
+
+    function plusSlides(n) {
+      slideIndex += n - 1;
+      if (slideIndex < 0) {slideIndex = slides.length - 1;}
+      showSlides(slideIndex);
+    }
+
+    function currentSlide(n) {
+      slideIndex = n - 1;
+      showSlides(slideIndex);
+    }
+
+    showSlides(slideIndex);
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {threshold: 0.2});
+
+    document.querySelectorAll('.card, .benefit, .cta').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
