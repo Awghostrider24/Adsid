@@ -43,7 +43,7 @@
     }
 
     @keyframes fade {
-      from {opacity: .4} 
+      from {opacity: .4}
       to {opacity: 1}
     }
 
@@ -172,19 +172,48 @@
       background: #007acc;
     }
 
-    .booking-text {
-      margin-top: 30px;
-      font-size: 18px;
-      color: #005fa3;
-      font-weight: 500;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 1s ease;
+    .map-section {
+      margin-top: 40px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: fade 1.5s ease-in-out;
     }
 
-    .booking-text.visible {
-      opacity: 1;
-      transform: translateY(0);
+    footer {
+      background: #007acc;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+      margin-top: 40px;
+    }
+
+    footer h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    footer p {
+      font-size: 14px;
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+
+    footer a {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .copyright {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #d0ebff;
     }
 
     @media (max-width: 768px) {
@@ -228,10 +257,31 @@
       <div class="benefit">🏥 5 Menit ke Pusat Kesehatan</div>
     </div>
 
-    <p class="booking-text">💡 Segera <strong>booking unit sekarang juga</strong> sebelum kehabisan kuota! Jangan lewatkan kesempatan memiliki hunian terbaik di Kota Sragen.</p>
+    <p style="margin-top: 30px; font-size: 18px; color: #007acc; font-weight: 600;">
+      💡 Segera Booking Unit Sekarang Sebelum Kehabisan Kuota! Hunian Terbatas!
+    </p>
 
-    <a class="cta" href="https://wa.me/6281330284747?text=Halo%20saya%20tertarik%20dengan%20Mutiara%20Regency%20Sragen" target="_blank">💬 Hubungi Kami via WhatsApp</a>
+    <a class="cta" href="https://wa.me/6281330284747?text=Halo%20saya%20tertarik%20dengan%20Mutiara%20Regency%20Sragen" target="_blank">
+      💬 Hubungi Kami via WhatsApp
+    </a>
+
+    <section class="map-section">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.267531244615!2d111.00166337475025!3d-7.434269292564785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a0300794844d1%3A0x32b89beef2e6094e!2sMutiara%20Regency!5e0!3m2!1sid!2sid!4v1696750290813!5m2!1sid!2sid"
+        width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </section>
   </main>
+
+  <footer>
+    <h3>Mutiara Regency Sragen</h3>
+    <p>📍 Lokasi: Jl. Gambiran, Kroyo, Karangmalang, Kabupaten Sragen</p>
+    <p>📞 WA: <a href="https://wa.me/6281330284747" target="_blank">0813-3028-4747</a></p>
+    <p>✉️ Email: mutiararegencysragen@gmail.com</p>
+    <div class="copyright">
+      © 2025 Mutiara Regency Sragen. All Rights Reserved.
+    </div>
+  </footer>
 
   <script>
     let slideIndex = 0;
@@ -240,14 +290,14 @@
 
     function showSlides(n) {
       for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
+        slides[i].style.display = "none";
       }
       for (let i = 0; i < dots.length; i++) {
         dots[i].className = dots[i].className.replace(" active", "");
       }
       slideIndex++;
       if (slideIndex > slides.length) {slideIndex = 1}
-      slides[slideIndex-1].style.display = "block";  
+      slides[slideIndex-1].style.display = "block";
       dots[slideIndex-1].className += " active";
       setTimeout(showSlides, 4000);
     }
@@ -265,7 +315,7 @@
 
     showSlides(slideIndex);
 
-    // Fade-in on scroll
+    // Fade-in animation on scroll
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -274,10 +324,9 @@
       });
     }, {threshold: 0.2});
 
-    document.querySelectorAll('.card, .benefit, .cta, .booking-text').forEach(el => {
+    document.querySelectorAll('.card, .benefit, .cta').forEach(el => {
       observer.observe(el);
     });
   </script>
 </body>
 </html>
-
