@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutiara Regency - Hunian Nyaman di Kota Sragen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #e8f4ff;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      overflow: hidden;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slides {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      left: 0;
+      top: 0;
+      animation: fade 1.5s ease-in-out;
+    }
+
+    @keyframes fade {
+      from {opacity: .4}
+      to {opacity: 1}
+    }
+
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.3s;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover, .next:hover {
+      background: rgba(0,0,0,0.6);
+    }
+
+    .dots {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      height: 12px;
+      width: 12px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+      cursor: pointer;
+    }
+
+    .active, .dot:hover {
+      background-color: #009dff;
+    }
+
+    main {
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #007acc;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .benefit {
+      background: #f0faff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: all 0.8s ease;
+      opacity: 0;
+      transform: translateY(25px);
+    }
+
+    .benefit.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cta {
+      display: inline-block;
+      background: #00a2ff;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .cta.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 1s ease;
+    }
+
+    .cta:hover {
+      background: #007acc;
+    }
+
+    .map-section {
+      margin-top: 40px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: fade 1.5s ease-in-out;
+    }
+
+    footer {
+      background: #007acc;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+      margin-top: 40px;
+    }
+
+    footer h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    footer p {
+      font-size: 14px;
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+
+    footer a {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .copyright {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #d0ebff;
+    }
+
+    @media (max-width: 768px) {
+      h1 {font-size: 24px;}
+      .cta {padding: 10px 20px; font-size: 14px;}
+    }
+
+    /* Sinematik animation */
+    @keyframes pulse {
+      0% {opacity: 0.4; transform: scale(1);}
+      100% {opacity: 0.8; transform: scale(1.1);}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="slider">
+      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/a1.jpg" alt="Rumah 1">
+      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/2.jpg" alt="Rumah 2">
+      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/3.jpg" alt="Rumah 3">
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      <div class="dots">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- STORYTELLING SECTION SINEMATIK -->
+    <section class="card fade-in" style="background: linear-gradient(135deg, #f9fcff 0%, #e8f4ff 100%); position: relative;">
+      <div style="position:absolute;top:0;left:0;width:100%;height:100%;
+        background:radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+        animation:pulse 8s infinite alternate ease-in-out;"></div>
+
+      <h2 style="color:#007acc; margin-bottom:15px; position:relative;">Sebuah Cerita Sepuluh Tahun Lagi...</h2>
+
+      <p style="font-style:italic; line-height:1.9; font-size:16px; color:#333; position:relative; text-align:justify;">
+        Bayangkan pagi di tahun <strong>2035</strong>.<br>
+        Kau berjalan melewati jalan yang dulu hanya berupa tanah kosong —  
+        kini berdiri deretan rumah indah dengan taman yang hijau dan udara sejuk.<br><br>
+
+        Suara anak-anak tertawa, aroma kopi dari teras,  
+        dan matahari yang menyapa pelan melalui jendela.  
+        Tapi di dadamu… ada sedikit sesal.<br><br>
+
+        “Andai saja dulu aku berani memulai…”<br><br>
+
+        Karena <strong>sepuluh tahun lalu</strong>, di tahun 2025,  
+        harga rumah di <strong>Mutiara Regency</strong> masih Rp166 juta.  
+        Harga yang kini hanya setara dengan sebuah motor baru.<br><br>
+
+        Tapi waktu berjalan cepat —  
+        harga tanah melesat, bahan bangunan naik, dan rumah impian itu...  
+        kini bernilai tiga kali lipat.<br><br>
+
+        Sementara yang berani mengambil langkah kecil waktu itu,  
+        hari ini tinggal tenang di rumahnya sendiri.  
+        Nilainya bukan cuma di rupiah —  
+        tapi di rasa tenang, di setiap pagi yang damai.<br><br>
+
+        <strong>Kadang keputusan kecil hari ini,  
+        bisa jadi kebahagiaan besar di masa depan.</strong><br><br>
+
+        Jangan tunggu nanti. Karena harga tanah...  
+        tidak pernah menunggu siapa pun.
+      </p>
+    </section>
+	<h1 class="fade-in">Mutiara Regency Sragen</h1>
+    <p class="fade-in"><strong>Hunian Nyaman, Aman, dan Strategis di Pusat Kota Sragen</strong></p>
+
+    <div class="card fade-in">
+      <p><strong>Harga KPR hanya Rp160 juta</strong> (setelah subsidi pemerintah & PT).<br>
+      Tersedia juga pilihan <strong>Cash Keras Rp162 juta</strong> dan <strong>Cash Tempo Rp164 juta</strong> hingga 18 bulan.<br>
+      Jenis angsuran <strong>flat hingga 20 tahun</strong> tanpa kenaikan. Dapatkan sekarang dengan <strong>DP 0%</strong>!</p>
+    </div>
+
+    <h2>Keunggulan Lokasi</h2>
+    <div class="benefits">
+      <div class="benefit">🏠 Rumah 1 Lantai</div>
+      <div class="benefit">🚗 Akses Jalan Lebar</div>
+      <div class="benefit">🕒 5 Menit ke Alun-alun Sragen</div>
+      <div class="benefit">🏙️ 5 Menit ke Pusat Kota</div>
+      <div class="benefit">🏥 5 Menit ke Pusat Kesehatan</div>
+    </div>
+
+    <p style="margin-top: 30px; font-size: 18px; color: #007acc; font-weight: 600;">
+      💡 Segera Booking Unit Sekarang Sebelum Kehabisan Kuota! Hunian Terbatas!
+    </p>
+
+    <a class="cta" href="https://wa.me/6281330284747?text=Halo%20saya%20tertarik%20dengan%20Mutiara%20Regency%20Sragen" target="_blank">
+      💬 Hubungi Kami via WhatsApp
+    </a>
+
+    <section class="map-section">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.267531244615!2d111.00166337475025!3d-7.434269292564785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a0300794844d1%3A0x32b89beef2e6094e!2sMutiara%20Regency!5e0!3m2!1sid!2sid!4v1696750290813!5m2!1sid!2sid"
+        width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </section>
+  </main>
+
+  <footer>
+    <h3>Mutiara Regency Sragen</h3>
+    <p>📍 Lokasi: Jl. Gambiran, Kroyo, Karangmalang, Kabupaten Sragen</p>
+    <p>📞 WA: <a href="https://wa.me/6281330284747" target="_blank">0813-3028-4747</a></p>
+    <p>✉️ Email: mutiararegencysragen@gmail.com</p>
+    <div class="copyright">
+      © 2025 Mutiara Regency Sragen. All Rights Reserved.
+    </div>
+  </footer>
+
+  <script>
+    let slideIndex = 0;
+    let slides = document.getElementsByClassName("slides");
+    let dots = document.getElementsByClassName("dot");
+
+    function showSlides() {
+      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+      for (let i = 0; i < dots.length; i++) dots[i].className = dots[i].className.replace(" active", "");
+      slideIndex++;
+      if (slideIndex > slides.length) slideIndex = 1;
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active";
+      setTimeout(showSlides, 4000);
+    }
+
+    function plusSlides(n) {
+      slideIndex += n - 1;
+      if (slideIndex < 0) slideIndex = slides.length - 1;
+      showSlides(slideIndex);
+    }
+
+    function currentSlide(n) {
+      slideIndex = n - 1;
+      showSlides(slideIndex);
+    }
+
+    showSlides();
+
+    // Fade-in animation on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {threshold: 0.2});
+
+    document.querySelectorAll('.card, .benefit, .cta').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
