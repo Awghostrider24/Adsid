@@ -19,79 +19,22 @@
     }
 
     header {
-      position: relative;
-      width: 100%;
-      height: 70vh;
-      overflow: hidden;
+      text-align: center;
+      padding-top: 10px;
     }
 
-    .slider {
-      position: relative;
+    header img {
       width: 100%;
-      height: 100%;
-    }
-
-    .slides {
-      display: none;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      left: 0;
-      top: 0;
-      animation: fade 1.5s ease-in-out;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 0px;
+      box-shadow: 0 0x 0px rgba(0,0,0,0.2);
+      animation: fade 2s ease-in-out;
     }
 
     @keyframes fade {
       from {opacity: .4}
       to {opacity: 1}
-    }
-
-    .prev, .next {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      width: auto;
-      padding: 10px;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      transition: 0.3s;
-      border-radius: 0 3px 3px 0;
-      user-select: none;
-      background: rgba(0,0,0,0.3);
-    }
-
-    .next {
-      right: 0;
-      border-radius: 3px 0 0 3px;
-    }
-
-    .prev:hover, .next:hover {
-      background: rgba(0,0,0,0.6);
-    }
-
-    .dots {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-    }
-
-    .dot {
-      height: 12px;
-      width: 12px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.6s ease;
-      cursor: pointer;
-    }
-
-    .active, .dot:hover {
-      background-color: #009dff;
     }
 
     main {
@@ -127,6 +70,96 @@
       opacity: 1;
       transform: translateY(0);
     }
+/* Popup Image Viewer */
+.image-popup {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.85);
+  backdrop-filter: blur(5px);
+}
+
+.image-popup img {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+  animation: zoomIn 0.5s ease;
+}
+
+.image-popup span {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: white;
+  font-size: 35px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.image-popup span:hover {
+  color: #00aaff;
+}
+
+@keyframes zoomIn {
+  from {transform: scale(0.8); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
+}
+
+/* Slider Section */
+.slider-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin: 5px auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+.slider {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  cursor: grab;
+}
+
+.slide {
+  min-width: 100%;
+  height: auto; /* biarkan tinggi menyesuaikan gambar */
+  object-fit: contain; /* tampilkan gambar utuh tanpa terpotong */
+  user-select: none;
+  background-color: #f5f5f5; /* latar belakang jika gambar kecil */
+}
+
+.dots {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 4px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #009dff;
+
+}
 
     .benefits {
       display: grid;
@@ -190,18 +223,6 @@
       margin-top: 40px;
     }
 
-    footer h3 {
-      margin-bottom: 10px;
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    footer p {
-      font-size: 14px;
-      margin-bottom: 5px;
-      line-height: 1.5;
-    }
-
     footer a {
       color: #fff;
       font-weight: bold;
@@ -218,35 +239,38 @@
       color: #d0ebff;
     }
 
-    @media (max-width: 768px) {
-      h1 {font-size: 24px;}
-      .cta {padding: 10px 20px; font-size: 14px;}
-    }
-
     /* Sinematik animation */
     @keyframes pulse {
       0% {opacity: 0.4; transform: scale(1);}
       100% {opacity: 0.8; transform: scale(1.1);}
     }
+
+    @media (max-width: 768px) {
+      h1 {font-size: 24px;}
+      .slide {height: 45vh;}
+      .cta {padding: 10px 20px; font-size: 14px;}
+    }
   </style>
 </head>
 <body>
+
+  <!-- Gambar utama di atas -->
   <header>
-    <div class="slider">
-      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/a1.jpg" alt="Rumah 1">
-      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/2.jpg" alt="Rumah 2">
-      <img class="slides" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/3.jpg" alt="Rumah 3">
-      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-      <a class="next" onclick="plusSlides(1)">&#10095;</a>
-      <div class="dots">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
-      </div>
-    </div>
+    <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/a1.jpg" alt="Rumah Utama Mutiara Regency">
   </header>
 
   <main>
+    <h1 class="fade-in">Coba Sejenak Kamu Renungkan!</h1>
+    <p class="fade-in"><strong>Apakah nilai uang 166 Juta hari ini akan sama nilainya dengan 10 tahun lagi?</strong></p>
+
+    <div class="card fade-in">
+      <p><strong>Tentu saja tidak.</strong> Uangmu bisa menurun nilainya,
+      tapi tanah dan rumah justru terus naik setiap tahun.<br><br>
+      Maka pertanyaannya bukan lagi “Apakah aku mampu beli rumah sekarang?”
+      tapi “Apakah aku siap kehilangan kesempatan ini nanti?”<br><br>
+      Kamu masih bisa memulai langkah pertama menuju rumah impianmu di <strong>Mutiara Regency</strong>.
+      Tapi sepuluh tahun lagi?<br> <strong>Nilai yang sama mungkin hanya cukup untuk sepetak lahan parkir.</strong></p>
+    </div>
 
     <!-- STORYTELLING SECTION SINEMATIK -->
     <section class="card fade-in" style="background: linear-gradient(135deg, #f9fcff 0%, #e8f4ff 100%); position: relative;">
@@ -254,7 +278,7 @@
         background:radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
         animation:pulse 8s infinite alternate ease-in-out;"></div>
 
-      <h2 style="color:#007acc; margin-bottom:15px; position:relative;">Sebuah Cerita Sepuluh Tahun Lagi...</h2>
+      <h2 style="color:#007acc; margin-bottom:15px; position:relative;">Inilah Bayangan 10 Tahun Lagi</h2>
 
       <p style="font-style:italic; line-height:1.9; font-size:16px; color:#333; position:relative; text-align:justify;">
         Bayangkan pagi di tahun <strong>2035</strong>.<br>
@@ -287,8 +311,29 @@
         tidak pernah menunggu siapa pun.
       </p>
     </section>
-	<h1 class="fade-in">Mutiara Regency Sragen</h1>
-    <p class="fade-in"><strong>Hunian Nyaman, Aman, dan Strategis di Pusat Kota Sragen</strong></p>
+
+    <!-- SLIDER PINDAH KE SINI -->
+    <div class="slider-container">
+      <div class="slider" id="slider">
+        <img class="slide" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/a1.jpg" alt="Rumah 1">
+        <img class="slide" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/2.jpg" alt="Rumah 2">
+        <img class="slide" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/3.jpg" alt="Rumah 3">
+      </div>
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+	<!-- Popup Image -->
+<div id="popupImage" class="image-popup">
+  <span onclick="closePopup()">&times;</span>
+  <img id="popupImg" src="">
+</div>
+
+
+    <h1 class="fade-in">Mutiara Regency Sragen</h1>
+    <p class="fade-in"><strong>Mewujudkan Impianmu untuk memiliki Hunian Nyaman, Aman, dan Strategis di Pusat Kota Sragen</strong></p>
 
     <div class="card fade-in">
       <p><strong>Harga KPR hanya Rp160 juta</strong> (setelah subsidi pemerintah & PT).<br>
@@ -332,45 +377,68 @@
   </footer>
 
   <script>
-    let slideIndex = 0;
-    let slides = document.getElementsByClassName("slides");
-    let dots = document.getElementsByClassName("dot");
+    // Swipe Slider Logic
+    const slider = document.getElementById('slider');
+    const dots = document.querySelectorAll('.dot');
+    let currentIndex = 0;
+    let startX = 0;
+    let isDragging = false;
 
-    function showSlides() {
-      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
-      for (let i = 0; i < dots.length; i++) dots[i].className = dots[i].className.replace(" active", "");
-      slideIndex++;
-      if (slideIndex > slides.length) slideIndex = 1;
-      slides[slideIndex-1].style.display = "block";
-      dots[slideIndex-1].className += " active";
-      setTimeout(showSlides, 4000);
+    function updateSlider() {
+      slider.style.transform = `translateX(${-currentIndex * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
     }
 
-    function plusSlides(n) {
-      slideIndex += n - 1;
-      if (slideIndex < 0) slideIndex = slides.length - 1;
-      showSlides(slideIndex);
-    }
+    slider.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    slider.addEventListener('touchmove', e => {
+      if (!startX) return;
+      let diff = startX - e.touches[0].clientX;
+      if (diff > 50) { currentIndex = (currentIndex + 1) % dots.length; startX = 0; }
+      else if (diff < -50) { currentIndex = (currentIndex - 1 + dots.length) % dots.length; startX = 0; }
+      updateSlider();
+    });
 
-    function currentSlide(n) {
-      slideIndex = n - 1;
-      showSlides(slideIndex);
-    }
-
-    showSlides();
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        currentIndex = i;
+        updateSlider();
+      });
+    });
 
     // Fade-in animation on scroll
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, {threshold: 0.2});
 
-    document.querySelectorAll('.card, .benefit, .cta').forEach(el => {
-      observer.observe(el);
-    });
+    document.querySelectorAll('.card, .benefit, .cta').forEach(el => observer.observe(el));
+	// Klik gambar untuk tampil besar
+const slidesImg = document.querySelectorAll('.slide');
+const popup = document.getElementById('popupImage');
+const popupImg = document.getElementById('popupImg');
+
+slidesImg.forEach(img => {
+  img.addEventListener('click', () => {
+    popup.style.display = 'block';
+    popupImg.src = img.src;
+  });
+});
+
+function closePopup() {
+  popup.style.display = 'none';
+}
+
+// Tutup popup jika klik di luar gambar
+popup.addEventListener('click', (e) => {
+  if (e.target === popup) {
+    closePopup();
+  }
+});
+
   </script>
+  
 </body>
 </html>
