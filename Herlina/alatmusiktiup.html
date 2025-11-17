@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alat Musik Tiup</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            background: #f3f6fa;
+            text-align: center;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4c8df5, #6ad4dd);
+            padding: 22px;
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Wrapper tombol */
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        /* Desain tombol */
+        .btn {
+            padding: 12px 22px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Warna tombol */
+        .play { background: linear-gradient(135deg, #4caf50, #45d17a); }
+        .pause { background: linear-gradient(135deg, #ff9800, #ffc362); }
+        .stop { background: linear-gradient(135deg, #f44336, #ff7b70); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>Alat Musik Tiup</header>
+
+<div class="container">
+
+    <img src="https://awghostrider24.github.io/Adsid/halaman/tiup.jpg" alt="Alat Musik Tiup">
+
+    <div class="controls">
+        <button class="btn play" onclick="playAudio()">▶ Play</button>
+        <button class="btn pause" onclick="pauseAudio()">⏸ Pause</button>
+        <button class="btn stop" onclick="stopAudio()">⏹ Stop</button>
+    </div>
+
+    <audio id="music">
+        <source src="https://awghostrider24.github.io/Adsid/audio/alatmusiktiup.mp3" type="audio/mpeg">
+    </audio>
+
+</div>
+
+<script>
+const audio = document.getElementById("music");
+
+function playAudio() {
+    audio.play();
+}
+
+function pauseAudio() {
+    audio.pause();
+}
+
+function stopAudio() {
+    audio.pause();
+    audio.currentTime = 0; // kembali ke awal
+}
+</script>
+
+</body>
+</html>
