@@ -45,7 +45,7 @@
 
   function submitData() {
     auth.currentUser.getIdToken().then(token => {
-      fetch("URL_APPS_SCRIPT", {
+      fetch("https://script.google.com/macros/s/AKfycbxcLp38NHhkep0lLsyDsYPa0Ls1yFZdxdHfA72s3UZ89QMg3RasrCxmoq9dJnLqtZmE/exec", {
         method: "POST",
         body: JSON.stringify({
           idToken: token,
@@ -64,3 +64,4 @@
 
 </body>
 </html>
+
