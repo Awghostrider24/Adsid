@@ -1,52 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login & Input Keuangan</title>
+  <title>Login & Input Keuangan UMKM</title>
 
-  <!-- Firebase -->
+  <!-- Firebase SDK (Compat - Aman untuk CSP) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    }
+    h3 {
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #logoutBtn {
+      background: #c62828;
+    }
+    #status {
+      text-align: center;
+      margin-top: 10px;
+      color: green;
+    }
+  </style>
 </head>
 <body>
 
-<h3>Login Google</h3>
-<button onclick="login()">Login dengan Google</button>
+<div class="card">
+  <h3>📊 Keuangan UMKM</h3>
 
-<div id="form" style="display:none">
-  <h3>Input Keuangan</h3>
-  <input id="namaUsaha" placeholder="Nama Usaha">
-  <input id="pemasukan" type="number" placeholder="Pemasukan">
-  <input id="pengeluaran" type="number" placeholder="Pengeluaran">
-  <button onclick="submitData()">Submit</button>
+  <!-- LOGIN -->
+  <button id="loginBtn" onclick="login()">Login dengan Google</button>
+
+  <!-- FORM -->
+  <div id="form" style="display:none">
+    <p id="userInfo"></p>
+
+    <input id="namaUsaha" placeholder="Nama Usaha">
+    <input id="pemasukan" type="number" placeholder="Pemasukan">
+    <input id="pengeluaran" type="number" placeholder="Pengeluaran">
+
+    <button onclick="submitData()">Simpan Data</button>
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+
+    <p id="status"></p>
+  </div>
 </div>
 
 <script>
+  // 🔥 FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyDAPMv_1Oy_-bKIOJUxj83dh8uVtenEJj4",
     authDomain: "umkm-49f21.firebaseapp.com",
     projectId: "umkm-49f21"
   };
 
+  // Init Firebase
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
+  // LOGIN (REDIRECT - CSP SAFE)
   function login() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+    auth.signInWithRedirect(provider);
   }
 
+  // HANDLE REDIRECT RESULT
+  auth.getRedirectResult()
+    .then(result => {
+      if (result.user) {
+        console.log("Login berhasil:", result.user.email);
+      }
+    })
+    .catch(err => alert(err.message));
+
+  // AUTH STATE
   auth.onAuthStateChanged(user => {
     if (user) {
-      document.querySelector("button").style.display = "none";
+      document.getElementById("loginBtn").style.display = "none";
       document.getElementById("form").style.display = "block";
+      document.getElementById("userInfo").innerText =
+        "👤 " + user.displayName + " (" + user.email + ")";
     }
   });
 
+  // LOGOUT
+  function logout() {
+    auth.signOut().then(() => location.reload());
+  }
+
+  // SUBMIT DATA KE APPS SCRIPT
   function submitData() {
+    if (!namaUsaha.value || !pemasukan.value || !pengeluaran.value) {
+      alert("Semua kolom wajib diisi");
+      return;
+    }
+
     auth.currentUser.getIdToken().then(token => {
       fetch("https://script.google.com/macros/s/AKfycbxcLp38NHhkep0lLsyDsYPa0Ls1yFZdxdHfA72s3UZ89QMg3RasrCxmoq9dJnLqtZmE/exec", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           idToken: token,
           namaUser: auth.currentUser.displayName,
@@ -57,11 +137,16 @@
         })
       })
       .then(res => res.text())
-      .then(alert);
+      .then(res => {
+        status.innerText = "✅ Data berhasil disimpan";
+        namaUsaha.value = "";
+        pemasukan.value = "";
+        pengeluaran.value = "";
+      })
+      .catch(err => alert(err));
     });
   }
 </script>
 
 </body>
 </html>
-
