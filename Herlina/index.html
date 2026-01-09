@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login & Input Keuangan</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<h3>Login Google</h3>
+<button onclick="login()">Login dengan Google</button>
+
+<div id="form" style="display:none">
+  <h3>Input Keuangan</h3>
+  <input id="namaUsaha" placeholder="Nama Usaha">
+  <input id="pemasukan" type="number" placeholder="Pemasukan">
+  <input id="pengeluaran" type="number" placeholder="Pengeluaran">
+  <button onclick="submitData()">Submit</button>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAPMv_1Oy_-bKIOJUxj83dh8uVtenEJj4",
+    authDomain: "umkm-49f21.firebaseapp.com",
+    projectId: "umkm-49f21"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  function login() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.querySelector("button").style.display = "none";
+      document.getElementById("form").style.display = "block";
+    }
+  });
+
+  function submitData() {
+    auth.currentUser.getIdToken().then(token => {
+      fetch("URL_APPS_SCRIPT", {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: token,
+          namaUser: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          namaUsaha: namaUsaha.value,
+          pemasukan: pemasukan.value,
+          pengeluaran: pengeluaran.value
+        })
+      })
+      .then(res => res.text())
+      .then(alert);
+    });
+  }
+</script>
+
+</body>
+</html>
