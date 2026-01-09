@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login & Input Keuangan UMKM</title>
+  <title>Keuangan UMKM</title>
 
-  <!-- Firebase SDK (Compat - Aman untuk CSP) -->
+  <!-- Firebase SDK (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
@@ -57,9 +57,9 @@
   <h3>📊 Keuangan UMKM</h3>
 
   <!-- LOGIN -->
-  <button id="loginBtn" onclick="login()">Login dengan Google</button>
+  <button id="loginBtn">Login dengan Google</button>
 
-  <!-- FORM -->
+  <!-- FORM (DISMBUNYIKAN DULU) -->
   <div id="form" style="display:none">
     <p id="userInfo"></p>
 
@@ -67,8 +67,8 @@
     <input id="pemasukan" type="number" placeholder="Pemasukan">
     <input id="pengeluaran" type="number" placeholder="Pengeluaran">
 
-    <button onclick="submitData()">Simpan Data</button>
-    <button id="logoutBtn" onclick="logout()">Logout</button>
+    <button id="saveBtn">Simpan Data</button>
+    <button id="logoutBtn">Logout</button>
 
     <p id="status"></p>
   </div>
@@ -82,43 +82,45 @@
     projectId: "umkm-49f21"
   };
 
-  // Init Firebase
+  // INIT FIREBASE
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  // LOGIN (REDIRECT - CSP SAFE)
-  function login() {
+  const loginBtn = document.getElementById("loginBtn");
+  const form = document.getElementById("form");
+  const userInfo = document.getElementById("userInfo");
+  const status = document.getElementById("status");
+
+  // LOGIN
+  loginBtn.addEventListener("click", () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithRedirect(provider);
-  }
+  });
 
-  // HANDLE REDIRECT RESULT
-  auth.getRedirectResult()
-    .then(result => {
-      if (result.user) {
-        console.log("Login berhasil:", result.user.email);
-      }
-    })
-    .catch(err => alert(err.message));
-
-  // AUTH STATE
+  // HANDLE LOGIN STATE
   auth.onAuthStateChanged(user => {
     if (user) {
-      document.getElementById("loginBtn").style.display = "none";
-      document.getElementById("form").style.display = "block";
-      document.getElementById("userInfo").innerText =
-        "👤 " + user.displayName + " (" + user.email + ")";
+      loginBtn.style.display = "none";
+      form.style.display = "block";
+      userInfo.innerText = `👤 ${user.displayName} (${user.email})`;
+    } else {
+      loginBtn.style.display = "block";
+      form.style.display = "none";
     }
   });
 
   // LOGOUT
-  function logout() {
-    auth.signOut().then(() => location.reload());
-  }
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    auth.signOut();
+  });
 
-  // SUBMIT DATA KE APPS SCRIPT
-  function submitData() {
-    if (!namaUsaha.value || !pemasukan.value || !pengeluaran.value) {
+  // SUBMIT DATA
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    const namaUsaha = document.getElementById("namaUsaha").value;
+    const pemasukan = document.getElementById("pemasukan").value;
+    const pengeluaran = document.getElementById("pengeluaran").value;
+
+    if (!namaUsaha || !pemasukan || !pengeluaran) {
       alert("Semua kolom wajib diisi");
       return;
     }
@@ -131,23 +133,22 @@
           idToken: token,
           namaUser: auth.currentUser.displayName,
           email: auth.currentUser.email,
-          namaUsaha: namaUsaha.value,
-          pemasukan: pemasukan.value,
-          pengeluaran: pengeluaran.value
+          namaUsaha,
+          pemasukan,
+          pengeluaran
         })
       })
       .then(res => res.text())
-      .then(res => {
+      .then(() => {
         status.innerText = "✅ Data berhasil disimpan";
-        namaUsaha.value = "";
-        pemasukan.value = "";
-        pengeluaran.value = "";
+        document.getElementById("namaUsaha").value = "";
+        document.getElementById("pemasukan").value = "";
+        document.getElementById("pengeluaran").value = "";
       })
       .catch(err => alert(err));
     });
-  }
+  });
 </script>
 
 </body>
 </html>
-
