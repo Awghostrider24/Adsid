@@ -91,20 +91,15 @@
   const userInfo = document.getElementById("userInfo");
   const status = document.getElementById("status");
 
-  // LOGIN (POPUP - TANPA REDIRECT)
+  // 🔐 LOGIN GOOGLE (POPUP – TANPA REDIRECT)
   loginBtn.addEventListener("click", () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     auth.signInWithPopup(provider)
-      .then(result => {
-        console.log("Login berhasil:", result.user);
-      })
-      .catch(error => {
-        alert("Login gagal: " + error.message);
-      });
+      .catch(err => alert("Login gagal: " + err.message));
   });
 
-  // HANDLE LOGIN STATE
+  // 🔁 HANDLE LOGIN STATE
   auth.onAuthStateChanged(user => {
     if (user) {
       loginBtn.style.display = "none";
@@ -117,12 +112,12 @@
     }
   });
 
-  // LOGOUT
+  // 🚪 LOGOUT
   document.getElementById("logoutBtn").addEventListener("click", () => {
     auth.signOut();
   });
 
-  // SUBMIT DATA
+  // 💾 SIMPAN DATA (ANTI-CORS)
   document.getElementById("saveBtn").addEventListener("click", () => {
     const namaUsaha = document.getElementById("namaUsaha").value;
     const pemasukan = document.getElementById("pemasukan").value;
@@ -133,31 +128,34 @@
       return;
     }
 
-    auth.currentUser.getIdToken()
-      .then(token => {
-        return fetch("https://script.google.com/macros/s/AKfycbzmOX_235cUtMEXDNmY0EF8d8SG8saYCKsmkIf7E3Tc-rC9qlrXWwfP0vr-s7MIvBU/exec", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            idToken: token,
-            namaUser: auth.currentUser.displayName,
-            email: auth.currentUser.email,
-            namaUsaha,
-            pemasukan,
-            pengeluaran
-          })
-        });
+    auth.currentUser.getIdToken().then(token => {
+
+      const payload = {
+        idToken: token,
+        namaUser: auth.currentUser.displayName,
+        email: auth.currentUser.email,
+        namaUsaha: namaUsaha,
+        pemasukan: pemasukan,
+        pengeluaran: pengeluaran
+      };
+
+      const formData = new URLSearchParams(payload);
+
+      fetch("https://script.google.com/macros/s/AKfycbxcSboNb3s7RAZCNrn9rAQ3-E1x3qt5vlcsSk9GggTHPg9sOAC_gMGmHGmhon0sMnZu/exec", {
+        method: "POST",
+        body: formData
       })
       .then(res => res.text())
       .then(() => {
         status.innerText = "✅ Data berhasil disimpan";
+
         document.getElementById("namaUsaha").value = "";
         document.getElementById("pemasukan").value = "";
         document.getElementById("pengeluaran").value = "";
       })
-      .catch(err => {
-        alert("Gagal menyimpan: " + err.message);
-      });
+      .catch(err => alert("Gagal simpan: " + err));
+
+    });
   });
 </script>
 
