@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keuangan UMKM</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      max-width: 420px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    }
+    h3 {
+      text-align: center;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #logoutBtn {
+      background: #c62828;
+    }
+    #status {
+      text-align: center;
+      margin-top: 10px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h3>📊 Keuangan UMKM</h3>
+
+  <!-- LOGIN -->
+  <button id="loginBtn">Login dengan Google</button>
+
+  <!-- FORM -->
+  <div id="form" style="display:none">
+    <p id="userInfo"></p>
+
+    <input id="nama" placeholder="Nama Lengkap">
+
+    <!-- 🔽 PILIH BULAN -->
+    <select id="bulan">
+      <option value="">-- Pilih Bulan --</option>
+      <option value="Januari">Januari</option>
+      <option value="Februari">Februari</option>
+      <option value="Maret">Maret</option>
+      <option value="April">April</option>
+      <option value="Mei">Mei</option>
+      <option value="Juni">Juni</option>
+      <option value="Juli">Juli</option>
+      <option value="Agustus">Agustus</option>
+      <option value="September">September</option>
+      <option value="Oktober">Oktober</option>
+      <option value="November">November</option>
+      <option value="Desember">Desember</option>
+    </select>
+
+    <input id="namaUsaha" placeholder="Nama Usaha">
+    <input id="pemasukan" type="number" placeholder="Pemasukan">
+    <input id="pengeluaran" type="number" placeholder="Pengeluaran">
+
+    <button id="saveBtn">Simpan Data</button>
+    <button id="logoutBtn">Logout</button>
+
+    <p id="status"></p>
+  </div>
+</div>
+
+<script>
+  // FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAPMv_1Oy_-bKIOJUxj83dh8uVtenEJj4",
+    authDomain: "umkm-49f21.firebaseapp.com",
+    projectId: "umkm-49f21"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  const loginBtn = document.getElementById("loginBtn");
+  const form = document.getElementById("form");
+  const userInfo = document.getElementById("userInfo");
+  const status = document.getElementById("status");
+
+  // LOGIN
+  loginBtn.addEventListener("click", () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .catch(err => alert("Login gagal: " + err.message));
+  });
+
+  // AUTH STATE
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      loginBtn.style.display = "none";
+      form.style.display = "block";
+      userInfo.innerText = `👤 ${user.displayName} (${user.email})`;
+    } else {
+      loginBtn.style.display = "block";
+      form.style.display = "none";
+      status.innerText = "";
+    }
+  });
+
+  // LOGOUT
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    auth.signOut();
+  });
+
+  // SIMPAN DATA
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    const nama = document.getElementById("nama").value;
+    const bulan = document.getElementById("bulan").value;
+    const namaUsaha = document.getElementById("namaUsaha").value;
+    const pemasukan = document.getElementById("pemasukan").value;
+    const pengeluaran = document.getElementById("pengeluaran").value;
+
+    if (!nama || !bulan || !namaUsaha || !pemasukan || !pengeluaran) {
+      alert("Semua kolom wajib diisi");
+      return;
+    }
+
+    auth.currentUser.getIdToken().then(token => {
+
+      const payload = {
+        idToken: token,
+        nama: nama,
+        bulan: bulan,
+        namaUser: auth.currentUser.displayName,
+        email: auth.currentUser.email,
+        namaUsaha: namaUsaha,
+        pemasukan: pemasukan,
+        pengeluaran: pengeluaran
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbweNipFZu8Kl3a-WCOgbesUeN1oEBw_QpP8-YhycxI63myKIc8D-ZND57P95uYL-MLV/exec", {
+        method: "POST",
+        body: new URLSearchParams(payload)
+      })
+      .then(res => res.text())
+      .then(text => {
+        if (text !== "OK") throw text;
+        status.innerText = "✅ Data berhasil disimpan";
+
+        document.getElementById("nama").value = "";
+        document.getElementById("bulan").value = "";
+        document.getElementById("namaUsaha").value = "";
+        document.getElementById("pemasukan").value = "";
+        document.getElementById("pengeluaran").value = "";
+      })
+      .catch(err => alert("Gagal simpan: " + err));
+    });
+  });
+</script>
+
+</body>
+</html>
