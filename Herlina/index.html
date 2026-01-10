@@ -59,7 +59,7 @@
   <!-- LOGIN -->
   <button id="loginBtn">Login dengan Google</button>
 
-  <!-- FORM (DISMBUNYIKAN DULU) -->
+  <!-- FORM -->
   <div id="form" style="display:none">
     <p id="userInfo"></p>
 
@@ -91,10 +91,17 @@
   const userInfo = document.getElementById("userInfo");
   const status = document.getElementById("status");
 
-  // LOGIN
+  // LOGIN (POPUP - TANPA REDIRECT)
   loginBtn.addEventListener("click", () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithRedirect(provider);
+
+    auth.signInWithPopup(provider)
+      .then(result => {
+        console.log("Login berhasil:", result.user);
+      })
+      .catch(error => {
+        alert("Login gagal: " + error.message);
+      });
   });
 
   // HANDLE LOGIN STATE
@@ -106,6 +113,7 @@
     } else {
       loginBtn.style.display = "block";
       form.style.display = "none";
+      status.innerText = "";
     }
   });
 
@@ -125,18 +133,20 @@
       return;
     }
 
-    auth.currentUser.getIdToken().then(token => {
-      fetch("https://script.google.com/macros/s/AKfycby7JWAgTVdyH0Wox6o4jzXBcqXGeKun8hBpF31aYclwuHPW6lnzMAMldp5xNH-ivQJf/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          idToken: token,
-          namaUser: auth.currentUser.displayName,
-          email: auth.currentUser.email,
-          namaUsaha,
-          pemasukan,
-          pengeluaran
-        })
+    auth.currentUser.getIdToken()
+      .then(token => {
+        return fetch("https://script.google.com/macros/s/AKfycby7JWAgTVdyH0Wox6o4jzXBcqXGeKun8hBpF31aYclwuHPW6lnzMAMldp5xNH-ivQJf/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idToken: token,
+            namaUser: auth.currentUser.displayName,
+            email: auth.currentUser.email,
+            namaUsaha,
+            pemasukan,
+            pengeluaran
+          })
+        });
       })
       .then(res => res.text())
       .then(() => {
@@ -145,8 +155,9 @@
         document.getElementById("pemasukan").value = "";
         document.getElementById("pengeluaran").value = "";
       })
-      .catch(err => alert(err));
-    });
+      .catch(err => {
+        alert("Gagal menyimpan: " + err.message);
+      });
   });
 </script>
 
