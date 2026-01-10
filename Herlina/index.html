@@ -18,7 +18,7 @@
     .card {
       background: #fff;
       padding: 20px;
-      max-width: 400px;
+      max-width: 420px;
       margin: auto;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,.1);
@@ -63,6 +63,10 @@
   <div id="form" style="display:none">
     <p id="userInfo"></p>
 
+    <!-- INPUT BARU -->
+    <input id="nama" placeholder="Nama Lengkap">
+    <input id="bulan" type="month">
+
     <input id="namaUsaha" placeholder="Nama Usaha">
     <input id="pemasukan" type="number" placeholder="Pemasukan">
     <input id="pengeluaran" type="number" placeholder="Pengeluaran">
@@ -82,7 +86,6 @@
     projectId: "umkm-49f21"
   };
 
-  // INIT FIREBASE
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
@@ -91,15 +94,14 @@
   const userInfo = document.getElementById("userInfo");
   const status = document.getElementById("status");
 
-  // 🔐 LOGIN GOOGLE (POPUP – TANPA REDIRECT)
+  // LOGIN GOOGLE
   loginBtn.addEventListener("click", () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-
     auth.signInWithPopup(provider)
       .catch(err => alert("Login gagal: " + err.message));
   });
 
-  // 🔁 HANDLE LOGIN STATE
+  // HANDLE LOGIN
   auth.onAuthStateChanged(user => {
     if (user) {
       loginBtn.style.display = "none";
@@ -112,18 +114,20 @@
     }
   });
 
-  // 🚪 LOGOUT
+  // LOGOUT
   document.getElementById("logoutBtn").addEventListener("click", () => {
     auth.signOut();
   });
 
-  // 💾 SIMPAN DATA (ANTI-CORS)
+  // SIMPAN DATA
   document.getElementById("saveBtn").addEventListener("click", () => {
+    const nama = document.getElementById("nama").value;
+    const bulan = document.getElementById("bulan").value;
     const namaUsaha = document.getElementById("namaUsaha").value;
     const pemasukan = document.getElementById("pemasukan").value;
     const pengeluaran = document.getElementById("pengeluaran").value;
 
-    if (!namaUsaha || !pemasukan || !pengeluaran) {
+    if (!nama || !bulan || !namaUsaha || !pemasukan || !pengeluaran) {
       alert("Semua kolom wajib diisi");
       return;
     }
@@ -132,6 +136,8 @@
 
       const payload = {
         idToken: token,
+        nama: nama,
+        bulan: bulan,
         namaUser: auth.currentUser.displayName,
         email: auth.currentUser.email,
         namaUsaha: namaUsaha,
@@ -146,15 +152,18 @@
         body: formData
       })
       .then(res => res.text())
-      .then(() => {
+      .then(text => {
+        if (text !== "OK") throw text;
+
         status.innerText = "✅ Data berhasil disimpan";
 
+        document.getElementById("nama").value = "";
+        document.getElementById("bulan").value = "";
         document.getElementById("namaUsaha").value = "";
         document.getElementById("pemasukan").value = "";
         document.getElementById("pengeluaran").value = "";
       })
       .catch(err => alert("Gagal simpan: " + err));
-
     });
   });
 </script>
