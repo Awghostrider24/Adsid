@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mutiara Regency Sragen</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#fff;color:#333;overflow-x:hidden}
+
+header img{width:100%;max-height:400px;object-fit:contain}
+
+main{padding:15px 10px;text-align:center}
+h1{color:#007acc;font-size:28px;margin-bottom:5px}
+h2{margin-bottom:3px}
+p{line-height:1.6;margin-bottom:15px}
+/* ===== POPUP AUTO CLOSE ===== */
+.qr-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn .4s ease;
+}
+
+.qr-popup-box {
+  background: #fff;
+  padding: 30px 25px;
+  max-width: 350px;
+  width: 90%;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  animation: scaleIn .4s ease;
+}
+
+.qr-popup-box h2 {
+  color: #007acc;
+  margin-bottom: 15px;
+}
+
+.qr-popup-box p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(.85); }
+  to { transform: scale(1); }
+}
+
+
+/* CARD */
+.card{
+  background:#fff;
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:25px;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
+  opacity:0;
+  transform:translateY(30px);
+  transition:1s;
+}
+.card.visible{opacity:1;transform:none}
+
+/* SLIDER */
+.slider-container {
+  position: relative;
+}
+.slider-caption.dark {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  background: rgba(0,0,0,.5);
+  color: #fff;
+  font-size: 3px;        /* lebih kecil */
+  font-style: italic;    /* italic */
+  padding: 3px 7px;
+  border-radius: 6px;
+  line-height: 1.3;
+}
+.slider-container{width:100%;overflow:hidden;margin:25px 0}
+.slider{
+  display:flex;
+  transition:transform .35s ease;
+  touch-action:pan-y;
+  cursor:grab;
+}
+.slide{min-width:100%;object-fit:contain;user-select:none}
+
+.dots{margin-top:10px}
+.dot{
+  width:8px;height:8px;
+  background:#bbb;border-radius:50%;
+  display:inline-block;margin:0 4px;cursor:pointer
+}
+.dot.active{background:#009dff}
+
+/* BENEFITS */
+.benefits{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;margin-top:20px
+}
+.benefit{
+  background:#f0faff;
+  padding:15px;border-radius:10px;
+  opacity:0;transform:translateY(25px);
+  transition:.8s
+}
+.benefit.visible{opacity:1;transform:none}
+
+/* CTA */
+.cta{
+  display:inline-block;
+  background:#00a2ff;color:#fff;
+  padding:12px 25px;
+  border-radius:30px;
+  text-decoration:none;font-weight:bold;
+  margin-top:20px;
+  opacity:0;transform:translateY(20px);
+  transition:1s
+}
+.cta.visible{opacity:1;transform:none}
+
+/* MAP */
+.map-section{
+  margin-top:40px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.1)
+}
+
+/* FOOTER */
+footer{
+  background:#007acc;color:#fff;
+  padding:30px 15px;text-align:center;
+  margin-top:40px
+}
+.section-title {
+  display: inline-block;
+  background: #29C5F4; /* navy gelap */
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+footer a{color:#fff;font-weight:bold;text-decoration:none}
+
+@media(max-width:768px){
+  h1{font-size:22px}
+  h2{font-size:16px}
+}
+</style>
+</head>
+<!-- POPUP AUTO CLOSE QR -->
+<div class="qr-popup" id="qrPopup">
+  <div class="qr-popup-box">
+    <h2>🙏 Terima Kasih</h2>
+    <p>
+      Terima kasih sudah scan QR Code.<br><br>
+      Semoga Anda senantiasa dalam keadaan
+      <strong>sehat dan bahagia selalu</strong>.<br><br>
+      <strong>Aamiin 🤲</strong>
+    </p>
+  </div>
+</div>
+
+
+<body>
+
+<header>
+  <img src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/head.jpg">
+</header>
+<main>
+<h1>Selamat Datang</h1>
+<h2>Di Perumahan Mutiara Regency Sragen</h2>
+<div class="slider-container">
+  <div class="slider" data-slider>
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/h1.jpg">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/h2.jpg">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/h3.jpg">
+  </div>
+  <div class="dots"></div>
+</div>
+
+<div class="card">
+Hunian modern yang dirancang untuk menghadirkan kenyamanan, keamanan, dan kualitas hidup terbaik bagi keluarga Anda. Perpaduan desain elegan, lokasi strategis, dan lingkungan yang asri menjadikan Mutiara Regency pilihan tepat untuk masa depan yang lebih baik.
+</div>
+
+<!-- ===== SLIDER 1 (ATAS) ===== -->
+
+<div class="slider-container">
+  <div class="slider" data-slider>
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/1.png">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/2.png">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/3.png">
+	<img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/4.png">
+  </div>
+  <div class="dots"></div>
+</div>
+
+<!-- ===== CARD HARGA ===== -->
+<div class="card">
+<p><strong>Harga KPR hanya Rp160 juta</strong> (setelah subsidi pemerintah & PT).<br>
+      Tersedia juga pilihan <strong>Cash Keras Rp162 juta</strong> dan <strong>Cash Tempo Rp164 juta</strong> hingga 18 bulan.<br>
+      Jenis angsuran <strong>flat hingga 20 tahun</strong> tanpa kenaikan. Dapatkan sekarang dengan <strong>DP 0%</strong>!</p>
+</div>
+<h2 class="section-title">Fasilitas</h2>
+<!-- ===== SLIDER 2 (BARU DI BAWAH CARD HARGA) ===== -->
+<div class="slider-container">
+  <div class="slider" data-slider>
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/bp.png">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/pg.png">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/lp.png">
+  </div>
+
+  <div class="slider-caption light">
+    *Gambar ini merupakan ilustrasi
+  </div>
+
+  <div class="dots"></div>
+</div>
+<h2 class="section-title">Denah & Siteplan</h2>
+<div class="slider-container">
+  <div class="slider" data-slider>
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/s1.jpg">
+    <img class="slide" src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/s2.jpg">
+  </div>
+  <div class="dots"></div>
+</div>
+<img 
+  src="https://raw.githubusercontent.com/mutiarargcy/page/main/img/cta.jpg" 
+  alt="CTA Mutiara Regency"
+  style="
+    width:100%;
+    max-width:1200px;
+    height:auto;
+    display:block;
+    margin:20px auto;
+    border-radius:12px;
+  ">
+
+<div class="benefits">
+  <div class="benefit">🏠 Rumah 1 Lantai</div>
+  <div class="benefit">🚗 Jalan Lebar</div>
+  <div class="benefit">🕒 5 Menit Pusat Kota</div>
+  <div class="benefit">🚗 Carport</div>
+  <div class="benefit">🛋️ Ruang Keluarga</div>
+  <div class="benefit">🛏️ 2 Kamar Tidur</div>
+  <div class="benefit">🚿 Kamar Mandi</div>
+</div>
+
+<a class="cta" href="https://wa.me/6281330284747?text=Halo%20saya%20tertarik%20dengan%20Mutiara%20Regency%20Sragen" target="_blank">
+💬 Chat Admin Sekarang
+</a>
+<section class="map-section">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.267531244615!2d111.00166337475025!3d-7.434269292564785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a0300794844d1%3A0x32b89beef2e6094e!2sMutiara%20Regency!5e0!3m2!1sid!2sid!4v1696750290813!5m2!1sid!2sid"
+        width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </section>
+  </main>
+
+  <footer>
+    <h3>Mutiara Regency Sragen</h3>
+    <p>📍 Lokasi: Jl. Tempel, Kroyo, Karangmalang, Kabupaten Sragen</p>
+    <p>📞 WA: <a href="https://wa.me/6281330284747?text=Halo%20saya%20tertarik%20dengan%20Mutiara%20Regency%20Sragen" target="_blank">0813-3028-4747</a></p>
+    <p>✉️ Email: mutiararegencysragen@gmail.com</p>
+    <div class="copyright">
+      © 2025 Mutiara Regency Sragen. All Rights Reserved.
+    </div>
+  </footer>
+
+<script>
+/* ===== MULTI SLIDER SCRIPT ===== */
+document.querySelectorAll('[data-slider]').forEach(slider=>{
+  const slides=slider.querySelectorAll('.slide');
+  const dotsBox=slider.nextElementSibling;
+  let index=0,startX=0,isDown=false;
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement('span');
+    d.className='dot'+(i===0?' active':'');
+    d.onclick=()=>move(i);
+    dotsBox.appendChild(d);
+  });
+  const dots=dotsBox.querySelectorAll('.dot');
+
+  function move(i){
+    index=i;
+    slider.style.transform=`translateX(-${index*100}%)`;
+    dots.forEach(d=>d.classList.remove('active'));
+    dots[index].classList.add('active');
+  }
+
+  slider.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;isDown=true});
+  slider.addEventListener('touchend',e=>swipe(e.changedTouches[0].clientX));
+  slider.addEventListener('mousedown',e=>{startX=e.clientX;isDown=true});
+  slider.addEventListener('mouseup',e=>swipe(e.clientX));
+
+  function swipe(end){
+    if(!isDown)return;
+    const diff=startX-end;
+    if(diff>50&&index<slides.length-1)index++;
+    if(diff<-50&&index>0)index--;
+    move(index);
+    isDown=false;
+  }
+});
+
+/* SCROLL ANIMATION */
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>x.isIntersecting&&x.target.classList.add('visible'))
+},{threshold:.2});
+document.querySelectorAll('.card,.benefit,.cta').forEach(el=>obs.observe(el));
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const popup = document.getElementById('qrPopup');
+    if (popup) {
+      popup.style.opacity = '0';
+      setTimeout(() => popup.style.display = 'none', 400);
+    }
+  }, 3000); // ⏱️ 4 detik
+});
+</script>
+
+</body>
+</html>
