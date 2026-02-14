@@ -434,26 +434,6 @@ footer a {
   <div class="testi-text" id="text"></div>
   <div class="stars" id="stars"></div>
 </div>
-<!-- CHATBOT -->
-<div class="chatbot-toggle" onclick="toggleChat()">💬</div>
-
-<div class="chatbot-box" id="chatbox">
-  <div class="chat-header">
-    <span>Hamintuju AI</span>
-    <button onclick="toggleChat()">✕</button>
-  </div>
-
-  <div class="chat-body" id="chatBody">
-    <div class="bot-msg">Halo 👋 Ada yang bisa kami bantu?</div>
-  </div>
-
-  <div class="chat-footer">
-    <input type="text" id="userInput" placeholder="Tulis pesan..." onkeypress="handleKey(event)">
-    <button onclick="sendMessage()">Kirim</button>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/openai@4.56.0/dist/openai.min.js"></script>
 
 <body>
 
@@ -724,80 +704,9 @@ function closeTesti(){
 popup.style.display="none";
 }
 
-/* ========================
-   CHAT BOT FUNCTION
-======================== */
-
-function toggleChat(){
-  const box=document.getElementById("chatbox");
-  box.style.display = box.style.display === "flex" ? "none" : "flex";
-}
-
-function handleKey(e){
-  if(e.key==="Enter"){
-    sendMessage();
-  }
-}
-
-const openai = new OpenAI({
-  apiKey: "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",
-  dangerouslyAllowBrowser: true
-});
-
-async function sendMessage(){
-  const input=document.getElementById("userInput");
-  const message=input.value.trim();
-  if(message==="") return;
-
-  const body=document.getElementById("chatBody");
-
-  const userDiv=document.createElement("div");
-  userDiv.className="user-msg";
-  userDiv.innerText=message;
-  body.appendChild(userDiv);
-
-  input.value="";
-  body.scrollTop=body.scrollHeight;
-
-  const loading=document.createElement("div");
-  loading.className="bot-msg";
-  loading.innerText="Mengetik...";
-  body.appendChild(loading);
-  body.scrollTop=body.scrollHeight;
-
-  try{
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "Kamu adalah admin profesional HAMINTUJU HAMPERS & PARCEL. Jawab ramah, singkat, dan arahkan ke WhatsApp jika user ingin order."
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ],
-      temperature: 0.7
-    });
-
-    loading.remove();
-
-    const botDiv=document.createElement("div");
-    botDiv.className="bot-msg";
-    botDiv.innerText=completion.choices[0].message.content;
-    body.appendChild(botDiv);
-
-    body.scrollTop=body.scrollHeight;
-
-  }catch(err){
-    loading.innerText="Koneksi gagal. Silakan coba lagi.";
-    console.error(err);
-  }
-}
-
 
 </script>
 
 </body>
 </html>
+
