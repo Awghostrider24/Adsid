@@ -6,9 +6,9 @@
 <title>HAMINTUJU HAMPERS & PARCEL</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
 <style>
 
+/* ================= ROOT ================= */
 :root {
   --gold-main: #d4af37;
   --gold-soft: #f1d27a;
@@ -24,12 +24,12 @@
 }
 
 body {
-  background: linear-gradient(180deg, #0f1c2e, #08121f);
+  background:#08121f;
   color: #f5f7fa;
   overflow-x: hidden;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 header {
   display: flex;
   justify-content: center;
@@ -51,6 +51,7 @@ header img {
   to { opacity: 1 }
 }
 
+/* ================= MAIN ================= */
 main {
   padding: 40px 20px;
   max-width: 1100px;
@@ -58,7 +59,7 @@ main {
   text-align: center;
 }
 
-/* TITLE GOLD GRADIENT */
+/* ================= TITLE ================= */
 h1 {
   font-size: 32px;
   margin-bottom: 10px;
@@ -80,7 +81,7 @@ h2::after {
   display: block;
   width: 70px;
   height: 3px;
-  background: linear-gradient(90deg, var(--gold-main), transparent);
+  background:#08121f;
   margin: 8px auto 0;
   border-radius: 3px;
 }
@@ -91,26 +92,18 @@ p {
   color: #dce6f3;
 }
 
-/* CARD */
+/* ================= CARD ================= */
 .card {
   background: #16263d;
   border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.4);
+  padding: 40px;
+  box-shadow: none;
   margin: 30px auto;
   max-width: 800px;
   border: 1px solid rgba(212,175,55,0.2);
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all .9s ease;
 }
 
-.card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* SLIDER */
+/* ================= IMAGE SLIDER ================= */
 .slider-container {
   margin: 40px auto;
   border-radius: 18px;
@@ -124,7 +117,10 @@ p {
 .slider {
   display: flex;
   transition: transform .6s ease-in-out;
+  cursor: grab;
 }
+
+.slider:active { cursor: grabbing; }
 
 .slide {
   width: 100%;
@@ -132,9 +128,7 @@ p {
   object-fit: cover;
 }
 
-.dots {
-  margin: 15px 0;
-}
+.dots { margin: 15px 0; }
 
 .dot {
   height: 10px;
@@ -152,7 +146,7 @@ p {
   transform: scale(1.2);
 }
 
-/* PACKAGES */
+/* ================= PACKAGES ================= */
 .packages {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -174,17 +168,7 @@ p {
   box-shadow: 0 14px 30px var(--gold-glow);
 }
 
-.package h3 {
-  color: var(--gold-main);
-  margin-bottom: 8px;
-}
-
-.price {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--gold-soft);
-  margin-bottom: 12px;
-}
+.package h3 { color: var(--gold-main); margin-bottom: 8px; }
 
 .package ul {
   list-style: none;
@@ -193,7 +177,7 @@ p {
   color: #dce6f3;
 }
 
-/* BENEFITS */
+/* ================= BENEFITS ================= */
 .benefits {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -207,17 +191,9 @@ p {
   padding: 18px;
   border: 1px solid rgba(212,175,55,0.2);
   box-shadow: 0 4px 12px rgba(0,0,0,.4);
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all .8s ease;
 }
 
-.benefit.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* CTA BUTTON GOLD */
+/* ================= CTA ================= */
 .cta {
   display: inline-block;
   background: linear-gradient(135deg, var(--gold-dark), var(--gold-main), var(--gold-soft));
@@ -226,8 +202,7 @@ p {
   border-radius: 40px;
   text-decoration: none;
   font-weight: 700;
-  margin-top: 35px;
-   margin-bottom: 35px;
+  margin: 35px 0;
   transition: .3s;
   box-shadow: 0 6px 18px var(--gold-glow);
 }
@@ -237,7 +212,59 @@ p {
   box-shadow: 0 10px 30px var(--gold-glow);
 }
 
-/* FOOTER */
+/* ================= TESTIMONI SLIDER ================= */
+.testi-slider-container{
+  margin:50px auto;
+  max-width:650px;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid rgba(212,175,55,0.3);
+  box-shadow:0 0 25px var(--gold-glow);
+  background:linear-gradient(180deg,#1b2f4d,#14243a);
+}
+
+.testi-slider{
+  display:flex;
+  transition:transform .6s ease-in-out;
+}
+
+.testi-slide{
+  min-width:100%;
+  padding:35px 25px;
+  text-align:center;
+}
+
+.testi-photo{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  margin-bottom:10px;
+  border:2px solid var(--gold-main);
+  box-shadow:0 0 12px var(--gold-glow);
+}
+
+.testi-slide h4 { margin-bottom:6px; font-weight:600; }
+
+.testi-slide h4 span{
+  font-size:10px;
+  opacity:.7;
+  font-weight:300;
+}
+
+.stars{
+  color:#ffd700;
+  font-size:18px;
+  margin-bottom:12px;
+  letter-spacing:2px;
+}
+
+.testi-slide p{
+  font-style:italic;
+  color:#dce6f3;
+  line-height:1.6;
+}
+
+/* ================= FOOTER ================= */
 footer {
   background: #08121f;
   text-align: center;
@@ -246,194 +273,16 @@ footer {
   border-top: 1px solid rgba(212,175,55,0.2);
 }
 
-footer a {
-  color: var(--gold-soft);
-  font-weight: 400;
-  text-decoration: none;
-}
+footer a { color: var(--gold-soft); text-decoration: none; }
 
 .copyright {
   margin-top: 15px;
   font-size: 13px;
   color: #b0c4de;
 }
-.slider {
-  display: flex;
-  transition: transform .6s ease-in-out;
-  cursor: grab;
-}
-
-.slider:active {
-  cursor: grabbing;
-}
-/* ===== TESTIMONI POPUP (PINDAH KE ATAS & DIPERKECIL) ===== */
-.testi-popup{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translate(-50%, -40px);
-  width:280px;
-  background:#16263d;
-  border-radius:14px;
-  padding:12px;
-  box-shadow:0 8px 25px rgba(0,0,0,.6);
-  border:1px solid rgba(212,175,55,.4);
-  z-index:9999;
-  opacity:0;
-  transition:.5s;
-}
-
-.testi-popup.show{
-  opacity:1;
-  transform:translate(-50%,0);
-}
-
-.testi-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:6px;
-  color:var(--gold-soft);
-  font-size:13px;
-}
-
-.testi-profile{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:6px;
-}
-
-.testi-profile img{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-}
-
-.testi-text{
-  font-size:12px;
-  margin-bottom:4px;
-}
-
-.stars{
-  color:#ffd700;
-  font-size:14px;
-}
-.chatbot-toggle{
-  position:fixed;
-  bottom:25px;
-  right:25px;
-  background:linear-gradient(135deg,var(--gold-dark),var(--gold-main));
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;
-  cursor:pointer;
-  box-shadow:0 6px 20px var(--gold-glow);
-  z-index:9999;
-}
-
-.chatbot-box{
-  position:fixed;
-  bottom:100px;
-  right:25px;
-  width:320px;
-  background:#16263d;
-  border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-  border:1px solid rgba(212,175,55,.4);
-  display:none;
-  flex-direction:column;
-  overflow:hidden;
-  z-index:9999;
-}
-
-.chat-header{
-  background:linear-gradient(90deg,var(--gold-dark),var(--gold-main));
-  padding:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-weight:600;
-  color:#0f1c2e;
-}
-
-.chat-header button{
-  background:none;
-  border:none;
-  font-size:18px;
-  cursor:pointer;
-}
-
-.chat-body{
-  height:260px;
-  padding:12px;
-  overflow-y:auto;
-  font-size:14px;
-}
-
-.bot-msg{
-  background:#1b2f4d;
-  padding:8px 12px;
-  border-radius:12px;
-  margin-bottom:8px;
-  display:inline-block;
-}
-
-.user-msg{
-  background:var(--gold-main);
-  color:#0f1c2e;
-  padding:8px 12px;
-  border-radius:12px;
-  margin-bottom:8px;
-  display:inline-block;
-  align-self:flex-end;
-}
-
-.chat-footer{
-  display:flex;
-  border-top:1px solid rgba(212,175,55,.2);
-}
-
-.chat-footer input{
-  flex:1;
-  border:none;
-  padding:10px;
-  outline:none;
-  background:#0f1c2e;
-  color:white;
-}
-
-.chat-footer button{
-  background:var(--gold-main);
-  border:none;
-  padding:0 15px;
-  cursor:pointer;
-  font-weight:600;
-}
 
 </style>
 </head>
-<div class="testi-popup" id="popup">
-  <div class="testi-header">
-    <span>Testimoni Pelanggan</span>
-    <button onclick="closeTesti()" style="background:none;border:none;color:white;font-size:16px;cursor:pointer;">✕</button>
-  </div>
-
-  <div class="testi-profile">
-    <img id="photo" src="">
-    <div>
-      <div id="name" style="font-weight:600;font-size:13px;"></div>
-      <div id="city" style="font-size:11px;opacity:.8;"></div>
-    </div>
-  </div>
-
-  <div class="testi-text" id="text"></div>
-  <div class="stars" id="stars"></div>
-</div>
 
 <body>
 
@@ -548,9 +397,44 @@ footer a {
 <a class="cta" href="https://wa.me/6283125183360?text=Halo%20saya%20ingin%20pesan%20hampers%20di%20HAMINTUJU%20HAMPERS" target="_blank">
 💬 Pesan Sekarang
 </a>
+<h2>Testimoni Pelanggan</h2>
 
-</main>
+<div class="testi-slider-container">
+  <div class="testi-slider" id="testiSlider">
 
+    <div class="testi-slide">
+      <img src="https://i.pravatar.cc/100?img=1" class="testi-photo">
+      <h4>Ibu Rina <span>• Sragen</span></h4>
+      <div class="stars">★★★★★</div>
+      <p>"Parselnya cantik banget dan rapi! Packaging elegan dan premium."</p>
+    </div>
+
+    <div class="testi-slide">
+      <img src="https://i.pravatar.cc/100?img=2" class="testi-photo">
+      <h4>Pak Andi <span>• Solo</span></h4>
+      <div class="stars">★★★★★</div>
+      <p>"Pengiriman cepat & aman. Cocok untuk corporate gift."</p>
+    </div>
+
+    <div class="testi-slide">
+      <img src="https://i.pravatar.cc/100?img=3" class="testi-photo">
+      <h4>Mbak Dita <span>• Yogyakarta</span></h4>
+      <div class="stars">★★★★★</div>
+      <p>"Repeat order tiap Lebaran 👍 kualitas selalu konsisten."</p>
+    </div>
+
+    <div class="testi-slide">
+      <img src="https://i.pravatar.cc/100?img=4" class="testi-photo">
+      <h4>Bu Sari <span>• Semarang</span></h4>
+      <div class="stars">★★★★★</div>
+      <p>"Admin ramah & bisa custom sesuai budget."</p>
+    </div>
+
+  </div>
+</div>
+<a class="cta" href="https://wa.me/6283125183360?text=Halo%20saya%20ingin%20pesan%20hampers%20di%20HAMINTUJU%20HAMPERS" target="_blank">
+💬 Pesan Sekarang
+</a>
 <footer>
 <h3 style="color:var(--gold-main);">HAMINTUJU HAMPERS & PARCEL</h3>
 <p>📦 Spesialis Hampers Custom & Parcel Eksklusif</p>
@@ -558,6 +442,9 @@ footer a {
 <div class="copyright">
 © 2026 HAMINTUJU HAMPERS & PARCEL
 </div>
+
+</main>
+
 </footer>
 
 <script>
@@ -658,55 +545,17 @@ dots.forEach((dot, i) => {
     showSlide(i);
   });
 });
+const testiSlider = document.getElementById("testiSlider");
+const testiSlides = document.querySelectorAll(".testi-slide");
+let testiIndex = 0;
 
-/* ========================
-   ANIMATION OBSERVER
-======================== */
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.2 });
-
-document.querySelectorAll('.animate').forEach(el => observer.observe(el));
-
-const data=[
-{ name:"Ibu Rina", city:"Sragen", photo:"https://i.pravatar.cc/100?img=1", text:"Parselnya cantik banget dan rapi!", star:5 },
-{ name:"Pak Andi", city:"Solo", photo:"https://i.pravatar.cc/100?img=2", text:"Pengiriman cepat & aman.", star:5 },
-{ name:"Mbak Dita", city:"Yogyakarta", photo:"https://i.pravatar.cc/100?img=3", text:"Repeat order tiap Lebaran 👍", star:5 },
-{ name:"Bu Sari", city:"Semarang", photo:"https://i.pravatar.cc/100?img=4", text:"Admin ramah & bisa custom.", star:5 }
-];
-
-let i=0;
-const popup=document.getElementById("popup");
-
-function show(){
-popup.classList.remove("show");
-setTimeout(()=>{
-let d=data[i];
-document.getElementById("name").innerText=d.name;
-document.getElementById("city").innerText=d.city;
-document.getElementById("photo").src=d.photo;
-document.getElementById("text").innerText=d.text;
-document.getElementById("stars").innerText="★★★★★".slice(0,d.star);
-popup.classList.add("show");
-i=(i+1)%data.length;
-},400);
-}
-
-setTimeout(show,1500);
-setInterval(show,6000);
-
-function closeTesti(){
-popup.style.display="none";
-}
+setInterval(() => {
+  testiIndex = (testiIndex + 1) % testiSlides.length;
+  testiSlider.style.transform = `translateX(-${testiIndex * 100}%)`;
+}, 4500);
 
 
 </script>
 
 </body>
 </html>
-
