@@ -58,7 +58,7 @@ main {
   text-align: center;
 }
 
-/* TITLE */
+/* TITLE GOLD GRADIENT */
 h1 {
   font-size: 32px;
   margin-bottom: 10px;
@@ -80,7 +80,7 @@ h2::after {
   display: block;
   width: 70px;
   height: 3px;
-  background: linear-gradient(90deg, var(--gold-main, #d4af37), transparent);
+  background: linear-gradient(90deg, var(--gold-main), transparent);
   margin: 8px auto 0;
   border-radius: 3px;
 }
@@ -124,7 +124,6 @@ p {
 .slider {
   display: flex;
   transition: transform .6s ease-in-out;
-  cursor: grab;
 }
 
 .slide {
@@ -133,7 +132,9 @@ p {
   object-fit: cover;
 }
 
-.dots { margin: 15px 0; }
+.dots {
+  margin: 15px 0;
+}
 
 .dot {
   height: 10px;
@@ -143,6 +144,7 @@ p {
   border-radius: 50%;
   display: inline-block;
   cursor: pointer;
+  transition: .3s;
 }
 
 .dot.active {
@@ -163,14 +165,32 @@ p {
   border-radius: 18px;
   padding: 22px;
   border: 1px solid rgba(212,175,55,0.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,.4);
+  transition: .3s;
 }
 
-.package h3 { color: var(--gold-main); }
+.package:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px var(--gold-glow);
+}
+
+.package h3 {
+  color: var(--gold-main);
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold-soft);
+  margin-bottom: 12px;
+}
 
 .package ul {
   list-style: none;
   font-size: 14px;
   line-height: 1.7;
+  color: #dce6f3;
 }
 
 /* BENEFITS */
@@ -186,6 +206,7 @@ p {
   border-radius: 15px;
   padding: 18px;
   border: 1px solid rgba(212,175,55,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
   opacity: 0;
   transform: translateY(30px);
   transition: all .8s ease;
@@ -196,7 +217,7 @@ p {
   transform: translateY(0);
 }
 
-/* CTA */
+/* CTA BUTTON GOLD */
 .cta {
   display: inline-block;
   background: linear-gradient(135deg, var(--gold-dark), var(--gold-main), var(--gold-soft));
@@ -206,6 +227,13 @@ p {
   text-decoration: none;
   font-weight: 700;
   margin-top: 35px;
+  transition: .3s;
+  box-shadow: 0 6px 18px var(--gold-glow);
+}
+
+.cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px var(--gold-glow);
 }
 
 /* FOOTER */
@@ -214,48 +242,107 @@ footer {
   text-align: center;
   padding: 40px 15px;
   margin-top: 60px;
+  border-top: 1px solid rgba(212,175,55,0.2);
 }
 
-/* ===========================
-   TESTIMONI POPUP
-=========================== */
-
-.testi-popup {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background: #16263d;
-  border: 1px solid rgba(212,175,55,0.4);
-  border-radius: 14px;
-  padding: 16px 18px;
-  width: 260px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.5);
-  z-index: 999;
-  animation: fadeInUp .6s ease;
+footer a {
+  color: var(--gold-soft);
+  font-weight: 600;
+  text-decoration: none;
 }
 
-@keyframes fadeInUp {
-  from {opacity:0; transform:translateY(20px);}
-  to {opacity:1; transform:translateY(0);}
+.copyright {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #b0c4de;
+}
+.slider {
+  display: flex;
+  transition: transform .6s ease-in-out;
+  cursor: grab;
 }
 
-.testi-text {
-  font-size: 14px;
-  margin-bottom: 8px;
+.slider:active {
+  cursor: grabbing;
+}
+/* ===== TESTIMONI POPUP (PINDAH KE ATAS & DIPERKECIL) ===== */
+.testi-popup{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translate(-50%, -40px);
+  width:280px;
+  background:#16263d;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 8px 25px rgba(0,0,0,.6);
+  border:1px solid rgba(212,175,55,.4);
+  z-index:9999;
+  opacity:0;
+  transition:.5s;
 }
 
-.stars {
-  color: gold;
-  font-size: 16px;
+.testi-popup.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.testi-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+  color:var(--gold-soft);
+  font-size:13px;
+}
+
+.testi-profile{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.testi-profile img{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+}
+
+.testi-text{
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.stars{
+  color:#ffd700;
+  font-size:14px;
 }
 
 </style>
 </head>
+<div class="testi-popup" id="popup">
+  <div class="testi-header">
+    <span>Testimoni Pelanggan</span>
+    <button onclick="closeTesti()" style="background:none;border:none;color:white;font-size:16px;cursor:pointer;">✕</button>
+  </div>
+
+  <div class="testi-profile">
+    <img id="photo" src="">
+    <div>
+      <div id="name" style="font-weight:600;font-size:13px;"></div>
+      <div id="city" style="font-size:11px;opacity:.8;"></div>
+    </div>
+  </div>
+
+  <div class="testi-text" id="text"></div>
+  <div class="stars" id="stars"></div>
+</div>
 
 <body>
 
 <header>
-<img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/haminju.png">
+  <img src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/sampleweb/haminju.png" alt="Hamintuju Hampers">
 </header>
 
 <main>
@@ -264,11 +351,11 @@ footer {
 <p><strong>Spesialis Hampers Eksklusif untuk Momen Spesial Anda</strong></p>
 
 <div class="card animate">
-<p>
-Setiap momen berharga layak dirayakan dengan cara istimewa.
-Dari ulang tahun, pernikahan, hari raya, hingga corporate gift —
-<strong>HAMINTUJU HAMPERS & PARCEL</strong> hadir memberi kesan tak terlupakan.
-</p>
+  <p>
+    Setiap momen berharga layak dirayakan dengan cara istimewa.
+    Dari ulang tahun, pernikahan, hari raya, hingga corporate gift —
+    <strong>HAMINTUJU HAMPERS & PARCEL</strong> hadir memberi kesan tak terlupakan.
+  </p>
 </div>
 
 <div class="slider-container">
@@ -279,116 +366,245 @@ Dari ulang tahun, pernikahan, hari raya, hingga corporate gift —
 <img class="slide" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/image/4.png">
 <img class="slide" src="https://raw.githubusercontent.com/Awghostrider24/Adsid/main/image/5.png">
 </div>
+
+<div class="dots">
+  <span class="dot active"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
 </div>
 
 <h2>Pilihan Paket Harga</h2>
 
 <div class="packages">
 
-<div class="package">
-<h3>Paket Rp50.000</h3>
-<ul>
-<li>✔ Gula</li>
-<li>✔ Teh</li>
-<li>✔ Mie Tasty</li>
-<li>✔ Slai O’lai 192 g</li>
-</ul>
+  <div class="package animate">
+    <h3>Paket Rp50.000</h3>
+    <ul>
+      <li>✔ Gula</li>
+      <li>✔ Teh</li>
+      <li>✔ Mie Tasty</li>
+      <li>✔ Slai O’lai 192 g</li>
+    </ul>
+  </div>
+
+  <div class="package animate">
+    <h3>Paket Rp75.000</h3>
+    <ul>
+      <li>✔ Gula</li>
+      <li>✔ Teh</li>
+      <li>✔ Mie Tasty</li>
+      <li>✔ Tango Wafer Kaleng</li>
+      <li>✔ ABC Squash Delight 425 ml</li>
+    </ul>
+  </div>
+
+  <div class="package animate">
+    <h3>Paket Rp100.000</h3>
+    <ul>
+      <li>✔ Gula</li>
+      <li>✔ Teh</li>
+      <li>✔ Wafer Tango</li>
+      <li>✔ ABC Squash</li>
+      <li>✔ Minyak Goreng Sania Pouch 1 L</li>
+      <li>✔ Fanta 1 L</li>
+    </ul>
+  </div>
+
+  <div class="package animate">
+    <h3>Paket Rp150.000</h3>
+    <ul>
+      <li>✔ Gula</li>
+      <li>✔ Teh</li>
+      <li>✔ Nissin Wafer Kaleng</li>
+      <li>✔ Minyak Goreng Sania Pouch 1 L</li>
+      <li>✔ Marjan</li>
+      <li>✔ Gery Biskuit Egg Roll Bucket 210 g</li>
+      <li>✔ Fanta 1 L</li>
+    </ul>
+  </div>
+
+  <div class="package animate">
+    <h3>Paket Rp200.000</h3>
+    <ul>
+      <li>✔ Gula 2 kg</li>
+      <li>✔ Teh 1 kotak</li>
+      <li>✔ Minyak Goreng Sunco 2 L</li>
+      <li>✔ Wafer Wafello</li>
+      <li>✔ ABC Squash Delight 425 ml</li>
+      <li>✔ Permen Kaleng Fox</li>
+      <li>✔ Good Time</li>
+    </ul>
+  </div>
+
 </div>
 
-<div class="package">
-<h3>Paket Rp75.000</h3>
-<ul>
-<li>✔ Gula</li>
-<li>✔ Teh</li>
-<li>✔ Mie Tasty</li>
-<li>✔ Tango Wafer Kaleng</li>
-<li>✔ ABC Squash Delight 425 ml</li>
-</ul>
+<h2>Kenapa Pilih Kami?</h2>
+
+<div class="benefits">
+<div class="benefit animate">🎁 Desain Eksklusif & Elegan</div>
+<div class="benefit animate">✨ Bisa Custom Sesuai Budget</div>
+<div class="benefit animate">🚚 Pengiriman Aman & Tepat Waktu</div>
+<div class="benefit animate">💝 Cocok Personal & Corporate</div>
 </div>
 
-<div class="package">
-<h3>Paket Rp100.000</h3>
-<ul>
-<li>✔ Gula</li>
-<li>✔ Teh</li>
-<li>✔ Wafer Tango</li>
-<li>✔ ABC Squash</li>
-<li>✔ Minyak Goreng Sania 1 L</li>
-<li>✔ Fanta 1 L</li>
-</ul>
-</div>
-
-<div class="package">
-<h3>Paket Rp150.000</h3>
-<ul>
-<li>✔ Gula</li>
-<li>✔ Teh</li>
-<li>✔ Nissin Wafer Kaleng</li>
-<li>✔ Minyak Goreng Sania 1 L</li>
-<li>✔ Marjan</li>
-<li>✔ Gery Egg Roll 210 g</li>
-<li>✔ Fanta 1 L</li>
-</ul>
-</div>
-
-<div class="package">
-<h3>Paket Rp200.000</h3>
-<ul>
-<li>✔ Gula 2 kg</li>
-<li>✔ Teh 1 kotak</li>
-<li>✔ Minyak Sunco 2 L</li>
-<li>✔ Wafer Wafello</li>
-<li>✔ ABC Squash 425 ml</li>
-<li>✔ Permen Fox</li>
-<li>✔ Good Time</li>
-</ul>
-</div>
-
-</div>
-
-<a class="cta" href="https://wa.me/6283125183360" target="_blank">
-Pesan Sekarang via WhatsApp
+<a class="cta" href="https://wa.me/6283125183360?text=Halo%20saya%20ingin%20pesan%20hampers%20di%20HAMINTUJU%20HAMPERS" target="_blank">
+💬 Pesan Sekarang via WhatsApp
 </a>
 
 </main>
 
 <footer>
-<h3>HAMINTUJU HAMPERS & PARCEL</h3>
-<p>WA: 083125183360</p>
+<h3 style="color:var(--gold-main);">HAMINTUJU HAMPERS & PARCEL</h3>
+<p>📦 Spesialis Hampers Custom & Parcel Eksklusif</p>
+<p>📞 WA: <a href="https://wa.me/6283125183360">083125183360</a></p>
+<div class="copyright">
+© 2026 HAMINTUJU HAMPERS & PARCEL
+</div>
 </footer>
 
-<!-- =======================
-     TESTIMONI POPUP
-======================= -->
-
-<div class="testi-popup" id="testiBox">
-<div class="testi-text" id="testiText"></div>
-<div class="stars" id="stars"></div>
-</div>
-
 <script>
+const slider = document.getElementById('slider');
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
 
-/* TESTIMONI DATA */
-const testimonials = [
-{ text:"Parselnya cantik banget, keluarga saya senang!", star:5 },
-{ text:"Packing rapi dan pengiriman cepat.", star:5 },
-{ text:"Harga sesuai kualitas. Recommended!", star:5 },
-{ text:"Admin ramah & bisa custom isi.", star:5 },
-{ text:"Repeat order terus tiap momen spesial.", star:5 }
-];
+let index = 0;
+let startX = 0;
+let currentTranslate = 0;
+let isDragging = false;
+let autoSlide;
 
-let tIndex = 0;
+// Update posisi slide
+function showSlide(i) {
+  index = i;
+  slider.style.transition = "transform 0.6s ease";
+  slider.style.transform = `translateX(-${index * 100}%)`;
 
-function showTesti(){
-  const t = testimonials[tIndex];
-  document.getElementById("testiText").innerText = t.text;
-  document.getElementById("stars").innerText = "★★★★★".slice(0,t.star);
-  tIndex = (tIndex+1) % testimonials.length;
+  dots.forEach(dot => dot.classList.remove('active'));
+  dots[index].classList.add('active');
 }
 
-showTesti();
-setInterval(showTesti, 4000);
+// Auto Slide
+function startAutoSlide() {
+  autoSlide = setInterval(() => {
+    index = (index + 1) % slides.length;
+    showSlide(index);
+  }, 4000);
+}
 
+function stopAutoSlide() {
+  clearInterval(autoSlide);
+}
+
+startAutoSlide();
+
+/* ========================
+   DRAG / SWIPE FUNCTION
+======================== */
+
+function touchStart(positionX) {
+  isDragging = true;
+  startX = positionX;
+  slider.style.transition = "none";
+  stopAutoSlide();
+}
+
+function touchMove(positionX) {
+  if (!isDragging) return;
+  const diff = positionX - startX;
+  currentTranslate = -index * slider.offsetWidth + diff;
+  slider.style.transform = `translateX(${currentTranslate}px)`;
+}
+
+function touchEnd(positionX) {
+  if (!isDragging) return;
+  isDragging = false;
+
+  const diff = positionX - startX;
+
+  if (diff < -50 && index < slides.length - 1) {
+    index++;
+  } else if (diff > 50 && index > 0) {
+    index--;
+  }
+
+  showSlide(index);
+  startAutoSlide();
+}
+
+/* ========================
+   EVENT LISTENER
+======================== */
+
+// Touch (Mobile)
+slider.addEventListener("touchstart", e => touchStart(e.touches[0].clientX));
+slider.addEventListener("touchmove", e => touchMove(e.touches[0].clientX));
+slider.addEventListener("touchend", e => touchEnd(e.changedTouches[0].clientX));
+
+// Mouse (Desktop)
+slider.addEventListener("mousedown", e => touchStart(e.clientX));
+slider.addEventListener("mousemove", e => {
+  if (isDragging) touchMove(e.clientX);
+});
+slider.addEventListener("mouseup", e => touchEnd(e.clientX));
+slider.addEventListener("mouseleave", () => {
+  if (isDragging) {
+    isDragging = false;
+    showSlide(index);
+    startAutoSlide();
+  }
+});
+
+// Dots Click
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    showSlide(i);
+  });
+});
+
+/* ========================
+   ANIMATION OBSERVER
+======================== */
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+const data=[
+{ name:"Ibu Rina", city:"Sragen", photo:"https://i.pravatar.cc/100?img=1", text:"Parselnya cantik banget dan rapi!", star:5 },
+{ name:"Pak Andi", city:"Solo", photo:"https://i.pravatar.cc/100?img=2", text:"Pengiriman cepat & aman.", star:5 },
+{ name:"Mbak Dita", city:"Yogyakarta", photo:"https://i.pravatar.cc/100?img=3", text:"Repeat order tiap Lebaran 👍", star:5 },
+{ name:"Bu Sari", city:"Semarang", photo:"https://i.pravatar.cc/100?img=4", text:"Admin ramah & bisa custom.", star:5 }
+];
+
+let i=0;
+const popup=document.getElementById("popup");
+
+function show(){
+popup.classList.remove("show");
+setTimeout(()=>{
+let d=data[i];
+document.getElementById("name").innerText=d.name;
+document.getElementById("city").innerText=d.city;
+document.getElementById("photo").src=d.photo;
+document.getElementById("text").innerText=d.text;
+document.getElementById("stars").innerText="★★★★★".slice(0,d.star);
+popup.classList.add("show");
+i=(i+1)%data.length;
+},400);
+}
+
+setTimeout(show,1500);
+setInterval(show,6000);
+
+function closeTesti(){
+popup.style.display="none";
+}
 </script>
 
 </body>
