@@ -319,6 +319,101 @@ footer a {
   color:#ffd700;
   font-size:14px;
 }
+.chatbot-toggle{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold-main));
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  cursor:pointer;
+  box-shadow:0 6px 20px var(--gold-glow);
+  z-index:9999;
+}
+
+.chatbot-box{
+  position:fixed;
+  bottom:100px;
+  right:25px;
+  width:320px;
+  background:#16263d;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  border:1px solid rgba(212,175,55,.4);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:9999;
+}
+
+.chat-header{
+  background:linear-gradient(90deg,var(--gold-dark),var(--gold-main));
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:600;
+  color:#0f1c2e;
+}
+
+.chat-header button{
+  background:none;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.chat-body{
+  height:260px;
+  padding:12px;
+  overflow-y:auto;
+  font-size:14px;
+}
+
+.bot-msg{
+  background:#1b2f4d;
+  padding:8px 12px;
+  border-radius:12px;
+  margin-bottom:8px;
+  display:inline-block;
+}
+
+.user-msg{
+  background:var(--gold-main);
+  color:#0f1c2e;
+  padding:8px 12px;
+  border-radius:12px;
+  margin-bottom:8px;
+  display:inline-block;
+  align-self:flex-end;
+}
+
+.chat-footer{
+  display:flex;
+  border-top:1px solid rgba(212,175,55,.2);
+}
+
+.chat-footer input{
+  flex:1;
+  border:none;
+  padding:10px;
+  outline:none;
+  background:#0f1c2e;
+  color:white;
+}
+
+.chat-footer button{
+  background:var(--gold-main);
+  border:none;
+  padding:0 15px;
+  cursor:pointer;
+  font-weight:600;
+}
 
 </style>
 </head>
@@ -339,6 +434,26 @@ footer a {
   <div class="testi-text" id="text"></div>
   <div class="stars" id="stars"></div>
 </div>
+<!-- CHATBOT -->
+<div class="chatbot-toggle" onclick="toggleChat()">💬</div>
+
+<div class="chatbot-box" id="chatbox">
+  <div class="chat-header">
+    <span>Hamintuju AI</span>
+    <button onclick="toggleChat()">✕</button>
+  </div>
+
+  <div class="chat-body" id="chatBody">
+    <div class="bot-msg">Halo 👋 Ada yang bisa kami bantu?</div>
+  </div>
+
+  <div class="chat-footer">
+    <input type="text" id="userInput" placeholder="Tulis pesan..." onkeypress="handleKey(event)">
+    <button onclick="sendMessage()">Kirim</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/openai@4.56.0/dist/openai.min.js"></script>
 
 <body>
 
@@ -608,6 +723,80 @@ setInterval(show,6000);
 function closeTesti(){
 popup.style.display="none";
 }
+
+/* ========================
+   CHAT BOT FUNCTION
+======================== */
+
+function toggleChat(){
+  const box=document.getElementById("chatbox");
+  box.style.display = box.style.display === "flex" ? "none" : "flex";
+}
+
+function handleKey(e){
+  if(e.key==="Enter"){
+    sendMessage();
+  }
+}
+
+const openai = new OpenAI({
+  apiKey: "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",
+  dangerouslyAllowBrowser: true
+});
+
+async function sendMessage(){
+  const input=document.getElementById("userInput");
+  const message=input.value.trim();
+  if(message==="") return;
+
+  const body=document.getElementById("chatBody");
+
+  const userDiv=document.createElement("div");
+  userDiv.className="user-msg";
+  userDiv.innerText=message;
+  body.appendChild(userDiv);
+
+  input.value="";
+  body.scrollTop=body.scrollHeight;
+
+  const loading=document.createElement("div");
+  loading.className="bot-msg";
+  loading.innerText="Mengetik...";
+  body.appendChild(loading);
+  body.scrollTop=body.scrollHeight;
+
+  try{
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "Kamu adalah admin profesional HAMINTUJU HAMPERS & PARCEL. Jawab ramah, singkat, dan arahkan ke WhatsApp jika user ingin order."
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ],
+      temperature: 0.7
+    });
+
+    loading.remove();
+
+    const botDiv=document.createElement("div");
+    botDiv.className="bot-msg";
+    botDiv.innerText=completion.choices[0].message.content;
+    body.appendChild(botDiv);
+
+    body.scrollTop=body.scrollHeight;
+
+  }catch(err){
+    loading.innerText="Koneksi gagal. Silakan coba lagi.";
+    console.error(err);
+  }
+}
+
+
 </script>
 
 </body>
