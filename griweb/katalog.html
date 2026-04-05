@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rempah Nusantara Store</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body {
+  background:#f5f1e9;
+  color:#333;
+  max-width:480px;
+  margin:auto;
+}
+
+/* HEADER */
+header {
+  background:#5a3e2b;
+  color:white;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+header h1 {
+  font-size:16px;
+}
+
+nav a {
+  color:white;
+  text-decoration:none;
+  margin-left:10px;
+  font-size:13px;
+  padding:6px 8px;
+}
+
+/* HERO */
+.hero {
+  background:url('https://images.unsplash.com/photo-1604908176997-431b3b9b8b54') center/cover;
+  color:white;
+  padding:40px 15px;
+  text-align:center;
+}
+
+.hero h2 {
+  font-size:20px;
+  margin-bottom:5px;
+}
+
+.hero p {
+  font-size:13px;
+  opacity:0.9;
+}
+
+/* SECTION */
+.section {
+  padding:20px 12px;
+}
+
+.section h2 {
+  font-size:18px;
+  margin-bottom:8px;
+  color:#5a3e2b;
+}
+
+/* CONTAINER */
+.container {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+/* CARD */
+.card {
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card img {
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+
+.card-content {
+  padding:10px;
+}
+
+.card h3 {
+  font-size:15px;
+}
+
+.card small {
+  font-size:11px;
+}
+
+/* PRICE */
+.price {
+  color:#2e7d32;
+  font-weight:bold;
+  font-size:14px;
+  margin:4px 0;
+}
+
+/* DESKRIPSI */
+.card p {
+  font-size:12px;
+  line-height:1.4;
+}
+
+/* QTY CONTROL */
+.qty-box {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:8px 0;
+}
+
+.qty-btn {
+  width:32px;
+  height:32px;
+  border:none;
+  background:#eee;
+  font-size:16px;
+  border-radius:6px;
+}
+
+.qty-input {
+  width:45px;
+  text-align:center;
+  font-size:14px;
+}
+
+/* BUTTON */
+.btn {
+  display:block;
+  width:100%;
+  padding:10px;
+  background:#25D366;
+  color:white;
+  text-align:center;
+  border-radius:8px;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:600;
+}
+
+/* FLOAT WA */
+.whatsapp {
+  position:fixed;
+  bottom:15px;
+  right:15px;
+  background:#25D366;
+  padding:12px;
+  border-radius:50%;
+  font-size:18px;
+  color:white;
+  text-decoration:none;
+  box-shadow:0 3px 8px rgba(0,0,0,0.3);
+}
+
+/* DESKTOP */
+@media(min-width:768px){
+  body {
+    max-width:1000px;
+  }
+
+  .container {
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  header h1 {
+    font-size:18px;
+  }
+
+  .hero {
+    padding:60px;
+  }
+
+  .hero h2 {
+    font-size:28px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>🌿 Gudang Rempah Indonesia</header>
+<p>
+        Kami menghadirkan kekayaan rempah-rempah Indonesia langsung dari sumber terbaik. 
+        Dari kunyit, jahe, hingga pala, semua dipilih dengan kualitas premium dan penuh cita rasa tradisional.
+      </p>
+
+<div class="container" id="productContainer"></div>
+
+<a class="whatsapp" href="https://wa.me/6283168451215" target="_blank">💬</a>
+
+
+<script>
+// DATA
+const products = [
+{nama:"Jahe", latin:"Zingiber officinale", manfaat:"Menghangatkan tubuh, meredakan mual, meningkatkan daya tahan tubuh", harga:12000, img:"https://images.unsplash.com/photo-1603048297172-c92544798d5a"},
+{nama:"Kunyit", latin:"Curcuma longa", manfaat:"Anti-inflamasi, baik untuk pencernaan, membantu kesehatan kulit", harga:15000, img:"https://images.unsplash.com/photo-1615486362153-8c6a89e1aeb2"},
+{nama:"Kencur", latin:"Kaempferia galanga", manfaat:"Meredakan batuk, meningkatkan nafsu makan, anti pegal", harga:14000, img:"https://images.unsplash.com/photo-1604908812857-2c1f59e86cdc"},
+{nama:"Lengkuas", latin:"Alpinia galanga", manfaat:"Antibakteri, membantu pencernaan, mengurangi nyeri", harga:13000, img:"https://images.unsplash.com/photo-1630910415277-1f9b0f4f1c3c"},
+{nama:"Temulawak", latin:"Curcuma xanthorrhiza", manfaat:"Menjaga kesehatan hati, meningkatkan nafsu makan, anti radang", harga:16000, img:"https://images.unsplash.com/photo-1621609764095-b32c8c6cbd17"},
+{nama:"Temu Kunci", latin:"Boesenbergia rotunda", manfaat:"Melancarkan pencernaan, meningkatkan stamina, antibakteri", harga:15000, img:"https://images.unsplash.com/photo-1627468489836-63ad7a6a1c37"},
+{nama:"Temu Ireng", latin:"Curcuma aeruginosa", manfaat:"Mengatasi cacingan, meningkatkan nafsu makan, detoks alami", harga:17000, img:"https://images.unsplash.com/photo-1587049352846-4a222e784d38"},
+{nama:"Temu Mangga", latin:"Curcuma mangga", manfaat:"Antioksidan, meningkatkan daya tahan tubuh, menjaga kesehatan lambung", harga:18000, img:"https://images.unsplash.com/photo-1615485737651-0b4a87d0ed07"},
+{nama:"Lempuyang", latin:"Zingiber zerumbet", manfaat:"Mengatasi gangguan pencernaan, menambah nafsu makan, anti radang", harga:16000, img:"https://images.unsplash.com/photo-1604908176997-431b3b9b8b54"},
+{nama:"Bangle", latin:"Zingiber cassumunar", manfaat:"Meredakan nyeri, anti-inflamasi, baik untuk kesehatan otot", harga:19000, img:"https://images.unsplash.com/photo-1587049352846-4a222e784d38"}
+];
+
+// RENDER
+const container = document.getElementById("productContainer");
+
+products.forEach((p,i)=>{
+  container.innerHTML += `
+<div class="card">
+  <img loading="lazy" src="${p.img}">
+  <div class="card-content">
+    <h3>${p.nama}</h3>
+    <small><i>${p.latin}</i></small>
+    <div class="price">Rp ${p.harga.toLocaleString()}</div>
+    <p style="font-size:13px; margin-top:5px;">${p.manfaat}</p>
+
+    <div class="qty-box">
+      <button class="qty-btn" onclick="minus(${i})">-</button>
+      <input class="qty-input" id="qty${i}" value="1">
+      <button class="qty-btn" onclick="plus(${i})">+</button>
+    </div>
+
+    <a class="btn" onclick="orderWA(${i})">Beli via WhatsApp</a>
+  </div>
+</div>`;
+});
+
+// QTY
+function plus(i){
+  let el = document.getElementById("qty"+i);
+  el.value = parseInt(el.value) + 1;
+}
+
+function minus(i){
+  let el = document.getElementById("qty"+i);
+  if(el.value > 1) el.value--;
+}
+
+// ORDER WA
+function orderWA(i){
+  const p = products[i];
+  const qty = document.getElementById("qty"+i).value;
+  const total = p.harga * qty;
+
+  const msg = `Halo, saya ingin pesan:
+Produk: ${p.nama}
+Jumlah: ${qty}
+Total: Rp ${total.toLocaleString()}
+
+Terima kasih 🙏`;
+
+  window.open("https://wa.me/6281234567890?text="+encodeURIComponent(msg));
+}
+</script>
+
+</body>
+</html>
