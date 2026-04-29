@@ -1,0 +1,36 @@
+{
+    "Kecamatan": [
+        {
+            "id": 1,
+            "nama": "UMKM",
+            "alamat": "Penerima Manfaat",
+  
+            "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
+            "link": "https://awghostrider24.github.io/Adsid/kecamatan/sragen.html"
+        },
+        {
+            "id": 2,
+            "nama": "Lumbung Pangan",
+            "alamat": "Sekian Penerima",
+           
+            "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
+            "link": "https://awghostrider24.github.io/Adsid/kecamatan/ngrampal.html"
+        },
+        {
+            "id": 3,
+            "nama": "Upgrade Skill",
+            "alamat": "19 Penerima Manfaat",
+           
+            "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
+            "link": "https://awghostrider24.github.io/Adsid/kecamatan/karangmalang.html"
+        },
+        {
+            "id": 4,
+            "nama": "Z Mart",
+            "alamat": "30 Penerima Manfaat",
+           
+            "image": "https://awghostrider24.github.io/Adsid/sample/logob.png",
+            "link": "https://awghostrider24.github.io/Adsid/kecamatan/kedawung.html"
+        }
+    ]
+}
