@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Antrian Pasien</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background:#f4f6f9;
+      padding:30px;
+    }
+
+    .container{
+      max-width:700px;
+      margin:auto;
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      text-align:center;
+    }
+
+    h1{
+      margin-bottom:20px;
+      color:#1e293b;
+    }
+
+    .nomor-box{
+      margin:30px 0;
+      padding:40px 20px;
+      border:3px dashed #2563eb;
+      border-radius:15px;
+      background:#eff6ff;
+    }
+
+    .label{
+      font-size:22px;
+      color:#475569;
+      margin-bottom:10px;
+    }
+
+    .nomor{
+      font-size:80px;
+      font-weight:bold;
+      color:#2563eb;
+      letter-spacing:5px;
+    }
+
+    .btn-group{
+      display:flex;
+      gap:15px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    button{
+      padding:14px 24px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:16px;
+      font-weight:bold;
+      transition:0.3s;
+    }
+
+    .btn-next{
+      background:#2563eb;
+      color:white;
+    }
+
+    .btn-next:hover{
+      background:#1d4ed8;
+    }
+
+    .btn-print{
+      background:#16a34a;
+      color:white;
+    }
+
+    .btn-print:hover{
+      background:#15803d;
+    }
+
+    .btn-reset{
+      background:#dc2626;
+      color:white;
+    }
+
+    .btn-reset:hover{
+      background:#b91c1c;
+    }
+
+    .info{
+      margin-top:20px;
+      color:#64748b;
+    }
+
+    @media print {
+      body{
+        background:white;
+        padding:0;
+      }
+
+      .btn-group,
+      .info,
+      h1{
+        display:none;
+      }
+
+      .container{
+        box-shadow:none;
+        border:none;
+      }
+
+      .nomor-box{
+        border:none;
+        background:white;
+      }
+
+      .nomor{
+        font-size:120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Nomor Antrian Pasien</h1>
+
+    <div class="nomor-box">
+      <div class="label">Nomor Antrian</div>
+      <div class="nomor" id="nomorAntrian">A01</div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn-next" onclick="nextQueue()">
+        Ambil Antrian
+      </button>
+
+      <button class="btn-print" onclick="window.print()">
+        Cetak
+      </button>
+
+      <button class="btn-reset" onclick="resetQueue()">
+        Reset
+      </button>
+    </div>
+
+    <div class="info">
+      Maksimal antrian sampai A100
+    </div>
+  </div>
+
+  <script>
+    let nomor = 1;
+
+    function formatNomor(num){
+      return 'A' + String(num).padStart(2, '0');
+    }
+
+    function tampilkanNomor(){
+      document.getElementById('nomorAntrian').innerText = formatNomor(nomor);
+    }
+
+    function nextQueue(){
+      if(nomor < 100){
+        nomor++;
+        tampilkanNomor();
+      } else {
+        alert('Antrian sudah mencapai A100');
+      }
+    }
+
+    function resetQueue(){
+      if(confirm('Reset antrian ke A01?')){
+        nomor = 1;
+        tampilkanNomor();
+      }
+    }
+
+    tampilkanNomor();
+  </script>
+
+</body>
+</html>
