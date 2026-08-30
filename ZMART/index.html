@@ -277,6 +277,64 @@ body{
 }
 
 /* =====================================================
+   USER FILTER BULAN
+===================================================== */
+
+.user-filter-panel{
+    margin-bottom:22px;
+}
+
+.user-filter-row{
+    display:flex;
+    align-items:end;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.user-filter-group{
+    min-width:250px;
+    flex:1;
+}
+
+.user-filter-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.user-filter-group select{
+    width:100%;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:white;
+}
+
+.user-filter-info{
+    margin-top:12px;
+    padding:12px 15px;
+    background:#f1f8e9;
+    border-left:4px solid #43a047;
+    border-radius:8px;
+    font-size:13px;
+    color:#33691e;
+}
+
+@media(max-width:650px){
+
+    .user-filter-row{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .user-filter-group{
+        width:100%;
+    }
+
+}
+
+/* =====================================================
    FILTER INFO
 ===================================================== */
 
@@ -617,6 +675,48 @@ tr:hover{
 ===================================================== -->
 
 <section id="userDashboard" class="dashboard">
+
+<!-- =====================================================
+     FILTER BULAN USER
+===================================================== -->
+
+<div class="panel user-filter-panel">
+
+    <div class="panel-title">
+        <h3>📅 Filter Dashboard</h3>
+    </div>
+
+    <div class="user-filter-row">
+
+        <div class="user-filter-group">
+
+            <label>Pilih Bulan / Tahun</label>
+
+            <select id="userFilterBulan">
+                <option value="">Memuat bulan...</option>
+            </select>
+
+        </div>
+
+        <button
+            id="userResetFilter"
+            class="reset-btn">
+
+            📅 Bulan Berjalan
+
+        </button>
+
+    </div>
+
+    <div
+        id="userFilterInfo"
+        class="user-filter-info">
+
+        Menampilkan data bulan berjalan.
+
+    </div>
+
+</div>
 
 <div class="cards">
 
@@ -1320,6 +1420,15 @@ let financeChart = null;
 
 
 /* =====================================================
+   USER DASHBOARD DATA
+===================================================== */
+
+let userDashboardData = [];
+
+let userSelectedBulan = "";
+
+
+/* =====================================================
    ELEMENT
 ===================================================== */
 
@@ -1636,6 +1745,9 @@ async function loadCurrentUser(firebaseUser){
 
         }
 
+        userSelectedBulan =
+            getCurrentBulanTahun();
+
         await loadUserDashboard();
 
     }
@@ -1709,72 +1821,405 @@ async function loadUserDashboard(){
         if(!result.success){
 
             throw new Error(
-                result.message
+                result.message ||
+                "Gagal memuat dashboard"
             );
 
         }
 
-
-        document.getElementById(
-            "uTotalOmset"
-        ).innerText =
-            rupiah(
-                result.summary.totalOmset
-            );
-
-        document.getElementById(
-            "uTotalKulakan"
-        ).innerText =
-            rupiah(
-                result.summary.totalKulakan
-            );
-
-        document.getElementById(
-            "uTotalBersih"
-        ).innerText =
-            rupiah(
-                result.summary.totalBersih
-            );
-
-        document.getElementById(
-            "uTotalTambahan"
-        ).innerText =
-            rupiah(
-                result.summary.totalTambahan
-            );
+        userDashboardData =
+            result.data || [];
 
 
-        const body =
+        populateUserBulanFilter();
+
+
+        if(!userSelectedBulan){
+
+            userSelectedBulan =
+                getCurrentBulanTahun();
+
+        }
+
+
+        const select =
             document.getElementById(
-                "userTableBody"
+                "userFilterBulan"
             );
 
-        body.innerHTML = "";
+
+        const tersedia =
+            Array.from(
+                select.options
+            ).some(
+                function(option){
+
+                    return (
+                        option.value ===
+                        userSelectedBulan
+                    );
+
+                }
+            );
 
 
-        if(
-            !result.data ||
-            result.data.length === 0
-        ){
+        /*
+           Jika bulan berjalan belum ada
+           di dropdown, tetap gunakan bulan berjalan.
+           Dashboard akan menampilkan nilai 0.
+        */
 
-            body.innerHTML =
-                `
-                <tr>
-                    <td colspan="7" class="empty">
-                        Belum ada laporan.
-                    </td>
-                </tr>
-                `;
+        if(!tersedia){
 
-            return;
+            select.value = "";
+
+        }
+        else{
+
+            select.value =
+                userSelectedBulan;
 
         }
 
 
-        result.data
-            .slice()
-            .reverse()
-            .forEach(function(row){
+        applyUserFilter();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Gagal memuat dashboard user:\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   GET BULAN BERJALAN
+===================================================== */
+
+function getCurrentBulanTahun(){
+
+    const bulanNama = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    ];
+
+    const sekarang =
+        new Date();
+
+    return (
+        bulanNama[
+            sekarang.getMonth()
+        ] +
+        " " +
+        sekarang.getFullYear()
+    );
+
+}
+
+
+/* =====================================================
+   POPULATE FILTER BULAN USER
+===================================================== */
+
+function populateUserBulanFilter(){
+
+    const select =
+        document.getElementById(
+            "userFilterBulan"
+        );
+
+
+    select.innerHTML =
+        `
+        <option value="">
+            Semua Bulan
+        </option>
+        `;
+
+
+    const bulanOrder = {
+
+        Januari:1,
+        Februari:2,
+        Maret:3,
+        April:4,
+        Mei:5,
+        Juni:6,
+        Juli:7,
+        Agustus:8,
+        September:9,
+        Oktober:10,
+        November:11,
+        Desember:12
+
+    };
+
+
+    const daftarBulan =
+        [
+            ...new Set(
+
+                userDashboardData
+                    .map(
+                        function(row){
+
+                            return (
+                                row.bulanTahun ||
+                                ""
+                            );
+
+                        }
+                    )
+                    .filter(Boolean)
+
+            )
+        ];
+
+
+    daftarBulan
+        .sort(
+            function(a,b){
+
+                const pa =
+                    String(a).split(" ");
+
+                const pb =
+                    String(b).split(" ");
+
+                const ya =
+                    Number(pa[1]) || 0;
+
+                const yb =
+                    Number(pb[1]) || 0;
+
+
+                if(ya !== yb){
+
+                    return yb - ya;
+
+                }
+
+
+                return (
+                    (bulanOrder[pb[0]] || 0)
+                    -
+                    (bulanOrder[pa[0]] || 0)
+                );
+
+            }
+        )
+        .forEach(
+            function(item){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    item;
+
+                option.textContent =
+                    item;
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   APPLY USER FILTER
+===================================================== */
+
+function applyUserFilter(){
+
+    const bulan =
+        userSelectedBulan;
+
+
+    let filtered =
+        userDashboardData.slice();
+
+
+    if(bulan){
+
+        filtered =
+            filtered.filter(
+                function(row){
+
+                    return (
+                        String(
+                            row.bulanTahun || ""
+                        ) ===
+                        String(bulan)
+                    );
+
+                }
+            );
+
+    }
+
+
+    let totalOmset = 0;
+
+    let totalKulakan = 0;
+
+    let totalBersih = 0;
+
+    let totalTambahan = 0;
+
+
+    filtered.forEach(
+        function(row){
+
+            totalOmset +=
+                Number(row.omset) || 0;
+
+            totalKulakan +=
+                Number(row.kulakan) || 0;
+
+            totalBersih +=
+                Number(
+                    row.pendapatanBersih
+                ) || 0;
+
+            totalTambahan +=
+                Number(
+                    row.pendapatanTambahan
+                ) || 0;
+
+        }
+    );
+
+
+    document.getElementById(
+        "uTotalOmset"
+    ).innerText =
+        rupiah(totalOmset);
+
+
+    document.getElementById(
+        "uTotalKulakan"
+    ).innerText =
+        rupiah(totalKulakan);
+
+
+    document.getElementById(
+        "uTotalBersih"
+    ).innerText =
+        rupiah(totalBersih);
+
+
+    document.getElementById(
+        "uTotalTambahan"
+    ).innerText =
+        rupiah(totalTambahan);
+
+
+    const info =
+        document.getElementById(
+            "userFilterInfo"
+        );
+
+
+    if(bulan){
+
+        info.innerHTML =
+            `
+            <b>Menampilkan Dashboard:</b>
+            ${escapeHTML(bulan)}
+            &nbsp; | &nbsp;
+            <b>${filtered.length}</b>
+            laporan
+            `;
+
+    }
+    else{
+
+        info.innerHTML =
+            `
+            <b>Menampilkan:</b>
+            Semua Bulan
+            &nbsp; | &nbsp;
+            <b>${filtered.length}</b>
+            laporan
+            `;
+
+    }
+
+
+    renderUserTable(filtered);
+
+}
+
+
+/* =====================================================
+   RENDER USER TABLE
+===================================================== */
+
+function renderUserTable(rows){
+
+    const body =
+        document.getElementById(
+            "userTableBody"
+        );
+
+
+    body.innerHTML = "";
+
+
+    if(
+        !rows ||
+        rows.length === 0
+    ){
+
+        body.innerHTML =
+            `
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty">
+
+                    Belum ada laporan pada periode ini.
+
+                </td>
+
+            </tr>
+            `;
+
+        return;
+
+    }
+
+
+    rows
+        .slice()
+        .reverse()
+        .forEach(
+            function(row){
 
                 body.innerHTML +=
                 `
@@ -1782,28 +2227,34 @@ async function loadUserDashboard(){
 
                     <td>
                         ${escapeHTML(
-                            formatTanggal(row.waktu)
+                            formatTanggal(
+                                row.waktu
+                            )
                         )}
                     </td>
 
                     <td>
                         ${escapeHTML(
-                            row.bulanTahun
+                            row.bulanTahun || ""
                         )}
                     </td>
 
                     <td>
                         ${escapeHTML(
-                            row.kecamatan
+                            row.kecamatan || ""
                         )}
                     </td>
 
                     <td>
-                        ${rupiah(row.omset)}
+                        ${rupiah(
+                            row.omset
+                        )}
                     </td>
 
                     <td>
-                        ${rupiah(row.kulakan)}
+                        ${rupiah(
+                            row.kulakan
+                        )}
                     </td>
 
                     <td>
@@ -1821,19 +2272,8 @@ async function loadUserDashboard(){
                 </tr>
                 `;
 
-            });
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        alert(
-            "Gagal memuat dashboard user:\n\n" +
-            error.message
+            }
         );
-
-    }
 
 }
 
@@ -3383,6 +3823,79 @@ function renderChart(rows){
 
 
 /* =====================================================
+   USER FILTER BULAN
+===================================================== */
+
+document.getElementById(
+    "userFilterBulan"
+).addEventListener(
+    "change",
+    function(){
+
+        userSelectedBulan =
+            this.value;
+
+        applyUserFilter();
+
+    }
+);
+
+
+/* =====================================================
+   USER RESET KE BULAN BERJALAN
+===================================================== */
+
+document.getElementById(
+    "userResetFilter"
+).addEventListener(
+    "click",
+    function(){
+
+        userSelectedBulan =
+            getCurrentBulanTahun();
+
+
+        const select =
+            document.getElementById(
+                "userFilterBulan"
+            );
+
+
+        const tersedia =
+            Array.from(
+                select.options
+            ).some(
+                function(option){
+
+                    return (
+                        option.value ===
+                        userSelectedBulan
+                    );
+
+                }
+            );
+
+
+        if(tersedia){
+
+            select.value =
+                userSelectedBulan;
+
+        }
+        else{
+
+            select.value = "";
+
+        }
+
+
+        applyUserFilter();
+
+    }
+);
+
+
+/* =====================================================
    FILTER USER
 ===================================================== */
 
@@ -3519,6 +4032,10 @@ logoutBtn.addEventListener(
             adminData = [];
 
             adminUsers = [];
+
+            userDashboardData = [];
+
+            userSelectedBulan = "";
 
 
             if(financeChart){
