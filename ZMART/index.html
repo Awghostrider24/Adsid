@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,24 +8,9 @@
 
 <title>Keuangan Mustahik</title>
 
-<!-- =====================================================
-     FIREBASE
-===================================================== -->
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-
-<!-- =====================================================
-     CHART JS
-===================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-<!-- =====================================================
-     STYLE
-===================================================== -->
 
 <style>
 
@@ -33,816 +19,446 @@
 }
 
 body{
-
     margin:0;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    background:
-        linear-gradient(
-            135deg,
-            #e8f5e9,
-            #f5f7fa
-        );
-
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(135deg,#e8f5e9,#f5f7fa);
     color:#333;
-
 }
-
 
 /* =====================================================
    LOGIN
 ===================================================== */
 
 .login-page{
-
     min-height:100vh;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     padding:20px;
-
 }
-
 
 .login-card{
-
     width:100%;
-
     max-width:430px;
-
     background:white;
-
     border-radius:22px;
-
     padding:35px 28px;
-
     text-align:center;
-
-    box-shadow:
-        0 15px 40px
-        rgba(0,0,0,.12);
-
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
 }
-
 
 .login-icon{
-
     font-size:60px;
-
     margin-bottom:10px;
-
 }
-
 
 .login-card h1{
-
     margin:0;
-
     color:#2e7d32;
-
     font-size:28px;
-
 }
-
 
 .login-card p{
-
     color:#777;
-
     font-size:14px;
-
-    margin:
-        10px
-        0
-        25px;
-
+    margin:10px 0 25px;
 }
-
 
 .google-btn{
-
     width:100%;
-
     padding:15px;
-
     border:none;
-
     border-radius:10px;
-
     background:#2e7d32;
-
     color:white;
-
     font-size:16px;
-
     font-weight:bold;
-
     cursor:pointer;
-
 }
-
 
 .google-btn:hover{
-
     opacity:.9;
-
 }
-
 
 /* =====================================================
    APP
 ===================================================== */
 
 #app{
-
     display:none;
-
 }
-
 
 .header{
-
-    background:
-        linear-gradient(
-            135deg,
-            #1b5e20,
-            #2e7d32
-        );
-
+    background:linear-gradient(135deg,#1b5e20,#2e7d32);
     color:white;
-
     padding:18px 25px;
-
     position:sticky;
-
     top:0;
-
     z-index:100;
-
-    box-shadow:
-        0 3px 12px
-        rgba(0,0,0,.15);
-
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
 }
-
 
 .header-inner{
-
     max-width:1400px;
-
     margin:auto;
-
     display:flex;
-
     align-items:center;
-
     justify-content:space-between;
-
     gap:15px;
-
 }
-
 
 .brand{
-
     display:flex;
-
     align-items:center;
-
     gap:12px;
-
 }
-
 
 .brand-icon{
-
     font-size:35px;
-
 }
-
 
 .brand h2{
-
     margin:0;
-
     font-size:20px;
-
 }
-
 
 .brand small{
-
     opacity:.85;
-
 }
-
 
 .header-right{
-
     display:flex;
-
     align-items:center;
-
     gap:10px;
-
 }
-
 
 .role-badge{
-
-    padding:
-        7px
-        12px;
-
+    padding:7px 12px;
     border-radius:20px;
-
-    background:
-        rgba(255,255,255,.18);
-
+    background:rgba(255,255,255,.18);
     font-size:13px;
-
 }
-
 
 .logout-btn{
-
     border:none;
-
     background:#c62828;
-
     color:white;
-
-    padding:
-        9px
-        14px;
-
+    padding:9px 14px;
     border-radius:8px;
-
     cursor:pointer;
-
     font-weight:bold;
-
 }
-
 
 /* =====================================================
    MAIN
 ===================================================== */
 
 .main{
-
     max-width:1400px;
-
     margin:auto;
-
     padding:25px;
-
 }
-
 
 .welcome{
-
     margin-bottom:20px;
-
 }
-
 
 .welcome h2{
-
     margin:0;
-
     color:#1b5e20;
-
 }
-
 
 .welcome p{
-
-    margin:
-        6px
-        0;
-
+    margin:6px 0;
     color:#777;
-
 }
-
-
-/* =====================================================
-   DASHBOARD SWITCH
-===================================================== */
 
 .dashboard{
-
     display:none;
-
 }
-
 
 .dashboard.active{
-
     display:block;
-
 }
-
 
 /* =====================================================
    CARDS
 ===================================================== */
 
 .cards{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(
-            4,
-            1fr
-        );
-
+    grid-template-columns:repeat(4,1fr);
     gap:18px;
-
     margin-bottom:25px;
-
 }
-
 
 .card-stat{
-
     background:white;
-
     border-radius:15px;
-
     padding:20px;
-
-    box-shadow:
-        0 5px 18px
-        rgba(0,0,0,.08);
-
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
-
 
 .card-stat .icon{
-
     font-size:30px;
-
     margin-bottom:10px;
-
 }
-
 
 .card-stat .title{
-
     color:#777;
-
     font-size:13px;
-
 }
-
 
 .card-stat .value{
-
     font-size:23px;
-
     font-weight:bold;
-
     margin-top:7px;
-
     color:#1b5e20;
-
 }
-
 
 /* =====================================================
    PANEL
 ===================================================== */
 
 .panel{
-
     background:white;
-
     border-radius:16px;
-
     padding:20px;
-
     margin-bottom:22px;
-
-    box-shadow:
-        0 5px 18px
-        rgba(0,0,0,.07);
-
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
 }
-
 
 .panel-title{
-
     display:flex;
-
     align-items:center;
-
     justify-content:space-between;
-
     gap:10px;
-
     margin-bottom:18px;
-
 }
-
 
 .panel-title h3{
-
     margin:0;
-
     color:#333;
-
 }
-
 
 /* =====================================================
    FILTER
 ===================================================== */
 
 .filters{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(
-            4,
-            1fr
-        );
-
+    grid-template-columns:repeat(4,1fr);
     gap:12px;
-
 }
-
 
 .filter-group label{
-
     display:block;
-
     font-size:13px;
-
     font-weight:bold;
-
     margin-bottom:6px;
-
 }
-
 
 .filter-group select,
 .filter-group input{
-
     width:100%;
-
     padding:11px;
-
-    border:
-        1px solid #ddd;
-
+    border:1px solid #ddd;
     border-radius:8px;
-
     background:white;
-
 }
-
 
 .reset-btn{
-
     border:none;
-
     background:#607d8b;
-
     color:white;
-
     padding:11px 15px;
-
     border-radius:8px;
-
     cursor:pointer;
-
     margin-top:20px;
-
 }
 
+/* =====================================================
+   FILTER INFO
+===================================================== */
+
+.filter-info{
+    margin-top:15px;
+    padding:12px 15px;
+    background:#f1f8e9;
+    border-left:4px solid #43a047;
+    border-radius:8px;
+    font-size:13px;
+    color:#33691e;
+}
 
 /* =====================================================
    CHART
 ===================================================== */
 
 .chart-container{
-
     position:relative;
-
     width:100%;
-
     height:380px;
-
 }
-
 
 /* =====================================================
    TABLE
 ===================================================== */
 
 .table-wrapper{
-
     width:100%;
-
     overflow-x:auto;
-
 }
-
 
 table{
-
     width:100%;
-
     border-collapse:collapse;
-
     min-width:900px;
-
 }
-
 
 th{
-
     background:#2e7d32;
-
     color:white;
-
     padding:12px;
-
     text-align:left;
-
     font-size:13px;
-
 }
-
 
 td{
-
     padding:11px;
-
-    border-bottom:
-        1px solid #eee;
-
+    border-bottom:1px solid #eee;
     font-size:13px;
-
 }
-
 
 tr:hover{
-
     background:#f5f9f5;
-
 }
-
 
 /* =====================================================
    USER FORM
 ===================================================== */
 
 .user-form-grid{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(
-            2,
-            1fr
-        );
-
+    grid-template-columns:repeat(2,1fr);
     gap:15px;
-
 }
-
 
 .form-group{
-
     margin-bottom:5px;
-
 }
-
 
 .form-group label{
-
     display:block;
-
     margin-bottom:6px;
-
     font-size:13px;
-
     font-weight:bold;
-
 }
-
 
 .form-group input,
 .form-group select{
-
     width:100%;
-
     padding:12px;
-
-    border:
-        1px solid #ccc;
-
+    border:1px solid #ccc;
     border-radius:8px;
-
 }
-
 
 .readonly{
-
     background:#f1f3f4;
-
 }
-
 
 .save-btn{
-
     width:100%;
-
     border:none;
-
     padding:14px;
-
     margin-top:15px;
-
     border-radius:9px;
-
     background:#2e7d32;
-
     color:white;
-
     font-weight:bold;
-
     font-size:15px;
-
     cursor:pointer;
-
 }
-
 
 .save-btn:disabled{
-
     background:#999;
-
 }
-
-
-/* =====================================================
-   USER SUMMARY
-===================================================== */
-
-.user-summary{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(
-            4,
-            1fr
-        );
-
-    gap:15px;
-
-}
-
-
-.user-summary-box{
-
-    background:#f8f9fa;
-
-    border-radius:10px;
-
-    padding:15px;
-
-}
-
-
-.user-summary-box span{
-
-    display:block;
-
-    font-size:12px;
-
-    color:#777;
-
-}
-
-
-.user-summary-box strong{
-
-    display:block;
-
-    margin-top:6px;
-
-    color:#2e7d32;
-
-}
-
 
 /* =====================================================
    STATUS
 ===================================================== */
 
 .status{
-
     margin-top:15px;
-
     text-align:center;
-
     font-weight:bold;
-
 }
-
 
 .success{
-
     color:#2e7d32;
-
 }
-
 
 .error{
-
     color:#c62828;
-
 }
-
 
 .loading{
-
     color:#ef6c00;
-
 }
 
-
 /* =====================================================
-   ADMIN USER TABLE
+   ROLE
 ===================================================== */
 
 .role-admin{
-
     background:#e8f5e9;
-
     color:#2e7d32;
-
-    padding:
-        5px
-        9px;
-
+    padding:5px 9px;
     border-radius:15px;
-
     font-size:11px;
-
     font-weight:bold;
-
 }
-
 
 .role-user{
-
     background:#e3f2fd;
-
     color:#1565c0;
-
-    padding:
-        5px
-        9px;
-
+    padding:5px 9px;
     border-radius:15px;
-
     font-size:11px;
-
     font-weight:bold;
-
 }
-
 
 /* =====================================================
    EMPTY
 ===================================================== */
 
 .empty{
-
     text-align:center;
-
     padding:30px;
-
     color:#888;
-
 }
 
+/* =====================================================
+   ADMIN HEADER
+===================================================== */
+
+.admin-title{
+    background:linear-gradient(135deg,#263238,#37474f);
+    color:white;
+    padding:18px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.admin-title h2{
+    margin:0 0 5px;
+}
+
+.admin-title p{
+    margin:0;
+    opacity:.8;
+    font-size:13px;
+}
 
 /* =====================================================
    RESPONSIVE
@@ -851,98 +467,55 @@ tr:hover{
 @media(max-width:1000px){
 
     .cards{
-
-        grid-template-columns:
-            repeat(
-                2,
-                1fr
-            );
-
+        grid-template-columns:repeat(2,1fr);
     }
 
     .filters{
-
-        grid-template-columns:
-            repeat(
-                2,
-                1fr
-            );
-
+        grid-template-columns:repeat(2,1fr);
     }
 
 }
 
-
 @media(max-width:650px){
 
     .header{
-
         padding:15px;
-
     }
 
     .header-inner{
-
         align-items:flex-start;
-
     }
 
     .brand h2{
-
         font-size:17px;
-
     }
 
     .brand small{
-
         font-size:11px;
-
     }
 
     .role-badge{
-
         display:none;
-
     }
 
     .main{
-
         padding:15px;
-
     }
 
     .cards{
-
         grid-template-columns:1fr;
-
     }
 
     .filters{
-
         grid-template-columns:1fr;
-
     }
 
     .user-form-grid{
-
         grid-template-columns:1fr;
-
-    }
-
-    .user-summary{
-
-        grid-template-columns:
-            repeat(
-                2,
-                1fr
-            );
-
     }
 
     .chart-container{
-
         height:300px;
-
     }
 
 }
@@ -951,59 +524,40 @@ tr:hover{
 
 </head>
 
-
 <body>
 
-
 <!-- =====================================================
-     LOGIN PAGE
+     LOGIN
 ===================================================== -->
 
 <div id="loginPage" class="login-page">
 
     <div class="login-card">
 
-        <div class="login-icon">
-            📊
-        </div>
+        <div class="login-icon">📊</div>
 
-        <h1>
-            Keuangan Mustahik
-        </h1>
+        <h1>Keuangan Mustahik</h1>
 
         <p>
             Sistem Laporan Keuangan UMKM Mustahik
         </p>
 
-        <button
-            id="loginBtn"
-            class="google-btn">
-
+        <button id="loginBtn" class="google-btn">
             🔐 Login dengan Google
-
         </button>
 
-        <div
-            id="loginStatus"
-            class="status">
-        </div>
+        <div id="loginStatus" class="status"></div>
 
     </div>
 
 </div>
 
 
-
 <!-- =====================================================
-     APPLICATION
+     APP
 ===================================================== -->
 
 <div id="app">
-
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
 
 <header class="header">
 
@@ -1029,21 +583,14 @@ tr:hover{
 
         </div>
 
-
         <div class="header-right">
 
-            <span
-                id="roleBadge"
-                class="role-badge">
+            <span id="roleBadge" class="role-badge">
                 USER
             </span>
 
-            <button
-                id="logoutBtn"
-                class="logout-btn">
-
+            <button id="logoutBtn" class="logout-btn">
                 🚪 Logout
-
             </button>
 
         </div>
@@ -1053,13 +600,7 @@ tr:hover{
 </header>
 
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
 <main class="main">
-
 
 <div class="welcome">
 
@@ -1067,40 +608,28 @@ tr:hover{
         Selamat Datang
     </h2>
 
-    <p id="welcomeEmail">
-    </p>
+    <p id="welcomeEmail"></p>
 
 </div>
 
 
-
 <!-- =====================================================
-     DASHBOARD USER
+     USER DASHBOARD
 ===================================================== -->
 
-<section
-    id="userDashboard"
-    class="dashboard">
-
-
-<!-- USER SUMMARY -->
+<section id="userDashboard" class="dashboard">
 
 <div class="cards">
 
-
     <div class="card-stat">
 
-        <div class="icon">
-            💰
-        </div>
+        <div class="icon">💰</div>
 
         <div class="title">
             Total Omset
         </div>
 
-        <div
-            id="uTotalOmset"
-            class="value">
+        <div id="uTotalOmset" class="value">
             Rp 0
         </div>
 
@@ -1109,17 +638,13 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            🛒
-        </div>
+        <div class="icon">🛒</div>
 
         <div class="title">
             Total Kulakan
         </div>
 
-        <div
-            id="uTotalKulakan"
-            class="value">
+        <div id="uTotalKulakan" class="value">
             Rp 0
         </div>
 
@@ -1128,17 +653,13 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            📈
-        </div>
+        <div class="icon">📈</div>
 
         <div class="title">
             Pendapatan Bersih
         </div>
 
-        <div
-            id="uTotalBersih"
-            class="value">
+        <div id="uTotalBersih" class="value">
             Rp 0
         </div>
 
@@ -1147,30 +668,22 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            💵
-        </div>
+        <div class="icon">💵</div>
 
         <div class="title">
             Pendapatan Tambahan
         </div>
 
-        <div
-            id="uTotalTambahan"
-            class="value">
+        <div id="uTotalTambahan" class="value">
             Rp 0
         </div>
 
     </div>
 
-
 </div>
 
 
-
-<!-- =====================================================
-     FORM LAPORAN
-===================================================== -->
+<!-- FORM -->
 
 <div class="panel">
 
@@ -1185,12 +698,9 @@ tr:hover{
 
     <div class="user-form-grid">
 
-
         <div class="form-group">
 
-            <label>
-                Nama Mustahik
-            </label>
+            <label>Nama Mustahik</label>
 
             <input
                 id="namaMustahik"
@@ -1201,9 +711,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Kecamatan
-            </label>
+            <label>Kecamatan</label>
 
             <input
                 id="kecamatan"
@@ -1215,9 +723,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Bulan
-            </label>
+            <label>Bulan</label>
 
             <select id="bulan">
 
@@ -1245,9 +751,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Tahun
-            </label>
+            <label>Tahun</label>
 
             <select id="tahun">
 
@@ -1269,9 +773,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Omset
-            </label>
+            <label>Omset</label>
 
             <input
                 id="omset"
@@ -1284,9 +786,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Kulakan
-            </label>
+            <label>Kulakan</label>
 
             <input
                 id="kulakan"
@@ -1299,9 +799,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Pendapatan Bersih
-            </label>
+            <label>Pendapatan Bersih</label>
 
             <input
                 id="pendapatanBersih"
@@ -1315,9 +813,7 @@ tr:hover{
 
         <div class="form-group">
 
-            <label>
-                Pendapatan Tambahan
-            </label>
+            <label>Pendapatan Tambahan</label>
 
             <input
                 id="pendapatanTambahan"
@@ -1330,27 +826,19 @@ tr:hover{
     </div>
 
 
-    <button
-        id="saveBtn"
-        class="save-btn">
+    <button id="saveBtn" class="save-btn">
 
         💾 Simpan Laporan
 
     </button>
 
 
-    <div
-        id="saveStatus"
-        class="status">
-    </div>
+    <div id="saveStatus" class="status"></div>
 
 </div>
 
 
-
-<!-- =====================================================
-     DATA USER
-===================================================== -->
+<!-- RIWAYAT -->
 
 <div class="panel">
 
@@ -1379,41 +867,19 @@ tr:hover{
 
                 <tr>
 
-                    <th>
-                        Tanggal
-                    </th>
-
-                    <th>
-                        Bulan
-                    </th>
-
-                    <th>
-                        Kecamatan
-                    </th>
-
-                    <th>
-                        Omset
-                    </th>
-
-                    <th>
-                        Kulakan
-                    </th>
-
-                    <th>
-                        Bersih
-                    </th>
-
-                    <th>
-                        Tambahan
-                    </th>
+                    <th>Tanggal</th>
+                    <th>Bulan</th>
+                    <th>Kecamatan</th>
+                    <th>Omset</th>
+                    <th>Kulakan</th>
+                    <th>Bersih</th>
+                    <th>Tambahan</th>
 
                 </tr>
 
             </thead>
 
-            <tbody
-                id="userTableBody">
-            </tbody>
+            <tbody id="userTableBody"></tbody>
 
         </table>
 
@@ -1421,38 +887,42 @@ tr:hover{
 
 </div>
 
-
 </section>
 
 
-
 <!-- =====================================================
-     DASHBOARD ADMIN
+     ADMIN DASHBOARD
 ===================================================== -->
 
-<section
-    id="adminDashboard"
-    class="dashboard">
+<section id="adminDashboard" class="dashboard">
 
 
-<!-- ADMIN CARDS -->
+<div class="admin-title">
+
+    <h2>
+        🛠️ Dashboard Administrator
+    </h2>
+
+    <p>
+        Pantau dan analisis perkembangan keuangan seluruh Mustahik.
+    </p>
+
+</div>
+
+
+<!-- ADMIN SUMMARY -->
 
 <div class="cards">
 
-
     <div class="card-stat">
 
-        <div class="icon">
-            👥
-        </div>
+        <div class="icon">👥</div>
 
         <div class="title">
             Total User
         </div>
 
-        <div
-            id="aTotalUser"
-            class="value">
+        <div id="aTotalUser" class="value">
             0
         </div>
 
@@ -1461,17 +931,13 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            📋
-        </div>
+        <div class="icon">📋</div>
 
         <div class="title">
             Total Laporan
         </div>
 
-        <div
-            id="aTotalLaporan"
-            class="value">
+        <div id="aTotalLaporan" class="value">
             0
         </div>
 
@@ -1480,17 +946,13 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            💰
-        </div>
+        <div class="icon">💰</div>
 
         <div class="title">
             Total Omset
         </div>
 
-        <div
-            id="aTotalOmset"
-            class="value">
+        <div id="aTotalOmset" class="value">
             Rp 0
         </div>
 
@@ -1499,29 +961,23 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            📈
-        </div>
+        <div class="icon">📈</div>
 
         <div class="title">
             Pendapatan Bersih
         </div>
 
-        <div
-            id="aTotalBersih"
-            class="value">
+        <div id="aTotalBersih" class="value">
             Rp 0
         </div>
 
     </div>
 
-
 </div>
 
 
-
 <!-- =====================================================
-     FILTER ADMIN
+     FILTER
 ===================================================== -->
 
 <div class="panel">
@@ -1529,7 +985,7 @@ tr:hover{
     <div class="panel-title">
 
         <h3>
-            🔎 Filter Dashboard
+            🔎 Filter Dashboard Admin
         </h3>
 
     </div>
@@ -1613,8 +1069,16 @@ tr:hover{
 
     </button>
 
-</div>
 
+    <div
+        id="filterInfo"
+        class="filter-info">
+
+        Menampilkan seluruh data Mustahik.
+
+    </div>
+
+</div>
 
 
 <!-- =====================================================
@@ -1626,7 +1090,7 @@ tr:hover{
     <div class="panel-title">
 
         <h3 id="chartTitle">
-            📊 Grafik Keuangan Bulanan
+            📊 Grafik Keuangan Semua User
         </h3>
 
     </div>
@@ -1634,35 +1098,28 @@ tr:hover{
 
     <div class="chart-container">
 
-        <canvas id="financeChart">
-        </canvas>
+        <canvas id="financeChart"></canvas>
 
     </div>
 
 </div>
 
 
-
 <!-- =====================================================
-     RINGKASAN HASIL FILTER
+     HASIL FILTER
 ===================================================== -->
 
 <div class="cards">
 
-
     <div class="card-stat">
 
-        <div class="icon">
-            💰
-        </div>
+        <div class="icon">💰</div>
 
         <div class="title">
             Omset Filter
         </div>
 
-        <div
-            id="fOmset"
-            class="value">
+        <div id="fOmset" class="value">
             Rp 0
         </div>
 
@@ -1671,17 +1128,13 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            🛒
-        </div>
+        <div class="icon">🛒</div>
 
         <div class="title">
             Kulakan Filter
         </div>
 
-        <div
-            id="fKulakan"
-            class="value">
+        <div id="fKulakan" class="value">
             Rp 0
         </div>
 
@@ -1690,17 +1143,13 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            📈
-        </div>
+        <div class="icon">📈</div>
 
         <div class="title">
             Bersih Filter
         </div>
 
-        <div
-            id="fBersih"
-            class="value">
+        <div id="fBersih" class="value">
             Rp 0
         </div>
 
@@ -1709,29 +1158,23 @@ tr:hover{
 
     <div class="card-stat">
 
-        <div class="icon">
-            💵
-        </div>
+        <div class="icon">💵</div>
 
         <div class="title">
             Tambahan Filter
         </div>
 
-        <div
-            id="fTambahan"
-            class="value">
+        <div id="fTambahan" class="value">
             Rp 0
         </div>
 
     </div>
 
-
 </div>
 
 
-
 <!-- =====================================================
-     TABEL USER
+     USER TABLE
 ===================================================== -->
 
 <div class="panel">
@@ -1753,33 +1196,17 @@ tr:hover{
 
                 <tr>
 
-                    <th>
-                        Nama
-                    </th>
-
-                    <th>
-                        Email
-                    </th>
-
-                    <th>
-                        Kecamatan
-                    </th>
-
-                    <th>
-                        Role
-                    </th>
-
-                    <th>
-                        Jumlah Laporan
-                    </th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Kecamatan</th>
+                    <th>Role</th>
+                    <th>Jumlah Laporan</th>
 
                 </tr>
 
             </thead>
 
-            <tbody
-                id="adminUserBody">
-            </tbody>
+            <tbody id="adminUserBody"></tbody>
 
         </table>
 
@@ -1788,9 +1215,8 @@ tr:hover{
 </div>
 
 
-
 <!-- =====================================================
-     TABEL SELURUH DATA
+     DATA KEUANGAN
 ===================================================== -->
 
 <div class="panel">
@@ -1798,7 +1224,7 @@ tr:hover{
     <div class="panel-title">
 
         <h3>
-            📋 Seluruh Data Keuangan
+            📋 Data Keuangan
         </h3>
 
         <button
@@ -1820,49 +1246,21 @@ tr:hover{
 
                 <tr>
 
-                    <th>
-                        Waktu
-                    </th>
-
-                    <th>
-                        Nama Mustahik
-                    </th>
-
-                    <th>
-                        Bulan
-                    </th>
-
-                    <th>
-                        Email
-                    </th>
-
-                    <th>
-                        Kecamatan
-                    </th>
-
-                    <th>
-                        Omset
-                    </th>
-
-                    <th>
-                        Kulakan
-                    </th>
-
-                    <th>
-                        Bersih
-                    </th>
-
-                    <th>
-                        Tambahan
-                    </th>
+                    <th>Waktu</th>
+                    <th>Nama Mustahik</th>
+                    <th>Bulan</th>
+                    <th>Email</th>
+                    <th>Kecamatan</th>
+                    <th>Omset</th>
+                    <th>Kulakan</th>
+                    <th>Bersih</th>
+                    <th>Tambahan</th>
 
                 </tr>
 
             </thead>
 
-            <tbody
-                id="adminTableBody">
-            </tbody>
+            <tbody id="adminTableBody"></tbody>
 
         </table>
 
@@ -1870,22 +1268,14 @@ tr:hover{
 
 </div>
 
-
 </section>
-
 
 </main>
 
 </div>
 
 
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
 <script>
-
 
 /* =====================================================
    FIREBASE CONFIG
@@ -1894,7 +1284,7 @@ tr:hover{
 const firebaseConfig = {
 
     apiKey:
-        "AIzaSyDFMqBgt1F3gGtXsTUo4NiqjkxE_QYf5Xs",
+        "AIzaSyDFMqBgt1F3gGtXsTUoN4iqjkxE_QYf5Xs",
 
     authDomain:
         "zmart-8320a.firebaseapp.com",
@@ -1904,28 +1294,21 @@ const firebaseConfig = {
 
 };
 
+firebase.initializeApp(firebaseConfig);
 
-firebase.initializeApp(
-    firebaseConfig
-);
-
-
-const auth =
-    firebase.auth();
-
+const auth = firebase.auth();
 
 
 /* =====================================================
-   APPS SCRIPT
+   GOOGLE APPS SCRIPT
 ===================================================== */
 
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbxNyV-LWL_DmPo7KJJzTL2xX4rNG3BKriZIKqwrXD0U44VxXuuoTIrTw7F3K9lMDnOi/exec";
 
 
-
 /* =====================================================
-   GLOBAL DATA
+   GLOBAL
 ===================================================== */
 
 let currentUserData = null;
@@ -1937,35 +1320,25 @@ let adminUsers = [];
 let financeChart = null;
 
 
-
 /* =====================================================
    ELEMENT
 ===================================================== */
 
 const loginPage =
-    document.getElementById(
-        "loginPage"
-    );
+    document.getElementById("loginPage");
 
 const app =
-    document.getElementById(
-        "app"
-    );
+    document.getElementById("app");
 
 const loginBtn =
-    document.getElementById(
-        "loginBtn"
-    );
+    document.getElementById("loginBtn");
 
 const logoutBtn =
-    document.getElementById(
-        "logoutBtn"
-    );
-
+    document.getElementById("logoutBtn");
 
 
 /* =====================================================
-   FORMAT RUPIAH
+   RUPIAH
 ===================================================== */
 
 function rupiah(value){
@@ -1973,23 +1346,13 @@ function rupiah(value){
     return new Intl.NumberFormat(
         "id-ID",
         {
-
-            style:
-                "currency",
-
-            currency:
-                "IDR",
-
-            maximumFractionDigits:
-                0
-
+            style:"currency",
+            currency:"IDR",
+            maximumFractionDigits:0
         }
-    ).format(
-        Number(value) || 0
-    );
+    ).format(Number(value) || 0);
 
 }
-
 
 
 /* =====================================================
@@ -1999,19 +1362,86 @@ function rupiah(value){
 function escapeHTML(text){
 
     const div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     div.textContent =
-        text == null
-            ? ""
-            : text;
+        text == null ? "" : text;
 
     return div.innerHTML;
 
 }
 
+
+/* =====================================================
+   FORMAT TANGGAL
+=====================================================
+
+   Fungsi ini menangani:
+
+   2026-05-31T17:00:00.000Z
+
+   maupun:
+
+   31/05/2026 00:00
+
+===================================================== */
+
+function formatTanggal(value){
+
+    if(!value){
+        return "";
+    }
+
+    const text =
+        String(value).trim();
+
+    /*
+       Jika sudah format Indonesia
+    */
+
+    if(
+        /^\d{2}\/\d{2}\/\d{4}/.test(text)
+    ){
+        return text;
+    }
+
+    /*
+       Jika format ISO
+    */
+
+    const date =
+        new Date(text);
+
+    if(!isNaN(date.getTime())){
+
+        /*
+          Gunakan waktu Asia/Jakarta.
+          UTC +7
+        */
+
+        const formatter =
+            new Intl.DateTimeFormat(
+                "id-ID",
+                {
+                    timeZone:"Asia/Jakarta",
+                    day:"2-digit",
+                    month:"2-digit",
+                    year:"numeric",
+                    hour:"2-digit",
+                    minute:"2-digit",
+                    hour12:false
+                }
+            );
+
+        return formatter
+            .format(date)
+            .replace(",", "");
+
+    }
+
+    return text;
+
+}
 
 
 /* =====================================================
@@ -2032,8 +1462,7 @@ loginBtn.addEventListener(
 
         try{
 
-            loginBtn.disabled =
-                true;
+            loginBtn.disabled = true;
 
             loginBtn.innerText =
                 "⏳ Login...";
@@ -2044,11 +1473,9 @@ loginBtn.addEventListener(
             status.innerText =
                 "Menghubungkan akun...";
 
-
             await auth.signInWithPopup(
                 provider
             );
-
 
         }
         catch(error){
@@ -2062,9 +1489,7 @@ loginBtn.addEventListener(
                 "Login gagal: " +
                 error.message;
 
-
-            loginBtn.disabled =
-                false;
+            loginBtn.disabled = false;
 
             loginBtn.innerText =
                 "🔐 Login dengan Google";
@@ -2073,7 +1498,6 @@ loginBtn.addEventListener(
 
     }
 );
-
 
 
 /* =====================================================
@@ -2095,7 +1519,6 @@ auth.onAuthStateChanged(
 
         }
 
-
         try{
 
             loginPage.style.display =
@@ -2104,14 +1527,7 @@ auth.onAuthStateChanged(
             app.style.display =
                 "block";
 
-
-            /*
-             Ambil / register user
-            */
-
-            await loadCurrentUser(
-                user
-            );
+            await loadCurrentUser(user);
 
         }
         catch(error){
@@ -2129,39 +1545,29 @@ auth.onAuthStateChanged(
 );
 
 
-
 /* =====================================================
    LOAD CURRENT USER
 ===================================================== */
 
-async function loadCurrentUser(
-    firebaseUser
-){
+async function loadCurrentUser(firebaseUser){
 
     const url =
         SCRIPT_URL +
         "?action=getUser" +
         "&uid=" +
-        encodeURIComponent(
-            firebaseUser.uid
-        ) +
+        encodeURIComponent(firebaseUser.uid) +
         "&email=" +
-        encodeURIComponent(
-            firebaseUser.email || ""
-        ) +
+        encodeURIComponent(firebaseUser.email || "") +
         "&nama=" +
         encodeURIComponent(
             firebaseUser.displayName || "User"
         );
 
-
     const response =
         await fetch(url);
 
-
     const result =
         await response.json();
-
 
     if(!result.success){
 
@@ -2172,14 +1578,7 @@ async function loadCurrentUser(
 
     }
 
-
-    currentUserData =
-        result;
-
-
-    /*
-     Header
-    */
+    currentUserData = result;
 
     document.getElementById(
         "welcomeName"
@@ -2191,14 +1590,12 @@ async function loadCurrentUser(
             "User"
         );
 
-
     document.getElementById(
         "welcomeEmail"
     ).innerText =
         result.email ||
         firebaseUser.email ||
         "";
-
 
     document.getElementById(
         "roleBadge"
@@ -2209,15 +1606,10 @@ async function loadCurrentUser(
         ).toUpperCase();
 
 
-    /*
-     Pilih dashboard
-    */
-
     if(
         String(result.role)
             .toLowerCase()
-            ===
-        "admin"
+            === "admin"
     ){
 
         showAdminDashboard();
@@ -2229,17 +1621,12 @@ async function loadCurrentUser(
 
         showUserDashboard();
 
-        /*
-         Isi form otomatis
-        */
-
         document.getElementById(
             "namaMustahik"
         ).value =
             result.nama ||
             firebaseUser.displayName ||
             "";
-
 
         if(result.kecamatan){
 
@@ -2250,13 +1637,11 @@ async function loadCurrentUser(
 
         }
 
-
         await loadUserDashboard();
 
     }
 
 }
-
 
 
 /* =====================================================
@@ -2267,18 +1652,13 @@ function showUserDashboard(){
 
     document.getElementById(
         "userDashboard"
-    ).classList.add(
-        "active"
-    );
+    ).classList.add("active");
 
     document.getElementById(
         "adminDashboard"
-    ).classList.remove(
-        "active"
-    );
+    ).classList.remove("active");
 
 }
-
 
 
 /* =====================================================
@@ -2289,18 +1669,13 @@ function showAdminDashboard(){
 
     document.getElementById(
         "adminDashboard"
-    ).classList.add(
-        "active"
-    );
+    ).classList.add("active");
 
     document.getElementById(
         "userDashboard"
-    ).classList.remove(
-        "active"
-    );
+    ).classList.remove("active");
 
 }
-
 
 
 /* =====================================================
@@ -2313,11 +1688,8 @@ async function loadUserDashboard(){
         !currentUserData ||
         !currentUserData.uid
     ){
-
         return;
-
     }
-
 
     const url =
         SCRIPT_URL +
@@ -2327,16 +1699,13 @@ async function loadUserDashboard(){
             currentUserData.uid
         );
 
-
     try{
 
         const response =
             await fetch(url);
 
-
         const result =
             await response.json();
-
 
         if(!result.success){
 
@@ -2347,17 +1716,12 @@ async function loadUserDashboard(){
         }
 
 
-        /*
-         SUMMARY
-        */
-
         document.getElementById(
             "uTotalOmset"
         ).innerText =
             rupiah(
                 result.summary.totalOmset
             );
-
 
         document.getElementById(
             "uTotalKulakan"
@@ -2366,14 +1730,12 @@ async function loadUserDashboard(){
                 result.summary.totalKulakan
             );
 
-
         document.getElementById(
             "uTotalBersih"
         ).innerText =
             rupiah(
                 result.summary.totalBersih
             );
-
 
         document.getElementById(
             "uTotalTambahan"
@@ -2383,15 +1745,10 @@ async function loadUserDashboard(){
             );
 
 
-        /*
-         TABLE
-        */
-
         const body =
             document.getElementById(
                 "userTableBody"
             );
-
 
         body.innerHTML = "";
 
@@ -2404,12 +1761,8 @@ async function loadUserDashboard(){
             body.innerHTML =
                 `
                 <tr>
-                    <td
-                        colspan="7"
-                        class="empty">
-
+                    <td colspan="7" class="empty">
                         Belum ada laporan.
-
                     </td>
                 </tr>
                 `;
@@ -2422,48 +1775,54 @@ async function loadUserDashboard(){
         result.data
             .slice()
             .reverse()
-            .forEach(
-                function(row){
+            .forEach(function(row){
 
-                    body.innerHTML +=
-                    `
+                body.innerHTML +=
+                `
+                <tr>
 
-                    <tr>
+                    <td>
+                        ${escapeHTML(
+                            formatTanggal(row.waktu)
+                        )}
+                    </td>
 
-                        <td>
-                            ${escapeHTML(row.waktu)}
-                        </td>
+                    <td>
+                        ${escapeHTML(
+                            row.bulanTahun
+                        )}
+                    </td>
 
-                        <td>
-                            ${escapeHTML(row.bulanTahun)}
-                        </td>
+                    <td>
+                        ${escapeHTML(
+                            row.kecamatan
+                        )}
+                    </td>
 
-                        <td>
-                            ${escapeHTML(row.kecamatan)}
-                        </td>
+                    <td>
+                        ${rupiah(row.omset)}
+                    </td>
 
-                        <td>
-                            ${rupiah(row.omset)}
-                        </td>
+                    <td>
+                        ${rupiah(row.kulakan)}
+                    </td>
 
-                        <td>
-                            ${rupiah(row.kulakan)}
-                        </td>
+                    <td>
+                        ${rupiah(
+                            row.pendapatanBersih
+                        )}
+                    </td>
 
-                        <td>
-                            ${rupiah(row.pendapatanBersih)}
-                        </td>
+                    <td>
+                        ${rupiah(
+                            row.pendapatanTambahan
+                        )}
+                    </td>
 
-                        <td>
-                            ${rupiah(row.pendapatanTambahan)}
-                        </td>
+                </tr>
+                `;
 
-                    </tr>
-
-                    `;
-
-                }
-            );
+            });
 
     }
     catch(error){
@@ -2480,7 +1839,6 @@ async function loadUserDashboard(){
 }
 
 
-
 /* =====================================================
    HITUNG BERSIH
 ===================================================== */
@@ -2494,7 +1852,6 @@ function hitungBersih(){
             ).value
         ) || 0;
 
-
     const kulakan =
         Number(
             document.getElementById(
@@ -2502,25 +1859,14 @@ function hitungBersih(){
             ).value
         ) || 0;
 
-
-    const bersih =
-        omset - kulakan;
-
-
     document.getElementById(
         "pendapatanBersih"
     ).value =
         rupiah(
-            bersih
+            omset - kulakan
         );
 
 }
-
-
-
-/* =====================================================
-   EVENT HITUNG
-===================================================== */
 
 document.getElementById(
     "omset"
@@ -2529,14 +1875,12 @@ document.getElementById(
     hitungBersih
 );
 
-
 document.getElementById(
     "kulakan"
 ).addEventListener(
     "input",
     hitungBersih
 );
-
 
 
 /* =====================================================
@@ -2551,12 +1895,10 @@ document.getElementById(
 );
 
 
-
 async function saveData(){
 
     const user =
         auth.currentUser;
-
 
     if(!user){
 
@@ -2574,24 +1916,20 @@ async function saveData(){
             "namaMustahik"
         ).value.trim();
 
-
     const kecamatan =
         document.getElementById(
             "kecamatan"
         ).value.trim();
-
 
     const bulan =
         document.getElementById(
             "bulan"
         ).value;
 
-
     const tahun =
         document.getElementById(
             "tahun"
         ).value;
-
 
     const omset =
         Number(
@@ -2600,14 +1938,12 @@ async function saveData(){
             ).value
         ) || 0;
 
-
     const kulakan =
         Number(
             document.getElementById(
                 "kulakan"
             ).value
         ) || 0;
-
 
     const tambahan =
         Number(
@@ -2627,7 +1963,6 @@ async function saveData(){
 
     }
 
-
     if(!kecamatan){
 
         alert(
@@ -2638,7 +1973,6 @@ async function saveData(){
 
     }
 
-
     if(!bulan){
 
         alert(
@@ -2648,7 +1982,6 @@ async function saveData(){
         return;
 
     }
-
 
     if(!tahun){
 
@@ -2662,21 +1995,15 @@ async function saveData(){
 
 
     const bulanTahun =
-        bulan +
-        " " +
-        tahun;
-
+        bulan + " " + tahun;
 
     const bersih =
-        omset -
-        kulakan;
-
+        omset - kulakan;
 
     const saveBtn =
         document.getElementById(
             "saveBtn"
         );
-
 
     const status =
         document.getElementById(
@@ -2686,12 +2013,10 @@ async function saveData(){
 
     try{
 
-        saveBtn.disabled =
-            true;
+        saveBtn.disabled = true;
 
         saveBtn.innerText =
             "⏳ Menyimpan...";
-
 
         status.className =
             "status loading";
@@ -2706,35 +2031,25 @@ async function saveData(){
 
         const payload = {
 
-            idToken:
-                token,
+            idToken:token,
 
-            uid:
-                user.uid,
+            uid:user.uid,
 
-            email:
-                user.email,
+            email:user.email,
 
-            namaMustahik:
-                nama,
+            namaMustahik:nama,
 
-            bulanTahun:
-                bulanTahun,
+            bulanTahun:bulanTahun,
 
-            kecamatan:
-                kecamatan,
+            kecamatan:kecamatan,
 
-            omset:
-                omset,
+            omset:omset,
 
-            kulakan:
-                kulakan,
+            kulakan:kulakan,
 
-            pendapatanBersih:
-                bersih,
+            pendapatanBersih:bersih,
 
-            pendapatanTambahan:
-                tambahan
+            pendapatanTambahan:tambahan
 
         };
 
@@ -2743,15 +2058,11 @@ async function saveData(){
             await fetch(
                 SCRIPT_URL,
                 {
-
-                    method:
-                        "POST",
-
+                    method:"POST",
                     body:
                         new URLSearchParams(
                             payload
                         )
-
                 }
             );
 
@@ -2777,44 +2088,31 @@ async function saveData(){
             result.message;
 
 
-        /*
-         Reset
-        */
-
         document.getElementById(
             "bulan"
         ).value = "";
-
 
         document.getElementById(
             "tahun"
         ).value = "";
 
-
         document.getElementById(
             "omset"
         ).value = "";
-
 
         document.getElementById(
             "kulakan"
         ).value = "";
 
-
         document.getElementById(
             "pendapatanTambahan"
         ).value = "";
-
 
         document.getElementById(
             "pendapatanBersih"
         ).value =
             "Rp 0";
 
-
-        /*
-         Refresh dashboard
-        */
 
         await loadUserDashboard();
 
@@ -2829,7 +2127,6 @@ async function saveData(){
         status.innerText =
             "❌ Gagal menyimpan";
 
-
         alert(
             "Gagal menyimpan data:\n\n" +
             error.message
@@ -2838,8 +2135,7 @@ async function saveData(){
     }
     finally{
 
-        saveBtn.disabled =
-            false;
+        saveBtn.disabled = false;
 
         saveBtn.innerText =
             "💾 Simpan Laporan";
@@ -2849,9 +2145,8 @@ async function saveData(){
 }
 
 
-
 /* =====================================================
-   LOAD ADMIN DASHBOARD
+   LOAD ADMIN
 ===================================================== */
 
 async function loadAdminDashboard(){
@@ -2860,11 +2155,8 @@ async function loadAdminDashboard(){
         !currentUserData ||
         !currentUserData.uid
     ){
-
         return;
-
     }
-
 
     try{
 
@@ -2880,7 +2172,6 @@ async function loadAdminDashboard(){
         const response =
             await fetch(url);
 
-
         const result =
             await response.json();
 
@@ -2894,22 +2185,12 @@ async function loadAdminDashboard(){
         }
 
 
-        /*
-         SIMPAN DATA GLOBAL
-        */
-
         adminData =
-            result.data ||
-            [];
+            result.data || [];
 
         adminUsers =
-            result.users ||
-            [];
+            result.users || [];
 
-
-        /*
-         SUMMARY AWAL
-        */
 
         document.getElementById(
             "aTotalUser"
@@ -2939,16 +2220,7 @@ async function loadAdminDashboard(){
             );
 
 
-        /*
-         FILTER USER
-        */
-
         populateUserFilter();
-
-
-        /*
-         FILTER KECAMATAN
-        */
 
         populateKecamatanFilter(
             result.filters
@@ -2956,37 +2228,13 @@ async function loadAdminDashboard(){
                 : []
         );
 
-
-        /*
-         FILTER BULAN
-        */
-
         populateBulanFilter(
             result.filters
                 ? result.filters.bulanTahun
                 : []
         );
 
-
-        /*
-         USER TABLE
-        */
-
         renderAdminUsers();
-
-
-        /*
-         DATA TABLE
-        */
-
-        renderAdminTable(
-            adminData
-        );
-
-
-        /*
-         GRAFIK
-        */
 
         applyAdminFilter();
 
@@ -3005,9 +2253,8 @@ async function loadAdminDashboard(){
 }
 
 
-
 /* =====================================================
-   POPULATE USER FILTER
+   USER FILTER
 ===================================================== */
 
 function populateUserFilter(){
@@ -3016,7 +2263,6 @@ function populateUserFilter(){
         document.getElementById(
             "filterUser"
         );
-
 
     const oldValue =
         select.value;
@@ -3030,42 +2276,65 @@ function populateUserFilter(){
         `;
 
 
-    adminUsers.forEach(
-        function(user){
+    adminUsers
+        .filter(function(user){
+
+            return (
+                String(user.role || "user")
+                    .toLowerCase()
+                !== "admin"
+            );
+
+        })
+        .sort(function(a,b){
+
+            return String(a.nama || "")
+                .localeCompare(
+                    String(b.nama || ""),
+                    "id"
+                );
+
+        })
+        .forEach(function(user){
 
             const option =
                 document.createElement(
                     "option"
                 );
 
-
             option.value =
                 user.uid;
-
 
             option.textContent =
                 user.nama ||
                 user.email ||
                 user.uid;
 
+            select.appendChild(option);
 
-            select.appendChild(
-                option
-            );
-
-        }
-    );
+        });
 
 
-    select.value =
-        oldValue;
+    if(
+        Array.from(
+            select.options
+        ).some(function(option){
+
+            return option.value === oldValue;
+
+        })
+    ){
+
+        select.value =
+            oldValue;
+
+    }
 
 }
 
 
-
 /* =====================================================
-   POPULATE KECAMATAN
+   KECAMATAN FILTER
 ===================================================== */
 
 function populateKecamatanFilter(
@@ -3077,6 +2346,9 @@ function populateKecamatanFilter(
             "filterKecamatan"
         );
 
+    const oldValue =
+        select.value;
+
 
     select.innerHTML =
         `
@@ -3086,34 +2358,53 @@ function populateKecamatanFilter(
         `;
 
 
-    (kecamatanList || [])
-        .forEach(
-            function(kec){
+    [...new Set(kecamatanList || [])]
+        .filter(Boolean)
+        .sort(function(a,b){
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    kec;
-
-                option.textContent =
-                    kec;
-
-                select.appendChild(
-                    option
+            return String(a)
+                .localeCompare(
+                    String(b),
+                    "id"
                 );
 
-            }
-        );
+        })
+        .forEach(function(kec){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = kec;
+
+            option.textContent = kec;
+
+            select.appendChild(option);
+
+        });
+
+
+    if(
+        Array.from(
+            select.options
+        ).some(function(option){
+
+            return option.value === oldValue;
+
+        })
+    ){
+
+        select.value =
+            oldValue;
+
+    }
 
 }
 
 
-
 /* =====================================================
-   POPULATE BULAN
+   BULAN FILTER
 ===================================================== */
 
 function populateBulanFilter(
@@ -3125,6 +2416,9 @@ function populateBulanFilter(
             "filterBulan"
         );
 
+    const oldValue =
+        select.value;
+
 
     select.innerHTML =
         `
@@ -3133,10 +2427,6 @@ function populateBulanFilter(
         </option>
         `;
 
-
-    /*
-     Urutan bulan
-    */
 
     const bulanOrder = {
 
@@ -3156,51 +2446,38 @@ function populateBulanFilter(
     };
 
 
-    const sorted =
-        (bulanList || [])
-        .slice()
-        .sort(
-            function(a,b){
+    [...new Set(bulanList || [])]
+        .filter(Boolean)
+        .sort(function(a,b){
 
-                const pa =
-                    String(a)
-                    .split(" ");
+            const pa =
+                String(a).split(" ");
 
-                const pb =
-                    String(b)
-                    .split(" ");
+            const pb =
+                String(b).split(" ");
 
+            const ya =
+                Number(pa[1]) || 0;
 
-                const ya =
-                    Number(
-                        pa[1]
-                    ) || 0;
-
-                const yb =
-                    Number(
-                        pb[1]
-                    ) || 0;
+            const yb =
+                Number(pb[1]) || 0;
 
 
-                if(ya !== yb){
+            if(ya !== yb){
 
-                    return yb - ya;
-
-                }
-
-
-                return (
-                    (bulanOrder[pb[0]] || 0)
-                    -
-                    (bulanOrder[pa[0]] || 0)
-                );
+                return yb - ya;
 
             }
-        );
 
 
-    sorted.forEach(
-        function(item){
+            return (
+                (bulanOrder[pb[0]] || 0)
+                -
+                (bulanOrder[pa[0]] || 0)
+            );
+
+        })
+        .forEach(function(item){
 
             const option =
                 document.createElement(
@@ -3217,15 +2494,117 @@ function populateBulanFilter(
                 option
             );
 
-        }
-    );
+        });
+
+
+    if(
+        Array.from(
+            select.options
+        ).some(function(option){
+
+            return option.value === oldValue;
+
+        })
+    ){
+
+        select.value =
+            oldValue;
+
+    }
 
 }
 
 
+/* =====================================================
+   UPDATE BULAN SESUAI USER
+=====================================================
+
+   Jika user dipilih,
+   daftar bulan akan mengikuti
+   bulan yang benar-benar dimiliki
+   user tersebut.
+
+===================================================== */
+
+function updateBulanFilterByUser(){
+
+    const uid =
+        document.getElementById(
+            "filterUser"
+        ).value;
+
+
+    const select =
+        document.getElementById(
+            "filterBulan"
+        );
+
+
+    const oldValue =
+        select.value;
+
+
+    let sourceData =
+        adminData;
+
+
+    if(uid){
+
+        sourceData =
+            adminData.filter(
+                function(row){
+
+                    return row.uid === uid;
+
+                }
+            );
+
+    }
+
+
+    const bulanSet = {};
+
+
+    sourceData.forEach(
+        function(row){
+
+            if(row.bulanTahun){
+
+                bulanSet[
+                    row.bulanTahun
+                ] = true;
+
+            }
+
+        }
+    );
+
+
+    populateBulanFilter(
+        Object.keys(bulanSet)
+    );
+
+
+    if(
+        Object.keys(bulanSet)
+            .includes(oldValue)
+    ){
+
+        select.value =
+            oldValue;
+
+    }
+    else{
+
+        select.value = "";
+
+    }
+
+}
+
 
 /* =====================================================
-   APPLY FILTER
+   APPLY FILTER ADMIN
 ===================================================== */
 
 function applyAdminFilter(){
@@ -3260,51 +2639,38 @@ function applyAdminFilter(){
         adminData.filter(
             function(row){
 
-                /*
-                 User
-                */
-
                 if(
                     uid &&
-                    row.uid !== uid
+                    String(row.uid) !==
+                    String(uid)
                 ){
 
                     return false;
 
                 }
 
-
-                /*
-                 Kecamatan
-                */
 
                 if(
                     kecamatan &&
-                    row.kecamatan !== kecamatan
+                    String(row.kecamatan) !==
+                    String(kecamatan)
                 ){
 
                     return false;
 
                 }
 
-
-                /*
-                 Bulan
-                */
 
                 if(
                     bulan &&
-                    row.bulanTahun !== bulan
+                    String(row.bulanTahun) !==
+                    String(bulan)
                 ){
 
                     return false;
 
                 }
 
-
-                /*
-                 Search
-                */
 
                 if(search){
 
@@ -3320,9 +2686,7 @@ function applyAdminFilter(){
 
 
                     if(
-                        !text.includes(
-                            search
-                        )
+                        !text.includes(search)
                     ){
 
                         return false;
@@ -3338,18 +2702,16 @@ function applyAdminFilter(){
         );
 
 
-    /*
-     Render
-    */
+    /* =================================================
+       RENDER TABEL
+    ================================================= */
 
-    renderAdminTable(
-        filtered
-    );
+    renderAdminTable(filtered);
 
 
-    /*
-     Hitung total filter
-    */
+    /* =================================================
+       HITUNG SUMMARY FILTER
+    ================================================= */
 
     let omset = 0;
     let kulakan = 0;
@@ -3361,14 +2723,10 @@ function applyAdminFilter(){
         function(row){
 
             omset +=
-                Number(
-                    row.omset
-                ) || 0;
+                Number(row.omset) || 0;
 
             kulakan +=
-                Number(
-                    row.kulakan
-                ) || 0;
+                Number(row.kulakan) || 0;
 
             bersih +=
                 Number(
@@ -3408,31 +2766,69 @@ function applyAdminFilter(){
         rupiah(tambahan);
 
 
-    /*
-     Update chart
-    */
+    /* =================================================
+       FILTER INFO
+    ================================================= */
 
-    renderChart(
-        filtered
-    );
+    const userSelect =
+        document.getElementById(
+            "filterUser"
+        );
+
+    const userText =
+        userSelect.options[
+            userSelect.selectedIndex
+        ]
+        ? userSelect.options[
+            userSelect.selectedIndex
+        ].text
+        : "Semua User";
+
+
+    const kecText =
+        kecamatan ||
+        "Semua Kecamatan";
+
+
+    const bulanText =
+        bulan ||
+        "Semua Bulan";
+
+
+    document.getElementById(
+        "filterInfo"
+    ).innerHTML =
+        `
+        <b>Filter aktif:</b>
+        ${escapeHTML(userText)}
+        &nbsp; | &nbsp;
+        ${escapeHTML(kecText)}
+        &nbsp; | &nbsp;
+        ${escapeHTML(bulanText)}
+        &nbsp; | &nbsp;
+        <b>${filtered.length}</b> data
+        `;
+
+
+    /* =================================================
+       CHART
+    ================================================= */
+
+    renderChart(filtered);
 
 }
-
 
 
 /* =====================================================
    RENDER ADMIN TABLE
 ===================================================== */
 
-function renderAdminTable(
-    rows
-){
+function renderAdminTable(rows){
 
     const body =
         document.getElementById(
             "adminTableBody"
         );
-
 
     body.innerHTML = "";
 
@@ -3465,77 +2861,76 @@ function renderAdminTable(
     rows
         .slice()
         .reverse()
-        .forEach(
-            function(row){
+        .forEach(function(row){
 
-                body.innerHTML +=
-                `
+            body.innerHTML +=
+            `
+            <tr>
 
-                <tr>
+                <td>
+                    ${escapeHTML(
+                        formatTanggal(
+                            row.waktu
+                        )
+                    )}
+                </td>
 
-                    <td>
-                        ${escapeHTML(row.waktu)}
-                    </td>
-
-                    <td>
-                        <b>
-                            ${escapeHTML(
-                                row.namaMustahik
-                            )}
-                        </b>
-                    </td>
-
-                    <td>
+                <td>
+                    <b>
                         ${escapeHTML(
-                            row.bulanTahun
+                            row.namaMustahik
                         )}
-                    </td>
+                    </b>
+                </td>
 
-                    <td>
-                        ${escapeHTML(
-                            row.email
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(
+                        row.bulanTahun
+                    )}
+                </td>
 
-                    <td>
-                        ${escapeHTML(
-                            row.kecamatan
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(
+                        row.email
+                    )}
+                </td>
 
-                    <td>
-                        ${rupiah(row.omset)}
-                    </td>
+                <td>
+                    ${escapeHTML(
+                        row.kecamatan
+                    )}
+                </td>
 
-                    <td>
-                        ${rupiah(row.kulakan)}
-                    </td>
+                <td>
+                    ${rupiah(row.omset)}
+                </td>
 
-                    <td>
-                        ${rupiah(
-                            row.pendapatanBersih
-                        )}
-                    </td>
+                <td>
+                    ${rupiah(row.kulakan)}
+                </td>
 
-                    <td>
-                        ${rupiah(
-                            row.pendapatanTambahan
-                        )}
-                    </td>
+                <td>
+                    ${rupiah(
+                        row.pendapatanBersih
+                    )}
+                </td>
 
-                </tr>
+                <td>
+                    ${rupiah(
+                        row.pendapatanTambahan
+                    )}
+                </td>
 
-                `;
+            </tr>
+            `;
 
-            }
-        );
+        });
 
 }
 
 
-
 /* =====================================================
-   RENDER USER TABLE ADMIN
+   RENDER USER ADMIN
 ===================================================== */
 
 function renderAdminUsers(){
@@ -3544,7 +2939,6 @@ function renderAdminUsers(){
         document.getElementById(
             "adminUserBody"
         );
-
 
     body.innerHTML = "";
 
@@ -3606,7 +3000,6 @@ function renderAdminUsers(){
 
             body.innerHTML +=
             `
-
             <tr>
 
                 <td>
@@ -3638,7 +3031,6 @@ function renderAdminUsers(){
                 </td>
 
             </tr>
-
             `;
 
         }
@@ -3647,14 +3039,11 @@ function renderAdminUsers(){
 }
 
 
-
 /* =====================================================
-   CHART
+   RENDER CHART
 ===================================================== */
 
-function renderChart(
-    rows
-){
+function renderChart(rows){
 
     const grouped = {};
 
@@ -3667,9 +3056,7 @@ function renderChart(
                 "Tidak diketahui";
 
 
-            if(
-                !grouped[key]
-            ){
+            if(!grouped[key]){
 
                 grouped[key] = {
 
@@ -3687,15 +3074,11 @@ function renderChart(
 
 
             grouped[key].omset +=
-                Number(
-                    row.omset
-                ) || 0;
+                Number(row.omset) || 0;
 
 
             grouped[key].kulakan +=
-                Number(
-                    row.kulakan
-                ) || 0;
+                Number(row.kulakan) || 0;
 
 
             grouped[key].bersih +=
@@ -3732,47 +3115,36 @@ function renderChart(
 
 
     const labels =
-        Object.keys(
-            grouped
-        )
-        .sort(
-            function(a,b){
+        Object.keys(grouped)
+        .sort(function(a,b){
 
-                const pa =
-                    String(a)
-                    .split(" ");
+            const pa =
+                String(a).split(" ");
 
-                const pb =
-                    String(b)
-                    .split(" ");
+            const pb =
+                String(b).split(" ");
 
+            const ya =
+                Number(pa[1]) || 0;
 
-                const ya =
-                    Number(
-                        pa[1]
-                    ) || 0;
-
-                const yb =
-                    Number(
-                        pb[1]
-                    ) || 0;
+            const yb =
+                Number(pb[1]) || 0;
 
 
-                if(ya !== yb){
+            if(ya !== yb){
 
-                    return ya - yb;
-
-                }
-
-
-                return (
-                    (bulanOrder[pa[0]] || 0)
-                    -
-                    (bulanOrder[pb[0]] || 0)
-                );
+                return ya - yb;
 
             }
-        );
+
+
+            return (
+                (bulanOrder[pa[0]] || 0)
+                -
+                (bulanOrder[pb[0]] || 0)
+            );
+
+        });
 
 
     const omset =
@@ -3803,40 +3175,92 @@ function renderChart(
         );
 
 
-    /*
-     Judul grafik
-    */
+    /* =================================================
+       JUDUL GRAFIK SESUAI USER
+    ================================================= */
 
-    const userFilter =
+    const userSelect =
         document.getElementById(
             "filterUser"
         );
 
 
     const selectedUserText =
-        userFilter.options[
-            userFilter.selectedIndex
+        userSelect.options[
+            userSelect.selectedIndex
         ]
-        ? userFilter.options[
-            userFilter.selectedIndex
+        ? userSelect.options[
+            userSelect.selectedIndex
         ].text
         : "Semua User";
+
+
+    const kecamatan =
+        document.getElementById(
+            "filterKecamatan"
+        ).value;
+
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        ).value;
+
+
+    let title =
+        "📊 Grafik Keuangan";
+
+
+    if(
+        userSelect.value
+    ){
+
+        title +=
+            " - " +
+            selectedUserText;
+
+    }
+    else{
+
+        title +=
+            " - Semua User";
+
+    }
+
+
+    if(kecamatan){
+
+        title +=
+            " | " +
+            kecamatan;
+
+    }
+
+
+    if(bulan){
+
+        title +=
+            " | " +
+            bulan;
+
+    }
 
 
     document.getElementById(
         "chartTitle"
     ).innerText =
-        "📊 Grafik Keuangan - " +
-        selectedUserText;
+        title;
 
 
-    /*
-     Destroy chart lama
-    */
+    /* =================================================
+       DESTROY CHART
+    ================================================= */
 
     if(financeChart){
 
         financeChart.destroy();
+
+        financeChart = null;
 
     }
 
@@ -3852,66 +3276,36 @@ function renderChart(
             ctx,
             {
 
-                type:
-                    "bar",
+                type:"bar",
 
                 data:{
 
-                    labels:
-                        labels,
+                    labels:labels,
 
                     datasets:[
 
                         {
-
-                            label:
-                                "Omset",
-
-                            data:
-                                omset,
-
-                            borderWidth:
-                                1
-
+                            label:"Omset",
+                            data:omset,
+                            borderWidth:1
                         },
 
                         {
-
-                            label:
-                                "Kulakan",
-
-                            data:
-                                kulakan,
-
-                            borderWidth:
-                                1
-
+                            label:"Kulakan",
+                            data:kulakan,
+                            borderWidth:1
                         },
 
                         {
-
-                            label:
-                                "Pendapatan Bersih",
-
-                            data:
-                                bersih,
-
-                            borderWidth:
-                                1
-
+                            label:"Pendapatan Bersih",
+                            data:bersih,
+                            borderWidth:1
                         },
 
                         {
-
-                            label:
-                                "Pendapatan Tambahan",
-
-                            data:
-                                tambahan,
-
-                            borderWidth:
-                                1
-
+                            label:"Pendapatan Tambahan",
+                            data:tambahan,
+                            borderWidth:1
                         }
 
                     ]
@@ -3920,28 +3314,20 @@ function renderChart(
 
                 options:{
 
-                    responsive:
-                        true,
+                    responsive:true,
 
-                    maintainAspectRatio:
-                        false,
+                    maintainAspectRatio:false,
 
                     interaction:{
-
-                        mode:
-                            "index",
-
-                        intersect:
-                            false
-
+                        mode:"index",
+                        intersect:false
                     },
 
                     scales:{
 
                         y:{
 
-                            beginAtZero:
-                                true,
+                            beginAtZero:true,
 
                             ticks:{
 
@@ -3961,6 +3347,10 @@ function renderChart(
                     },
 
                     plugins:{
+
+                        legend:{
+                            position:"top"
+                        },
 
                         tooltip:{
 
@@ -3993,18 +3383,33 @@ function renderChart(
 }
 
 
-
 /* =====================================================
-   FILTER EVENT
+   FILTER USER
 ===================================================== */
 
 document.getElementById(
     "filterUser"
 ).addEventListener(
     "change",
-    applyAdminFilter
+    function(){
+
+        /*
+          Ketika user berubah,
+          bulan otomatis menyesuaikan
+          data user tersebut.
+        */
+
+        updateBulanFilterByUser();
+
+        applyAdminFilter();
+
+    }
 );
 
+
+/* =====================================================
+   FILTER KECAMATAN
+===================================================== */
 
 document.getElementById(
     "filterKecamatan"
@@ -4014,6 +3419,10 @@ document.getElementById(
 );
 
 
+/* =====================================================
+   FILTER BULAN
+===================================================== */
+
 document.getElementById(
     "filterBulan"
 ).addEventListener(
@@ -4022,13 +3431,16 @@ document.getElementById(
 );
 
 
+/* =====================================================
+   SEARCH
+===================================================== */
+
 document.getElementById(
     "filterSearch"
 ).addEventListener(
     "input",
     applyAdminFilter
 );
-
 
 
 /* =====================================================
@@ -4045,27 +3457,50 @@ document.getElementById(
             "filterUser"
         ).value = "";
 
-
         document.getElementById(
             "filterKecamatan"
         ).value = "";
 
-
         document.getElementById(
             "filterBulan"
         ).value = "";
-
 
         document.getElementById(
             "filterSearch"
         ).value = "";
 
 
+        /*
+          Kembalikan daftar bulan
+          seluruh user.
+        */
+
+        const allMonths = {};
+
+        adminData.forEach(
+            function(row){
+
+                if(row.bulanTahun){
+
+                    allMonths[
+                        row.bulanTahun
+                    ] = true;
+
+                }
+
+            }
+        );
+
+
+        populateBulanFilter(
+            Object.keys(allMonths)
+        );
+
+
         applyAdminFilter();
 
     }
 );
-
 
 
 /* =====================================================
@@ -4080,21 +3515,18 @@ logoutBtn.addEventListener(
 
             await auth.signOut();
 
-            currentUserData =
-                null;
+            currentUserData = null;
 
-            adminData =
-                [];
+            adminData = [];
 
-            adminUsers =
-                [];
+            adminUsers = [];
+
 
             if(financeChart){
 
                 financeChart.destroy();
 
-                financeChart =
-                    null;
+                financeChart = null;
 
             }
 
@@ -4108,8 +3540,8 @@ logoutBtn.addEventListener(
     }
 );
 
-
 </script>
 
 </body>
 </html>
+```
