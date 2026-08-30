@@ -1420,34 +1420,14 @@ saveBtn.addEventListener(
         );
 
 
-      const result =
-        await response.text();
+      const result = await response.json();
 
+if (!result.success) {
+    throw new Error(result.message);
+}
 
-      /*
-       CEK RESPONSE
-      */
-
-      if (
-        result.trim() !== "OK"
-      ) {
-
-        throw new Error(
-          result
-        );
-
-      }
-
-
-      /*
-       BERHASIL
-      */
-
-      status.className =
-        "success";
-
-      status.innerText =
-        "✅ Data berhasil disimpan";
+status.className = "success";
+status.innerText = "✅ " + result.message;
 
 
       /*
