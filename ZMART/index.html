@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Keuangan Mustahik</title>
+
+  <!-- Firebase SDK -->
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 25px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,.1);
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2e7d32;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #444;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 7px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #2e7d32;
+    }
+
+    button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    #logoutBtn {
+      background: #c62828;
+      margin-top: 10px;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .readonly {
+      background: #f1f1f1;
+    }
+
+    .user-box {
+      background: #e8f5e9;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+  <h3>📊 Keuangan Mustahik</h3>
+
+  <p class="subtitle">
+    Form Laporan Keuangan UMKM Mustahik
+  </p>
+
+  <!-- LOGIN -->
+
+  <button id="loginBtn">
+    Login dengan Google
+  </button>
+
+  <!-- FORM -->
+
+  <div id="form" style="display:none">
+
+```
+<div class="user-box">
+  <span id="userInfo"></span>
+</div>
+
+
+<!-- NAMA MUSTAHIK -->
+
+<label>Nama Mustahik</label>
+
+<input
+  id="namaMustahik"
+  type="text"
+  placeholder="Masukkan Nama Mustahik"
+>
+
+
+<!-- BULAN -->
+
+<label>Bulan</label>
+
+<select id="bulan">
+
+  <option value="">
+    -- Pilih Bulan --
+  </option>
+
+  <option value="Januari">Januari</option>
+  <option value="Februari">Februari</option>
+  <option value="Maret">Maret</option>
+  <option value="April">April</option>
+  <option value="Mei">Mei</option>
+  <option value="Juni">Juni</option>
+  <option value="Juli">Juli</option>
+  <option value="Agustus">Agustus</option>
+  <option value="September">September</option>
+  <option value="Oktober">Oktober</option>
+  <option value="November">November</option>
+  <option value="Desember">Desember</option>
+
+</select>
+
+
+<!-- TAHUN -->
+
+<label>Tahun</label>
+
+<select id="tahun">
+
+  <option value="">
+    -- Pilih Tahun --
+  </option>
+
+  <option value="2025">2025</option>
+  <option value="2026">2026</option>
+  <option value="2027">2027</option>
+  <option value="2028">2028</option>
+  <option value="2029">2029</option>
+  <option value="2030">2030</option>
+
+</select>
+
+
+<!-- KECAMATAN -->
+
+<label>Kecamatan</label>
+
+<input
+  id="kecamatan"
+  type="text"
+  placeholder="Masukkan Nama Kecamatan"
+>
+
+
+<!-- OMSET -->
+
+<label>Omset</label>
+
+<input
+  id="omset"
+  type="number"
+  placeholder="Contoh: 5000000"
+  min="0"
+>
+
+
+<!-- KULAKAN -->
+
+<label>Kulakan</label>
+
+<input
+  id="kulakan"
+  type="number"
+  placeholder="Contoh: 2000000"
+  min="0"
+>
+
+
+<!-- PENDAPATAN BERSIH -->
+
+<label>Pendapatan Bersih</label>
+
+<input
+  id="pendapatanBersih"
+  type="text"
+  placeholder="Otomatis dihitung"
+  class="readonly"
+  readonly
+>
+
+
+<!-- PENDAPATAN TAMBAHAN -->
+
+<label>
+  Pendapatan Tambahan di Luar Usaha
+</label>
+
+<input
+  id="pendapatanTambahan"
+  type="number"
+  placeholder="Contoh: 500000"
+  min="0"
+>
+
+
+<!-- SIMPAN -->
+
+<button id="saveBtn">
+
+  💾 Simpan Data
+
+</button>
+
+
+<!-- LOGOUT -->
+
+<button id="logoutBtn">
+
+  Logout
+
+</button>
+
+
+<p id="status"></p>
+```
+
+  </div>
+
+</div>
+
+<script>
+
+
+  /* =====================================================
+     FIREBASE CONFIG
+  ===================================================== */
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyDAPMv_1Oy_-bKIOJUxj83dh8uVtenEJj4",
+
+    authDomain: "umkm-49f21.firebaseapp.com",
+
+    projectId: "umkm-49f21"
+
+  };
+
+
+  firebase.initializeApp(firebaseConfig);
+
+
+  const auth = firebase.auth();
+
+
+  /* =====================================================
+     ELEMENT
+  ===================================================== */
+
+  const loginBtn = document.getElementById("loginBtn");
+
+  const form = document.getElementById("form");
+
+  const userInfo = document.getElementById("userInfo");
+
+  const status = document.getElementById("status");
+
+
+  /* =====================================================
+     LOGIN GOOGLE
+  ===================================================== */
+
+  loginBtn.addEventListener("click", () => {
+
+    const provider =
+      new firebase.auth.GoogleAuthProvider();
+
+
+    auth.signInWithPopup(provider)
+
+      .catch(err => {
+
+        alert(
+          "Login gagal: " + err.message
+        );
+
+      });
+
+  });
+
+
+  /* =====================================================
+     CEK STATUS LOGIN
+  ===================================================== */
+
+  auth.onAuthStateChanged(user => {
+
+    if (user) {
+
+
+      loginBtn.style.display = "none";
+
+
+      form.style.display = "block";
+
+
+      userInfo.innerHTML = `
+
+        👤 <b>${user.displayName}</b>
+        <br>
+        📧 ${user.email}
+
+      `;
+
+
+      /*
+       Opsional:
+
+       Mengisi nama mustahik
+       otomatis dari nama akun Google
+      */
+
+      document.getElementById("namaMustahik").value =
+        user.displayName;
+
+
+    } else {
+
+
+      loginBtn.style.display = "block";
+
+
+      form.style.display = "none";
+
+
+      status.innerText = "";
+
+    }
+
+  });
+
+
+  /* =====================================================
+     LOGOUT
+  ===================================================== */
+
+  document
+    .getElementById("logoutBtn")
+
+    .addEventListener("click", () => {
+
+      auth.signOut();
+
+    });
+
+
+  /* =====================================================
+     HITUNG PENDAPATAN BERSIH
+     OMSET - KULAKAN
+  ===================================================== */
+
+  const omsetInput =
+    document.getElementById("omset");
+
+
+  const kulakanInput =
+    document.getElementById("kulakan");
+
+
+  const pendapatanBersihInput =
+    document.getElementById("pendapatanBersih");
+
+
+  function hitungPendapatanBersih() {
+
+
+    const omset =
+      Number(omsetInput.value) || 0;
+
+
+    const kulakan =
+      Number(kulakanInput.value) || 0;
+
+
+    const pendapatanBersih =
+      omset - kulakan;
+
+
+    pendapatanBersihInput.value =
+      pendapatanBersih;
+
+  }
+
+
+  omsetInput.addEventListener(
+    "input",
+    hitungPendapatanBersih
+  );
+
+
+  kulakanInput.addEventListener(
+    "input",
+    hitungPendapatanBersih
+  );
+
+
+  /* =====================================================
+     SIMPAN DATA
+  ===================================================== */
+
+  document
+
+    .getElementById("saveBtn")
+
+    .addEventListener("click", () => {
+
+
+      const namaMustahik =
+        document
+          .getElementById("namaMustahik")
+          .value
+          .trim();
+
+
+      const bulan =
+        document
+          .getElementById("bulan")
+          .value;
+
+
+      const tahun =
+        document
+          .getElementById("tahun")
+          .value;
+
+
+      /*
+       BULAN TAHUN
+       Contoh:
+       Agustus 2026
+      */
+
+      const bulanTahun =
+        bulan + " " + tahun;
+
+
+      const kecamatan =
+        document
+          .getElementById("kecamatan")
+          .value
+          .trim();
+
+
+      const omset =
+        Number(
+          document
+            .getElementById("omset")
+            .value
+        );
+
+
+      const kulakan =
+        Number(
+          document
+            .getElementById("kulakan")
+            .value
+        );
+
+
+      const pendapatanBersih =
+        Number(
+          document
+            .getElementById("pendapatanBersih")
+            .value
+        );
+
+
+      const pendapatanTambahan =
+        Number(
+          document
+            .getElementById("pendapatanTambahan")
+            .value
+        );
+
+
+      /* VALIDASI */
+
+
+      if (
+
+        !namaMustahik ||
+
+        !bulan ||
+
+        !tahun ||
+
+        !kecamatan ||
+
+        isNaN(omset) ||
+
+        isNaN(kulakan) ||
+
+        isNaN(pendapatanTambahan)
+
+      ) {
+
+        alert(
+          "Semua kolom wajib diisi"
+        );
+
+        return;
+
+      }
+
+
+      /* VALIDASI LOGIN */
+
+
+      if (!auth.currentUser) {
+
+        alert(
+          "Silakan login terlebih dahulu"
+        );
+
+        return;
+
+      }
+
+
+      /*
+       AMBIL FIREBASE TOKEN
+      */
+
+
+      auth.currentUser
+
+        .getIdToken()
+
+        .then(token => {
+
+
+          /*
+           WAKTU OTOMATIS
+          */
+
+
+          const sekarang =
+            new Date();
+
+
+          /*
+           FORMAT WAKTU
+          */
+
+
+          const waktuDanTanggal =
+            sekarang.toLocaleString(
+              "id-ID",
+              {
+
+                timeZone:
+                  "Asia/Jakarta"
+
+              }
+            );
+
+
+          /*
+           PAYLOAD
+          */
+
+
+          const payload = {
+
+
+            /*
+             IDENTITAS FIREBASE
+            */
+
+
+            idToken:
+              token,
+
+
+            uid:
+              auth.currentUser.uid,
+
+
+            email:
+              auth.currentUser.email,
+
+
+            /*
+             DATA FORM
+            */
+
+
+            waktuDanTanggal:
+              waktuDanTanggal,
+
+
+            namaMustahik:
+              namaMustahik,
+
+
+            bulanTahun:
+              bulanTahun,
+
+
+            kecamatan:
+              kecamatan,
+
+
+            omset:
+              omset,
+
+
+            kulakan:
+              kulakan,
+
+
+            pendapatanBersih:
+              pendapatanBersih,
+
+
+            pendapatanTambahan:
+              pendapatanTambahan
+
+          };
+
+
+          /*
+           KIRIM KE
+           GOOGLE APPS SCRIPT
+          */
+
+
+          status.innerText =
+            "⏳ Sedang menyimpan data...";
+
+
+          fetch(
+
+            "https://script.google.com/macros/s/AKfycbweNipFZu8Kl3a-WCOgbesUeN1oEBw_QpP8-YhycxI63myKIc8D-ZND57P95uYL-MLV/exec",
+
+            {
+
+              method:
+                "POST",
+
+
+              body:
+                new URLSearchParams(
+                  payload
+                )
+
+            }
+
+          )
+
+
+          .then(res =>
+            res.text()
+          )
+
+
+          .then(text => {
+
+
+            if (
+              text.trim() !== "OK"
+            ) {
+
+              throw text;
+
+            }
+
+
+            status.innerText =
+              "✅ Data berhasil disimpan";
+
+
+            /*
+             RESET FORM
+            */
+
+
+            document
+              .getElementById(
+                "bulan"
+              )
+              .value = "";
+
+
+            document
+              .getElementById(
+                "tahun"
+              )
+              .value = "";
+
+
+            document
+              .getElementById(
+                "kecamatan"
+              )
+              .value = "";
+
+
+            document
+              .getElementById(
+                "omset"
+              )
+              .value = "";
+
+
+            document
+              .getElementById(
+                "kulakan"
+              )
+              .value = "";
+
+
+            document
+              .getElementById(
+                "pendapatanBersih"
+              )
+              .value = "";
+
+
+            document
+              .getElementById(
+                "pendapatanTambahan"
+              )
+              .value = "";
+
+          })
+
+
+          .catch(err => {
+
+
+            status.innerText =
+              "";
+
+
+            alert(
+              "Gagal simpan: " +
+              err
+            );
+
+          });
+
+        });
+
+    });
+
+
+</script>
+
+</body>
+</html>
