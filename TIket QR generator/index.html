@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pendaftaran Tiket QR</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7f5;margin:0;color:#18352b}.wrap{max-width:520px;margin:30px auto;padding:20px}
+.card{background:white;border-radius:18px;padding:24px;box-shadow:0 8px 30px #0001}h1{margin-top:0}label{display:block;margin:14px 0 6px;font-weight:bold}
+input{width:100%;box-sizing:border-box;padding:13px;border:1px solid #ccd8d2;border-radius:10px;font-size:16px}
+button{margin-top:18px;width:100%;padding:14px;border:0;border-radius:10px;background:#087f5b;color:white;font-size:16px;font-weight:bold}
+small{color:#667}a{color:#087f5b}
+</style></head>
+<body><div class="wrap"><div class="card">
+<h1>🎟️ Pendaftaran Tiket</h1><p>Isi data untuk mendapatkan tiket QR Code.</p>
+<form id="form">
+<label>Nama Lengkap</label><input id="nama" required>
+<label>No. HP</label><input id="hp" required>
+<label>Email (opsional)</label><input id="email" type="email">
+<button>Generate Tiket</button>
+</form><p><small>Demo ini menyimpan data di browser perangkat. Untuk acara sungguhan, gunakan database online.</small></p>
+</div></div>
+<script>
+form.onsubmit=e=>{e.preventDefault();
+let data=JSON.parse(localStorage.getItem('tickets')||'[]');
+let id='SRG-'+new Date().getFullYear()+'-'+String(data.length+1).padStart(5,'0');
+let t={id,nama:nama.value.trim(),hp:hp.value.trim(),email:email.value.trim(),status:'belum',created:new Date().toISOString()};
+data.push(t);localStorage.setItem('tickets',JSON.stringify(data));
+location.href='tiket.html?id='+encodeURIComponent(id);
+};
+</script></body></html>

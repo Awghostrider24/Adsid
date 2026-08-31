@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tiket QR</title>
+<style>
+body{font-family:Arial;background:#eef5f1;margin:0}.wrap{max-width:460px;margin:25px auto;padding:16px}.ticket{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 10px 35px #0002}
+.head{background:#087f5b;color:#fff;padding:24px;text-align:center}.body{padding:25px;text-align:center}
+#qr{display:flex;justify-content:center;margin:15px}.id{font-size:22px;font-weight:bold;letter-spacing:2px}.meta{color:#52635c}
+button{padding:12px 18px;border:0;border-radius:9px;background:#087f5b;color:#fff;font-weight:bold;margin:5px}
+</style></head><body><div class="wrap"><div class="ticket">
+<div class="head"><h2>🎟️ TIKET EVENT</h2><div>BAZNAS SRAGEN</div></div>
+<div class="body"><div id="info"></div><div id="qr"></div><div class="id" id="tid"></div>
+<button onclick="window.print()">Cetak / Simpan PDF</button><button onclick="location.href='index.html'">Tiket Baru</button></div>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const id=new URLSearchParams(location.search).get('id');
+const data=JSON.parse(localStorage.getItem('tickets')||'[]'); const t=data.find(x=>x.id===id);
+if(!t){document.body.innerHTML='<h2 style="text-align:center">Tiket tidak ditemukan.</h2>'}
+else{info.innerHTML='<h2>'+t.nama+'</h2><p class="meta">'+t.hp+(t.email?' · '+t.email:'')+'</p>';
+tid.textContent=t.id; new QRCode(document.getElementById('qr'),{text:t.id,width:220,height:220});}
+</script></body></html>

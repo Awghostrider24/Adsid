@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Tiket</title><style>
+body{font-family:Arial;background:#f4f7f5;margin:0;color:#18352b}.wrap{max-width:900px;margin:25px auto;padding:18px}.stats{display:flex;gap:10px;flex-wrap:wrap}.stat{background:#fff;padding:18px;border-radius:14px;flex:1;min-width:130px;box-shadow:0 5px 20px #0001}.num{font-size:30px;font-weight:bold}
+table{width:100%;background:#fff;border-collapse:collapse;margin-top:18px}th,td{padding:11px;border-bottom:1px solid #ddd;text-align:left}button{padding:10px;border:0;border-radius:8px;background:#087f5b;color:#fff}
+</style></head><body><div class="wrap"><h1>📊 Dashboard Tiket</h1><div class="stats"><div class="stat">Total<div class="num" id="total">0</div></div><div class="stat">Sudah Check-in<div class="num" id="used">0</div></div><div class="stat">Belum Check-in<div class="num" id="left">0</div></div></div>
+<p><button onclick="location.href='scanner.html'">Buka Scanner</button> <button onclick="exportCSV()">Export CSV</button> <button onclick="resetData()">Reset Demo</button></p>
+<table><thead><tr><th>ID</th><th>Nama</th><th>HP</th><th>Status</th><th>Check-in</th></tr></thead><tbody id="rows"></tbody></table>
+</div><script>
+function load(){let a=JSON.parse(localStorage.getItem('tickets')||'[]');total.textContent=a.length;used.textContent=a.filter(x=>x.status==='sudah').length;left.textContent=a.filter(x=>x.status!=='sudah').length;
+rows.innerHTML=a.map(x=>'<tr><td>'+x.id+'</td><td>'+x.nama+'</td><td>'+x.hp+'</td><td>'+x.status+'</td><td>'+(x.checkin?new Date(x.checkin).toLocaleString('id-ID'):'-')+'</td></tr>').join('')}
+function exportCSV(){let a=JSON.parse(localStorage.getItem('tickets')||'[]');let csv='ID,Nama,HP,Email,Status,Check-in\\n'+a.map(x=>[x.id,x.nama,x.hp,x.email,x.status,x.checkin||''].map(v=>'\"'+String(v).replaceAll('\"','\"\"')+'\"').join(',')).join('\\n');let b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),aEl=document.createElement('a');aEl.href=u;aEl.download='tiket.csv';aEl.click()}
+function resetData(){if(confirm('Hapus semua data demo?')){localStorage.removeItem('tickets');load()}}load();setInterval(load,1000);
+</script></body></html>
