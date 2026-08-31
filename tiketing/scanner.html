@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scanner Tiket</title>
+<style>
+body{font-family:Arial;background:#101816;color:#fff;margin:0}.wrap{max-width:520px;margin:auto;padding:18px}
+.card{background:#1c2925;padding:20px;border-radius:18px}#reader{background:#fff;border-radius:12px;overflow:hidden}
+input,button{box-sizing:border-box;width:100%;padding:13px;margin-top:10px;border-radius:9px;border:0;font-size:16px}
+button{background:#20a06b;color:#fff;font-weight:bold}.result{margin-top:16px;padding:18px;border-radius:12px;background:#263a34}
+.ok{background:#126b48}.bad{background:#8b3030}.warn{background:#775d20}
+</style></head><body><div class="wrap"><h1>📷 Scanner Tiket</h1><div class="card">
+<div id="reader"></div><input id="manual" placeholder="Atau masukkan ID tiket manual">
+<button onclick="cek(manual.value)">Cek Tiket</button><div id="result" class="result">Arahkan kamera ke QR Code.</div>
+</div></div>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+function cek(id){id=(id||'').trim();let a=JSON.parse(localStorage.getItem('tickets')||'[]');let t=a.find(x=>x.id===id);
+if(!t){result.className='result bad';result.innerHTML='<b>❌ TIKET TIDAK VALID</b><br>ID tidak ditemukan.';return}
+if(t.status==='sudah'){result.className='result warn';result.innerHTML='<b>⚠️ SUDAH DIGUNAKAN</b><br>'+t.nama+'<br>Check-in: '+new Date(t.checkin).toLocaleString('id-ID');return}
+t.status='sudah';t.checkin=new Date().toISOString();localStorage.setItem('tickets',JSON.stringify(a));
+result.className='result ok';result.innerHTML='<b>✅ TIKET VALID</b><br><strong>'+t.nama+'</strong><br>'+t.id+'<br>Check-in berhasil.';
+}
+function onScanSuccess(decodedText){cek(decodedText)}
+const scanner=new Html5QrcodeScanner("reader",{fps:10,qrbox:{width:250,height:250}},false);scanner.render(onScanSuccess);
+</script></body></html>
