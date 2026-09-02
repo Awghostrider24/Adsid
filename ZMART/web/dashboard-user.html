@@ -186,7 +186,7 @@ body{
 
 .cards{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
     gap:18px;
     margin-bottom:25px;
 }
@@ -629,11 +629,11 @@ tr:hover{
             <div>
 
                 <h2>
-                    Keuangan Mustahik
+                    Keuangan Mustahik Z Mart
                 </h2>
 
                 <small>
-                    Dashboard Laporan UMKM
+                    Dashboard Laporan Z Mart
                 </small>
 
             </div>
@@ -674,49 +674,23 @@ tr:hover{
      USER DASHBOARD
 ===================================================== -->
 
-<section id="userDashboard" class="dashboard">
+<section id="adminDashboard" class="dashboard">
 
-<!-- =====================================================
-     FILTER BULAN USER
-===================================================== -->
 
-<div class="panel user-filter-panel">
+<div class="admin-title">
 
-    <div class="panel-title">
-        <h3>📅 Filter Dashboard</h3>
-    </div>
+    <h2>
+        🛠️ Dashboard Administrator
+    </h2>
 
-    <div class="user-filter-row">
-
-        <div class="user-filter-group">
-
-            <label>Pilih Bulan / Tahun</label>
-
-            <select id="userFilterBulan">
-                <option value="">Memuat bulan...</option>
-            </select>
-
-        </div>
-
-        <button
-            id="userResetFilter"
-            class="reset-btn">
-
-            📅 Reset
-
-        </button>
-
-    </div>
-
-    <div
-        id="userFilterInfo"
-        class="user-filter-info">
-
-        Menampilkan data bulan berjalan.
-
-    </div>
+    <p>
+        Pantau dan analisis perkembangan keuangan seluruh Mustahik Z Mart.
+    </p>
 
 </div>
+<!-- =====================================================
+     HASIL FILTER
+===================================================== -->
 
 <div class="cards">
 
@@ -725,10 +699,10 @@ tr:hover{
         <div class="icon">💰</div>
 
         <div class="title">
-            Total Omset
+            Omset Z Mart
         </div>
 
-        <div id="uTotalOmset" class="value">
+        <div id="fOmset" class="value">
             Rp 0
         </div>
 
@@ -740,10 +714,105 @@ tr:hover{
         <div class="icon">🛒</div>
 
         <div class="title">
-            Total Kulakan
+            Kulakan (Modal)
         </div>
 
-        <div id="uTotalKulakan" class="value">
+        <div id="fKulakan" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">📈</div>
+
+        <div class="title">
+           Pendapatan Bersih Z Mart
+        </div>
+
+        <div id="fBersih" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">💳</div>
+
+        <div class="title">
+            Sisa Omset
+        </div>
+
+        <div id="fSisaOmset" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">💵</div>
+
+        <div class="title">
+            Pendapatan Tambahan di luar Z Mart
+        </div>
+
+        <div id="fTambahan" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+</div>
+<!-- ADMIN SUMMARY -->
+
+
+<div class="cards">
+
+    <div class="card-stat">
+
+        <div class="icon">👥</div>
+
+        <div class="title">
+            Total Mustahik Z Mart
+        </div>
+
+        <div id="aTotalUser" class="value">
+            0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">📋</div>
+
+        <div class="title">
+            Total Laporan
+        </div>
+
+        <div id="aTotalLaporan" class="value">
+            0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">💰</div>
+
+        <div class="title">
+            Total Omset Seluruh Z Mart
+        </div>
+
+        <div id="aTotalOmset" class="value">
             Rp 0
         </div>
 
@@ -758,197 +827,201 @@ tr:hover{
             Pendapatan Bersih
         </div>
 
-        <div id="uTotalBersih" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">💵</div>
-
-        <div class="title">
-            Pendapatan Tambahan
-        </div>
-
-        <div id="uTotalTambahan" class="value">
+        <div id="aTotalBersih" class="value">
             Rp 0
         </div>
 
     </div>
 
 </div>
-
-
-<!-- FORM -->
+<!-- =====================================================
+     FILTER
+===================================================== -->
 
 <div class="panel">
 
     <div class="panel-title">
 
         <h3>
-            📝 Input Laporan Keuangan
+            🔎 Filter Laporan Mustahik
         </h3>
 
     </div>
 
 
-    <div class="user-form-grid">
-
-        <div class="form-group">
-
-            <label>Nama Mustahik</label>
-
-            <input
-                id="namaMustahik"
-                type="text">
-
-        </div>
+    <div class="filters">
 
 
-        <div class="form-group">
+        <div class="filter-group">
 
-            <label>Kecamatan</label>
+            <label>
+                Nama User
+            </label>
 
-            <input
-                id="kecamatan"
-                type="text"
-                placeholder="Contoh: Sragen">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Bulan</label>
-
-            <select id="bulan">
+            <select id="filterUser">
 
                 <option value="">
-                    -- Pilih Bulan --
+                    Semua User
                 </option>
-
-                <option>Januari</option>
-                <option>Februari</option>
-                <option>Maret</option>
-                <option>April</option>
-                <option>Mei</option>
-                <option>Juni</option>
-                <option>Juli</option>
-                <option>Agustus</option>
-                <option>September</option>
-                <option>Oktober</option>
-                <option>November</option>
-                <option>Desember</option>
 
             </select>
 
         </div>
 
 
-        <div class="form-group">
+        <div class="filter-group">
 
-            <label>Tahun</label>
+            <label>
+                Kecamatan
+            </label>
 
-            <select id="tahun">
+            <select id="filterKecamatan">
 
                 <option value="">
-                    -- Pilih Tahun --
+                    Semua Kecamatan
                 </option>
-
-                <option>2025</option>
-                <option>2026</option>
-                <option>2027</option>
-                <option>2028</option>
-                <option>2029</option>
-                <option>2030</option>
 
             </select>
 
         </div>
 
 
-        <div class="form-group">
+        <div class="filter-group">
 
-            <label>Omset</label>
+            <label>
+                Bulan / Tahun
+            </label>
 
-            <input
-                id="omset"
-                type="number"
-                min="0"
-                placeholder="0">
+            <select id="filterBulan">
 
-        </div>
+                <option value="">
+                    Semua Bulan
+                </option>
 
-
-        <div class="form-group">
-
-            <label>Kulakan</label>
-
-            <input
-                id="kulakan"
-                type="number"
-                min="0"
-                placeholder="0">
+            </select>
 
         </div>
 
 
-        <div class="form-group">
+        <div class="filter-group">
 
-            <label>Pendapatan Bersih</label>
+            <label>
+                Pencarian
+            </label>
 
             <input
-                id="pendapatanBersih"
-                class="readonly"
+                id="filterSearch"
                 type="text"
-                readonly
-                value="Rp 0">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Pendapatan Tambahan</label>
-
-            <input
-                id="pendapatanTambahan"
-                type="number"
-                min="0"
-                placeholder="0">
+                placeholder="Nama / email / kecamatan">
 
         </div>
 
     </div>
 
 
-    <button id="saveBtn" class="save-btn">
+    <button
+        id="resetFilter"
+        class="reset-btn">
 
-        💾 Simpan Laporan
+        ↺ Reset Filter
 
     </button>
 
 
-    <div id="saveStatus" class="status"></div>
+    <div
+        id="filterInfo"
+        class="filter-info">
+
+        Menampilkan seluruh data Mustahik.
+
+    </div>
 
 </div>
 
 
-<!-- RIWAYAT -->
+<!-- =====================================================
+     CHART
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3 id="chartTitle">
+            📊 Grafik Keuangan Semua User
+        </h3>
+
+    </div>
+
+
+    <div class="chart-container">
+
+        <canvas id="financeChart"></canvas>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- =====================================================
+     USER TABLE
+===================================================== -->
 
 <div class="panel">
 
     <div class="panel-title">
 
         <h3>
-            📋 Riwayat Laporan Saya
+            👥 Daftar User
+        </h3>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Kecamatan</th>
+                    <th>Role</th>
+                    <th>Jumlah Laporan</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="adminUserBody"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DATA KEUANGAN
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            📋 Data Keuangan
         </h3>
 
         <button
-            onclick="loadUserDashboard()"
+            onclick="loadAdminDashboard()"
             class="reset-btn">
 
             🔄 Refresh
@@ -966,19 +1039,21 @@ tr:hover{
 
                 <tr>
 
-                    <th>Tanggal</th>
+                    <th>Waktu</th>
+                    <th>Nama Mustahik</th>
                     <th>Bulan</th>
+                    <th>Email</th>
                     <th>Kecamatan</th>
                     <th>Omset</th>
                     <th>Kulakan</th>
-                    <th>Bersih</th>
+                    <th>Bersih (10%)</th>
                     <th>Tambahan</th>
 
                 </tr>
 
             </thead>
 
-            <tbody id="userTableBody"></tbody>
+            <tbody id="adminTableBody"></tbody>
 
         </table>
 
@@ -987,16 +1062,14 @@ tr:hover{
 </div>
 
 </section>
-<div id="adminDashboard" style="display:none!important;">
-<select id="filterUser"></select>
-<select id="filterKecamatan"></select>
-<select id="filterBulan"></select>
-<input id="filterSearch">
-<button id="resetFilter"></button>
-<div id="adminTableBody"></div><div id="adminUserBody"></div>
-<div id="aTotalUser"></div><div id="fOmset"></div><div id="fKulakan"></div>
-<div id="fBersih"></div><div id="fTambahan"></div><div id="filterInfo"></div>
-<div id="chartTitle"></div><canvas id="financeChart"></canvas>
+<div id="userDashboard" style="display:none!important;">
+<select id="userFilterBulan"></select><button id="userResetFilter"></button>
+<div id="userFilterInfo"></div><div id="uTotalOmset"></div><div id="uTotalKulakan"></div>
+<div id="uTotalBersih"></div><div id="uTotalTambahan"></div><div id="userTableBody"></div>
+<input id="namaMustahik"><input id="kecamatan"><select id="bulan"></select>
+<select id="tahun"></select><input id="omset"><input id="kulakan">
+<input id="pendapatanBersih" readonly value="Rp 0"><input id="pendapatanTambahan">
+<button id="saveBtn"></button><div id="saveStatus"></div>
 </div>
 
 </main>
@@ -1346,38 +1419,19 @@ async function loadCurrentUser(firebaseUser){
     if(
         String(result.role)
             .toLowerCase()
-            === "admin"
+            !== "admin"
     ){
 
         window.location.href =
-            "dashboard-admin.html";
+            "dashboard-user.html";
 
         return;
 
     }
 
-    showUserDashboard();
+    showAdminDashboard();
 
-    document.getElementById(
-        "namaMustahik"
-    ).value =
-        result.nama ||
-        firebaseUser.displayName ||
-        "";
-
-    if(result.kecamatan){
-
-        document.getElementById(
-            "kecamatan"
-        ).value =
-            result.kecamatan;
-
-    }
-
-    userSelectedBulan =
-        getCurrentBulanTahun();
-
-    await loadUserDashboard();
+    await loadAdminDashboard();
 
 }
 
@@ -1713,8 +1767,6 @@ function applyUserFilter(){
 
     let totalKulakan = 0;
 
-    let totalBersih = 0;
-
     let totalTambahan = 0;
 
 
@@ -1726,11 +1778,6 @@ function applyUserFilter(){
 
             totalKulakan +=
                 Number(row.kulakan) || 0;
-
-            totalBersih +=
-                Number(
-                    row.pendapatanBersih
-                ) || 0;
 
             totalTambahan +=
                 Number(
@@ -1752,6 +1799,10 @@ function applyUserFilter(){
     ).innerText =
         rupiah(totalKulakan);
 
+
+    const totalBersih = totalOmset * 0.10;
+
+    const totalSisaOmset = totalOmset - totalBersih - totalKulakan;
 
     document.getElementById(
         "uTotalBersih"
@@ -1886,7 +1937,7 @@ function renderUserTable(rows){
 
                     <td>
                         ${rupiah(
-                            row.pendapatanBersih
+                            (Number(row.omset) || 0) * 0.10
                         )}
                     </td>
 
@@ -1907,6 +1958,8 @@ function renderUserTable(rows){
 
 /* =====================================================
    HITUNG BERSIH
+   Pendapatan Bersih = 10% dari Omset
+   Sisa Omset = Omset - Pendapatan Bersih - Kulakan
 ===================================================== */
 
 function hitungBersih(){
@@ -1918,19 +1971,12 @@ function hitungBersih(){
             ).value
         ) || 0;
 
-    const kulakan =
-        Number(
-            document.getElementById(
-                "kulakan"
-            ).value
-        ) || 0;
+    const bersih = omset * 0.10;
 
     document.getElementById(
         "pendapatanBersih"
     ).value =
-        rupiah(
-            omset - kulakan
-        );
+        rupiah(bersih);
 
 }
 
@@ -1940,6 +1986,9 @@ document.getElementById(
     "input",
     hitungBersih
 );
+
+// Hitung nilai default saat formulir pertama kali dibuka
+hitungBersih();
 
 document.getElementById(
     "kulakan"
@@ -2064,7 +2113,7 @@ async function saveData(){
         bulan + " " + tahun;
 
     const bersih =
-        omset - kulakan;
+        omset * 0.10;
 
     const saveBtn =
         document.getElementById(
@@ -2282,7 +2331,7 @@ async function loadAdminDashboard(){
             "aTotalBersih"
         ).innerText =
             rupiah(
-                result.summary.totalBersih
+                (Number(result.summary.totalOmset) || 0) * 0.10
             );
 
 
@@ -2781,7 +2830,6 @@ function applyAdminFilter(){
 
     let omset = 0;
     let kulakan = 0;
-    let bersih = 0;
     let tambahan = 0;
 
 
@@ -2793,11 +2841,6 @@ function applyAdminFilter(){
 
             kulakan +=
                 Number(row.kulakan) || 0;
-
-            bersih +=
-                Number(
-                    row.pendapatanBersih
-                ) || 0;
 
             tambahan +=
                 Number(
@@ -2820,10 +2863,18 @@ function applyAdminFilter(){
         rupiah(kulakan);
 
 
+    const bersih = omset * 0.10;
+    const sisaOmset = omset - bersih - kulakan;
+
     document.getElementById(
         "fBersih"
     ).innerText =
         rupiah(bersih);
+
+    document.getElementById(
+        "fSisaOmset"
+    ).innerText =
+        rupiah(sisaOmset);
 
 
     document.getElementById(
@@ -2977,7 +3028,7 @@ function renderAdminTable(rows){
 
                 <td>
                     ${rupiah(
-                        row.pendapatanBersih
+                        (Number(row.omset) || 0) * 0.10
                     )}
                 </td>
 
@@ -3131,6 +3182,7 @@ function renderChart(rows){
                     kulakan:0,
 
                     bersih:0,
+                    sisaOmset:0,
 
                     tambahan:0
 
@@ -3230,7 +3282,15 @@ function renderChart(rows){
     const bersih =
         labels.map(
             key =>
-                grouped[key].bersih
+                grouped[key].omset * 0.10
+        );
+
+    const sisaOmset =
+        labels.map(
+            key =>
+                grouped[key].omset -
+                (grouped[key].omset * 0.10) -
+                grouped[key].kulakan
         );
 
 
@@ -3363,8 +3423,14 @@ function renderChart(rows){
                         },
 
                         {
-                            label:"Pendapatan Bersih",
+                            label:"Pendapatan Bersih (10% Omset)",
                             data:bersih,
+                            borderWidth:1
+                        },
+
+                        {
+                            label:"Sisa Omset",
+                            data:sisaOmset,
                             borderWidth:1
                         },
 
