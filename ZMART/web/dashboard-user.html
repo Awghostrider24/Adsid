@@ -1918,19 +1918,14 @@ function hitungBersih(){
             ).value
         ) || 0;
 
-    const kulakan =
-        Number(
-            document.getElementById(
-                "kulakan"
-            ).value
-        ) || 0;
+    // Pendapatan Bersih = 10% dari Omset
+    // Kulakan tidak mengurangi Pendapatan Bersih.
+    const bersih = omset * 0.10;
 
     document.getElementById(
         "pendapatanBersih"
     ).value =
-        rupiah(
-            omset - kulakan
-        );
+        rupiah(bersih);
 
 }
 
@@ -1940,14 +1935,6 @@ document.getElementById(
     "input",
     hitungBersih
 );
-
-document.getElementById(
-    "kulakan"
-).addEventListener(
-    "input",
-    hitungBersih
-);
-
 
 /* =====================================================
    SAVE DATA
@@ -2063,8 +2050,10 @@ async function saveData(){
     const bulanTahun =
         bulan + " " + tahun;
 
+    // Pendapatan Bersih = 10% dari Omset
+    // Kulakan tidak digunakan dalam perhitungan ini.
     const bersih =
-        omset - kulakan;
+        omset * 0.10;
 
     const saveBtn =
         document.getElementById(
