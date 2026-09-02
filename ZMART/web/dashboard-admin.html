@@ -186,7 +186,7 @@ body{
 
 .cards{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
     gap:18px;
     margin-bottom:25px;
 }
@@ -741,6 +741,21 @@ tr:hover{
 
     <div class="card-stat">
 
+        <div class="icon">💳</div>
+
+        <div class="title">
+            Sisa Omset
+        </div>
+
+        <div id="fSisaOmset" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
         <div class="icon">💵</div>
 
         <div class="title">
@@ -1031,7 +1046,7 @@ tr:hover{
                     <th>Kecamatan</th>
                     <th>Omset</th>
                     <th>Kulakan</th>
-                    <th>Bersih</th>
+                    <th>Bersih (10%)</th>
                     <th>Tambahan</th>
 
                 </tr>
@@ -1752,8 +1767,6 @@ function applyUserFilter(){
 
     let totalKulakan = 0;
 
-    let totalBersih = 0;
-
     let totalTambahan = 0;
 
 
@@ -1765,11 +1778,6 @@ function applyUserFilter(){
 
             totalKulakan +=
                 Number(row.kulakan) || 0;
-
-            totalBersih +=
-                Number(
-                    row.pendapatanBersih
-                ) || 0;
 
             totalTambahan +=
                 Number(
@@ -1791,6 +1799,10 @@ function applyUserFilter(){
     ).innerText =
         rupiah(totalKulakan);
 
+
+    const totalBersih = totalOmset * 0.10;
+
+    const totalSisaOmset = totalOmset - totalBersih - totalKulakan;
 
     document.getElementById(
         "uTotalBersih"
@@ -1925,7 +1937,7 @@ function renderUserTable(rows){
 
                     <td>
                         ${rupiah(
-                            row.pendapatanBersih
+                            (Number(row.omset) || 0) * 0.10
                         )}
                     </td>
 
@@ -1946,6 +1958,8 @@ function renderUserTable(rows){
 
 /* =====================================================
    HITUNG BERSIH
+   Pendapatan Bersih = 10% dari Omset
+   Sisa Omset = Omset - Pendapatan Bersih - Kulakan
 ===================================================== */
 
 function hitungBersih(){
@@ -1957,19 +1971,12 @@ function hitungBersih(){
             ).value
         ) || 0;
 
-    const kulakan =
-        Number(
-            document.getElementById(
-                "kulakan"
-            ).value
-        ) || 0;
+    const bersih = omset * 0.10;
 
     document.getElementById(
         "pendapatanBersih"
     ).value =
-        rupiah(
-            omset - kulakan
-        );
+        rupiah(bersih);
 
 }
 
@@ -2103,7 +2110,7 @@ async function saveData(){
         bulan + " " + tahun;
 
     const bersih =
-        omset - kulakan;
+        omset * 0.10;
 
     const saveBtn =
         document.getElementById(
@@ -2321,7 +2328,7 @@ async function loadAdminDashboard(){
             "aTotalBersih"
         ).innerText =
             rupiah(
-                result.summary.totalBersih
+                (Number(result.summary.totalOmset) || 0) * 0.10
             );
 
 
@@ -2820,7 +2827,6 @@ function applyAdminFilter(){
 
     let omset = 0;
     let kulakan = 0;
-    let bersih = 0;
     let tambahan = 0;
 
 
@@ -2832,11 +2838,6 @@ function applyAdminFilter(){
 
             kulakan +=
                 Number(row.kulakan) || 0;
-
-            bersih +=
-                Number(
-                    row.pendapatanBersih
-                ) || 0;
 
             tambahan +=
                 Number(
@@ -2859,10 +2860,18 @@ function applyAdminFilter(){
         rupiah(kulakan);
 
 
+    const bersih = omset * 0.10;
+    const sisaOmset = omset - bersih - kulakan;
+
     document.getElementById(
         "fBersih"
     ).innerText =
         rupiah(bersih);
+
+    document.getElementById(
+        "fSisaOmset"
+    ).innerText =
+        rupiah(sisaOmset);
 
 
     document.getElementById(
@@ -3016,7 +3025,7 @@ function renderAdminTable(rows){
 
                 <td>
                     ${rupiah(
-                        row.pendapatanBersih
+                        (Number(row.omset) || 0) * 0.10
                     )}
                 </td>
 
@@ -3170,6 +3179,7 @@ function renderChart(rows){
                     kulakan:0,
 
                     bersih:0,
+                    sisaOmset:0,
 
                     tambahan:0
 
@@ -3269,7 +3279,15 @@ function renderChart(rows){
     const bersih =
         labels.map(
             key =>
-                grouped[key].bersih
+                grouped[key].omset * 0.10
+        );
+
+    const sisaOmset =
+        labels.map(
+            key =>
+                grouped[key].omset -
+                (grouped[key].omset * 0.10) -
+                grouped[key].kulakan
         );
 
 
@@ -3402,8 +3420,14 @@ function renderChart(rows){
                         },
 
                         {
-                            label:"Pendapatan Bersih",
+                            label:"Pendapatan Bersih (10% Omset)",
                             data:bersih,
+                            borderWidth:1
+                        },
+
+                        {
+                            label:"Sisa Omset",
+                            data:sisaOmset,
                             borderWidth:1
                         },
 
