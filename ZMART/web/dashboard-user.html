@@ -28,788 +28,6 @@ body{
    LOGIN
 ===================================================== */
 
-.login-page{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-.login-card{
-    width:100%;
-    max-width:430px;
-    background:white;
-    border-radius:22px;
-    padding:35px 28px;
-    text-align:center;
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
-}
-
-.login-icon{
-    font-size:60px;
-    margin-bottom:10px;
-}
-
-.login-card h1{
-    margin:0;
-    color:#2e7d32;
-    font-size:28px;
-}
-
-.login-card p{
-    color:#777;
-    font-size:14px;
-    margin:10px 0 25px;
-}
-
-.google-btn{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:#2e7d32;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.google-btn:hover{
-    opacity:.9;
-}
-
-/* =====================================================
-   APP
-===================================================== */
-
-#app{
-    display:none;
-}
-
-.header{
-    background:linear-gradient(135deg,#1b5e20,#2e7d32);
-    color:white;
-    padding:18px 25px;
-    position:sticky;
-    top:0;
-    z-index:100;
-    box-shadow:0 3px 12px rgba(0,0,0,.15);
-}
-
-.header-inner{
-    max-width:1400px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.brand-icon{
-    font-size:35px;
-}
-
-.brand h2{
-    margin:0;
-    font-size:20px;
-}
-
-.brand small{
-    opacity:.85;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.role-badge{
-    padding:7px 12px;
-    border-radius:20px;
-    background:rgba(255,255,255,.18);
-    font-size:13px;
-}
-
-.logout-btn{
-    border:none;
-    background:#c62828;
-    color:white;
-    padding:9px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-/* =====================================================
-   MAIN
-===================================================== */
-
-.main{
-    max-width:1400px;
-    margin:auto;
-    padding:25px;
-}
-
-.welcome{
-    margin-bottom:20px;
-}
-
-.welcome h2{
-    margin:0;
-    color:#1b5e20;
-}
-
-.welcome p{
-    margin:6px 0;
-    color:#777;
-}
-
-.dashboard{
-    display:none;
-}
-
-.dashboard.active{
-    display:block;
-}
-
-/* =====================================================
-   CARDS
-===================================================== */
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:18px;
-    margin-bottom:25px;
-}
-
-.card-stat{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    box-shadow:0 5px 18px rgba(0,0,0,.08);
-}
-
-.card-stat .icon{
-    font-size:30px;
-    margin-bottom:10px;
-}
-
-.card-stat .title{
-    color:#777;
-    font-size:13px;
-}
-
-.card-stat .value{
-    font-size:23px;
-    font-weight:bold;
-    margin-top:7px;
-    color:#1b5e20;
-}
-
-/* =====================================================
-   PANEL
-===================================================== */
-
-.panel{
-    background:white;
-    border-radius:16px;
-    padding:20px;
-    margin-bottom:22px;
-    box-shadow:0 5px 18px rgba(0,0,0,.07);
-}
-
-.panel-title{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:18px;
-}
-
-.panel-title h3{
-    margin:0;
-    color:#333;
-}
-
-/* =====================================================
-   FILTER
-===================================================== */
-
-.filters{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-}
-
-.filter-group label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    margin-bottom:6px;
-}
-
-.filter-group select,
-.filter-group input{
-    width:100%;
-    padding:11px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    background:white;
-}
-
-.reset-btn{
-    border:none;
-    background:#607d8b;
-    color:white;
-    padding:11px 15px;
-    border-radius:8px;
-    cursor:pointer;
-    margin-top:20px;
-}
-
-/* =====================================================
-   USER FILTER BULAN
-===================================================== */
-
-.user-filter-panel{
-    margin-bottom:22px;
-}
-
-.user-filter-row{
-    display:flex;
-    align-items:end;
-    gap:12px;
-    flex-wrap:wrap;
-}
-
-.user-filter-group{
-    min-width:250px;
-    flex:1;
-}
-
-.user-filter-group label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    margin-bottom:6px;
-}
-
-.user-filter-group select{
-    width:100%;
-    padding:11px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    background:white;
-}
-
-.user-filter-info{
-    margin-top:12px;
-    padding:12px 15px;
-    background:#f1f8e9;
-    border-left:4px solid #43a047;
-    border-radius:8px;
-    font-size:13px;
-    color:#33691e;
-}
-
-@media(max-width:650px){
-
-    .user-filter-row{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
-    .user-filter-group{
-        width:100%;
-    }
-
-}
-
-/* =====================================================
-   FILTER INFO
-===================================================== */
-
-.filter-info{
-    margin-top:15px;
-    padding:12px 15px;
-    background:#f1f8e9;
-    border-left:4px solid #43a047;
-    border-radius:8px;
-    font-size:13px;
-    color:#33691e;
-}
-
-/* =====================================================
-   CHART
-===================================================== */
-
-.chart-container{
-    position:relative;
-    width:100%;
-    height:380px;
-}
-
-/* =====================================================
-   TABLE
-===================================================== */
-
-.table-wrapper{
-    width:100%;
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:900px;
-}
-
-th{
-    background:#2e7d32;
-    color:white;
-    padding:12px;
-    text-align:left;
-    font-size:13px;
-}
-
-td{
-    padding:11px;
-    border-bottom:1px solid #eee;
-    font-size:13px;
-}
-
-tr:hover{
-    background:#f5f9f5;
-}
-
-/* =====================================================
-   USER FORM
-===================================================== */
-
-.user-form-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
-}
-
-.form-group{
-    margin-bottom:5px;
-}
-
-.form-group label{
-    display:block;
-    margin-bottom:6px;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.form-group input,
-.form-group select{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:8px;
-}
-
-.readonly{
-    background:#f1f3f4;
-}
-
-.save-btn{
-    width:100%;
-    border:none;
-    padding:14px;
-    margin-top:15px;
-    border-radius:9px;
-    background:#2e7d32;
-    color:white;
-    font-weight:bold;
-    font-size:15px;
-    cursor:pointer;
-}
-
-.save-btn:disabled{
-    background:#999;
-}
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-.status{
-    margin-top:15px;
-    text-align:center;
-    font-weight:bold;
-}
-
-.success{
-    color:#2e7d32;
-}
-
-.error{
-    color:#c62828;
-}
-
-.loading{
-    color:#ef6c00;
-}
-
-/* =====================================================
-   ROLE
-===================================================== */
-
-.role-admin{
-    background:#e8f5e9;
-    color:#2e7d32;
-    padding:5px 9px;
-    border-radius:15px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.role-user{
-    background:#e3f2fd;
-    color:#1565c0;
-    padding:5px 9px;
-    border-radius:15px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty{
-    text-align:center;
-    padding:30px;
-    color:#888;
-}
-
-/* =====================================================
-   ADMIN HEADER
-===================================================== */
-
-.admin-title{
-    background:linear-gradient(135deg,#263238,#37474f);
-    color:white;
-    padding:18px;
-    border-radius:15px;
-    margin-bottom:20px;
-}
-
-.admin-title h2{
-    margin:0 0 5px;
-}
-
-.admin-title p{
-    margin:0;
-    opacity:.8;
-    font-size:13px;
-}
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width:1000px){
-
-    .cards{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .filters{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
-
-@media(max-width:650px){
-
-    .header{
-        padding:15px;
-    }
-
-    .header-inner{
-        align-items:flex-start;
-    }
-
-    .brand h2{
-        font-size:17px;
-    }
-
-    .brand small{
-        font-size:11px;
-    }
-
-    .role-badge{
-        display:none;
-    }
-
-    .main{
-        padding:15px;
-    }
-
-    .cards{
-        grid-template-columns:1fr;
-    }
-
-    .filters{
-        grid-template-columns:1fr;
-    }
-
-    .user-form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .chart-container{
-        height:300px;
-    }
-
-}
-
-</style>
-
-</head>
-
-<body>
-<div id="loginPage" class="login-page">
-  <div class="login-card">
-    <div class="login-icon">📊</div>
-    <h1>Keuangan Mustahik</h1>
-    <p>Dashboard Laporan Keuangan Z Mart</p>
-    <button id="loginBtn" class="google-btn">🔐 Login dengan Google</button>
-    <div id="loginStatus" class="status"></div>
-  </div>
-</div>
-<div id="app">
-<header class="header"><div class="header-inner">
-  <div class="brand"><div class="brand-icon">📊</div><div><h2>Keuangan Mustahik Z Mart</h2><small>Dashboard User</small></div></div>
-  <div class="header-right"><span id="roleBadge" class="role-badge">USER</span><button id="logoutBtn" class="logout-btn">🚪 Logout</button></div>
-</div></header>
-<main class="main">
-  <div class="welcome"><h2 id="welcomeName">Selamat Datang</h2><p id="welcomeEmail"></p></div>
-  <section class="panel">
-    <div class="panel-title"><h3>📅 Filter Dashboard</h3></div>
-    <div class="user-filter-row"><div class="user-filter-group"><label for="userFilterBulan">Bulan</label><select id="userFilterBulan"></select></div><button id="userResetFilter" class="reset-btn">🔄 Reset</button></div>
-    <div id="userFilterInfo" class="user-filter-info">Memuat data...</div>
-  </section>
-  <section class="cards">
-    <div class="card-stat"><div class="icon">💰</div><div class="title">Total Omset</div><div id="uTotalOmset" class="value">Rp 0</div></div>
-    <div class="card-stat"><div class="icon">🛒</div><div class="title">Total Kulakan</div><div id="uTotalKulakan" class="value">Rp 0</div></div>
-    <div class="card-stat"><div class="icon">💵</div><div class="title">Pendapatan Bersih (10%)</div><div id="uTotalBersih" class="value">Rp 0</div></div>
-    <div class="card-stat"><div class="icon">💳</div><div class="title">Sisa Omset</div><div id="uTotalSisaOmset" class="value">Rp 0</div></div>
-    <div class="card-stat"><div class="icon">➕</div><div class="title">Pendapatan Tambahan</div><div id="uTotalTambahan" class="value">Rp 0</div></div>
-  </section>
-  <section class="panel"><div class="panel-title"><h3>📈 Grafik Keuangan</h3></div><div class="chart-container"><canvas id="userFinanceChart"></canvas></div></section>
-  <section class="panel"><div class="panel-title"><h3>📝 Input Laporan Keuangan</h3></div>
-    <div class="user-form-grid">
-      <div class="form-group"><label for="namaMustahik">Nama Mustahik</label><input id="namaMustahik" type="text" placeholder="Nama Mustahik"></div>
-      <div class="form-group"><label for="kecamatan">Kecamatan</label><input id="kecamatan" type="text" placeholder="Kecamatan"></div>
-      <div class="form-group"><label for="bulan">Bulan</label><select id="bulan"><option value="">Pilih Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
-      <div class="form-group"><label for="tahun">Tahun</label><select id="tahun"></select></div>
-      <div class="form-group"><label for="omset">Omset</label><input id="omset" type="number" min="0" step="1" placeholder="0"></div>
-      <div class="form-group"><label for="kulakan">Kulakan</label><input id="kulakan" type="number" min="0" step="1" placeholder="0"></div>
-      <div class="form-group"><label for="pendapatanBersih">Pendapatan Bersih Z Mart (10%)</label><input id="pendapatanBersih" class="readonly" readonly value="Rp 0"><div class="help">Otomatis = 10% dari Omset</div></div>
-      <div class="form-group"><label for="sisaOmset">Sisa Omset</label><input id="sisaOmset" class="readonly" readonly value="Rp 0"><div class="help">Omset − Pendapatan Bersih − Kulakan</div></div>
-      <div class="form-group"><label for="pendapatanTambahan">Pendapatan Tambahan di Luar Usaha</label><input id="pendapatanTambahan" type="number" min="0" step="1" placeholder="0"></div>
-    </div>
-    <button id="saveBtn" class="save-btn">💾 Simpan Laporan</button><div id="saveStatus" class="status"></div>
-  </section>
-  <section class="panel"><div class="panel-title"><h3>📋 Riwayat Laporan</h3></div><div class="table-wrapper"><table><thead><tr><th>Waktu</th><th>Bulan</th><th>Kecamatan</th><th>Omset</th><th>Kulakan</th><th>Bersih (10%)</th><th>Sisa Omset</th><th>Tambahan</th></tr></thead><tbody id="userTableBody"></tbody></table></div></section>
-  <div class="footer">Sistem Keuangan Mustahik Z Mart</div>
-</main></div>
-<script>
-
-/* =====================================================
-   FIREBASE CONFIG
-===================================================== */
-
-const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyDFMqBgt1F3gGtXsTUo4NiqjkxE_QYf5Xs",
-
-    authDomain:
-        "zmart-8320a.firebaseapp.com",
-
-    projectId:
-        "zmart-8320a"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-
-
-/* =====================================================
-   GOOGLE APPS SCRIPT
-===================================================== */
-
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxNyV-LWL_DmPo7KJJzTL2xX4rNG3BKriZIKqwrXD0U44VxXuuoTIrTw7F3K9lMDnOi/exec";
-
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-let currentUserData = null;
-
-let adminData = [];
-
-let adminUsers = [];
-
-let financeChart = null;
-
-
-/* =====================================================
-   USER DASHBOARD DATA
-===================================================== */
-
-let userDashboardData = [];
-
-let userSelectedBulan = "";
-
-
-/* =====================================================
-   ELEMENT
-===================================================== */
-
-const loginPage =
-    document.getElementById("loginPage");
-
-const app =
-    document.getElementById("app");
-
-const loginBtn =
-    document.getElementById("loginBtn");
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
-
-
-/* =====================================================
-   RUPIAH
-===================================================== */
-
-function rupiah(value){
-
-    return new Intl.NumberFormat(
-        "id-ID",
-        {
-            style:"currency",
-            currency:"IDR",
-            maximumFractionDigits:0
-        }
-    ).format(Number(value) || 0);
-
-}
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(text){
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        text == null ? "" : text;
-
-    return div.innerHTML;
-
-}
-
-
-/* =====================================================
-   FORMAT TANGGAL
-=====================================================
-
-   Fungsi ini menangani:
-
-   2026-05-31T17:00:00.000Z
-
-   maupun:
-
-   31/05/2026 00:00
-
-===================================================== */
-
-function formatTanggal(value){
-
-    if(!value){
-        return "";
-    }
-
-    const text =
-        String(value).trim();
-
-    /*
-       Jika sudah format Indonesia
-    */
-
-    if(
-        /^\d{2}\/\d{2}\/\d{4}/.test(text)
-    ){
-        return text;
-    }
-
-    /*
-       Jika format ISO
-    */
-
-    const date =
-        new Date(text);
-
-    if(!isNaN(date.getTime())){
-
-        /*
-          Gunakan waktu Asia/Jakarta.
-          UTC +7
-        */
-
-        const formatter =
-            new Intl.DateTimeFormat(
-                "id-ID",
-                {
-                    timeZone:"Asia/Jakarta",
-                    day:"2-digit",
-                    month:"2-digit",
-                    year:"numeric",
-                    hour:"2-digit",
-                    minute:"2-digit",
-                    hour12:false
-                }
-            );
-
-        return formatter
-            .format(date)
-            .replace(",", "");
-
-    }
-
-    return text;
-
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
 loginBtn.addEventListener(
     "click",
     async function(){
@@ -818,46 +36,35 @@ loginBtn.addEventListener(
             new firebase.auth.GoogleAuthProvider();
 
         const status =
-            document.getElementById(
-                "loginStatus"
-            );
+            document.getElementById("loginStatus");
 
         try{
-
             loginBtn.disabled = true;
+            loginBtn.innerText = "⏳ Login...";
 
-            loginBtn.innerText =
-                "⏳ Login...";
+            if(status){
+                status.className = "status loading";
+                status.innerText = "Menghubungkan akun...";
+            }
 
-            status.className =
-                "status loading";
+            await auth.signInWithPopup(provider);
 
-            status.innerText =
-                "Menghubungkan akun...";
-
-            await auth.signInWithPopup(
-                provider
-            );
-
+            // Jangan redirect di sini.
+            // Firebase akan menjalankan onAuthStateChanged().
         }
         catch(error){
+            console.error("Login error:", error);
 
-            console.error(error);
-
-            status.className =
-                "status error";
-
-            status.innerText =
-                "Login gagal: " +
-                error.message;
+            if(status){
+                status.className = "status error";
+                status.innerText =
+                    "Login gagal: " +
+                    (error.message || "Terjadi kesalahan");
+            }
 
             loginBtn.disabled = false;
-
-            loginBtn.innerText =
-                "🔐 Login dengan Google";
-
+            loginBtn.innerText = "🔐 Login dengan Google";
         }
-
     }
 );
 
@@ -870,39 +77,39 @@ auth.onAuthStateChanged(
     async function(user){
 
         if(!user){
+            loginPage.style.display = "flex";
+            app.style.display = "none";
 
-            loginPage.style.display =
-                "flex";
-
-            app.style.display =
-                "none";
-
+            loginBtn.disabled = false;
+            loginBtn.innerText = "🔐 Login dengan Google";
             return;
-
         }
 
         try{
-
-            loginPage.style.display =
-                "none";
-
-            app.style.display =
-                "block";
+            loginPage.style.display = "none";
+            app.style.display = "block";
 
             await loadCurrentUser(user);
-
         }
         catch(error){
+            console.error("Auth state error:", error);
 
-            console.error(error);
+            loginPage.style.display = "flex";
+            app.style.display = "none";
 
-            alert(
-                "Gagal mengambil data user:\n\n" +
-                error.message
-            );
+            loginBtn.disabled = false;
+            loginBtn.innerText = "🔐 Login dengan Google";
 
+            const status =
+                document.getElementById("loginStatus");
+
+            if(status){
+                status.className = "status error";
+                status.innerText =
+                    "Gagal mengambil data user: " +
+                    (error.message || "Terjadi kesalahan");
+            }
         }
-
     }
 );
 
@@ -925,66 +132,79 @@ async function loadCurrentUser(firebaseUser){
             firebaseUser.displayName || "User"
         );
 
-    const response =
-        await fetch(url);
+    const response = await fetch(url);
 
-    const result =
-        await response.json();
+    if(!response.ok){
+        throw new Error(
+            "Server mengembalikan HTTP " +
+            response.status
+        );
+    }
+
+    const result = await response.json();
 
     if(!result.success){
-
         throw new Error(
             result.message ||
-            "Gagal mengambil user"
+            "Gagal mengambil data user"
         );
-
     }
 
     currentUserData = result;
 
-    document.getElementById(
-        "welcomeName"
-    ).innerText =
-        "Selamat Datang, " +
-        (
-            result.nama ||
-            firebaseUser.displayName ||
-            "User"
-        );
+    const welcomeName =
+        document.getElementById("welcomeName");
 
-    document.getElementById(
-        "welcomeEmail"
-    ).innerText =
-        result.email ||
-        firebaseUser.email ||
-        "";
-
-    document.getElementById(
-        "roleBadge"
-    ).innerText =
-        (
-            result.role ||
-            "user"
-        ).toUpperCase();
-
-
-    if(
-        String(result.role)
-            .toLowerCase()
-            !== "admin"
-    ){
-
-        window.location.href =
-            "dashboard-user.html";
-
-        return;
-
+    if(welcomeName){
+        welcomeName.innerText =
+            "Selamat Datang, " +
+            (
+                result.nama ||
+                firebaseUser.displayName ||
+                "User"
+            );
     }
 
-    showAdminDashboard();
+    const welcomeEmail =
+        document.getElementById("welcomeEmail");
 
-    await loadAdminDashboard();
+    if(welcomeEmail){
+        welcomeEmail.innerText =
+            result.email ||
+            firebaseUser.email ||
+            "";
+    }
 
+    const roleBadge =
+        document.getElementById("roleBadge");
+
+    const role =
+        String(result.role || "user")
+            .trim()
+            .toLowerCase();
+
+    if(roleBadge){
+        roleBadge.innerText = role.toUpperCase();
+    }
+
+    /*
+     * ADMIN
+     */
+    if(role === "admin"){
+        showAdminDashboard();
+        await loadAdminDashboard();
+        return;
+    }
+
+    /*
+     * USER
+     *
+     * Jangan menggunakan window.location.href di sini.
+     * User dashboard ditampilkan pada halaman yang sama
+     * agar tidak terjadi reload / redirect loop.
+     */
+    showUserDashboard();
+    await loadUserDashboard();
 }
 
 
@@ -993,24 +213,22 @@ async function loadCurrentUser(firebaseUser){
 ===================================================== */
 
 function showUserDashboard(){
+
+    const adminDashboard =
+        document.getElementById("adminDashboard");
+
+    const userDashboard =
+        document.getElementById("userDashboard");
+
+    if(adminDashboard){
+        adminDashboard.classList.remove("active");
+    }
+
+    if(userDashboard){
+        userDashboard.classList.add("active");
+    }
+
     return true;
-}
-
-
-/* =====================================================
-   SHOW ADMIN
-===================================================== */
-
-function showAdminDashboard(){
-
-    document.getElementById(
-        "adminDashboard"
-    ).classList.add("active");
-
-    document.getElementById(
-        "userDashboard"
-    ).classList.remove("active");
-
 }
 
 
