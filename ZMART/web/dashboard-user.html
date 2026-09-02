@@ -582,500 +582,52 @@ tr:hover{
 </head>
 
 <body>
-
-<!-- =====================================================
-     LOGIN
-===================================================== -->
-
 <div id="loginPage" class="login-page">
-
-    <div class="login-card">
-
-        <div class="login-icon">📊</div>
-
-        <h1>Keuangan Mustahik</h1>
-
-        <p>
-            Sistem Laporan Keuangan UMKM Mustahik
-        </p>
-
-        <button id="loginBtn" class="google-btn">
-            🔐 Login dengan Google
-        </button>
-
-        <div id="loginStatus" class="status"></div>
-
-    </div>
-
+  <div class="login-card">
+    <div class="login-icon">📊</div>
+    <h1>Keuangan Mustahik</h1>
+    <p>Dashboard Laporan Keuangan Z Mart</p>
+    <button id="loginBtn" class="google-btn">🔐 Login dengan Google</button>
+    <div id="loginStatus" class="status"></div>
+  </div>
 </div>
-
-
-<!-- =====================================================
-     APP
-===================================================== -->
-
 <div id="app">
-
-<header class="header">
-
-    <div class="header-inner">
-
-        <div class="brand">
-
-            <div class="brand-icon">
-                📊
-            </div>
-
-            <div>
-
-                <h2>
-                    Keuangan Mustahik Z Mart
-                </h2>
-
-                <small>
-                    Dashboard Laporan Z Mart
-                </small>
-
-            </div>
-
-        </div>
-
-        <div class="header-right">
-
-            <span id="roleBadge" class="role-badge">
-                USER
-            </span>
-
-            <button id="logoutBtn" class="logout-btn">
-                🚪 Logout
-            </button>
-
-        </div>
-
-    </div>
-
-</header>
-
-
+<header class="header"><div class="header-inner">
+  <div class="brand"><div class="brand-icon">📊</div><div><h2>Keuangan Mustahik Z Mart</h2><small>Dashboard User</small></div></div>
+  <div class="header-right"><span id="roleBadge" class="role-badge">USER</span><button id="logoutBtn" class="logout-btn">🚪 Logout</button></div>
+</div></header>
 <main class="main">
-
-<div class="welcome">
-
-    <h2 id="welcomeName">
-        Selamat Datang
-    </h2>
-
-    <p id="welcomeEmail"></p>
-
-</div>
-
-
-<!-- =====================================================
-     USER DASHBOARD
-===================================================== -->
-
-<section id="adminDashboard" class="dashboard">
-
-
-<div class="admin-title">
-
-    <h2>
-        🛠️ Dashboard Administrator
-    </h2>
-
-    <p>
-        Pantau dan analisis perkembangan keuangan seluruh Mustahik Z Mart.
-    </p>
-
-</div>
-<!-- =====================================================
-     HASIL FILTER
-===================================================== -->
-
-<div class="cards">
-
-    <div class="card-stat">
-
-        <div class="icon">💰</div>
-
-        <div class="title">
-            Omset Z Mart
-        </div>
-
-        <div id="fOmset" class="value">
-            Rp 0
-        </div>
-
+  <div class="welcome"><h2 id="welcomeName">Selamat Datang</h2><p id="welcomeEmail"></p></div>
+  <section class="panel">
+    <div class="panel-title"><h3>📅 Filter Dashboard</h3></div>
+    <div class="user-filter-row"><div class="user-filter-group"><label for="userFilterBulan">Bulan</label><select id="userFilterBulan"></select></div><button id="userResetFilter" class="reset-btn">🔄 Reset</button></div>
+    <div id="userFilterInfo" class="user-filter-info">Memuat data...</div>
+  </section>
+  <section class="cards">
+    <div class="card-stat"><div class="icon">💰</div><div class="title">Total Omset</div><div id="uTotalOmset" class="value">Rp 0</div></div>
+    <div class="card-stat"><div class="icon">🛒</div><div class="title">Total Kulakan</div><div id="uTotalKulakan" class="value">Rp 0</div></div>
+    <div class="card-stat"><div class="icon">💵</div><div class="title">Pendapatan Bersih (10%)</div><div id="uTotalBersih" class="value">Rp 0</div></div>
+    <div class="card-stat"><div class="icon">💳</div><div class="title">Sisa Omset</div><div id="uTotalSisaOmset" class="value">Rp 0</div></div>
+    <div class="card-stat"><div class="icon">➕</div><div class="title">Pendapatan Tambahan</div><div id="uTotalTambahan" class="value">Rp 0</div></div>
+  </section>
+  <section class="panel"><div class="panel-title"><h3>📈 Grafik Keuangan</h3></div><div class="chart-container"><canvas id="userFinanceChart"></canvas></div></section>
+  <section class="panel"><div class="panel-title"><h3>📝 Input Laporan Keuangan</h3></div>
+    <div class="user-form-grid">
+      <div class="form-group"><label for="namaMustahik">Nama Mustahik</label><input id="namaMustahik" type="text" placeholder="Nama Mustahik"></div>
+      <div class="form-group"><label for="kecamatan">Kecamatan</label><input id="kecamatan" type="text" placeholder="Kecamatan"></div>
+      <div class="form-group"><label for="bulan">Bulan</label><select id="bulan"><option value="">Pilih Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+      <div class="form-group"><label for="tahun">Tahun</label><select id="tahun"></select></div>
+      <div class="form-group"><label for="omset">Omset</label><input id="omset" type="number" min="0" step="1" placeholder="0"></div>
+      <div class="form-group"><label for="kulakan">Kulakan</label><input id="kulakan" type="number" min="0" step="1" placeholder="0"></div>
+      <div class="form-group"><label for="pendapatanBersih">Pendapatan Bersih Z Mart (10%)</label><input id="pendapatanBersih" class="readonly" readonly value="Rp 0"><div class="help">Otomatis = 10% dari Omset</div></div>
+      <div class="form-group"><label for="sisaOmset">Sisa Omset</label><input id="sisaOmset" class="readonly" readonly value="Rp 0"><div class="help">Omset − Pendapatan Bersih − Kulakan</div></div>
+      <div class="form-group"><label for="pendapatanTambahan">Pendapatan Tambahan di Luar Usaha</label><input id="pendapatanTambahan" type="number" min="0" step="1" placeholder="0"></div>
     </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">🛒</div>
-
-        <div class="title">
-            Kulakan (Modal)
-        </div>
-
-        <div id="fKulakan" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">📈</div>
-
-        <div class="title">
-           Pendapatan Bersih Z Mart
-        </div>
-
-        <div id="fBersih" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">💳</div>
-
-        <div class="title">
-            Sisa Omset
-        </div>
-
-        <div id="fSisaOmset" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">💵</div>
-
-        <div class="title">
-            Pendapatan Tambahan di luar Z Mart
-        </div>
-
-        <div id="fTambahan" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-</div>
-<!-- ADMIN SUMMARY -->
-
-
-<div class="cards">
-
-    <div class="card-stat">
-
-        <div class="icon">👥</div>
-
-        <div class="title">
-            Total Mustahik Z Mart
-        </div>
-
-        <div id="aTotalUser" class="value">
-            0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">📋</div>
-
-        <div class="title">
-            Total Laporan
-        </div>
-
-        <div id="aTotalLaporan" class="value">
-            0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">💰</div>
-
-        <div class="title">
-            Total Omset Seluruh Z Mart
-        </div>
-
-        <div id="aTotalOmset" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-
-    <div class="card-stat">
-
-        <div class="icon">📈</div>
-
-        <div class="title">
-            Pendapatan Bersih
-        </div>
-
-        <div id="aTotalBersih" class="value">
-            Rp 0
-        </div>
-
-    </div>
-
-</div>
-<!-- =====================================================
-     FILTER
-===================================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-
-        <h3>
-            🔎 Filter Laporan Mustahik
-        </h3>
-
-    </div>
-
-
-    <div class="filters">
-
-
-        <div class="filter-group">
-
-            <label>
-                Nama User
-            </label>
-
-            <select id="filterUser">
-
-                <option value="">
-                    Semua User
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="filter-group">
-
-            <label>
-                Kecamatan
-            </label>
-
-            <select id="filterKecamatan">
-
-                <option value="">
-                    Semua Kecamatan
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="filter-group">
-
-            <label>
-                Bulan / Tahun
-            </label>
-
-            <select id="filterBulan">
-
-                <option value="">
-                    Semua Bulan
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="filter-group">
-
-            <label>
-                Pencarian
-            </label>
-
-            <input
-                id="filterSearch"
-                type="text"
-                placeholder="Nama / email / kecamatan">
-
-        </div>
-
-    </div>
-
-
-    <button
-        id="resetFilter"
-        class="reset-btn">
-
-        ↺ Reset Filter
-
-    </button>
-
-
-    <div
-        id="filterInfo"
-        class="filter-info">
-
-        Menampilkan seluruh data Mustahik.
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     CHART
-===================================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-
-        <h3 id="chartTitle">
-            📊 Grafik Keuangan Semua User
-        </h3>
-
-    </div>
-
-
-    <div class="chart-container">
-
-        <canvas id="financeChart"></canvas>
-
-    </div>
-
-</div>
-
-
-
-
-
-<!-- =====================================================
-     USER TABLE
-===================================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-
-        <h3>
-            👥 Daftar User
-        </h3>
-
-    </div>
-
-
-    <div class="table-wrapper">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Kecamatan</th>
-                    <th>Role</th>
-                    <th>Jumlah Laporan</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="adminUserBody"></tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     DATA KEUANGAN
-===================================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-
-        <h3>
-            📋 Data Keuangan
-        </h3>
-
-        <button
-            onclick="loadAdminDashboard()"
-            class="reset-btn">
-
-            🔄 Refresh
-
-        </button>
-
-    </div>
-
-
-    <div class="table-wrapper">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Waktu</th>
-                    <th>Nama Mustahik</th>
-                    <th>Bulan</th>
-                    <th>Email</th>
-                    <th>Kecamatan</th>
-                    <th>Omset</th>
-                    <th>Kulakan</th>
-                    <th>Bersih (10%)</th>
-                    <th>Tambahan</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="adminTableBody"></tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
-</section>
-<div id="userDashboard" style="display:none!important;">
-<select id="userFilterBulan"></select><button id="userResetFilter"></button>
-<div id="userFilterInfo"></div><div id="uTotalOmset"></div><div id="uTotalKulakan"></div>
-<div id="uTotalBersih"></div><div id="uTotalTambahan"></div><div id="userTableBody"></div>
-<input id="namaMustahik"><input id="kecamatan"><select id="bulan"></select>
-<select id="tahun"></select><input id="omset"><input id="kulakan">
-<input id="pendapatanBersih" readonly value="Rp 0"><input id="pendapatanTambahan">
-<button id="saveBtn"></button><div id="saveStatus"></div>
-</div>
-
-</main>
-
-</div>
-
+    <button id="saveBtn" class="save-btn">💾 Simpan Laporan</button><div id="saveStatus" class="status"></div>
+  </section>
+  <section class="panel"><div class="panel-title"><h3>📋 Riwayat Laporan</h3></div><div class="table-wrapper"><table><thead><tr><th>Waktu</th><th>Bulan</th><th>Kecamatan</th><th>Omset</th><th>Kulakan</th><th>Bersih (10%)</th><th>Sisa Omset</th><th>Tambahan</th></tr></thead><tbody id="userTableBody"></tbody></table></div></section>
+  <div class="footer">Sistem Keuangan Mustahik Z Mart</div>
+</main></div>
 <script>
 
 /* =====================================================
@@ -1441,15 +993,7 @@ async function loadCurrentUser(firebaseUser){
 ===================================================== */
 
 function showUserDashboard(){
-
-    document.getElementById(
-        "userDashboard"
-    ).classList.add("active");
-
-    document.getElementById(
-        "adminDashboard"
-    ).classList.remove("active");
-
+    return true;
 }
 
 
@@ -1964,38 +1508,18 @@ function renderUserTable(rows){
 
 function hitungBersih(){
 
-    const omset =
-        Number(
-            document.getElementById(
-                "omset"
-            ).value
-        ) || 0;
-
+    const omset = Number(document.getElementById("omset").value) || 0;
+    const kulakan = Number(document.getElementById("kulakan").value) || 0;
     const bersih = omset * 0.10;
+    const sisa = omset - bersih - kulakan;
 
-    document.getElementById(
-        "pendapatanBersih"
-    ).value =
-        rupiah(bersih);
-
+    document.getElementById("pendapatanBersih").value = rupiah(bersih);
+    document.getElementById("sisaOmset").value = rupiah(sisa);
 }
 
-document.getElementById(
-    "omset"
-).addEventListener(
-    "input",
-    hitungBersih
-);
-
-// Hitung nilai default saat formulir pertama kali dibuka
+document.getElementById("omset").addEventListener("input", hitungBersih);
+document.getElementById("kulakan").addEventListener("input", hitungBersih);
 hitungBersih();
-
-document.getElementById(
-    "kulakan"
-).addEventListener(
-    "input",
-    hitungBersih
-);
 
 
 /* =====================================================
@@ -3589,126 +3113,6 @@ document.getElementById(
 
 
 /* =====================================================
-   FILTER USER
-===================================================== */
-
-document.getElementById(
-    "filterUser"
-).addEventListener(
-    "change",
-    function(){
-
-        /*
-          Ketika user berubah,
-          bulan otomatis menyesuaikan
-          data user tersebut.
-        */
-
-        updateBulanFilterByUser();
-
-        applyAdminFilter();
-
-    }
-);
-
-
-/* =====================================================
-   FILTER KECAMATAN
-===================================================== */
-
-document.getElementById(
-    "filterKecamatan"
-).addEventListener(
-    "change",
-    applyAdminFilter
-);
-
-
-/* =====================================================
-   FILTER BULAN
-===================================================== */
-
-document.getElementById(
-    "filterBulan"
-).addEventListener(
-    "change",
-    applyAdminFilter
-);
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-document.getElementById(
-    "filterSearch"
-).addEventListener(
-    "input",
-    applyAdminFilter
-);
-
-
-/* =====================================================
-   RESET FILTER
-===================================================== */
-
-document.getElementById(
-    "resetFilter"
-).addEventListener(
-    "click",
-    function(){
-
-        document.getElementById(
-            "filterUser"
-        ).value = "";
-
-        document.getElementById(
-            "filterKecamatan"
-        ).value = "";
-
-        document.getElementById(
-            "filterBulan"
-        ).value = "";
-
-        document.getElementById(
-            "filterSearch"
-        ).value = "";
-
-
-        /*
-          Kembalikan daftar bulan
-          seluruh user.
-        */
-
-        const allMonths = {};
-
-        adminData.forEach(
-            function(row){
-
-                if(row.bulanTahun){
-
-                    allMonths[
-                        row.bulanTahun
-                    ] = true;
-
-                }
-
-            }
-        );
-
-
-        populateBulanFilter(
-            Object.keys(allMonths)
-        );
-
-
-        applyAdminFilter();
-
-    }
-);
-
-
-/* =====================================================
    LOGOUT
 ===================================================== */
 
@@ -3750,6 +3154,31 @@ logoutBtn.addEventListener(
 );
 
 </script>
-
+<script>
+/* USER-ONLY OVERRIDES */
+function renderUserTable(rows){
+    const body=document.getElementById("userTableBody"); body.innerHTML="";
+    if(!rows || !rows.length){body.innerHTML='<tr><td colspan="8" class="empty">Belum ada laporan pada periode ini.</td></tr>';return;}
+    rows.slice().reverse().forEach(function(row){
+        const omset=Number(row.omset)||0, kulakan=Number(row.kulakan)||0, bersih=omset*0.10, sisa=omset-bersih-kulakan;
+        body.innerHTML += `<tr><td>${escapeHTML(formatTanggal(row.waktu))}</td><td>${escapeHTML(row.bulanTahun||"")}</td><td>${escapeHTML(row.kecamatan||"")}</td><td>${rupiah(omset)}</td><td>${rupiah(kulakan)}</td><td>${rupiah(bersih)}</td><td>${rupiah(sisa)}</td><td>${rupiah(row.pendapatanTambahan)}</td></tr>`;
+    });
+}
+function renderUserChart(rows){
+    const grouped={};
+    rows.forEach(function(row){const key=row.bulanTahun||"Tidak diketahui"; if(!grouped[key]) grouped[key]={omset:0,kulakan:0,tambahan:0}; grouped[key].omset+=Number(row.omset)||0; grouped[key].kulakan+=Number(row.kulakan)||0; grouped[key].tambahan+=Number(row.pendapatanTambahan)||0;});
+    const order={Januari:1,Februari:2,Maret:3,April:4,Mei:5,Juni:6,Juli:7,Agustus:8,September:9,Oktober:10,November:11,Desember:12};
+    const labels=Object.keys(grouped).sort(function(a,b){const pa=a.split(" "),pb=b.split(" "),ya=Number(pa[1])||0,yb=Number(pb[1])||0;return ya!==yb?ya-yb:(order[pa[0]]||0)-(order[pb[0]]||0);});
+    const d=(key,fn)=>labels.map(k=>fn(grouped[k]));
+    if(userFinanceChart) userFinanceChart.destroy();
+    userFinanceChart=new Chart(document.getElementById("userFinanceChart"),{type:"bar",data:{labels:labels,datasets:[
+      {label:"Omset",data:d("omset",x=>x.omset)},
+      {label:"Kulakan",data:d("kulakan",x=>x.kulakan)},
+      {label:"Pendapatan Bersih (10%)",data:d("bersih",x=>x.omset*0.10)},
+      {label:"Sisa Omset",data:d("sisa",x=>x.omset-(x.omset*0.10)-x.kulakan)},
+      {label:"Pendapatan Tambahan",data:d("tambahan",x=>x.tambahan)}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+rupiah(c.raw)}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return rupiah(v)}}}}}});
+}
+</script>
 </body>
 </html>
