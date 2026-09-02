@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 
@@ -9,9 +8,7 @@
 <title>Keuangan Mustahik</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -592,25 +589,26 @@ tr:hover{
 
 <div id="loginPage" class="login-page">
 
-<div class="login-card">
+    <div class="login-card">
 
-    <div class="login-icon">📊</div>
+        <div class="login-icon">📊</div>
 
-    <h1>Keuangan Mustahik</h1>
+        <h1>Keuangan Mustahik</h1>
 
-    <p>
-        Sistem Laporan Keuangan UMKM Mustahik
-    </p>
+        <p>
+            Sistem Laporan Keuangan UMKM Mustahik
+        </p>
 
-    <button id="loginBtn" class="google-btn">
-        🔐 Login dengan Google
-    </button>
+        <button id="loginBtn" class="google-btn">
+            🔐 Login dengan Google
+        </button>
 
-    <div id="loginStatus" class="status"></div>
+        <div id="loginStatus" class="status"></div>
+
+    </div>
 
 </div>
 
-</div>
 
 <!-- =====================================================
      APP
@@ -620,55 +618,57 @@ tr:hover{
 
 <header class="header">
 
-<div class="header-inner">
+    <div class="header-inner">
 
-    <div class="brand">
+        <div class="brand">
 
-        <div class="brand-icon">
-            📊
+            <div class="brand-icon">
+                📊
+            </div>
+
+            <div>
+
+                <h2>
+                    Keuangan Mustahik
+                </h2>
+
+                <small>
+                    Dashboard Laporan UMKM
+                </small>
+
+            </div>
+
         </div>
 
-        <div>
+        <div class="header-right">
 
-            <h2>
-                Keuangan Mustahik
-            </h2>
+            <span id="roleBadge" class="role-badge">
+                USER
+            </span>
 
-            <small>
-                Dashboard Laporan UMKM
-            </small>
+            <button id="logoutBtn" class="logout-btn">
+                🚪 Logout
+            </button>
 
         </div>
 
     </div>
-
-    <div class="header-right">
-
-        <span id="roleBadge" class="role-badge">
-            USER
-        </span>
-
-        <button id="logoutBtn" class="logout-btn">
-            🚪 Logout
-        </button>
-
-    </div>
-
-</div>
 
 </header>
+
 
 <main class="main">
 
 <div class="welcome">
 
-<h2 id="welcomeName">
-    Selamat Datang
-</h2>
+    <h2 id="welcomeName">
+        Selamat Datang
+    </h2>
 
-<p id="welcomeEmail"></p>
+    <p id="welcomeEmail"></p>
 
 </div>
+
 
 <!-- =====================================================
      USER DASHBOARD
@@ -682,305 +682,307 @@ tr:hover{
 
 <div class="panel user-filter-panel">
 
-<div class="panel-title">
-    <h3>📅 Filter Dashboard</h3>
-</div>
+    <div class="panel-title">
+        <h3>📅 Filter Dashboard</h3>
+    </div>
 
-<div class="user-filter-row">
+    <div class="user-filter-row">
 
-    <div class="user-filter-group">
+        <div class="user-filter-group">
 
-        <label>Pilih Bulan / Tahun</label>
+            <label>Pilih Bulan / Tahun</label>
 
-        <select id="userFilterBulan">
-            <option value="">Memuat bulan...</option>
-        </select>
+            <select id="userFilterBulan">
+                <option value="">Memuat bulan...</option>
+            </select>
+
+        </div>
+
+        <button
+            id="userResetFilter"
+            class="reset-btn">
+
+            📅 Bulan Berjalan
+
+        </button>
 
     </div>
 
-    <button
-        id="userResetFilter"
-        class="reset-btn">
+    <div
+        id="userFilterInfo"
+        class="user-filter-info">
 
-        📅 Reset
+        Menampilkan data bulan berjalan.
 
-    </button>
-
-</div>
-
-<div
-    id="userFilterInfo"
-    class="user-filter-info">
-
-    Menampilkan data bulan berjalan.
-
-</div>
+    </div>
 
 </div>
 
 <div class="cards">
 
-<div class="card-stat">
+    <div class="card-stat">
 
-    <div class="icon">💰</div>
+        <div class="icon">💰</div>
 
-    <div class="title">
-        Total Omset
+        <div class="title">
+            Total Omset
+        </div>
+
+        <div id="uTotalOmset" class="value">
+            Rp 0
+        </div>
+
     </div>
 
-    <div id="uTotalOmset" class="value">
-        Rp 0
+
+    <div class="card-stat">
+
+        <div class="icon">🛒</div>
+
+        <div class="title">
+            Total Kulakan
+        </div>
+
+        <div id="uTotalKulakan" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">📈</div>
+
+        <div class="title">
+            Pendapatan Bersih
+        </div>
+
+        <div id="uTotalBersih" class="value">
+            Rp 0
+        </div>
+
+    </div>
+
+
+    <div class="card-stat">
+
+        <div class="icon">💵</div>
+
+        <div class="title">
+            Pendapatan Tambahan
+        </div>
+
+        <div id="uTotalTambahan" class="value">
+            Rp 0
+        </div>
+
     </div>
 
 </div>
 
-
-<div class="card-stat">
-
-    <div class="icon">🛒</div>
-
-    <div class="title">
-        Total Kulakan
-    </div>
-
-    <div id="uTotalKulakan" class="value">
-        Rp 0
-    </div>
-
-</div>
-
-
-<div class="card-stat">
-
-    <div class="icon">📈</div>
-
-    <div class="title">
-        Pendapatan Bersih
-    </div>
-
-    <div id="uTotalBersih" class="value">
-        Rp 0
-    </div>
-
-</div>
-
-
-<div class="card-stat">
-
-    <div class="icon">💵</div>
-
-    <div class="title">
-        Pendapatan Tambahan
-    </div>
-
-    <div id="uTotalTambahan" class="value">
-        Rp 0
-    </div>
-
-</div>
-
-</div>
 
 <!-- FORM -->
 
 <div class="panel">
 
-<div class="panel-title">
+    <div class="panel-title">
 
-    <h3>
-        📝 Input Laporan Keuangan
-    </h3>
+        <h3>
+            📝 Input Laporan Keuangan
+        </h3>
+
+    </div>
+
+
+    <div class="user-form-grid">
+
+        <div class="form-group">
+
+            <label>Nama Mustahik</label>
+
+            <input
+                id="namaMustahik"
+                type="text">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Kecamatan</label>
+
+            <input
+                id="kecamatan"
+                type="text"
+                placeholder="Contoh: Sragen">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Bulan</label>
+
+            <select id="bulan">
+
+                <option value="">
+                    -- Pilih Bulan --
+                </option>
+
+                <option>Januari</option>
+                <option>Februari</option>
+                <option>Maret</option>
+                <option>April</option>
+                <option>Mei</option>
+                <option>Juni</option>
+                <option>Juli</option>
+                <option>Agustus</option>
+                <option>September</option>
+                <option>Oktober</option>
+                <option>November</option>
+                <option>Desember</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Tahun</label>
+
+            <select id="tahun">
+
+                <option value="">
+                    -- Pilih Tahun --
+                </option>
+
+                <option>2025</option>
+                <option>2026</option>
+                <option>2027</option>
+                <option>2028</option>
+                <option>2029</option>
+                <option>2030</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Omset</label>
+
+            <input
+                id="omset"
+                type="number"
+                min="0"
+                placeholder="0">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Kulakan</label>
+
+            <input
+                id="kulakan"
+                type="number"
+                min="0"
+                placeholder="0">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Pendapatan Bersih</label>
+
+            <input
+                id="pendapatanBersih"
+                class="readonly"
+                type="text"
+                readonly
+                value="Rp 0">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Pendapatan Tambahan</label>
+
+            <input
+                id="pendapatanTambahan"
+                type="number"
+                min="0"
+                placeholder="0">
+
+        </div>
+
+    </div>
+
+
+    <button id="saveBtn" class="save-btn">
+
+        💾 Simpan Laporan
+
+    </button>
+
+
+    <div id="saveStatus" class="status"></div>
 
 </div>
 
-
-<div class="user-form-grid">
-
-    <div class="form-group">
-
-        <label>Nama Mustahik</label>
-
-        <input
-            id="namaMustahik"
-            type="text">
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Kecamatan</label>
-
-        <input
-            id="kecamatan"
-            type="text"
-            placeholder="Contoh: Sragen">
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Bulan</label>
-
-        <select id="bulan">
-
-            <option value="">
-                -- Pilih Bulan --
-            </option>
-
-            <option>Januari</option>
-            <option>Februari</option>
-            <option>Maret</option>
-            <option>April</option>
-            <option>Mei</option>
-            <option>Juni</option>
-            <option>Juli</option>
-            <option>Agustus</option>
-            <option>September</option>
-            <option>Oktober</option>
-            <option>November</option>
-            <option>Desember</option>
-
-        </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Tahun</label>
-
-        <select id="tahun">
-
-            <option value="">
-                -- Pilih Tahun --
-            </option>
-
-            <option>2025</option>
-            <option>2026</option>
-            <option>2027</option>
-            <option>2028</option>
-            <option>2029</option>
-            <option>2030</option>
-
-        </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Omset</label>
-
-        <input
-            id="omset"
-            type="number"
-            min="0"
-            placeholder="0">
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Kulakan</label>
-
-        <input
-            id="kulakan"
-            type="number"
-            min="0"
-            placeholder="0">
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Pendapatan Bersih</label>
-
-        <input
-            id="pendapatanBersih"
-            class="readonly"
-            type="text"
-            readonly
-            value="Rp 0">
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>Pendapatan Tambahan</label>
-
-        <input
-            id="pendapatanTambahan"
-            type="number"
-            min="0"
-            placeholder="0">
-
-    </div>
-
-</div>
-
-
-<button id="saveBtn" class="save-btn">
-
-    💾 Simpan Laporan
-
-</button>
-
-
-<div id="saveStatus" class="status"></div>
-
-</div>
 
 <!-- RIWAYAT -->
 
 <div class="panel">
 
-<div class="panel-title">
+    <div class="panel-title">
 
-    <h3>
-        📋 Riwayat Laporan Saya
-    </h3>
+        <h3>
+            📋 Riwayat Laporan Saya
+        </h3>
 
-    <button
-        onclick="loadUserDashboard()"
-        class="reset-btn">
+        <button
+            onclick="loadUserDashboard()"
+            class="reset-btn">
 
-        🔄 Refresh
+            🔄 Refresh
 
-    </button>
+        </button>
 
-</div>
+    </div>
 
 
-<div class="table-wrapper">
+    <div class="table-wrapper">
 
-    <table>
+        <table>
 
-        <thead>
+            <thead>
 
-            <tr>
+                <tr>
 
-                <th>Tanggal</th>
-                <th>Bulan</th>
-                <th>Kecamatan</th>
-                <th>Omset</th>
-                <th>Kulakan</th>
-                <th>Bersih</th>
-                <th>Tambahan</th>
+                    <th>Tanggal</th>
+                    <th>Bulan</th>
+                    <th>Kecamatan</th>
+                    <th>Omset</th>
+                    <th>Kulakan</th>
+                    <th>Bersih</th>
+                    <th>Tambahan</th>
 
-            </tr>
+                </tr>
 
-        </thead>
+            </thead>
 
-        <tbody id="userTableBody"></tbody>
+            <tbody id="userTableBody"></tbody>
 
-    </table>
+        </table>
 
-</div>
+    </div>
 
 </div>
 
