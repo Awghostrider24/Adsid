@@ -1727,10 +1727,10 @@ function applyUserFilter(){
             totalKulakan +=
                 Number(row.kulakan) || 0;
 
-            totalBersih +=
-                Number(
-                    row.pendapatanBersih
-                ) || 0;
+            // Pendapatan Bersih = 10% dari Omset
+            // Tidak mengambil nilai pendapatanBersih lama dari database.
+            totalBersih =
+                totalOmset * 0.10;
 
             totalTambahan +=
                 Number(
@@ -2267,11 +2267,12 @@ async function loadAdminDashboard(){
             );
 
 
+        // Card Pendapatan Bersih Admin = 10% dari total Omset
         document.getElementById(
             "aTotalBersih"
         ).innerText =
             rupiah(
-                result.summary.totalBersih
+                (Number(result.summary.totalOmset) || 0) * 0.10
             );
 
 
@@ -2783,10 +2784,10 @@ function applyAdminFilter(){
             kulakan +=
                 Number(row.kulakan) || 0;
 
-            bersih +=
-                Number(
-                    row.pendapatanBersih
-                ) || 0;
+            // Pendapatan Bersih = 10% dari Omset
+            // untuk seluruh hasil filter.
+            bersih =
+                omset * 0.10;
 
             tambahan +=
                 Number(
