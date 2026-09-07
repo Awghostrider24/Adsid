@@ -2862,6 +2862,35 @@ function applyAdminFilter(){
     );
 
 
+    /* =================================================
+       UPDATE CARD BERDASARKAN FILTER AKTIF
+       Pendapatan Rata-rata dan Bersih Rata-rata
+       mengikuti user / kecamatan / bulan / pencarian.
+    ================================================= */
+
+    const jumlahLaporanFilter =
+        filtered.length;
+
+    const rataRataOmsetFilter =
+        jumlahLaporanFilter > 0
+            ? omset / jumlahLaporanFilter
+            : 0;
+
+    // Bersih rata-rata = 10% dari pendapatan rata-rata
+    const rataRataBersihFilter =
+        rataRataOmsetFilter * 0.10;
+
+    document.getElementById(
+        "aTotalOmset"
+    ).innerText =
+        rupiah(rataRataOmsetFilter);
+
+    document.getElementById(
+        "aTotalBersih"
+    ).innerText =
+        rupiah(rataRataBersihFilter);
+
+
     document.getElementById(
         "fOmset"
     ).innerText =
