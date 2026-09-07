@@ -809,7 +809,7 @@ tr:hover{
         <div class="icon">💰</div>
 
         <div class="title">
-            Total Omset Seluruh Z Mart
+            Pendapatan Rata-rata
         </div>
 
         <div id="aTotalOmset" class="value">
@@ -824,7 +824,7 @@ tr:hover{
         <div class="icon">📈</div>
 
         <div class="title">
-            Pendapatan Bersih
+            Bersih Rata-rata
         </div>
 
         <div id="aTotalBersih" class="value">
@@ -2316,20 +2316,34 @@ async function loadAdminDashboard(){
             result.summary.totalLaporan;
 
 
+        // ============================================
+        // RATA-RATA PENDAPATAN & BERSIH
+        // ============================================
+        const totalLaporan =
+            Number(result.summary.totalLaporan) || 0;
+
+        const totalOmset =
+            Number(result.summary.totalOmset) || 0;
+
+        // Pendapatan rata-rata per laporan
+        const rataRataOmset =
+            totalLaporan > 0
+                ? totalOmset / totalLaporan
+                : 0;
+
+        // Bersih rata-rata = 10% dari pendapatan rata-rata
+        const rataRataBersih =
+            rataRataOmset * 0.10;
+
         document.getElementById(
             "aTotalOmset"
         ).innerText =
-            rupiah(
-                result.summary.totalOmset
-            );
-
+            rupiah(rataRataOmset);
 
         document.getElementById(
             "aTotalBersih"
         ).innerText =
-            rupiah(
-                (Number(result.summary.totalOmset) || 0) * 0.10
-            );
+            rupiah(rataRataBersih);
 
 
         populateUserFilter();
