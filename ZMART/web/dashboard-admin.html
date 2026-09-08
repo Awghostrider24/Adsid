@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
 
@@ -286,6 +287,137 @@ body{
 }
 
 /* =====================================================
+   PRINT LAPORAN TERFILTER
+===================================================== */
+function getActiveAdminFilterText(){
+    const userSelect=document.getElementById("filterUser");
+    const userText=userSelect && userSelect.selectedIndex>=0 ? userSelect.options[userSelect.selectedIndex].text : "Semua User";
+    const kec=document.getElementById("filterKecamatan").value || "Semua Kecamatan";
+    const bulan=document.getElementById("filterBulan").value || "Semua Bulan";
+    const search=document.getElementById("filterSearch").value.trim() || "-";
+    return "User: " + userText + " | Kecamatan: " + kec + " | Periode: " + bulan + " | Pencarian: " + search;
+}
+
+function getFilteredAdminRows(){
+    const uid=document.getElementById("filterUser").value;
+    const kecamatan=document.getElementById("filterKecamatan").value;
+    const bulan=document.getElementById("filterBulan").value;
+    const search=document.getElementById("filterSearch").value.toLowerCase().trim();
+    return (adminData||[]).filter(function(row){
+        if(uid && String(row.uid)!==String(uid)) return false;
+        if(kecamatan && String(row.kecamatan)!==String(kecamatan)) return false;
+        if(bulan && String(row.bulanTahun)!==String(bulan)) return false;
+        if(search){
+            const text=(String(row.namaMustahik||"")+" "+String(row.email||"")+" "+String(row.kecamatan||"")).toLowerCase();
+            if(!text.includes(search)) return false;
+        }
+        return true;
+    });
+}
+
+function printFilteredReport(){
+    const rows=getFilteredAdminRows();
+    const filterText=getActiveAdminFilterText();
+    const totalOmset=rows.reduce((a,r)=>a+(Number(r.omset)||0),0);
+    const totalKulakan=rows.reduce((a,r)=>a+(Number(r.kulakan)||0),0);
+    const totalTambahan=rows.reduce((a,r)=>a+(Number(r.pendapatanTambahan)||0),0);
+    const rata=rows.length?totalOmset/rows.length:0;
+    const bersih=rata*0.10;
+
+    const htmlRows=rows.slice().reverse().map(function(r){
+        return "<tr>"+
+            "<td>"+escapeHTML(formatTanggal(r.waktu))+"</td>"+
+            "<td>"+escapeHTML(r.namaMustahik||"")+"</td>"+
+            "<td>"+escapeHTML(r.bulanTahun||"")+"</td>"+
+            "<td>"+escapeHTML(r.email||"")+"</td>"+
+            "<td>"+escapeHTML(r.kecamatan||"")+"</td>"+
+            "<td>"+rupiah(r.omset)+"</td>"+
+            "<td>"+rupiah(r.kulakan)+"</td>"+
+            "<td>"+rupiah((Number(r.omset)||0)*0.10)+"</td>"+
+            "<td>"+rupiah(r.pendapatanTambahan)+"</td>"+
+            "</tr>";
+    }).join("");
+
+    const win=window.open("","_blank","width=1200,height=800");
+    if(!win){
+        alert("Popup diblokir browser. Izinkan popup untuk mencetak laporan.");
+        return;
+    }
+
+    const emptyRow="<tr><td colspan=\"9\" style=\"text-align:center\">Tidak ada data sesuai filter.</td></tr>";
+    const html="<!DOCTYPE html><html lang=\"id\"><head><meta charset=\"UTF-8\"><title>Laporan Keuangan Z Mart</title>"+
+        "<style>body{font-family:Arial,sans-serif;color:#222;font-size:11px;margin:20px}h1{margin:0 0 5px;font-size:20px}h2{font-size:14px;margin:18px 0 8px}.filter{font-size:11px;color:#555;margin-bottom:15px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:15px}.box{border:1px solid #ccc;padding:9px;border-radius:6px}.label{font-size:9px;color:#666}.value{font-size:13px;font-weight:bold;margin-top:3px}table{width:100%;border-collapse:collapse}th{background:#2e7d32;color:white;padding:6px;text-align:left}td{padding:5px;border-bottom:1px solid #ddd}tfoot td{font-weight:bold;border-top:2px solid #333}@media print{@page{size:A4 landscape;margin:10mm}}</style>"+
+        "</head><body>"+
+        "<h1>Laporan Keuangan Mustahik Z Mart</h1>"+
+        "<div class=\"filter\">"+escapeHTML(filterText)+" | "+rows.length+" laporan</div>"+
+        "<div class=\"summary\">"+
+            "<div class=\"box\"><div class=\"label\">Pendapatan Rata-rata</div><div class=\"value\">"+rupiah(rata)+"</div></div>"+
+            "<div class=\"box\"><div class=\"label\">Bersih Rata-rata</div><div class=\"value\">"+rupiah(bersih)+"</div></div>"+
+            "<div class=\"box\"><div class=\"label\">Total Omset</div><div class=\"value\">"+rupiah(totalOmset)+"</div></div>"+
+            "<div class=\"box\"><div class=\"label\">Total Kulakan</div><div class=\"value\">"+rupiah(totalKulakan)+"</div></div>"+
+        "</div>"+
+        "<h2>Data Keuangan</h2>"+
+        "<table><thead><tr><th>Waktu</th><th>Nama Mustahik</th><th>Bulan</th><th>Email</th><th>Kecamatan</th><th>Omset</th><th>Kulakan</th><th>Bersih (10%)</th><th>Tambahan</th></tr></thead>"+
+        "<tbody>"+(htmlRows||emptyRow)+"</tbody>"+
+        "<tfoot><tr><td colspan=\"5\">TOTAL</td><td>"+rupiah(totalOmset)+"</td><td>"+rupiah(totalKulakan)+"</td><td>"+rupiah(totalOmset*0.10)+"</td><td>"+rupiah(totalTambahan)+"</td></tr></tfoot></table>"+
+        "</body></html>";
+
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    setTimeout(function(){win.print();},500);
+}
+
+/* =====================================================
+   EXPORT EXCEL TERFILTER
+===================================================== */
+function exportFilteredExcel(){
+    if(typeof XLSX === "undefined"){
+        alert("Library Excel belum termuat. Silakan refresh halaman lalu coba lagi.");
+        return;
+    }
+    const rows=getFilteredAdminRows();
+    if(!rows.length){
+        alert("Tidak ada data sesuai filter untuk diekspor.");
+        return;
+    }
+    const totalOmset=rows.reduce((a,r)=>a+(Number(r.omset)||0),0);
+    const totalKulakan=rows.reduce((a,r)=>a+(Number(r.kulakan)||0),0);
+    const totalTambahan=rows.reduce((a,r)=>a+(Number(r.pendapatanTambahan)||0),0);
+    const rata=totalOmset/rows.length;
+    const wb=XLSX.utils.book_new();
+    const summary=[
+        ["LAPORAN KEUANGAN MUSTAHIK Z MART"],
+        [getActiveAdminFilterText()],
+        [],
+        ["Indikator","Nilai"],
+        ["Jumlah Laporan",rows.length],
+        ["Pendapatan Rata-rata",rata],
+        ["Bersih Rata-rata",rata*0.10],
+        ["Total Omset",totalOmset],
+        ["Total Kulakan",totalKulakan],
+        ["Total Bersih",totalOmset*0.10],
+        ["Total Pendapatan Tambahan",totalTambahan]
+    ];
+    const wsSummary=XLSX.utils.aoa_to_sheet(summary);
+    wsSummary['!cols']=[{wch:28},{wch:22}];
+    XLSX.utils.book_append_sheet(wb,wsSummary,"Ringkasan");
+    const data=[['Waktu','Nama Mustahik','Bulan/Tahun','Email','Kecamatan','Omset','Kulakan','Bersih (10%)','Pendapatan Tambahan']];
+    rows.slice().reverse().forEach(function(r){data.push([formatTanggal(r.waktu),r.namaMustahik||"",r.bulanTahun||"",r.email||"",r.kecamatan||"",Number(r.omset)||0,Number(r.kulakan)||0,(Number(r.omset)||0)*0.10,Number(r.pendapatanTambahan)||0]);});
+    const wsData=XLSX.utils.aoa_to_sheet(data);
+    wsData['!cols']=[{wch:20},{wch:25},{wch:16},{wch:30},{wch:18},{wch:16},{wch:16},{wch:16},{wch:22}];
+    XLSX.utils.book_append_sheet(wb,wsData,"Data Terfilter");
+    const stats={};
+    rows.forEach(function(r){const key=String(r.uid||r.email||r.namaMustahik||"");if(!key)return;if(!stats[key])stats[key]={nama:r.namaMustahik||"Tanpa Nama",email:r.email||"",kecamatan:r.kecamatan||"",laporan:0,omset:0};stats[key].laporan++;stats[key].omset+=Number(r.omset)||0;});
+    const rank=[['Peringkat','Nama Z Mart','Email','Kecamatan','Jumlah Laporan','Omset Rata-rata','Bersih Rata-rata']];
+    Object.values(stats).map(x=>{x.rata=x.laporan?x.omset/x.laporan:0;return x;}).sort((a,b)=>b.rata-a.rata).slice(0,10).forEach(function(x,i){rank.push([i+1,x.nama,x.email,x.kecamatan,x.laporan,x.rata,x.rata*0.10]);});
+    const wsRank=XLSX.utils.aoa_to_sheet(rank); wsRank['!cols']=[{wch:12},{wch:25},{wch:30},{wch:18},{wch:16},{wch:20},{wch:20}]; XLSX.utils.book_append_sheet(wb,wsRank,"Top Z Mart");
+    const now=new Date(); const stamp=now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+"_"+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+    XLSX.writeFile(wb,"Laporan_Z_Mart_"+stamp+".xlsx");
+}
+
+/* =====================================================
    USER FILTER BULAN
 ===================================================== */
 
@@ -527,6 +659,39 @@ tr:hover{
 }
 
 /* =====================================================
+   PRINT / EXPORT
+===================================================== */
+.action-buttons{display:flex;gap:10px;flex-wrap:wrap;}
+.action-btn{border:none;color:white;padding:10px 14px;border-radius:9px;cursor:pointer;font-weight:bold;font-size:13px;}
+.print-btn{background:#455a64;}
+.excel-btn{background:#2e7d32;}
+.action-btn:hover{opacity:.9;}
+@media(max-width:650px){.action-buttons{width:100%;}.action-btn{flex:1;}}
+
+@media print{
+    @page{size:A4 landscape;margin:12mm;}
+    body{background:white!important;color:#111!important;}
+    .header,.welcome,#loginPage,.user-dashboard-only,.user-filter-panel,
+    #resetFilter,.filter-panel-actions,.no-print,.action-buttons{display:none!important;}
+    #app{display:block!important;}
+    .main{max-width:none;padding:0;}
+    .dashboard{display:block!important;}
+    .panel,.card-stat,.admin-title{box-shadow:none!important;border:1px solid #ddd;}
+    .panel{break-inside:avoid;}
+    .chart-container{height:300px;}
+    table{min-width:0;font-size:10px;}
+    th,td{padding:6px;}
+    .cards{grid-template-columns:repeat(4,1fr);gap:10px;}
+    .card-stat .value{font-size:16px;}
+    .card-stat .icon{font-size:20px;}
+    .card-stat .title{font-size:10px;}
+    #rankingList{font-size:10px;}
+    .ranking-item{padding:7px;}
+    .print-header{display:block!important;}
+}
+.print-header{display:none;}
+
+/* =====================================================
    RESPONSIVE
 ===================================================== */
 
@@ -684,6 +849,8 @@ tr:hover{
 ===================================================== -->
 
 <section id="adminDashboard" class="dashboard">
+
+<div class="print-header" id="printHeader"><h1 style="margin:0 0 4px;">Laporan Keuangan Mustahik Z Mart</h1><div id="printFilterText" style="font-size:12px;"></div></div>
 
 
 <div class="admin-title">
@@ -1040,13 +1207,11 @@ tr:hover{
             📋 Data Keuangan
         </h3>
 
-        <button
-            onclick="loadAdminDashboard()"
-            class="reset-btn">
-
-            🔄 Refresh
-
-        </button>
+        <div class="action-buttons no-print">
+            <button type="button" onclick="printFilteredReport()" class="action-btn print-btn">🖨️ Print</button>
+            <button type="button" onclick="exportFilteredExcel()" class="action-btn excel-btn">📊 Export Excel</button>
+            <button type="button" onclick="loadAdminDashboard()" class="action-btn" style="background:#607d8b;">🔄 Refresh</button>
+        </div>
 
     </div>
 
@@ -3605,6 +3770,110 @@ function renderChart(rows){
 
 }
 
+
+/* =====================================================
+   PRINT LAPORAN TERFILTER
+===================================================== */
+function getActiveAdminFilterText(){
+    const userSelect=document.getElementById("filterUser");
+    const userText=userSelect && userSelect.selectedIndex>=0 ? userSelect.options[userSelect.selectedIndex].text : "Semua User";
+    const kec=document.getElementById("filterKecamatan").value || "Semua Kecamatan";
+    const bulan=document.getElementById("filterBulan").value || "Semua Bulan";
+    const search=document.getElementById("filterSearch").value.trim() || "-";
+    return "User: " + userText + " | Kecamatan: " + kec + " | Periode: " + bulan + " | Pencarian: " + search;
+}
+
+function getFilteredAdminRows(){
+    const uid=document.getElementById("filterUser").value;
+    const kecamatan=document.getElementById("filterKecamatan").value;
+    const bulan=document.getElementById("filterBulan").value;
+    const search=document.getElementById("filterSearch").value.toLowerCase().trim();
+    return (adminData||[]).filter(function(row){
+        if(uid && String(row.uid)!==String(uid)) return false;
+        if(kecamatan && String(row.kecamatan)!==String(kecamatan)) return false;
+        if(bulan && String(row.bulanTahun)!==String(bulan)) return false;
+        if(search){
+            const text=(String(row.namaMustahik||"")+" "+String(row.email||"")+" "+String(row.kecamatan||"")).toLowerCase();
+            if(!text.includes(search)) return false;
+        }
+        return true;
+    });
+}
+
+function printFilteredReport(){
+    const rows=getFilteredAdminRows();
+    const filterText=getActiveAdminFilterText();
+    const totalOmset=rows.reduce((a,r)=>a+(Number(r.omset)||0),0);
+    const totalKulakan=rows.reduce((a,r)=>a+(Number(r.kulakan)||0),0);
+    const totalTambahan=rows.reduce((a,r)=>a+(Number(r.pendapatanTambahan)||0),0);
+    const rata=rows.length?totalOmset/rows.length:0;
+    const bersih=rata*0.10;
+    const htmlRows=rows.slice().reverse().map(function(r){
+        return "<tr>" +
+            "<td>" + escapeHTML(formatTanggal(r.waktu)) + "</td>" +
+            "<td>" + escapeHTML(r.namaMustahik||"") + "</td>" +
+            "<td>" + escapeHTML(r.bulanTahun||"") + "</td>" +
+            "<td>" + escapeHTML(r.email||"") + "</td>" +
+            "<td>" + escapeHTML(r.kecamatan||"") + "</td>" +
+            "<td>" + rupiah(r.omset) + "</td>" +
+            "<td>" + rupiah(r.kulakan) + "</td>" +
+            "<td>" + rupiah((Number(r.omset)||0)*0.10) + "</td>" +
+            "<td>" + rupiah(r.pendapatanTambahan) + "</td>" +
+            "</tr>";
+    }).join("");
+    const win=window.open("","_blank","width=1200,height=800");
+    if(!win){alert("Popup diblokir browser. Izinkan popup untuk mencetak laporan.");return;}
+    win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Laporan Keuangan Z Mart</title><style>body{font-family:Arial,sans-serif;color:#222;font-size:11px;margin:20px}h1{margin:0 0 5px;font-size:20px}h2{font-size:14px;margin:18px 0 8px}.filter{font-size:11px;color:#555;margin-bottom:15px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:15px}.box{border:1px solid #ccc;padding:9px;border-radius:6px}.label{font-size:9px;color:#666}.value{font-size:13px;font-weight:bold;margin-top:3px}table{width:100%;border-collapse:collapse}th{background:#2e7d32;color:white;padding:6px;text-align:left}td{padding:5px;border-bottom:1px solid #ddd}tfoot td{font-weight:bold;border-top:2px solid #333}@media print{@page{size:A4 landscape;margin:10mm}}</style></head><body><h1>Laporan Keuangan Mustahik Z Mart</h1><div class="filter">${escapeHTML(filterText)} | ${rows.length} laporan</div><div class="summary"><div class="box"><div class="label">Pendapatan Rata-rata</div><div class="value">${rupiah(rata)}</div></div><div class="box"><div class="label">Bersih Rata-rata</div><div class="value">${rupiah(bersih)}</div></div><div class="box"><div class="label">Total Omset</div><div class="value">${rupiah(totalOmset)}</div></div><div class="box"><div class="label">Total Kulakan</div><div class="value">${rupiah(totalKulakan)}</div></div></div><h2>Data Keuangan</h2><table><thead><tr><th>Waktu</th><th>Nama Mustahik</th><th>Bulan</th><th>Email</th><th>Kecamatan</th><th>Omset</th><th>Kulakan</th><th>Bersih (10%)</th><th>Tambahan</th></tr></thead><tbody>${htmlRows||'<tr><td colspan="9" style="text-align:center">Tidak ada data sesuai filter.</td></tr>'}</tbody><tfoot><tr><td colspan="5">TOTAL</td><td>${rupiah(totalOmset)}</td><td>${rupiah(totalKulakan)}</td><td>${rupiah(totalOmset*0.10)}</td><td>${rupiah(totalTambahan)}</td></tr></tfoot></table><script>window.onload=function(){window.print();};<\/script></body></html>`);
+    win.document.close();
+}
+
+/* =====================================================
+   EXPORT EXCEL TERFILTER
+===================================================== */
+function exportFilteredExcel(){
+    if(typeof XLSX === "undefined"){
+        alert("Library Excel belum termuat. Silakan refresh halaman lalu coba lagi.");
+        return;
+    }
+    const rows=getFilteredAdminRows();
+    if(!rows.length){
+        alert("Tidak ada data sesuai filter untuk diekspor.");
+        return;
+    }
+    const totalOmset=rows.reduce((a,r)=>a+(Number(r.omset)||0),0);
+    const totalKulakan=rows.reduce((a,r)=>a+(Number(r.kulakan)||0),0);
+    const totalTambahan=rows.reduce((a,r)=>a+(Number(r.pendapatanTambahan)||0),0);
+    const rata=totalOmset/rows.length;
+    const wb=XLSX.utils.book_new();
+    const summary=[
+        ["LAPORAN KEUANGAN MUSTAHIK Z MART"],
+        [getActiveAdminFilterText()],
+        [],
+        ["Indikator","Nilai"],
+        ["Jumlah Laporan",rows.length],
+        ["Pendapatan Rata-rata",rata],
+        ["Bersih Rata-rata",rata*0.10],
+        ["Total Omset",totalOmset],
+        ["Total Kulakan",totalKulakan],
+        ["Total Bersih",totalOmset*0.10],
+        ["Total Pendapatan Tambahan",totalTambahan]
+    ];
+    const wsSummary=XLSX.utils.aoa_to_sheet(summary);
+    wsSummary['!cols']=[{wch:28},{wch:22}];
+    XLSX.utils.book_append_sheet(wb,wsSummary,"Ringkasan");
+    const data=[['Waktu','Nama Mustahik','Bulan/Tahun','Email','Kecamatan','Omset','Kulakan','Bersih (10%)','Pendapatan Tambahan']];
+    rows.slice().reverse().forEach(function(r){data.push([formatTanggal(r.waktu),r.namaMustahik||"",r.bulanTahun||"",r.email||"",r.kecamatan||"",Number(r.omset)||0,Number(r.kulakan)||0,(Number(r.omset)||0)*0.10,Number(r.pendapatanTambahan)||0]);});
+    const wsData=XLSX.utils.aoa_to_sheet(data);
+    wsData['!cols']=[{wch:20},{wch:25},{wch:16},{wch:30},{wch:18},{wch:16},{wch:16},{wch:16},{wch:22}];
+    XLSX.utils.book_append_sheet(wb,wsData,"Data Terfilter");
+    const stats={};
+    rows.forEach(function(r){const key=String(r.uid||r.email||r.namaMustahik||"");if(!key)return;if(!stats[key])stats[key]={nama:r.namaMustahik||"Tanpa Nama",email:r.email||"",kecamatan:r.kecamatan||"",laporan:0,omset:0};stats[key].laporan++;stats[key].omset+=Number(r.omset)||0;});
+    const rank=[['Peringkat','Nama Z Mart','Email','Kecamatan','Jumlah Laporan','Omset Rata-rata','Bersih Rata-rata']];
+    Object.values(stats).map(x=>{x.rata=x.laporan?x.omset/x.laporan:0;return x;}).sort((a,b)=>b.rata-a.rata).slice(0,10).forEach(function(x,i){rank.push([i+1,x.nama,x.email,x.kecamatan,x.laporan,x.rata,x.rata*0.10]);});
+    const wsRank=XLSX.utils.aoa_to_sheet(rank); wsRank['!cols']=[{wch:12},{wch:25},{wch:30},{wch:18},{wch:16},{wch:20},{wch:20}]; XLSX.utils.book_append_sheet(wb,wsRank,"Top Z Mart");
+    const now=new Date(); const stamp=now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+"_"+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+    XLSX.writeFile(wb,"Laporan_Z_Mart_"+stamp+".xlsx");
+}
 
 /* =====================================================
    USER FILTER BULAN
