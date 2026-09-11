@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Produk</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#222}
+.wrap{max-width:520px;margin:auto;padding:18px}.card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 6px 24px #0001}
+h1{margin:0 0 5px;font-size:24px}.sub{color:#666;margin:0 0 20px}
+label{display:block;font-weight:700;margin:14px 0 7px}
+input,textarea,select{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:16px}
+textarea{min-height:90px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.filebox{border:2px dashed #ccc;border-radius:12px;padding:18px;text-align:center}
+.preview{width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin-top:12px;display:none}
+button{width:100%;margin-top:20px;padding:15px;border:0;border-radius:11px;background:#111;color:#fff;font-size:17px;font-weight:700}
+button:disabled{opacity:.6}.msg{margin-top:15px;padding:12px;border-radius:10px;display:none}
+.ok{display:block;background:#e8f7ed;color:#176b35}.err{display:block;background:#fdecec;color:#a12626}
+.progress{margin-top:12px;height:8px;background:#eee;border-radius:8px;overflow:hidden;display:none}
+.bar{height:100%;width:0%;background:#333;transition:width .2s}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card">
+<h1>Tambah Produk</h1>
+<p class="sub">Foto dari HP akan otomatis di-upload ke Google Drive.</p>
+
+<form id="productForm">
+<label>ID Produk <small>(otomatis)</small></label>
+<input id="id" name="id" readonly>
+
+<label>Nama Produk</label>
+<input id="name" name="name" required placeholder="Contoh: Jus Alpukat">
+
+<label>Deskripsi</label>
+<textarea name="desc" required placeholder="Deskripsi singkat produk"></textarea>
+
+<div class="row">
+<div><label>Harga Small</label><input name="small" type="number" min="0" required placeholder="10000"></div>
+<div><label>Harga Medium</label><input name="medium" type="number" min="0" required placeholder="14000"></div>
+</div>
+
+<label>Foto Produk</label>
+<div class="filebox">
+<input id="image" name="image" type="file" accept="image/*" required>
+<img id="preview" class="preview" alt="Preview">
+</div>
+
+<label>Status</label>
+<select name="status"><option value="tersedia">Tersedia</option><option value="tidak tersedia">Tidak tersedia</option></select>
+
+<div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+<button id="submitBtn" type="submit">Simpan Produk</button>
+<div id="message" class="msg"></div>
+</form>
+</div></div>
+
+<script>
+const API_URL='https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec';
+const form=document.getElementById('productForm');
+const nameInput=document.getElementById('name');
+const idInput=document.getElementById('id');
+const imageInput=document.getElementById('image');
+const preview=document.getElementById('preview');
+const btn=document.getElementById('submitBtn');
+const msg=document.getElementById('message');
+const progress=document.getElementById('progress');
+const bar=document.getElementById('bar');
+
+function slugify(t){return t.toLowerCase().trim().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-')}
+nameInput.addEventListener('input',()=>idInput.value=slugify(nameInput.value));
+imageInput.addEventListener('change',()=>{
+ const f=imageInput.files[0];
+ if(f){preview.src=URL.createObjectURL(f);preview.style.display='block'}
+});
+
+function fileToBase64(file){
+ return new Promise((resolve,reject)=>{
+   const r=new FileReader();
+   r.onload=()=>resolve(r.result.split(',')[1]);
+   r.onerror=reject;r.readAsDataURL(file);
+ });
+}
+
+form.addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(API_URL.includes('GANTI_')){alert('Masukkan URL Web App Apps Script terlebih dahulu.');return}
+ const file=imageInput.files[0];
+ if(!file){alert('Pilih foto produk.');return}
+ if(file.size>10*1024*1024){alert('Ukuran foto maksimal 10 MB.');return}
+
+ btn.disabled=true;btn.textContent='Mengupload...';msg.className='msg';
+ progress.style.display='block';bar.style.width='15%';
+
+ try{
+   const data=Object.fromEntries(new FormData(form).entries());
+   data.small=Number(data.small);data.medium=Number(data.medium);
+   data.imageName=file.name;data.imageMimeType=file.type;
+   data.imageBase64=await fileToBase64(file);
+   bar.style.width='60%';
+
+   const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
+   const result=await res.json();
+   if(!result.success)throw new Error(result.message||'Gagal menyimpan');
+
+   bar.style.width='100%';msg.className='msg ok';
+   msg.innerHTML='Produk berhasil disimpan.<br><small>Foto otomatis masuk ke Google Drive.</small>';
+   form.reset();idInput.value='';preview.style.display='none';
+ }catch(err){
+   msg.className='msg err';msg.textContent='Gagal: '+err.message;
+ }finally{
+   btn.disabled=false;btn.textContent='Simpan Produk';
+   setTimeout(()=>{progress.style.display='none';bar.style.width='0%'},800);
+ }
+});
+</script>
+</body>
+</html>
