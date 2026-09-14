@@ -1,430 +1,458 @@
+```html
 <!DOCTYPE html>
-
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Input Produk</title>
+    <title>Input Produk — Alala Jusss</title>
 
-<style>
-* {
-    box-sizing: border-box;
-}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #222;
-}
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
 
-.wrap {
-    max-width: 520px;
-    margin: auto;
-    padding: 18px;
-}
+        .wrap {
+            max-width: 520px;
+            margin: auto;
+            padding: 18px;
+        }
 
-.card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 22px;
-    box-shadow: 0 6px 24px #0001;
-}
+        .card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 6px 24px #0001;
+        }
 
-h1 {
-    margin: 0 0 5px;
-    font-size: 24px;
-}
+        h1 {
+            margin: 0 0 5px;
+            font-size: 24px;
+        }
 
-.sub {
-    color: #666;
-    margin: 0 0 20px;
-    line-height: 1.5;
-}
+        .sub {
+            color: #666;
+            margin: 0 0 20px;
+            line-height: 1.5;
+        }
 
-label {
-    display: block;
-    font-weight: 700;
-    margin: 14px 0 7px;
-}
+        label {
+            display: block;
+            font-weight: 700;
+            margin: 14px 0 7px;
+        }
 
-small {
-    font-weight: normal;
-    color: #777;
-}
+        small {
+            font-weight: normal;
+            color: #777;
+        }
 
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 16px;
-    font-family: inherit;
-    background: #fff;
-}
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #fff;
+        }
 
-input:focus,
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: #888;
-}
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #888;
+        }
 
-textarea {
-    min-height: 90px;
-    resize: vertical;
-}
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
 
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
-.filebox {
-    border: 2px dashed #ccc;
-    border-radius: 12px;
-    padding: 18px;
-    text-align: center;
-    transition: .2s;
-}
+        .filebox {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
 
-.filebox:hover {
-    border-color: #999;
-}
+        .filebox input[type="file"] {
+            padding: 8px;
+            border: 0;
+        }
 
-.filebox input[type="file"] {
-    padding: 8px;
-    border: 0;
-}
+        .preview {
+            width: 100%;
+            max-height: 240px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: none;
+            background: #f4f4f4;
+        }
 
-.preview {
-    width: 100%;
-    max-height: 240px;
-    object-fit: contain;
-    border-radius: 10px;
-    margin-top: 12px;
-    display: none;
-    background: #f4f4f4;
-}
+        .image-info {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+            display: none;
+            line-height: 1.5;
+        }
 
-.image-info {
-    margin-top: 8px;
-    font-size: 13px;
-    color: #666;
-    display: none;
-    line-height: 1.5;
-}
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            border: 0;
+            border-radius: 11px;
+            background: #111;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+        }
 
-button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 15px;
-    border: 0;
-    border-radius: 11px;
-    background: #111;
-    color: #fff;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: .2s;
-}
+        button:hover:not(:disabled) {
+            background: #333;
+        }
 
-button:hover:not(:disabled) {
-    background: #333;
-}
+        button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
 
-button:disabled {
-    opacity: .6;
-    cursor: not-allowed;
-}
+        .msg {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.5;
+        }
 
-.msg {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 10px;
-    display: none;
-    line-height: 1.5;
-}
+        .ok {
+            display: block;
+            background: #e8f7ed;
+            color: #176b35;
+        }
 
-.ok {
-    display: block;
-    background: #e8f7ed;
-    color: #176b35;
-}
+        .err {
+            display: block;
+            background: #fdecec;
+            color: #a12626;
+        }
 
-.err {
-    display: block;
-    background: #fdecec;
-    color: #a12626;
-}
+        .progress {
+            margin-top: 12px;
+            height: 8px;
+            background: #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+        }
 
-.progress {
-    margin-top: 12px;
-    height: 8px;
-    background: #eee;
-    border-radius: 8px;
-    overflow: hidden;
-    display: none;
-}
+        .bar {
+            height: 100%;
+            width: 0%;
+            background: #333;
+            transition: width .25s ease;
+        }
 
-.bar {
-    height: 100%;
-    width: 0%;
-    background: #333;
-    transition: width .25s ease;
-}
+        .compress-info {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #555;
+            display: none;
+            text-align: center;
+        }
 
-.compress-info {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #555;
-    display: none;
-    text-align: center;
-}
+        @media (max-width: 420px) {
 
-@media (max-width: 420px) {
+            .wrap {
+                padding: 10px;
+            }
 
-    .wrap {
-        padding: 10px;
-    }
+            .card {
+                padding: 18px;
+            }
 
-    .card {
-        padding: 18px;
-    }
-
-    .row {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-}
-</style>
-
+            .row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
 </head>
+
 
 <body>
 
 <div class="wrap">
 
-```
-<div class="card">
+    <div class="card">
 
-    <h1>Tambah Produk</h1>
+        <h1>Tambah Produk</h1>
 
-    <p class="sub">
-        Foto dari HP akan otomatis diperkecil dan dikompres
-        sebelum dikirim ke Google Drive.
-    </p>
+        <p class="sub">
+            Foto dari HP akan otomatis diperkecil dan dikompres
+            sebelum dikirim ke Google Drive.
+        </p>
 
-    <form id="productForm">
 
-        <!-- ID PRODUK -->
-        <label>
-            ID Produk
-            <small>(otomatis)</small>
-        </label>
+        <form id="productForm">
 
-        <input
-            id="id"
-            name="id"
-            readonly
-            placeholder="Akan dibuat otomatis"
-        >
-
-        <!-- NAMA -->
-        <label>
-            Nama Produk
-        </label>
-
-        <input
-            id="name"
-            name="name"
-            required
-            autocomplete="off"
-            placeholder="Contoh: Jus Alpukat"
-        >
-
-        <!-- DESKRIPSI -->
-        <label>
-            Deskripsi
-        </label>
-
-        <textarea
-            id="desc"
-            name="desc"
-            required
-            placeholder="Deskripsi singkat produk"
-        ></textarea>
-
-        <!-- HARGA -->
-        <div class="row">
-
-            <div>
-
-                <label>
-                    Harga Small
-                </label>
-
-                <input
-                    id="small"
-                    name="small"
-                    type="number"
-                    min="0"
-                    required
-                    placeholder="10000"
-                >
-
-            </div>
-
-            <div>
-
-                <label>
-                    Harga Medium
-                </label>
-
-                <input
-                    id="medium"
-                    name="medium"
-                    type="number"
-                    min="0"
-                    required
-                    placeholder="14000"
-                >
-
-            </div>
-
-        </div>
-
-        <!-- FOTO -->
-        <label>
-            Foto Produk
-        </label>
-
-        <div class="filebox">
+            <!-- ID -->
+            <label>
+                ID Produk
+                <small>(otomatis)</small>
+            </label>
 
             <input
-                id="image"
-                name="image"
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/*"
-                capture="environment"
+                id="id"
+                name="id"
+                readonly
+                placeholder="Akan dibuat otomatis"
+            >
+
+
+            <!-- NAMA -->
+            <label>
+                Nama Produk
+            </label>
+
+            <input
+                id="name"
+                name="name"
                 required
+                autocomplete="off"
+                placeholder="Contoh: Jus Alpukat"
             >
 
-            <img
-                id="preview"
-                class="preview"
-                alt="Preview foto produk"
+
+            <!-- DESKRIPSI -->
+            <label>
+                Deskripsi
+            </label>
+
+            <textarea
+                id="desc"
+                name="desc"
+                required
+                placeholder="Deskripsi singkat produk"
+            ></textarea>
+
+
+            <!-- HARGA -->
+            <div class="row">
+
+                <div>
+
+                    <label>
+                        Harga Small
+                    </label>
+
+                    <input
+                        id="small"
+                        name="small"
+                        type="number"
+                        min="0"
+                        required
+                        placeholder="10000"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Harga Medium
+                    </label>
+
+                    <input
+                        id="medium"
+                        name="medium"
+                        type="number"
+                        min="0"
+                        required
+                        placeholder="14000"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- FOTO -->
+            <label>
+                Foto Produk
+            </label>
+
+            <div class="filebox">
+
+                <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/*"
+                    capture="environment"
+                    required
+                >
+
+                <img
+                    id="preview"
+                    class="preview"
+                    alt="Preview foto produk"
+                >
+
+                <div
+                    id="imageInfo"
+                    class="image-info"
+                ></div>
+
+            </div>
+
+
+            <div
+                id="compressInfo"
+                class="compress-info"
+            ></div>
+
+
+            <!-- STATUS -->
+            <label>
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
             >
 
+                <option value="tersedia">
+                    Tersedia
+                </option>
+
+                <option value="habis">
+                    Habis
+                </option>
+
+            </select>
+
+
+            <!-- PROGRESS -->
             <div
-                id="imageInfo"
-                class="image-info"
+                class="progress"
+                id="progress"
+            >
+
+                <div
+                    class="bar"
+                    id="bar"
+                ></div>
+
+            </div>
+
+
+            <!-- BUTTON -->
+            <button
+                id="submitBtn"
+                type="submit"
+            >
+                Simpan Produk
+            </button>
+
+
+            <!-- MESSAGE -->
+            <div
+                id="message"
+                class="msg"
             ></div>
 
-        </div>
+        </form>
 
-        <div
-            id="compressInfo"
-            class="compress-info"
-        ></div>
-
-        <!-- STATUS -->
-        <label>
-            Status
-        </label>
-
-        <select id="status" name="status">
-
-            <option value="tersedia">
-                Tersedia
-            </option>
-
-            <option value="habis">
-                Habis
-            </option>
-
-        </select>
-
-        <!-- PROGRESS -->
-        <div
-            class="progress"
-            id="progress"
-        >
-            <div
-                class="bar"
-                id="bar"
-            ></div>
-        </div>
-
-        <!-- SUBMIT -->
-        <button
-            id="submitBtn"
-            type="submit"
-        >
-            Simpan Produk
-        </button>
-
-        <!-- MESSAGE -->
-        <div
-            id="message"
-            class="msg"
-        ></div>
-
-    </form>
+    </div>
 
 </div>
-```
 
-</div>
 
 <script>
 
-/* =====================================================
-   GOOGLE APPS SCRIPT WEB APP
-   PENTING:
-   URL HARUS BERUPA URL BIASA, BUKAN MARKDOWN
-===================================================== */
+/* =========================================================
+   GOOGLE APPS SCRIPT
+   ========================================================= */
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec";
+    "https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec";
 
 
-/* =====================================================
+/* =========================================================
    PENGATURAN FOTO
-===================================================== */
+   ========================================================= */
 
 const MAX_IMAGE_SIZE = 1600;
+
 const JPEG_QUALITY = 0.80;
+
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
 
-/* =====================================================
+/* =========================================================
    ELEMENT
-===================================================== */
+   ========================================================= */
 
-const form = document.getElementById("productForm");
-const nameInput = document.getElementById("name");
-const idInput = document.getElementById("id");
-const imageInput = document.getElementById("image");
+const form =
+    document.getElementById("productForm");
 
-const preview = document.getElementById("preview");
-const imageInfo = document.getElementById("imageInfo");
-const compressInfo = document.getElementById("compressInfo");
+const nameInput =
+    document.getElementById("name");
 
-const btn = document.getElementById("submitBtn");
-const msg = document.getElementById("message");
+const idInput =
+    document.getElementById("id");
 
-const progress = document.getElementById("progress");
-const bar = document.getElementById("bar");
+const imageInput =
+    document.getElementById("image");
+
+const preview =
+    document.getElementById("preview");
+
+const imageInfo =
+    document.getElementById("imageInfo");
+
+const compressInfo =
+    document.getElementById("compressInfo");
+
+const btn =
+    document.getElementById("submitBtn");
+
+const msg =
+    document.getElementById("message");
+
+const progress =
+    document.getElementById("progress");
+
+const bar =
+    document.getElementById("bar");
 
 
-/* =====================================================
-   SLUG / ID PRODUK
-===================================================== */
+/* =========================================================
+   SLUG ID
+   ========================================================= */
 
 function slugify(text) {
 
@@ -438,288 +466,376 @@ function slugify(text) {
 }
 
 
-nameInput.addEventListener("input", function() {
+nameInput.addEventListener(
+    "input",
+    function () {
 
-    idInput.value = slugify(nameInput.value);
+        idInput.value =
+            slugify(nameInput.value);
 
-});
+    }
+);
 
 
-/* =====================================================
-   FORMAT BYTES
-===================================================== */
+/* =========================================================
+   FORMAT SIZE
+   ========================================================= */
 
 function formatBytes(bytes) {
 
     if (bytes < 1024) {
+
         return bytes + " B";
+
     }
 
     if (bytes < 1024 * 1024) {
-        return (bytes / 1024).toFixed(1) + " KB";
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
     }
 
-    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) + " MB";
 
 }
 
 
-/* =====================================================
-   KOMPRES FOTO
-===================================================== */
+/* =========================================================
+   KOMPRESI GAMBAR
+   ========================================================= */
 
 function compressImage(file) {
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(
+        function (resolve, reject) {
 
-        const reader = new FileReader();
-
-        reader.onload = function(event) {
-
-            const img = new Image();
-
-            img.onload = function() {
-
-                let width = img.width;
-                let height = img.height;
+            const reader =
+                new FileReader();
 
 
-                /* BATASI DIMENSI */
+            reader.onload =
+                function (event) {
 
-                if (
-                    width > MAX_IMAGE_SIZE ||
-                    height > MAX_IMAGE_SIZE
-                ) {
-
-                    if (width > height) {
-
-                        height = Math.round(
-                            height *
-                            MAX_IMAGE_SIZE /
-                            width
-                        );
-
-                        width = MAX_IMAGE_SIZE;
-
-                    } else {
-
-                        width = Math.round(
-                            width *
-                            MAX_IMAGE_SIZE /
-                            height
-                        );
-
-                        height = MAX_IMAGE_SIZE;
-
-                    }
-
-                }
+                    const img =
+                        new Image();
 
 
-                /* CANVAS */
+                    img.onload =
+                        function () {
 
-                const canvas =
-                    document.createElement("canvas");
+                            let width =
+                                img.width;
 
-                canvas.width = width;
-                canvas.height = height;
-
-
-                const ctx =
-                    canvas.getContext("2d");
-
-                if (!ctx) {
-
-                    reject(
-                        new Error(
-                            "Browser tidak mendukung canvas."
-                        )
-                    );
-
-                    return;
-                }
+                            let height =
+                                img.height;
 
 
-                /* BACKGROUND PUTIH */
+                            /* BATAS UKURAN */
 
-                ctx.fillStyle = "#ffffff";
+                            if (
+                                width >
+                                    MAX_IMAGE_SIZE ||
+                                height >
+                                    MAX_IMAGE_SIZE
+                            ) {
 
-                ctx.fillRect(
-                    0,
-                    0,
-                    width,
-                    height
-                );
+                                if (
+                                    width >
+                                    height
+                                ) {
+
+                                    height =
+                                        Math.round(
+                                            height *
+                                            MAX_IMAGE_SIZE /
+                                            width
+                                        );
+
+                                    width =
+                                        MAX_IMAGE_SIZE;
+
+                                } else {
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            MAX_IMAGE_SIZE /
+                                            height
+                                        );
+
+                                    height =
+                                        MAX_IMAGE_SIZE;
+
+                                }
+
+                            }
 
 
-                /* GAMBAR */
+                            /* CANVAS */
 
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
 
 
-                /* EXPORT JPEG */
+                            canvas.width =
+                                width;
 
-                canvas.toBlob(
-                    function(blob) {
+                            canvas.height =
+                                height;
 
-                        if (!blob) {
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            if (!ctx) {
+
+                                reject(
+                                    new Error(
+                                        "Browser tidak mendukung canvas."
+                                    )
+                                );
+
+                                return;
+
+                            }
+
+
+                            /* BACKGROUND PUTIH */
+
+                            ctx.fillStyle =
+                                "#ffffff";
+
+                            ctx.fillRect(
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            /* GAMBAR */
+
+                            ctx.drawImage(
+                                img,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            /* JPEG */
+
+                            canvas.toBlob(
+                                function (blob) {
+
+                                    if (!blob) {
+
+                                        reject(
+                                            new Error(
+                                                "Gagal melakukan kompresi foto."
+                                            )
+                                        );
+
+                                        return;
+
+                                    }
+
+
+                                    const originalName =
+                                        file.name
+                                            .replace(
+                                                /\.[^/.]+$/,
+                                                ""
+                                            )
+                                            .replace(
+                                                /[^a-zA-Z0-9-_]/g,
+                                                "-"
+                                            );
+
+
+                                    const newFile =
+                                        new File(
+                                            [
+                                                blob
+                                            ],
+                                            originalName +
+                                                ".jpg",
+                                            {
+                                                type:
+                                                    "image/jpeg",
+
+                                                lastModified:
+                                                    Date.now()
+                                            }
+                                        );
+
+
+                                    resolve(
+                                        newFile
+                                    );
+
+                                },
+
+                                "image/jpeg",
+
+                                JPEG_QUALITY
+                            );
+
+                        };
+
+
+                    img.onerror =
+                        function () {
 
                             reject(
                                 new Error(
-                                    "Gagal melakukan kompresi foto."
+                                    "Foto tidak dapat dibaca."
                                 )
                             );
 
-                            return;
-                        }
+                        };
 
 
-                        const originalName =
-                            file.name
-                                .replace(/\.[^/.]+$/, "")
-                                .replace(/[^a-zA-Z0-9-_]/g, "-");
+                    img.src =
+                        event.target.result;
+
+                };
 
 
-                        const newFile =
-                            new File(
-                                [blob],
-                                originalName + ".jpg",
-                                {
-                                    type: "image/jpeg",
-                                    lastModified: Date.now()
-                                }
-                            );
+            reader.onerror =
+                function () {
+
+                    reject(
+                        new Error(
+                            "Gagal membaca foto."
+                        )
+                    );
+
+                };
 
 
-                        resolve(newFile);
+            reader.readAsDataURL(file);
 
-                    },
-                    "image/jpeg",
-                    JPEG_QUALITY
-                );
-
-            };
-
-
-            img.onerror = function() {
-
-                reject(
-                    new Error(
-                        "Foto tidak dapat dibaca."
-                    )
-                );
-
-            };
-
-
-            img.src = event.target.result;
-
-        };
-
-
-        reader.onerror = function() {
-
-            reject(
-                new Error(
-                    "Gagal membaca file foto."
-                )
-            );
-
-        };
-
-
-        reader.readAsDataURL(file);
-
-    });
+        }
+    );
 
 }
 
 
-/* =====================================================
-   FILE KE BASE64
-===================================================== */
+/* =========================================================
+   FILE → BASE64
+   ========================================================= */
 
 function fileToBase64(file) {
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(
+        function (resolve, reject) {
 
-        const reader = new FileReader();
-
-        reader.onload = function() {
-
-            const result = reader.result;
-
-            if (!result) {
-
-                reject(
-                    new Error(
-                        "Data foto kosong."
-                    )
-                );
-
-                return;
-            }
-
-            const parts =
-                result.toString().split(",");
-
-            if (parts.length < 2) {
-
-                reject(
-                    new Error(
-                        "Format Base64 foto tidak valid."
-                    )
-                );
-
-                return;
-            }
-
-            resolve(parts[1]);
-
-        };
+            const reader =
+                new FileReader();
 
 
-        reader.onerror = function() {
+            reader.onload =
+                function () {
 
-            reject(
-                new Error(
-                    "Gagal mengubah foto menjadi Base64."
-                )
-            );
-
-        };
+                    const result =
+                        reader.result;
 
 
-        reader.readAsDataURL(file);
+                    if (!result) {
 
-    });
+                        reject(
+                            new Error(
+                                "Data foto kosong."
+                            )
+                        );
+
+                        return;
+
+                    }
+
+
+                    const parts =
+                        result
+                            .toString()
+                            .split(",");
+
+
+                    if (parts.length < 2) {
+
+                        reject(
+                            new Error(
+                                "Format Base64 tidak valid."
+                            )
+                        );
+
+                        return;
+
+                    }
+
+
+                    resolve(
+                        parts[1]
+                    );
+
+                };
+
+
+            reader.onerror =
+                function () {
+
+                    reject(
+                        new Error(
+                            "Gagal mengubah foto menjadi Base64."
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
 
 }
 
 
-/* =====================================================
-   PREVIEW FOTO
-===================================================== */
+/* =========================================================
+   PREVIEW
+   ========================================================= */
 
 imageInput.addEventListener(
     "change",
-    async function() {
+    async function () {
 
         const originalFile =
             imageInput.files[0];
 
+
         if (!originalFile) {
+
             return;
+
         }
 
 
-        if (!originalFile.type.startsWith("image/")) {
+        if (
+            !originalFile.type.startsWith(
+                "image/"
+            )
+        ) {
 
             showError(
                 "File yang dipilih bukan gambar."
@@ -728,26 +844,35 @@ imageInput.addEventListener(
             imageInput.value = "";
 
             return;
+
         }
 
 
         try {
 
-            imageInfo.style.display = "block";
+            imageInfo.style.display =
+                "block";
+
 
             imageInfo.innerHTML =
                 "Foto asli: " +
-                formatBytes(originalFile.size);
+                formatBytes(
+                    originalFile.size
+                );
 
 
-            compressInfo.style.display = "block";
+            compressInfo.style.display =
+                "block";
+
 
             compressInfo.textContent =
                 "Mengoptimalkan foto...";
 
 
             const compressedFile =
-                await compressImage(originalFile);
+                await compressImage(
+                    originalFile
+                );
 
 
             /* GANTI FILE INPUT */
@@ -757,24 +882,30 @@ imageInput.addEventListener(
                 const dataTransfer =
                     new DataTransfer();
 
-                dataTransfer.items.add(compressedFile);
+
+                dataTransfer.items.add(
+                    compressedFile
+                );
+
 
                 imageInput.files =
                     dataTransfer.files;
 
-            } catch (e) {
+            } catch (error) {
 
                 console.warn(
                     "Tidak dapat mengganti file input.",
-                    e
+                    error
                 );
 
             }
 
 
-            /* HAPUS PREVIEW LAMA */
+            /* PREVIEW */
 
-            if (preview.dataset.url) {
+            if (
+                preview.dataset.url
+            ) {
 
                 URL.revokeObjectURL(
                     preview.dataset.url
@@ -783,12 +914,11 @@ imageInput.addEventListener(
             }
 
 
-            /* PREVIEW BARU */
-
             const previewUrl =
                 URL.createObjectURL(
                     compressedFile
                 );
+
 
             preview.dataset.url =
                 previewUrl;
@@ -800,7 +930,7 @@ imageInput.addEventListener(
                 "block";
 
 
-            /* INFO UKURAN */
+            /* INFO */
 
             const originalSize =
                 originalFile.size;
@@ -811,6 +941,7 @@ imageInput.addEventListener(
 
             let percentage = 0;
 
+
             if (originalSize > 0) {
 
                 percentage =
@@ -818,7 +949,7 @@ imageInput.addEventListener(
                         (
                             1 -
                             compressedSize /
-                            originalSize
+                                originalSize
                         ) * 100
                     );
 
@@ -827,10 +958,14 @@ imageInput.addEventListener(
 
             imageInfo.innerHTML =
                 "Foto asli: " +
-                formatBytes(originalSize) +
+                formatBytes(
+                    originalSize
+                ) +
                 "<br>" +
                 "Setelah kompresi: " +
-                formatBytes(compressedSize);
+                formatBytes(
+                    compressedSize
+                );
 
 
             compressInfo.textContent =
@@ -848,13 +983,16 @@ imageInput.addEventListener(
 
             console.error(error);
 
-            preview.style.display = "none";
-
-            imageInfo.style.display = "none";
-
-            compressInfo.style.display = "none";
-
             imageInput.value = "";
+
+            preview.style.display =
+                "none";
+
+            imageInfo.style.display =
+                "none";
+
+            compressInfo.style.display =
+                "none";
 
             showError(
                 error.message ||
@@ -867,31 +1005,36 @@ imageInput.addEventListener(
 );
 
 
-/* =====================================================
+/* =========================================================
    MESSAGE
-===================================================== */
+   ========================================================= */
 
 function clearMessage() {
 
-    msg.className = "msg";
+    msg.className =
+        "msg";
 
-    msg.textContent = "";
+    msg.textContent =
+        "";
 
 }
 
 
 function showSuccess(message) {
 
-    msg.className = "msg ok";
+    msg.className =
+        "msg ok";
 
-    msg.innerHTML = message;
+    msg.innerHTML =
+        message;
 
 }
 
 
 function showError(message) {
 
-    msg.className = "msg err";
+    msg.className =
+        "msg err";
 
     msg.textContent =
         "Gagal: " + message;
@@ -899,18 +1042,18 @@ function showError(message) {
 }
 
 
-/* =====================================================
+/* =========================================================
    SUBMIT
-===================================================== */
+   ========================================================= */
 
 form.addEventListener(
     "submit",
-    async function(e) {
+    async function (e) {
 
         e.preventDefault();
 
 
-        /* CEK URL */
+        /* URL */
 
         if (
             !API_URL ||
@@ -922,13 +1065,15 @@ form.addEventListener(
             );
 
             return;
+
         }
 
 
-        /* CEK NAMA */
+        /* NAMA */
 
         const productName =
             nameInput.value.trim();
+
 
         if (!productName) {
 
@@ -939,13 +1084,15 @@ form.addEventListener(
             nameInput.focus();
 
             return;
+
         }
 
 
-        /* CEK ID */
+        /* ID */
 
         const productId =
             idInput.value.trim();
+
 
         if (!productId) {
 
@@ -954,13 +1101,15 @@ form.addEventListener(
             );
 
             return;
+
         }
 
 
-        /* CEK FOTO */
+        /* FOTO */
 
         const file =
             imageInput.files[0];
+
 
         if (!file) {
 
@@ -969,30 +1118,35 @@ form.addEventListener(
             );
 
             return;
+
         }
 
 
-        /* CEK UKURAN */
+        /* UKURAN */
 
-        if (file.size > MAX_UPLOAD_SIZE) {
+        if (
+            file.size >
+            MAX_UPLOAD_SIZE
+        ) {
 
             showError(
                 "Foto masih terlalu besar. Maksimal 5 MB."
             );
 
             return;
+
         }
 
 
         clearMessage();
 
 
-        /* LOADING */
-
-        btn.disabled = true;
+        btn.disabled =
+            true;
 
         btn.textContent =
             "Menyiapkan data...";
+
 
         progress.style.display =
             "block";
@@ -1003,36 +1157,52 @@ form.addEventListener(
 
         try {
 
-            /* AMBIL DATA */
+            /* =========================================
+               DATA FORM
+            ========================================= */
 
             const formData =
                 new FormData(form);
 
+
             const data = {};
 
 
-            formData.forEach(function(value, key) {
+            formData.forEach(
+                function (value, key) {
 
-                if (key !== "image") {
-                    data[key] = value;
+                    if (
+                        key !== "image"
+                    ) {
+
+                        data[key] =
+                            value;
+
+                    }
+
                 }
+            );
 
-            });
-
-
-            /* KONVERSI HARGA */
 
             data.small =
-                Number(data.small || 0);
+                Number(
+                    data.small || 0
+                );
+
 
             data.medium =
-                Number(data.medium || 0);
+                Number(
+                    data.medium || 0
+                );
 
 
-            /* FOTO */
+            /* =========================================
+               FOTO
+            ========================================= */
 
             data.imageName =
                 file.name;
+
 
             data.imageMimeType =
                 "image/jpeg";
@@ -1041,122 +1211,58 @@ form.addEventListener(
             bar.style.width =
                 "30%";
 
+
             btn.textContent =
                 "Memproses foto...";
 
 
-            /* BASE64 */
+            /* =========================================
+               BASE64
+            ========================================= */
 
             data.imageBase64 =
-                await fileToBase64(file);
+                await fileToBase64(
+                    file
+                );
 
 
             bar.style.width =
                 "55%";
 
+
             btn.textContent =
-                "Mengupload ke Google Sheets...";
+                "Mengirim produk...";
 
 
-            /*
-             * KIRIM KE APPS SCRIPT
-             *
-             * Content-Type text/plain digunakan
-             * agar tidak membuat preflight OPTIONS.
-             */
+            /* =========================================
+               KIRIM KE GOOGLE APPS SCRIPT
+               
+               PENTING:
+               mode no-cors digunakan agar browser
+               tidak memblokir request Apps Script.
+            ========================================= */
 
-            const response =
-                await fetch(
-                    API_URL,
-                    {
-                        method: "POST",
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
 
-                        headers: {
-                            "Content-Type":
-                                "text/plain;charset=utf-8"
-                        },
+                    mode: "no-cors",
 
-                        body:
-                            JSON.stringify(data),
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
 
-                        redirect: "follow"
-                    }
-                );
-
-
-            bar.style.width =
-                "80%";
-
-
-            /* CEK HTTP */
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Server mengembalikan HTTP " +
-                    response.status
-                );
-
-            }
-
-
-            const responseText =
-                await response.text();
-
-
-            console.log(
-                "Response Apps Script:",
-                responseText
+                    body:
+                        JSON.stringify(data)
+                }
             );
 
 
-            if (!responseText) {
-
-                throw new Error(
-                    "Apps Script tidak mengembalikan respons."
-                );
-
-            }
-
-
-            let result;
-
-
-            try {
-
-                result =
-                    JSON.parse(
-                        responseText
-                    );
-
-            } catch (jsonError) {
-
-                console.error(
-                    "Response bukan JSON:",
-                    responseText
-                );
-
-                throw new Error(
-                    "Response Google Apps Script tidak valid. Pastikan Apps Script sudah menggunakan doPost(e) yang benar."
-                );
-
-            }
-
-
-            /* CEK HASIL */
-
-            if (!result.success) {
-
-                throw new Error(
-                    result.message ||
-                    result.error ||
-                    "Gagal menyimpan produk."
-                );
-
-            }
-
-
-            /* BERHASIL */
+            /* =========================================
+               REQUEST TERKIRIM
+            ========================================= */
 
             bar.style.width =
                 "100%";
@@ -1165,47 +1271,61 @@ form.addEventListener(
             showSuccess(
                 "Produk <b>" +
                 productName +
-                "</b> berhasil disimpan.<br>" +
-                "<small>Data masuk ke Google Sheets dan foto masuk ke Google Drive.</small>"
+                "</b> sedang dikirim.<br>" +
+                "<small>" +
+                "Data akan disimpan ke Google Sheets dan foto ke Google Drive." +
+                "</small>"
             );
 
 
-            /* RESET */
+            /* =========================================
+               RESET
+            ========================================= */
 
-            form.reset();
+            setTimeout(
+                function () {
 
-            idInput.value = "";
+                    form.reset();
 
+                    idInput.value =
+                        "";
 
-            if (preview.dataset.url) {
+                    if (
+                        preview.dataset.url
+                    ) {
 
-                URL.revokeObjectURL(
-                    preview.dataset.url
-                );
+                        URL.revokeObjectURL(
+                            preview.dataset.url
+                        );
 
-                delete preview.dataset.url;
+                        delete preview.dataset.url;
 
-            }
-
-
-            preview.src = "";
-
-            preview.style.display =
-                "none";
-
-
-            imageInfo.innerHTML =
-                "";
-
-            imageInfo.style.display =
-                "none";
+                    }
 
 
-            compressInfo.textContent =
-                "";
+                    preview.src =
+                        "";
 
-            compressInfo.style.display =
-                "none";
+                    preview.style.display =
+                        "none";
+
+
+                    imageInfo.innerHTML =
+                        "";
+
+                    imageInfo.style.display =
+                        "none";
+
+
+                    compressInfo.textContent =
+                        "";
+
+                    compressInfo.style.display =
+                        "none";
+
+                },
+                1000
+            );
 
 
         } catch (error) {
@@ -1218,8 +1338,9 @@ form.addEventListener(
 
             showError(
                 error.message ||
-                "Terjadi kesalahan saat upload."
+                "Gagal mengirim data ke Google Apps Script."
             );
+
 
         } finally {
 
@@ -1231,7 +1352,7 @@ form.addEventListener(
 
 
             setTimeout(
-                function() {
+                function () {
 
                     progress.style.display =
                         "none";
@@ -1240,7 +1361,7 @@ form.addEventListener(
                         "0%";
 
                 },
-                1200
+                1500
             );
 
         }
@@ -1252,3 +1373,4 @@ form.addEventListener(
 
 </body>
 </html>
+```
