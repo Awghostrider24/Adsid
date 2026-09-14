@@ -1,204 +1,205 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Input Produk</title>
 
 <style>
-*{
-  box-sizing:border-box
+* {
+    box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f6f8;
-  color:#222
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
 }
 
-.wrap{
-  max-width:520px;
-  margin:auto;
-  padding:18px
+.wrap {
+    max-width: 520px;
+    margin: auto;
+    padding: 18px;
 }
 
-.card{
-  background:#fff;
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 6px 24px #0001
+.card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 6px 24px #0001;
 }
 
-h1{
-  margin:0 0 5px;
-  font-size:24px
+h1 {
+    margin: 0 0 5px;
+    font-size: 24px;
 }
 
-.sub{
-  color:#666;
-  margin:0 0 20px;
-  line-height:1.5
+.sub {
+    color: #666;
+    margin: 0 0 20px;
+    line-height: 1.5;
 }
 
-label{
-  display:block;
-  font-weight:700;
-  margin:14px 0 7px
+label {
+    display: block;
+    font-weight: 700;
+    margin: 14px 0 7px;
 }
 
-small{
-  font-weight:normal;
-  color:#777
+small {
+    font-weight: normal;
+    color: #777;
 }
 
 input,
 textarea,
-select{
-  width:100%;
-  padding:13px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:16px;
-  font-family:inherit;
-  background:#fff
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    background: #fff;
 }
 
 input:focus,
 textarea:focus,
-select:focus{
-  outline:none;
-  border-color:#888
+select:focus {
+    outline: none;
+    border-color: #888;
 }
 
-textarea{
-  min-height:90px;
-  resize:vertical
+textarea {
+    min-height: 90px;
+    resize: vertical;
 }
 
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
 }
 
-.filebox{
-  border:2px dashed #ccc;
-  border-radius:12px;
-  padding:18px;
-  text-align:center;
-  transition:.2s
+.filebox {
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    transition: .2s;
 }
 
-.filebox:hover{
-  border-color:#999
+.filebox:hover {
+    border-color: #999;
 }
 
-.filebox input[type="file"]{
-  padding:8px;
-  border:0
+.filebox input[type="file"] {
+    padding: 8px;
+    border: 0;
 }
 
-.preview{
-  width:100%;
-  max-height:240px;
-  object-fit:contain;
-  border-radius:10px;
-  margin-top:12px;
-  display:none;
-  background:#f4f4f4
+.preview {
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-top: 12px;
+    display: none;
+    background: #f4f4f4;
 }
 
-.image-info{
-  margin-top:8px;
-  font-size:13px;
-  color:#666;
-  display:none;
-  line-height:1.5
+.image-info {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
+    display: none;
+    line-height: 1.5;
 }
 
-button{
-  width:100%;
-  margin-top:20px;
-  padding:15px;
-  border:0;
-  border-radius:11px;
-  background:#111;
-  color:#fff;
-  font-size:17px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.2s
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    border: 0;
+    border-radius: 11px;
+    background: #111;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
 }
 
-button:hover:not(:disabled){
-  background:#333
+button:hover:not(:disabled) {
+    background: #333;
 }
 
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
 }
 
-.msg{
-  margin-top:15px;
-  padding:12px;
-  border-radius:10px;
-  display:none;
-  line-height:1.5
+.msg {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    display: none;
+    line-height: 1.5;
 }
 
-.ok{
-  display:block;
-  background:#e8f7ed;
-  color:#176b35
+.ok {
+    display: block;
+    background: #e8f7ed;
+    color: #176b35;
 }
 
-.err{
-  display:block;
-  background:#fdecec;
-  color:#a12626
+.err {
+    display: block;
+    background: #fdecec;
+    color: #a12626;
 }
 
-.progress{
-  margin-top:12px;
-  height:8px;
-  background:#eee;
-  border-radius:8px;
-  overflow:hidden;
-  display:none
+.progress {
+    margin-top: 12px;
+    height: 8px;
+    background: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
 }
 
-.bar{
-  height:100%;
-  width:0%;
-  background:#333;
-  transition:width .25s ease
+.bar {
+    height: 100%;
+    width: 0%;
+    background: #333;
+    transition: width .25s ease;
 }
 
-.compress-info{
-  margin-top:10px;
-  font-size:13px;
-  color:#555;
-  display:none;
-  text-align:center
+.compress-info {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #555;
+    display: none;
+    text-align: center;
 }
 
-@media(max-width:420px){
+@media (max-width: 420px) {
 
-  .wrap{
-    padding:10px
-  }
+    .wrap {
+        padding: 10px;
+    }
 
-  .card{
-    padding:18px
-  }
+    .card {
+        padding: 18px;
+    }
 
-  .row{
-    grid-template-columns:1fr;
-    gap:0
-  }
-
+    .row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
 }
 </style>
 
@@ -208,1098 +209,1044 @@ button:disabled{
 
 <div class="wrap">
 
-  <div class="card">
+```
+<div class="card">
 
     <h1>Tambah Produk</h1>
 
     <p class="sub">
-      Foto dari HP akan otomatis diperkecil dan dikompres
-      sebelum di-upload ke Google Drive.
+        Foto dari HP akan otomatis diperkecil dan dikompres
+        sebelum dikirim ke Google Drive.
     </p>
-
 
     <form id="productForm">
 
-
-      <!-- ID PRODUK -->
-
-      <label>
-        ID Produk
-        <small>(otomatis)</small>
-      </label>
-
-      <input
-        id="id"
-        name="id"
-        readonly
-        placeholder="Akan dibuat otomatis"
-      >
-
-
-      <!-- NAMA -->
-
-      <label>
-        Nama Produk
-      </label>
-
-      <input
-        id="name"
-        name="name"
-        required
-        placeholder="Contoh: Jus Alpukat"
-      >
-
-
-      <!-- DESKRIPSI -->
-
-      <label>
-        Deskripsi
-      </label>
-
-      <textarea
-        name="desc"
-        required
-        placeholder="Deskripsi singkat produk"
-      ></textarea>
-
-
-      <!-- HARGA -->
-
-      <div class="row">
-
-        <div>
-
-          <label>
-            Harga Small
-          </label>
-
-          <input
-            name="small"
-            type="number"
-            min="0"
-            required
-            placeholder="10000"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>
-            Harga Medium
-          </label>
-
-          <input
-            name="medium"
-            type="number"
-            min="0"
-            required
-            placeholder="14000"
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- FOTO -->
-
-      <label>
-        Foto Produk
-      </label>
-
-      <div class="filebox">
+        <!-- ID PRODUK -->
+        <label>
+            ID Produk
+            <small>(otomatis)</small>
+        </label>
 
         <input
-          id="image"
-          name="image"
-          type="file"
-          accept="image/*"
-          capture="environment"
-          required
+            id="id"
+            name="id"
+            readonly
+            placeholder="Akan dibuat otomatis"
         >
 
-        <img
-          id="preview"
-          class="preview"
-          alt="Preview foto produk"
+        <!-- NAMA -->
+        <label>
+            Nama Produk
+        </label>
+
+        <input
+            id="name"
+            name="name"
+            required
+            autocomplete="off"
+            placeholder="Contoh: Jus Alpukat"
         >
 
+        <!-- DESKRIPSI -->
+        <label>
+            Deskripsi
+        </label>
+
+        <textarea
+            id="desc"
+            name="desc"
+            required
+            placeholder="Deskripsi singkat produk"
+        ></textarea>
+
+        <!-- HARGA -->
+        <div class="row">
+
+            <div>
+
+                <label>
+                    Harga Small
+                </label>
+
+                <input
+                    id="small"
+                    name="small"
+                    type="number"
+                    min="0"
+                    required
+                    placeholder="10000"
+                >
+
+            </div>
+
+            <div>
+
+                <label>
+                    Harga Medium
+                </label>
+
+                <input
+                    id="medium"
+                    name="medium"
+                    type="number"
+                    min="0"
+                    required
+                    placeholder="14000"
+                >
+
+            </div>
+
+        </div>
+
+        <!-- FOTO -->
+        <label>
+            Foto Produk
+        </label>
+
+        <div class="filebox">
+
+            <input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/*"
+                capture="environment"
+                required
+            >
+
+            <img
+                id="preview"
+                class="preview"
+                alt="Preview foto produk"
+            >
+
+            <div
+                id="imageInfo"
+                class="image-info"
+            ></div>
+
+        </div>
+
         <div
-          id="imageInfo"
-          class="image-info"
+            id="compressInfo"
+            class="compress-info"
         ></div>
 
-      </div>
+        <!-- STATUS -->
+        <label>
+            Status
+        </label>
 
+        <select id="status" name="status">
 
-      <div
-        id="compressInfo"
-        class="compress-info"
-      ></div>
+            <option value="tersedia">
+                Tersedia
+            </option>
 
+            <option value="habis">
+                Habis
+            </option>
 
-      <!-- STATUS -->
+        </select>
 
-      <label>
-        Status
-      </label>
-
-      <select name="status">
-
-        <option value="tersedia">
-          Tersedia
-        </option>
-
-        <option value="habis">
-          Habis
-        </option>
-
-      </select>
-
-
-      <!-- PROGRESS -->
-
-      <div
-        class="progress"
-        id="progress"
-      >
-
+        <!-- PROGRESS -->
         <div
-          class="bar"
-          id="bar"
+            class="progress"
+            id="progress"
+        >
+            <div
+                class="bar"
+                id="bar"
+            ></div>
+        </div>
+
+        <!-- SUBMIT -->
+        <button
+            id="submitBtn"
+            type="submit"
+        >
+            Simpan Produk
+        </button>
+
+        <!-- MESSAGE -->
+        <div
+            id="message"
+            class="msg"
         ></div>
-
-      </div>
-
-
-      <!-- SUBMIT -->
-
-      <button
-        id="submitBtn"
-        type="submit"
-      >
-        Simpan Produk
-      </button>
-
-
-      <!-- MESSAGE -->
-
-      <div
-        id="message"
-        class="msg"
-      ></div>
-
 
     </form>
 
-  </div>
+</div>
+```
 
 </div>
 
-
 <script>
 
-
-// ======================================================
-// URL GOOGLE APPS SCRIPT
-// ======================================================
+/* =====================================================
+   GOOGLE APPS SCRIPT WEB APP
+   PENTING:
+   URL HARUS BERUPA URL BIASA, BUKAN MARKDOWN
+===================================================== */
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec';
+"https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec";
 
 
-// ======================================================
-// PENGATURAN FOTO
-// ======================================================
+/* =====================================================
+   PENGATURAN FOTO
+===================================================== */
 
 const MAX_IMAGE_SIZE = 1600;
-
 const JPEG_QUALITY = 0.80;
+const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
 
-// ======================================================
-// ELEMENT HTML
-// ======================================================
+/* =====================================================
+   ELEMENT
+===================================================== */
 
-const form =
-  document.getElementById('productForm');
+const form = document.getElementById("productForm");
+const nameInput = document.getElementById("name");
+const idInput = document.getElementById("id");
+const imageInput = document.getElementById("image");
 
-const nameInput =
-  document.getElementById('name');
+const preview = document.getElementById("preview");
+const imageInfo = document.getElementById("imageInfo");
+const compressInfo = document.getElementById("compressInfo");
 
-const idInput =
-  document.getElementById('id');
+const btn = document.getElementById("submitBtn");
+const msg = document.getElementById("message");
 
-const imageInput =
-  document.getElementById('image');
-
-const preview =
-  document.getElementById('preview');
-
-const imageInfo =
-  document.getElementById('imageInfo');
-
-const compressInfo =
-  document.getElementById('compressInfo');
-
-const btn =
-  document.getElementById('submitBtn');
-
-const msg =
-  document.getElementById('message');
-
-const progress =
-  document.getElementById('progress');
-
-const bar =
-  document.getElementById('bar');
+const progress = document.getElementById("progress");
+const bar = document.getElementById("bar");
 
 
-// ======================================================
-// BUAT ID PRODUK OTOMATIS
-// ======================================================
+/* =====================================================
+   SLUG / ID PRODUK
+===================================================== */
 
-function slugify(text){
+function slugify(text) {
 
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g,'')
-    .replace(/\s+/g,'-')
-    .replace(/-+/g,'-');
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
 
 }
 
 
-nameInput.addEventListener(
-  'input',
-  () => {
+nameInput.addEventListener("input", function() {
 
-    idInput.value =
-      slugify(nameInput.value);
+    idInput.value = slugify(nameInput.value);
 
-  }
-);
+});
 
 
-// ======================================================
-// FORMAT UKURAN FILE
-// ======================================================
+/* =====================================================
+   FORMAT BYTES
+===================================================== */
 
-function formatBytes(bytes){
+function formatBytes(bytes) {
 
-  if(bytes < 1024){
+    if (bytes < 1024) {
+        return bytes + " B";
+    }
 
-    return bytes + ' B';
+    if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(1) + " KB";
+    }
 
-  }
-
-
-  if(bytes < 1024 * 1024){
-
-    return (
-      (bytes / 1024).toFixed(1) +
-      ' KB'
-    );
-
-  }
-
-
-  return (
-    (bytes / (1024 * 1024)).toFixed(2) +
-    ' MB'
-  );
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 
 }
 
 
-// ======================================================
-// KOMPRESI FOTO
-// ======================================================
+/* =====================================================
+   KOMPRES FOTO
+===================================================== */
 
-function compressImage(file){
+function compressImage(file) {
 
-  return new Promise(
-    (resolve,reject) => {
+    return new Promise(function(resolve, reject) {
 
-      const reader =
-        new FileReader();
+        const reader = new FileReader();
 
+        reader.onload = function(event) {
 
-      reader.onload =
-        function(event){
+            const img = new Image();
 
-          const img =
-            new Image();
+            img.onload = function() {
 
-
-          img.onload =
-            function(){
-
-              let width =
-                img.width;
-
-              let height =
-                img.height;
+                let width = img.width;
+                let height = img.height;
 
 
-              // ======================================
-              // BATASI UKURAN MAKSIMAL
-              // ======================================
+                /* BATASI DIMENSI */
 
-              if(
-                width > MAX_IMAGE_SIZE ||
-                height > MAX_IMAGE_SIZE
-              ){
+                if (
+                    width > MAX_IMAGE_SIZE ||
+                    height > MAX_IMAGE_SIZE
+                ) {
 
-                if(width > height){
+                    if (width > height) {
 
-                  height =
-                    Math.round(
-                      height *
-                      MAX_IMAGE_SIZE /
-                      width
-                    );
+                        height = Math.round(
+                            height *
+                            MAX_IMAGE_SIZE /
+                            width
+                        );
 
-                  width =
-                    MAX_IMAGE_SIZE;
+                        width = MAX_IMAGE_SIZE;
 
-                }else{
+                    } else {
 
-                  width =
-                    Math.round(
-                      width *
-                      MAX_IMAGE_SIZE /
-                      height
-                    );
+                        width = Math.round(
+                            width *
+                            MAX_IMAGE_SIZE /
+                            height
+                        );
 
-                  height =
-                    MAX_IMAGE_SIZE;
+                        height = MAX_IMAGE_SIZE;
+
+                    }
 
                 }
 
-              }
+
+                /* CANVAS */
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width = width;
+                canvas.height = height;
 
 
-              // ======================================
-              // CANVAS
-              // ======================================
+                const ctx =
+                    canvas.getContext("2d");
 
-              const canvas =
-                document.createElement(
-                  'canvas'
-                );
-
-
-              canvas.width =
-                width;
-
-              canvas.height =
-                height;
-
-
-              const ctx =
-                canvas.getContext('2d');
-
-
-              // Background putih
-              ctx.fillStyle =
-                '#ffffff';
-
-              ctx.fillRect(
-                0,
-                0,
-                width,
-                height
-              );
-
-
-              ctx.drawImage(
-                img,
-                0,
-                0,
-                width,
-                height
-              );
-
-
-              // ======================================
-              // JADIKAN JPEG
-              // ======================================
-
-              canvas.toBlob(
-                blob => {
-
-                  if(!blob){
+                if (!ctx) {
 
                     reject(
-                      new Error(
-                        'Gagal melakukan kompresi foto.'
-                      )
+                        new Error(
+                            "Browser tidak mendukung canvas."
+                        )
                     );
 
                     return;
-
-                  }
-
-
-                  const newFile =
-                    new File(
-                      [blob],
-                      file.name.replace(
-                        /\.[^/.]+$/,
-                        ''
-                      ) + '.jpg',
-                      {
-                        type:
-                          'image/jpeg',
-
-                        lastModified:
-                          Date.now()
-                      }
-                    );
+                }
 
 
-                  resolve(
-                    newFile
-                  );
+                /* BACKGROUND PUTIH */
 
-                },
-                'image/jpeg',
-                JPEG_QUALITY
-              );
+                ctx.fillStyle = "#ffffff";
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+
+                /* GAMBAR */
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+
+                /* EXPORT JPEG */
+
+                canvas.toBlob(
+                    function(blob) {
+
+                        if (!blob) {
+
+                            reject(
+                                new Error(
+                                    "Gagal melakukan kompresi foto."
+                                )
+                            );
+
+                            return;
+                        }
+
+
+                        const originalName =
+                            file.name
+                                .replace(/\.[^/.]+$/, "")
+                                .replace(/[^a-zA-Z0-9-_]/g, "-");
+
+
+                        const newFile =
+                            new File(
+                                [blob],
+                                originalName + ".jpg",
+                                {
+                                    type: "image/jpeg",
+                                    lastModified: Date.now()
+                                }
+                            );
+
+
+                        resolve(newFile);
+
+                    },
+                    "image/jpeg",
+                    JPEG_QUALITY
+                );
 
             };
 
 
-          img.onerror =
-            () => {
+            img.onerror = function() {
 
-              reject(
+                reject(
+                    new Error(
+                        "Foto tidak dapat dibaca."
+                    )
+                );
+
+            };
+
+
+            img.src = event.target.result;
+
+        };
+
+
+        reader.onerror = function() {
+
+            reject(
                 new Error(
-                  'Foto tidak dapat dibaca.'
+                    "Gagal membaca file foto."
                 )
-              );
-
-            };
-
-
-          img.src =
-            event.target.result;
+            );
 
         };
 
 
-      reader.onerror =
-        () => {
+        reader.readAsDataURL(file);
 
-          reject(
-            new Error(
-              'Gagal membaca file foto.'
-            )
-          );
-
-        };
-
-
-      reader.readAsDataURL(file);
-
-    }
-  );
+    });
 
 }
 
 
-// ======================================================
-// FILE → BASE64
-// ======================================================
+/* =====================================================
+   FILE KE BASE64
+===================================================== */
 
-function fileToBase64(file){
+function fileToBase64(file) {
 
-  return new Promise(
-    (resolve,reject) => {
+    return new Promise(function(resolve, reject) {
 
-      const reader =
-        new FileReader();
+        const reader = new FileReader();
 
+        reader.onload = function() {
 
-      reader.onload =
-        () => {
+            const result = reader.result;
 
-          const result =
-            reader.result;
+            if (!result) {
 
+                reject(
+                    new Error(
+                        "Data foto kosong."
+                    )
+                );
 
-          resolve(
-            result.split(',')[1]
-          );
+                return;
+            }
+
+            const parts =
+                result.toString().split(",");
+
+            if (parts.length < 2) {
+
+                reject(
+                    new Error(
+                        "Format Base64 foto tidak valid."
+                    )
+                );
+
+                return;
+            }
+
+            resolve(parts[1]);
 
         };
 
 
-      reader.onerror =
-        reject;
+        reader.onerror = function() {
+
+            reject(
+                new Error(
+                    "Gagal mengubah foto menjadi Base64."
+                )
+            );
+
+        };
 
 
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
 
-    }
-  );
+    });
 
 }
 
 
-// ======================================================
-// PREVIEW FOTO
-// ======================================================
+/* =====================================================
+   PREVIEW FOTO
+===================================================== */
 
 imageInput.addEventListener(
-  'change',
-  async () => {
+    "change",
+    async function() {
 
-    const originalFile =
-      imageInput.files[0];
+        const originalFile =
+            imageInput.files[0];
 
-
-    if(!originalFile){
-
-      return;
-
-    }
+        if (!originalFile) {
+            return;
+        }
 
 
-    try{
+        if (!originalFile.type.startsWith("image/")) {
 
-      imageInfo.style.display =
-        'block';
+            showError(
+                "File yang dipilih bukan gambar."
+            );
 
+            imageInput.value = "";
 
-      imageInfo.innerHTML =
-        'Foto asli: ' +
-        formatBytes(
-          originalFile.size
-        );
-
-
-      compressInfo.style.display =
-        'block';
+            return;
+        }
 
 
-      compressInfo.textContent =
-        'Mengoptimalkan foto...';
+        try {
+
+            imageInfo.style.display = "block";
+
+            imageInfo.innerHTML =
+                "Foto asli: " +
+                formatBytes(originalFile.size);
 
 
-      // ============================================
-      // KOMPRESI
-      // ============================================
+            compressInfo.style.display = "block";
 
-      const compressedFile =
-        await compressImage(
-          originalFile
-        );
+            compressInfo.textContent =
+                "Mengoptimalkan foto...";
 
 
-      // ============================================
-      // GANTI FILE INPUT
-      // ============================================
-
-      const dataTransfer =
-        new DataTransfer();
+            const compressedFile =
+                await compressImage(originalFile);
 
 
-      dataTransfer.items.add(
-        compressedFile
-      );
+            /* GANTI FILE INPUT */
+
+            try {
+
+                const dataTransfer =
+                    new DataTransfer();
+
+                dataTransfer.items.add(compressedFile);
+
+                imageInput.files =
+                    dataTransfer.files;
+
+            } catch (e) {
+
+                console.warn(
+                    "Tidak dapat mengganti file input.",
+                    e
+                );
+
+            }
 
 
-      imageInput.files =
-        dataTransfer.files;
+            /* HAPUS PREVIEW LAMA */
+
+            if (preview.dataset.url) {
+
+                URL.revokeObjectURL(
+                    preview.dataset.url
+                );
+
+            }
 
 
-      // ============================================
-      // HAPUS PREVIEW LAMA
-      // ============================================
+            /* PREVIEW BARU */
 
-      if(
-        preview.dataset.url
-      ){
+            const previewUrl =
+                URL.createObjectURL(
+                    compressedFile
+                );
 
-        URL.revokeObjectURL(
-          preview.dataset.url
-        );
+            preview.dataset.url =
+                previewUrl;
 
-      }
+            preview.src =
+                previewUrl;
 
-
-      // ============================================
-      // PREVIEW BARU
-      // ============================================
-
-      const previewUrl =
-        URL.createObjectURL(
-          compressedFile
-        );
+            preview.style.display =
+                "block";
 
 
-      preview.dataset.url =
-        previewUrl;
+            /* INFO UKURAN */
+
+            const originalSize =
+                originalFile.size;
+
+            const compressedSize =
+                compressedFile.size;
 
 
-      preview.src =
-        previewUrl;
+            let percentage = 0;
+
+            if (originalSize > 0) {
+
+                percentage =
+                    Math.round(
+                        (
+                            1 -
+                            compressedSize /
+                            originalSize
+                        ) * 100
+                    );
+
+            }
 
 
-      preview.style.display =
-        'block';
+            imageInfo.innerHTML =
+                "Foto asli: " +
+                formatBytes(originalSize) +
+                "<br>" +
+                "Setelah kompresi: " +
+                formatBytes(compressedSize);
 
 
-      // ============================================
-      // INFORMASI UKURAN
-      // ============================================
-
-      const originalSize =
-        originalFile.size;
-
-
-      const compressedSize =
-        compressedFile.size;
-
-
-      const percentage =
-        Math.round(
-          (
-            1 -
-            compressedSize /
-            originalSize
-          ) * 100
-        );
+            compressInfo.textContent =
+                "Foto berhasil dioptimalkan" +
+                (
+                    percentage > 0
+                        ? " • Hemat sekitar " +
+                          percentage +
+                          "%"
+                        : ""
+                );
 
 
-      imageInfo.innerHTML =
-        'Foto asli: ' +
-        formatBytes(originalSize) +
-        '<br>Setelah kompresi: ' +
-        formatBytes(compressedSize);
+        } catch (error) {
 
+            console.error(error);
 
-      compressInfo.textContent =
-        'Foto berhasil dioptimalkan' +
-        (
-          percentage > 0
-            ? ' • Hemat sekitar ' +
-              percentage +
-              '%'
-            : ''
-        );
+            preview.style.display = "none";
 
+            imageInfo.style.display = "none";
 
-    }
-    catch(error){
+            compressInfo.style.display = "none";
 
-      preview.style.display =
-        'none';
+            imageInput.value = "";
 
+            showError(
+                error.message ||
+                "Gagal memproses foto."
+            );
 
-      imageInfo.style.display =
-        'none';
-
-
-      compressInfo.style.display =
-        'none';
-
-
-      imageInput.value =
-        '';
-
-
-      showError(
-        error.message
-      );
+        }
 
     }
-
-  }
 );
 
 
-// ======================================================
-// MESSAGE
-// ======================================================
+/* =====================================================
+   MESSAGE
+===================================================== */
 
-function clearMessage(){
+function clearMessage() {
 
-  msg.className =
-    'msg';
+    msg.className = "msg";
 
-  msg.textContent =
-    '';
+    msg.textContent = "";
 
 }
 
 
-function showSuccess(message){
+function showSuccess(message) {
 
-  msg.className =
-    'msg ok';
+    msg.className = "msg ok";
 
-  msg.innerHTML =
-    message;
+    msg.innerHTML = message;
 
 }
 
 
-function showError(message){
+function showError(message) {
 
-  msg.className =
-    'msg err';
+    msg.className = "msg err";
 
-  msg.textContent =
-    'Gagal: ' +
-    message;
+    msg.textContent =
+        "Gagal: " + message;
 
 }
 
 
-// ======================================================
-// SUBMIT FORM
-// ======================================================
+/* =====================================================
+   SUBMIT
+===================================================== */
 
 form.addEventListener(
-  'submit',
-  async e => {
+    "submit",
+    async function(e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
 
-    // ================================================
-    // CEK URL
-    // ================================================
+        /* CEK URL */
 
-    if(
-      !API_URL ||
-      API_URL.includes('GANTI_')
-    ){
+        if (
+            !API_URL ||
+            API_URL.includes("GANTI")
+        ) {
 
-      showError(
-        'URL Apps Script belum dikonfigurasi.'
-      );
+            showError(
+                "URL Google Apps Script belum dikonfigurasi."
+            );
 
-      return;
+            return;
+        }
+
+
+        /* CEK NAMA */
+
+        const productName =
+            nameInput.value.trim();
+
+        if (!productName) {
+
+            showError(
+                "Nama produk belum diisi."
+            );
+
+            nameInput.focus();
+
+            return;
+        }
+
+
+        /* CEK ID */
+
+        const productId =
+            idInput.value.trim();
+
+        if (!productId) {
+
+            showError(
+                "ID produk belum dibuat."
+            );
+
+            return;
+        }
+
+
+        /* CEK FOTO */
+
+        const file =
+            imageInput.files[0];
+
+        if (!file) {
+
+            showError(
+                "Pilih foto produk terlebih dahulu."
+            );
+
+            return;
+        }
+
+
+        /* CEK UKURAN */
+
+        if (file.size > MAX_UPLOAD_SIZE) {
+
+            showError(
+                "Foto masih terlalu besar. Maksimal 5 MB."
+            );
+
+            return;
+        }
+
+
+        clearMessage();
+
+
+        /* LOADING */
+
+        btn.disabled = true;
+
+        btn.textContent =
+            "Menyiapkan data...";
+
+        progress.style.display =
+            "block";
+
+        bar.style.width =
+            "10%";
+
+
+        try {
+
+            /* AMBIL DATA */
+
+            const formData =
+                new FormData(form);
+
+            const data = {};
+
+
+            formData.forEach(function(value, key) {
+
+                if (key !== "image") {
+                    data[key] = value;
+                }
+
+            });
+
+
+            /* KONVERSI HARGA */
+
+            data.small =
+                Number(data.small || 0);
+
+            data.medium =
+                Number(data.medium || 0);
+
+
+            /* FOTO */
+
+            data.imageName =
+                file.name;
+
+            data.imageMimeType =
+                "image/jpeg";
+
+
+            bar.style.width =
+                "30%";
+
+            btn.textContent =
+                "Memproses foto...";
+
+
+            /* BASE64 */
+
+            data.imageBase64 =
+                await fileToBase64(file);
+
+
+            bar.style.width =
+                "55%";
+
+            btn.textContent =
+                "Mengupload ke Google Sheets...";
+
+
+            /*
+             * KIRIM KE APPS SCRIPT
+             *
+             * Content-Type text/plain digunakan
+             * agar tidak membuat preflight OPTIONS.
+             */
+
+            const response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body:
+                            JSON.stringify(data),
+
+                        redirect: "follow"
+                    }
+                );
+
+
+            bar.style.width =
+                "80%";
+
+
+            /* CEK HTTP */
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Server mengembalikan HTTP " +
+                    response.status
+                );
+
+            }
+
+
+            const responseText =
+                await response.text();
+
+
+            console.log(
+                "Response Apps Script:",
+                responseText
+            );
+
+
+            if (!responseText) {
+
+                throw new Error(
+                    "Apps Script tidak mengembalikan respons."
+                );
+
+            }
+
+
+            let result;
+
+
+            try {
+
+                result =
+                    JSON.parse(
+                        responseText
+                    );
+
+            } catch (jsonError) {
+
+                console.error(
+                    "Response bukan JSON:",
+                    responseText
+                );
+
+                throw new Error(
+                    "Response Google Apps Script tidak valid. Pastikan Apps Script sudah menggunakan doPost(e) yang benar."
+                );
+
+            }
+
+
+            /* CEK HASIL */
+
+            if (!result.success) {
+
+                throw new Error(
+                    result.message ||
+                    result.error ||
+                    "Gagal menyimpan produk."
+                );
+
+            }
+
+
+            /* BERHASIL */
+
+            bar.style.width =
+                "100%";
+
+
+            showSuccess(
+                "Produk <b>" +
+                productName +
+                "</b> berhasil disimpan.<br>" +
+                "<small>Data masuk ke Google Sheets dan foto masuk ke Google Drive.</small>"
+            );
+
+
+            /* RESET */
+
+            form.reset();
+
+            idInput.value = "";
+
+
+            if (preview.dataset.url) {
+
+                URL.revokeObjectURL(
+                    preview.dataset.url
+                );
+
+                delete preview.dataset.url;
+
+            }
+
+
+            preview.src = "";
+
+            preview.style.display =
+                "none";
+
+
+            imageInfo.innerHTML =
+                "";
+
+            imageInfo.style.display =
+                "none";
+
+
+            compressInfo.textContent =
+                "";
+
+            compressInfo.style.display =
+                "none";
+
+
+        } catch (error) {
+
+            console.error(
+                "UPLOAD ERROR:",
+                error
+            );
+
+
+            showError(
+                error.message ||
+                "Terjadi kesalahan saat upload."
+            );
+
+        } finally {
+
+            btn.disabled =
+                false;
+
+            btn.textContent =
+                "Simpan Produk";
+
+
+            setTimeout(
+                function() {
+
+                    progress.style.display =
+                        "none";
+
+                    bar.style.width =
+                        "0%";
+
+                },
+                1200
+            );
+
+        }
 
     }
-
-
-    // ================================================
-    // CEK FOTO
-    // ================================================
-
-    const file =
-      imageInput.files[0];
-
-
-    if(!file){
-
-      showError(
-        'Pilih foto produk terlebih dahulu.'
-      );
-
-      return;
-
-    }
-
-
-    // ================================================
-    // BATAS FILE
-    // ================================================
-
-    if(
-      file.size >
-      5 * 1024 * 1024
-    ){
-
-      showError(
-        'Foto setelah kompresi masih terlalu besar. Silakan pilih foto lain.'
-      );
-
-      return;
-
-    }
-
-
-    // ================================================
-    // CEK ID
-    // ================================================
-
-    if(
-      !idInput.value.trim()
-    ){
-
-      showError(
-        'Nama produk belum diisi.'
-      );
-
-      nameInput.focus();
-
-      return;
-
-    }
-
-
-    clearMessage();
-
-
-    // ================================================
-    // LOADING
-    // ================================================
-
-    btn.disabled =
-      true;
-
-    btn.textContent =
-      'Menyiapkan foto...';
-
-
-    progress.style.display =
-      'block';
-
-
-    bar.style.width =
-      '10%';
-
-
-    try{
-
-      // ============================================
-      // AMBIL DATA FORM
-      // ============================================
-
-      const data =
-        Object.fromEntries(
-          new FormData(form).entries()
-        );
-
-
-      data.small =
-        Number(data.small);
-
-
-      data.medium =
-        Number(data.medium);
-
-
-      // ============================================
-      // DATA FOTO
-      // ============================================
-
-      data.imageName =
-        file.name;
-
-
-      data.imageMimeType =
-        'image/jpeg';
-
-
-      // ============================================
-      // PROGRESS
-      // ============================================
-
-      bar.style.width =
-        '30%';
-
-
-      btn.textContent =
-        'Memproses foto...';
-
-
-      // ============================================
-      // FOTO → BASE64
-      // ============================================
-
-      data.imageBase64 =
-        await fileToBase64(
-          file
-        );
-
-
-      bar.style.width =
-        '60%';
-
-
-      btn.textContent =
-        'Mengupload...';
-
-
-      // ============================================
-      // KIRIM KE GOOGLE APPS SCRIPT
-      // ============================================
-
-      const response =
-        await fetch(
-          API_URL,
-          {
-            method:'POST',
-
-            headers:{
-              'Content-Type':
-                'text/plain;charset=utf-8'
-            },
-
-            body:
-              JSON.stringify(data)
-          }
-        );
-
-
-      // ============================================
-      // BACA RESPONSE
-      // ============================================
-
-      const responseText =
-        await response.text();
-
-
-      console.log(
-        'Response Apps Script:',
-        responseText
-      );
-
-
-      let result;
-
-
-      try{
-
-        result =
-          JSON.parse(
-            responseText
-          );
-
-      }
-      catch(jsonError){
-
-        throw new Error(
-          'Response Apps Script tidak valid: ' +
-          responseText.substring(
-            0,
-            300
-          )
-        );
-
-      }
-
-
-      // ============================================
-      // CEK HASIL
-      // ============================================
-
-      if(
-        !result.success
-      ){
-
-        throw new Error(
-          result.message ||
-          result.error ||
-          'Gagal menyimpan produk.'
-        );
-
-      }
-
-
-      // ============================================
-      // BERHASIL
-      // ============================================
-
-      bar.style.width =
-        '100%';
-
-
-      showSuccess(
-        'Produk berhasil disimpan.<br>' +
-        '<small>Foto otomatis masuk ke Google Drive.</small>'
-      );
-
-
-      // ============================================
-      // RESET FORM
-      // ============================================
-
-      form.reset();
-
-
-      idInput.value =
-        '';
-
-
-      preview.src =
-        '';
-
-
-      preview.style.display =
-        'none';
-
-
-      imageInfo.innerHTML =
-        '';
-
-
-      imageInfo.style.display =
-        'none';
-
-
-      compressInfo.textContent =
-        '';
-
-
-      compressInfo.style.display =
-        'none';
-
-
-    }
-    catch(error){
-
-      console.error(
-        'Upload error:',
-        error
-      );
-
-
-      showError(
-        error.message ||
-        'Terjadi kesalahan saat upload.'
-      );
-
-    }
-    finally{
-
-      btn.disabled =
-        false;
-
-
-      btn.textContent =
-        'Simpan Produk';
-
-
-      setTimeout(
-        () => {
-
-          progress.style.display =
-            'none';
-
-
-          bar.style.width =
-            '0%';
-
-        },
-        1000
-      );
-
-    }
-
-  }
 );
-
 
 </script>
 
