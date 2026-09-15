@@ -1075,7 +1075,18 @@ function resetForm(){
 /* =========================================================
    KIRIM DATA
    ========================================================= */
+window.addEventListener("load", async () => {
+    try {
+        await fetch(API_URL, {
+            method: "GET",
+            mode: "no-cors"
+        });
 
+        console.log("Koneksi ke Apps Script berhasil dipanggil.");
+    } catch (error) {
+        console.error("Koneksi Apps Script gagal:", error);
+    }
+});
 form.addEventListener(
     "submit",
     async(e)=>{
