@@ -1,183 +1,306 @@
 <!DOCTYPE html>
 
 <html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Input Produk - Alala Jusss</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0"
+
+>
+
+<title>Alala Jusss - Tambah Produk</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
 
 body{
+
   margin:0;
-  font-family:Arial,sans-serif;
+
+  font-family:
+    Arial,
+    sans-serif;
+
   background:#f4f6f8;
+
   color:#222;
+
 }
 
 .wrap{
+
   max-width:520px;
+
   margin:auto;
+
   padding:18px;
+
 }
 
 .card{
+
   background:#fff;
+
   border-radius:18px;
+
   padding:22px;
-  box-shadow:0 6px 24px #0001;
+
+  box-shadow:
+    0 6px 24px #0001;
+
 }
 
 h1{
-  margin:0 0 5px;
+
+  margin:
+    0 0 5px;
+
   font-size:24px;
+
 }
 
 .sub{
+
   color:#666;
-  margin:0 0 20px;
+
+  margin:
+    0 0 20px;
+
+  line-height:1.5;
+
 }
 
 label{
+
   display:block;
+
   font-weight:700;
-  margin:14px 0 7px;
+
+  margin:
+    14px 0 7px;
+
 }
 
 label small{
-  font-weight:400;
+
   color:#777;
+
+  font-weight:400;
+
 }
 
 input,
 textarea,
 select{
+
   width:100%;
+
   padding:13px;
-  border:1px solid #ddd;
+
+  border:
+    1px solid #ddd;
+
   border-radius:10px;
+
   font-size:16px;
+
   outline:none;
+
 }
 
 input:focus,
 textarea:focus,
 select:focus{
+
   border-color:#111;
+
 }
 
 textarea{
+
   min-height:90px;
+
   resize:vertical;
+
 }
 
 .row{
+
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap:12px;
+
 }
 
 .filebox{
-  border:2px dashed #ccc;
+
+  border:
+    2px dashed #ccc;
+
   border-radius:12px;
+
   padding:18px;
+
   text-align:center;
+
 }
 
 .preview{
+
   width:100%;
+
   max-height:220px;
+
   object-fit:contain;
+
   border-radius:10px;
+
   margin-top:12px;
+
   display:none;
+
 }
 
 .info{
+
   margin-top:10px;
+
   padding:10px;
+
   border-radius:9px;
+
   background:#f5f5f5;
+
   color:#666;
+
   font-size:13px;
+
   line-height:1.5;
+
 }
 
 button{
+
   width:100%;
+
   margin-top:20px;
+
   padding:15px;
+
   border:0;
+
   border-radius:11px;
+
   background:#111;
+
   color:#fff;
+
   font-size:17px;
+
   font-weight:700;
+
   cursor:pointer;
+
 }
 
 button:disabled{
+
   opacity:.6;
+
   cursor:not-allowed;
+
 }
 
 .msg{
-  margin-top:15px;
-  padding:12px;
-  border-radius:10px;
-  display:none;
-  line-height:1.5;
-}
 
-.msg.ok{
-  display:block;
-  background:#e8f7ed;
-  color:#176b35;
+  margin-top:15px;
+
+  padding:12px;
+
+  border-radius:10px;
+
+  display:none;
+
+  line-height:1.5;
+
 }
 
 .msg.err{
+
   display:block;
+
   background:#fdecec;
+
   color:#a12626;
+
 }
 
-.msg.info-msg{
+.msg.info{
+
   display:block;
+
   background:#eef4ff;
+
   color:#24518f;
+
 }
 
 .progress{
+
   margin-top:12px;
+
   height:8px;
+
   background:#eee;
+
   border-radius:8px;
+
   overflow:hidden;
+
   display:none;
+
 }
 
 .bar{
+
   height:100%;
+
   width:0%;
+
   background:#333;
-  transition:width:.25s;
+
+  transition:
+    width .25s;
+
 }
 
 @media(max-width:420px){
 
   .row{
-    grid-template-columns:1fr;
+
+    grid-template-columns:
+      1fr;
+
   }
 
   .card{
+
     padding:18px;
+
   }
 
 }
+
 </style>
 
 </head>
@@ -188,27 +311,29 @@ button:disabled{
 
 <div class="card">
 
-<h1>Tambah Produk</h1>
+<h1>
+Tambah Produk
+</h1>
 
 <p class="sub">
-Foto dari HP akan otomatis dikompres dan di-upload ke Google Drive.
+Alala Jusss — Input produk baru.
+Foto akan otomatis dikompres sebelum dikirim ke Google Drive.
 </p>
-
-<!-- =====================================================
-     FORM UTAMA
-     ===================================================== -->
 
 <form
   id="productForm"
   method="POST"
   action="https://script.google.com/macros/s/AKfycbyzNbi14XlQrLOm-BXUaTiMehFCn-P-zp2mp-wLPh-y8S_y06ds3UKf2AFDNDqS-53GcA/exec"
-  target="hiddenFrame"
+  target="_blank"
 >
 
-<!-- ID PRODUK -->
+<!-- =====================================================
+     ID
+     ===================================================== -->
 
 <label>
-ID Produk <small>(otomatis)</small>
+ID Produk
+<small>(otomatis)</small>
 </label>
 
 <input
@@ -219,7 +344,9 @@ placeholder="Otomatis dari nama produk"
 
 >
 
-<!-- NAMA -->
+<!-- =====================================================
+     NAMA
+     ===================================================== -->
 
 <label>
 Nama Produk
@@ -234,7 +361,9 @@ autocomplete="off"
 
 >
 
-<!-- DESKRIPSI -->
+<!-- =====================================================
+     DESKRIPSI
+     ===================================================== -->
 
 <label>
 Deskripsi
@@ -247,7 +376,9 @@ Deskripsi
   placeholder="Deskripsi singkat produk"
 ></textarea>
 
-<!-- HARGA -->
+<!-- =====================================================
+     HARGA
+     ===================================================== -->
 
 <div class="row">
 
@@ -281,7 +412,7 @@ name="medium"
 type="number"
 min="0"
 required
-placeholder="14000"
+placeholder="15000"
 
 >
 
@@ -289,7 +420,9 @@ placeholder="14000"
 
 </div>
 
-<!-- FOTO -->
+<!-- =====================================================
+     FOTO
+     ===================================================== -->
 
 <label>
 Foto Produk
@@ -313,12 +446,17 @@ alt="Preview Produk"
 >
 
 <div class="info">
-Foto akan otomatis diperkecil menjadi JPEG agar upload lebih ringan.
-</div>
+
+Foto otomatis diperkecil menjadi
+maksimal sekitar 1000px agar upload lebih ringan.
 
 </div>
 
-<!-- STATUS -->
+</div>
+
+<!-- =====================================================
+     STATUS
+     ===================================================== -->
 
 <label>
 Status
@@ -340,7 +478,9 @@ Tidak tersedia
 
 </select>
 
-<!-- INPUT HIDDEN UNTUK FOTO -->
+<!-- =====================================================
+     HIDDEN FOTO
+     ===================================================== -->
 
 <input
 type="hidden"
@@ -363,7 +503,9 @@ name="imageMimeType"
 
 >
 
-<!-- PROGRESS -->
+<!-- =====================================================
+     PROGRESS
+     ===================================================== -->
 
 <div
   class="progress"
@@ -377,7 +519,9 @@ name="imageMimeType"
 
 </div>
 
-<!-- BUTTON -->
+<!-- =====================================================
+     BUTTON
+     ===================================================== -->
 
 <button
 id="submitBtn"
@@ -389,7 +533,9 @@ Simpan Produk
 
 </button>
 
-<!-- MESSAGE -->
+<!-- =====================================================
+     MESSAGE
+     ===================================================== -->
 
 <div
   id="message"
@@ -397,16 +543,6 @@ Simpan Produk
 ></div>
 
 </form>
-
-<!-- =====================================================
-     IFRAME TERSEMBUNYI
-     ===================================================== -->
-
-<iframe
-  name="hiddenFrame"
-  id="hiddenFrame"
-  style="display:none;"
-></iframe>
 
 </div>
 
@@ -419,57 +555,94 @@ Simpan Produk
    ========================================================= */
 
 const form =
-document.getElementById('productForm');
+  document.getElementById(
+    "productForm"
+  );
 
 const nameInput =
-document.getElementById('name');
+  document.getElementById(
+    "name"
+  );
 
 const idInput =
-document.getElementById('id');
+  document.getElementById(
+    "id"
+  );
 
 const imageInput =
-document.getElementById('image');
+  document.getElementById(
+    "image"
+  );
 
 const preview =
-document.getElementById('preview');
+  document.getElementById(
+    "preview"
+  );
 
-const imageBase64Input =
-document.getElementById('imageBase64');
+const imageBase64 =
+  document.getElementById(
+    "imageBase64"
+  );
 
-const imageNameInput =
-document.getElementById('imageName');
+const imageName =
+  document.getElementById(
+    "imageName"
+  );
 
-const imageMimeTypeInput =
-document.getElementById('imageMimeType');
+const imageMimeType =
+  document.getElementById(
+    "imageMimeType"
+  );
 
 const btn =
-document.getElementById('submitBtn');
+  document.getElementById(
+    "submitBtn"
+  );
 
 const msg =
-document.getElementById('message');
+  document.getElementById(
+    "message"
+  );
 
 const progress =
-document.getElementById('progress');
+  document.getElementById(
+    "progress"
+  );
 
 const bar =
-document.getElementById('bar');
-
-const hiddenFrame =
-document.getElementById('hiddenFrame');
+  document.getElementById(
+    "bar"
+  );
 
 
 /* =========================================================
-   SLUGIFY
+   SLUG
    ========================================================= */
 
-function slugify(text){
+function slugify(
+  text
+){
 
   return text
+
     .toLowerCase()
+
     .trim()
-    .replace(/[^a-z0-9\s-]/g,'')
-    .replace(/\s+/g,'-')
-    .replace(/-+/g,'-');
+
+    .replace(
+      /[^a-z0-9\s-]/g,
+      ""
+    )
+
+    .replace(
+      /\s+/g,
+      "-"
+    )
+
+    .replace(
+      /-+/g,
+      "-"
+    );
 
 }
 
@@ -479,7 +652,7 @@ function slugify(text){
    ========================================================= */
 
 nameInput.addEventListener(
-  'input',
+  "input",
   function(){
 
     idInput.value =
@@ -492,31 +665,36 @@ nameInput.addEventListener(
 
 
 /* =========================================================
-   PREVIEW FOTO
+   PREVIEW
    ========================================================= */
 
 imageInput.addEventListener(
-  'change',
+  "change",
   function(){
 
     const file =
       imageInput.files[0];
 
+
     if(!file){
 
-      preview.src = '';
+      preview.src = "";
+
       preview.style.display =
-        'none';
+        "none";
 
       return;
 
     }
 
+
     preview.src =
-      URL.createObjectURL(file);
+      URL.createObjectURL(
+        file
+      );
 
     preview.style.display =
-      'block';
+      "block";
 
   }
 );
@@ -556,11 +734,10 @@ function compressImage(
                 img.height;
 
 
-              /* =========================================
-                 BATASI LEBAR
-                 ========================================= */
-
-              if(width > maxWidth){
+              if(
+                width >
+                maxWidth
+              ){
 
                 height =
                   Math.round(
@@ -577,7 +754,7 @@ function compressImage(
 
               const canvas =
                 document.createElement(
-                  'canvas'
+                  "canvas"
                 );
 
 
@@ -590,7 +767,7 @@ function compressImage(
 
               const ctx =
                 canvas.getContext(
-                  '2d'
+                  "2d"
                 );
 
 
@@ -610,7 +787,7 @@ function compressImage(
 
                     reject(
                       new Error(
-                        'Gagal mengompres foto.'
+                        "Gagal mengompres foto."
                       )
                     );
 
@@ -618,11 +795,17 @@ function compressImage(
 
                   }
 
-                  resolve(blob);
+
+                  resolve(
+                    blob
+                  );
 
                 },
-                'image/jpeg',
+
+                "image/jpeg",
+
                 quality
+
               );
 
             };
@@ -633,7 +816,7 @@ function compressImage(
 
               reject(
                 new Error(
-                  'Foto tidak dapat dibaca.'
+                  "Foto tidak dapat dibaca."
                 )
               );
 
@@ -651,14 +834,16 @@ function compressImage(
 
           reject(
             new Error(
-              'Gagal membaca foto.'
+              "Gagal membaca foto."
             )
           );
 
         };
 
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(
+        file
+      );
 
     }
   );
@@ -667,10 +852,12 @@ function compressImage(
 
 
 /* =========================================================
-   BLOB KE BASE64
+   BASE64
    ========================================================= */
 
-function blobToBase64(blob){
+function blobToBase64(
+  blob
+){
 
   return new Promise(
     function(resolve,reject){
@@ -685,11 +872,12 @@ function blobToBase64(blob){
           const result =
             reader.result;
 
+
           if(!result){
 
             reject(
               new Error(
-                'Hasil foto kosong.'
+                "Foto kosong."
               )
             );
 
@@ -699,14 +887,16 @@ function blobToBase64(blob){
 
 
           const parts =
-            result.split(',');
+            result.split(",");
 
 
-          if(parts.length < 2){
+          if(
+            parts.length < 2
+          ){
 
             reject(
               new Error(
-                'Format Base64 foto tidak valid.'
+                "Format Base64 tidak valid."
               )
             );
 
@@ -727,7 +917,7 @@ function blobToBase64(blob){
 
           reject(
             new Error(
-              'Gagal membaca Base64 foto.'
+              "Gagal membaca foto."
             )
           );
 
@@ -754,7 +944,7 @@ function showMessage(
 ){
 
   msg.className =
-    'msg ' + type;
+    "msg " + type;
 
   msg.innerHTML =
     text;
@@ -763,39 +953,15 @@ function showMessage(
 
 
 /* =========================================================
-   FLAG SUBMIT
-   ========================================================= */
-
-let submitting =
-  false;
-
-
-/* =========================================================
    SUBMIT
    ========================================================= */
 
 form.addEventListener(
-  'submit',
+  "submit",
   async function(e){
-
-    /*
-     * Jangan biarkan submit asli terjadi
-     * sebelum Base64 selesai dibuat.
-     */
 
     e.preventDefault();
 
-
-    if(submitting){
-
-      return;
-
-    }
-
-
-    /* =========================================
-       VALIDASI DASAR
-       ========================================= */
 
     const name =
       nameInput.value.trim();
@@ -805,25 +971,29 @@ form.addEventListener(
 
     const desc =
       document.getElementById(
-        'desc'
+        "desc"
       ).value.trim();
 
     const small =
       document.getElementById(
-        'small'
+        "small"
       ).value;
 
     const medium =
       document.getElementById(
-        'medium'
+        "medium"
       ).value;
 
+
+    /* =====================================================
+       VALIDASI
+       ===================================================== */
 
     if(!name){
 
       showMessage(
-        'err',
-        'Nama produk wajib diisi.'
+        "err",
+        "Nama produk wajib diisi."
       );
 
       return;
@@ -834,8 +1004,8 @@ form.addEventListener(
     if(!id){
 
       showMessage(
-        'err',
-        'ID produk belum terbentuk.'
+        "err",
+        "ID produk belum terbentuk."
       );
 
       return;
@@ -846,20 +1016,8 @@ form.addEventListener(
     if(!desc){
 
       showMessage(
-        'err',
-        'Deskripsi produk wajib diisi.'
-      );
-
-      return;
-
-    }
-
-
-    if(small === '' || Number(small) < 0){
-
-      showMessage(
-        'err',
-        'Harga Small tidak valid.'
+        "err",
+        "Deskripsi wajib diisi."
       );
 
       return;
@@ -868,13 +1026,13 @@ form.addEventListener(
 
 
     if(
-      medium === '' ||
-      Number(medium) < 0
+      small === "" ||
+      Number(small) < 0
     ){
 
       showMessage(
-        'err',
-        'Harga Medium tidak valid.'
+        "err",
+        "Harga Small tidak valid."
       );
 
       return;
@@ -882,9 +1040,20 @@ form.addEventListener(
     }
 
 
-    /* =========================================
-       CEK FOTO
-       ========================================= */
+    if(
+      medium === "" ||
+      Number(medium) < 0
+    ){
+
+      showMessage(
+        "err",
+        "Harga Medium tidak valid."
+      );
+
+      return;
+
+    }
+
 
     const file =
       imageInput.files[0];
@@ -893,18 +1062,14 @@ form.addEventListener(
     if(!file){
 
       showMessage(
-        'err',
-        'Silakan pilih foto produk.'
+        "err",
+        "Silakan pilih foto produk."
       );
 
       return;
 
     }
 
-
-    /* =========================================
-       BATAS FOTO ASLI
-       ========================================= */
 
     if(
       file.size >
@@ -912,8 +1077,8 @@ form.addEventListener(
     ){
 
       showMessage(
-        'err',
-        'Ukuran foto asli maksimal 15 MB.'
+        "err",
+        "Ukuran foto asli maksimal 15 MB."
       );
 
       return;
@@ -921,40 +1086,41 @@ form.addEventListener(
     }
 
 
-    submitting =
-      true;
-
+    /* =====================================================
+       LOADING
+       ===================================================== */
 
     btn.disabled =
       true;
 
     btn.textContent =
-      'Menyiapkan foto...';
-
-
-    msg.className =
-      'msg';
-
-
-    msg.style.display =
-      'none';
+      "Mengolah foto...";
 
 
     progress.style.display =
-      'block';
+      "block";
 
 
     bar.style.width =
-      '10%';
+      "10%";
+
+
+    msg.className =
+      "msg";
+
+
+    msg.style.display =
+      "none";
 
 
     try{
 
-      /* =======================================
-         KOMPRES FOTO
-         ======================================= */
 
-      const compressedBlob =
+      /* ===================================================
+         KOMPRES
+         =================================================== */
+
+      const compressed =
         await compressImage(
           file,
           1000,
@@ -963,227 +1129,161 @@ form.addEventListener(
 
 
       bar.style.width =
-        '30%';
+        "35%";
 
-
-      btn.textContent =
-        'Mengolah foto...';
-
-
-      /* =======================================
-         BATAS HASIL KOMPRES
-         ======================================= */
 
       if(
-        compressedBlob.size >
+        compressed.size >
         2 * 1024 * 1024
       ){
 
         throw new Error(
-          'Foto setelah dikompres masih terlalu besar. Silakan pilih foto lain.'
+          "Foto setelah dikompres masih lebih dari 2 MB."
         );
 
       }
 
 
-      /* =======================================
+      /* ===================================================
          BASE64
-         ======================================= */
+         =================================================== */
+
+      btn.textContent =
+        "Menyiapkan upload...";
+
 
       const base64 =
         await blobToBase64(
-          compressedBlob
+          compressed
         );
 
 
       bar.style.width =
-        '50%';
+        "55%";
 
 
-      /* =======================================
-         MASUKKAN KE INPUT HIDDEN
-         ======================================= */
+      /* ===================================================
+         HIDDEN INPUT
+         =================================================== */
 
-      imageBase64Input.value =
+      imageBase64.value =
         base64;
 
-      imageNameInput.value =
-        id + '.jpg';
 
-      imageMimeTypeInput.value =
-        'image/jpeg';
+      imageName.value =
+        id + ".jpg";
 
 
-      /* =======================================
-         CEK BASE64
-         ======================================= */
+      imageMimeType.value =
+        "image/jpeg";
 
-      if(
-        !imageBase64Input.value
-      ){
 
-        throw new Error(
-          'Base64 foto kosong.'
-        );
-
-      }
-
+      /* ===================================================
+         DEBUG
+         =================================================== */
 
       console.log(
-        'Foto berhasil dikompres.'
+        "ID:",
+        id
       );
 
       console.log(
-        'Ukuran asli:',
+        "Nama:",
+        name
+      );
+
+      console.log(
+        "Ukuran asli:",
         Math.round(
           file.size / 1024
         ),
-        'KB'
+        "KB"
       );
 
       console.log(
-        'Ukuran hasil:',
+        "Ukuran hasil:",
         Math.round(
-          compressedBlob.size / 1024
+          compressed.size / 1024
         ),
-        'KB'
-      );
-
-      console.log(
-        'Base64:',
-        Math.round(
-          base64.length / 1024
-        ),
-        'KB'
+        "KB"
       );
 
 
-      /* =======================================
-         SUBMIT FORM BIASA
-         ======================================= */
+      /* ===================================================
+         SUBMIT
+         =================================================== */
 
-      btn.textContent =
-        'Menyimpan produk...';
+      showMessage(
+        "info",
+
+        "<b>Produk siap dikirim.</b><br>" +
+
+        "<small>" +
+
+        "Klik tombol sekali lagi jika browser meminta membuka tab baru." +
+
+        "</small>"
+
+      );
 
 
       bar.style.width =
-        '70%';
+        "75%";
+
+
+      btn.textContent =
+        "Mengirim ke Server...";
 
 
       /*
-       * PENTING:
+       * ==================================================
+       * PENTING
        *
-       * Tidak menggunakan fetch().
+       * TIDAK ADA FETCH
+       * TIDAK ADA IFRAME
        *
-       * Form langsung POST ke:
-       * script.google.com/macros/s/.../exec
+       * Browser mengirim POST biasa langsung
+       * ke Google Apps Script.
        *
-       * Response diarahkan ke iframe.
+       * Target _blank menghindari masalah
+       * 403 pada googleusercontent dalam iframe.
+       * ==================================================
        */
 
       form.submit();
 
 
-      bar.style.width =
-        '90%';
-
-
-      showMessage(
-        'info-msg',
-        '<b>Produk sedang disimpan...</b><br>' +
-        '<small>Mohon tunggu beberapa detik.</small>'
-      );
-
-
       /*
-       * Karena response Apps Script masuk
-       * ke iframe, kita tidak perlu membaca
-       * response dengan JavaScript.
-       *
-       * Setelah beberapa detik kita anggap
-       * proses server selesai.
+       * Tab baru akan menampilkan hasil
+       * dari Code.gs.
        */
 
-      setTimeout(
-        function(){
-
-          bar.style.width =
-            '100%';
+      btn.textContent =
+        "Terkirim";
 
 
-          showMessage(
-            'ok',
-            '<b>Permintaan penyimpanan telah dikirim.</b><br>' +
-            '<small>' +
-            'Silakan cek Google Sheet. Jika foto digunakan, cek juga folder Google Drive.' +
-            '</small>'
-          );
-
-
-          form.reset();
-
-          idInput.value =
-            '';
-
-          imageBase64Input.value =
-            '';
-
-          imageNameInput.value =
-            '';
-
-          imageMimeTypeInput.value =
-            '';
-
-          preview.src =
-            '';
-
-          preview.style.display =
-            'none';
-
-
-          btn.disabled =
-            false;
-
-          btn.textContent =
-            'Simpan Produk';
-
-          submitting =
-            false;
-
-
-          setTimeout(
-            function(){
-
-              progress.style.display =
-                'none';
-
-              bar.style.width =
-                '0%';
-
-            },
-            1500
-          );
-
-
-        },
-        5000
-      );
+      bar.style.width =
+        "100%";
 
 
     }catch(error){
 
       console.error(
-        'ERROR:',
         error
       );
 
 
       showMessage(
-        'err',
-        '<b>Gagal menyiapkan produk.</b><br>' +
-        '<small>' +
+        "err",
+
+        "<b>Gagal.</b><br>" +
+
+        "<small>" +
+
         error.message +
-        '</small>'
+
+        "</small>"
+
       );
 
 
@@ -1191,43 +1291,16 @@ form.addEventListener(
         false;
 
       btn.textContent =
-        'Simpan Produk';
-
-      submitting =
-        false;
+        "Simpan Produk";
 
 
       progress.style.display =
-        'none';
+        "none";
 
       bar.style.width =
-        '0%';
+        "0%";
 
     }
-
-  }
-);
-
-
-/* =========================================================
-   FRAME LOAD
-   ========================================================= */
-
-hiddenFrame.addEventListener(
-  'load',
-  function(){
-
-    /*
-     * Response Apps Script memang masuk
-     * ke iframe.
-     *
-     * Kita sengaja tidak membaca isi iframe
-     * karena berasal dari domain berbeda.
-     */
-
-    console.log(
-      'Response Apps Script diterima oleh iframe.'
-    );
 
   }
 );
@@ -1235,4 +1308,5 @@ hiddenFrame.addEventListener(
 </script>
 
 </body>
+
 </html>
