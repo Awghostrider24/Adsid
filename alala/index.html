@@ -1,1374 +1,414 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Input Produk — Alala Jusss</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
-        }
-
-        .wrap {
-            max-width: 520px;
-            margin: auto;
-            padding: 18px;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 18px;
-            padding: 22px;
-            box-shadow: 0 6px 24px #0001;
-        }
-
-        h1 {
-            margin: 0 0 5px;
-            font-size: 24px;
-        }
-
-        .sub {
-            color: #666;
-            margin: 0 0 20px;
-            line-height: 1.5;
-        }
-
-        label {
-            display: block;
-            font-weight: 700;
-            margin: 14px 0 7px;
-        }
-
-        small {
-            font-weight: normal;
-            color: #777;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: inherit;
-            background: #fff;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #888;
-        }
-
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .filebox {
-            border: 2px dashed #ccc;
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-        }
-
-        .filebox input[type="file"] {
-            padding: 8px;
-            border: 0;
-        }
-
-        .preview {
-            width: 100%;
-            max-height: 240px;
-            object-fit: contain;
-            border-radius: 10px;
-            margin-top: 12px;
-            display: none;
-            background: #f4f4f4;
-        }
-
-        .image-info {
-            margin-top: 8px;
-            font-size: 13px;
-            color: #666;
-            display: none;
-            line-height: 1.5;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 20px;
-            padding: 15px;
-            border: 0;
-            border-radius: 11px;
-            background: #111;
-            color: #fff;
-            font-size: 17px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        button:hover:not(:disabled) {
-            background: #333;
-        }
-
-        button:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
-
-        .msg {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 10px;
-            display: none;
-            line-height: 1.5;
-        }
-
-        .ok {
-            display: block;
-            background: #e8f7ed;
-            color: #176b35;
-        }
-
-        .err {
-            display: block;
-            background: #fdecec;
-            color: #a12626;
-        }
-
-        .progress {
-            margin-top: 12px;
-            height: 8px;
-            background: #eee;
-            border-radius: 8px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .bar {
-            height: 100%;
-            width: 0%;
-            background: #333;
-            transition: width .25s ease;
-        }
-
-        .compress-info {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #555;
-            display: none;
-            text-align: center;
-        }
-
-        @media (max-width: 420px) {
-
-            .wrap {
-                padding: 10px;
-            }
-
-            .card {
-                padding: 18px;
-            }
-
-            .row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Produk — Alala Jusss</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#222}
+.wrap{max-width:520px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 6px 24px #0001}
+h1{margin:0 0 5px;font-size:24px}
+.sub{color:#666;margin:0 0 20px;line-height:1.5}
+label{display:block;font-weight:700;margin:14px 0 7px}
+small{font-weight:normal;color:#777}
+input,textarea,select{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:16px;font-family:inherit;background:#fff}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#888}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.filebox{border:2px dashed #ccc;border-radius:12px;padding:18px;text-align:center}
+.filebox input[type=file]{padding:8px;border:0}
+.preview{width:100%;max-height:240px;object-fit:contain;border-radius:10px;margin-top:12px;display:none;background:#f4f4f4}
+.image-info,.compress-info{margin-top:8px;font-size:13px;color:#666;line-height:1.5}
+.image-info{display:none}.compress-info{display:none;text-align:center}
+button{width:100%;margin-top:20px;padding:15px;border:0;border-radius:11px;background:#111;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
+button:hover:not(:disabled){background:#333}
+button:disabled{opacity:.6;cursor:not-allowed}
+.msg{margin-top:15px;padding:12px;border-radius:10px;display:none;line-height:1.5}
+.ok{display:block;background:#e8f7ed;color:#176b35}
+.err{display:block;background:#fdecec;color:#a12626}
+.progress{margin-top:12px;height:8px;background:#eee;border-radius:8px;overflow:hidden;display:none}
+.bar{height:100%;width:0%;background:#333;transition:width .25s ease}
+@media(max-width:420px){.wrap{padding:10px}.card{padding:18px}.row{grid-template-columns:1fr;gap:0}}
+</style>
 </head>
-
-
 <body>
-
 <div class="wrap">
+<div class="card">
+<h1>Tambah Produk</h1>
+<p class="sub">Foto dari HP akan otomatis diperkecil dan dikompres sebelum dikirim ke Google Drive.</p>
 
-    <div class="card">
+<form id="productForm">
+<label>ID Produk <small>(otomatis)</small></label>
+<input id="id" name="id" readonly placeholder="Akan dibuat otomatis">
 
-        <h1>Tambah Produk</h1>
+<label>Nama Produk</label>
+<input id="name" name="name" required autocomplete="off" placeholder="Contoh: Jus Alpukat">
 
-        <p class="sub">
-            Foto dari HP akan otomatis diperkecil dan dikompres
-            sebelum dikirim ke Google Drive.
-        </p>
+<label>Deskripsi</label>
+<textarea id="desc" name="desc" required placeholder="Deskripsi singkat produk"></textarea>
 
-
-        <form id="productForm">
-
-            <!-- ID -->
-            <label>
-                ID Produk
-                <small>(otomatis)</small>
-            </label>
-
-            <input
-                id="id"
-                name="id"
-                readonly
-                placeholder="Akan dibuat otomatis"
-            >
-
-
-            <!-- NAMA -->
-            <label>
-                Nama Produk
-            </label>
-
-            <input
-                id="name"
-                name="name"
-                required
-                autocomplete="off"
-                placeholder="Contoh: Jus Alpukat"
-            >
-
-
-            <!-- DESKRIPSI -->
-            <label>
-                Deskripsi
-            </label>
-
-            <textarea
-                id="desc"
-                name="desc"
-                required
-                placeholder="Deskripsi singkat produk"
-            ></textarea>
-
-
-            <!-- HARGA -->
-            <div class="row">
-
-                <div>
-
-                    <label>
-                        Harga Small
-                    </label>
-
-                    <input
-                        id="small"
-                        name="small"
-                        type="number"
-                        min="0"
-                        required
-                        placeholder="10000"
-                    >
-
-                </div>
-
-
-                <div>
-
-                    <label>
-                        Harga Medium
-                    </label>
-
-                    <input
-                        id="medium"
-                        name="medium"
-                        type="number"
-                        min="0"
-                        required
-                        placeholder="14000"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <!-- FOTO -->
-            <label>
-                Foto Produk
-            </label>
-
-            <div class="filebox">
-
-                <input
-                    id="image"
-                    name="image"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/*"
-                    capture="environment"
-                    required
-                >
-
-                <img
-                    id="preview"
-                    class="preview"
-                    alt="Preview foto produk"
-                >
-
-                <div
-                    id="imageInfo"
-                    class="image-info"
-                ></div>
-
-            </div>
-
-
-            <div
-                id="compressInfo"
-                class="compress-info"
-            ></div>
-
-
-            <!-- STATUS -->
-            <label>
-                Status
-            </label>
-
-            <select
-                id="status"
-                name="status"
-            >
-
-                <option value="tersedia">
-                    Tersedia
-                </option>
-
-                <option value="habis">
-                    Habis
-                </option>
-
-            </select>
-
-
-            <!-- PROGRESS -->
-            <div
-                class="progress"
-                id="progress"
-            >
-
-                <div
-                    class="bar"
-                    id="bar"
-                ></div>
-
-            </div>
-
-
-            <!-- BUTTON -->
-            <button
-                id="submitBtn"
-                type="submit"
-            >
-                Simpan Produk
-            </button>
-
-
-            <!-- MESSAGE -->
-            <div
-                id="message"
-                class="msg"
-            ></div>
-
-        </form>
-
-    </div>
-
+<div class="row">
+<div>
+<label>Harga Small</label>
+<input id="small" name="small" type="number" min="0" required placeholder="10000">
+</div>
+<div>
+<label>Harga Medium</label>
+<input id="medium" name="medium" type="number" min="0" required placeholder="14000">
+</div>
 </div>
 
+<label>Foto Produk</label>
+<div class="filebox">
+<input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/*" capture="environment" required>
+<img id="preview" class="preview" alt="Preview foto produk">
+<div id="imageInfo" class="image-info"></div>
+</div>
+
+<div id="compressInfo" class="compress-info"></div>
+
+<label>Status</label>
+<select id="status" name="status">
+<option value="tersedia">Tersedia</option>
+<option value="habis">Habis</option>
+</select>
+
+<div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+
+<button id="submitBtn" type="submit">Simpan Produk</button>
+<div id="message" class="msg"></div>
+</form>
+</div>
+</div>
 
 <script>
-
 /* =========================================================
-   GOOGLE APPS SCRIPT
+   URL GOOGLE APPS SCRIPT
    ========================================================= */
-
-const API_URL =
-    "https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec";
-
-
-/* =========================================================
-   PENGATURAN FOTO
-   ========================================================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbz1O7imkZXxSgfdh38ZJW7iSp9ZxIjmlCU04RTWdU7fwdh6E5UtJ_SwxQye4fx1zm7lIA/exec";
 
 const MAX_IMAGE_SIZE = 1600;
-
 const JPEG_QUALITY = 0.80;
-
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
+const form = document.getElementById("productForm");
+const nameInput = document.getElementById("name");
+const idInput = document.getElementById("id");
+const imageInput = document.getElementById("image");
+const preview = document.getElementById("preview");
+const imageInfo = document.getElementById("imageInfo");
+const compressInfo = document.getElementById("compressInfo");
+const btn = document.getElementById("submitBtn");
+const msg = document.getElementById("message");
+const progress = document.getElementById("progress");
+const bar = document.getElementById("bar");
 
-/* =========================================================
-   ELEMENT
-   ========================================================= */
-
-const form =
-    document.getElementById("productForm");
-
-const nameInput =
-    document.getElementById("name");
-
-const idInput =
-    document.getElementById("id");
-
-const imageInput =
-    document.getElementById("image");
-
-const preview =
-    document.getElementById("preview");
-
-const imageInfo =
-    document.getElementById("imageInfo");
-
-const compressInfo =
-    document.getElementById("compressInfo");
-
-const btn =
-    document.getElementById("submitBtn");
-
-const msg =
-    document.getElementById("message");
-
-const progress =
-    document.getElementById("progress");
-
-const bar =
-    document.getElementById("bar");
-
-
-/* =========================================================
-   SLUG ID
-   ========================================================= */
-
-function slugify(text) {
-
-    return text
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-");
-
+function slugify(text){
+    return text.toLowerCase().trim()
+        .replace(/[^a-z0-9\s-]/g,"")
+        .replace(/\s+/g,"-")
+        .replace(/-+/g,"-");
 }
 
+nameInput.addEventListener("input",()=>{
+    idInput.value = slugify(nameInput.value);
+});
 
-nameInput.addEventListener(
-    "input",
-    function () {
-
-        idInput.value =
-            slugify(nameInput.value);
-
-    }
-);
-
-
-/* =========================================================
-   FORMAT SIZE
-   ========================================================= */
-
-function formatBytes(bytes) {
-
-    if (bytes < 1024) {
-
-        return bytes + " B";
-
-    }
-
-    if (bytes < 1024 * 1024) {
-
-        return (
-            bytes / 1024
-        ).toFixed(1) + " KB";
-
-    }
-
-    return (
-        bytes /
-        (1024 * 1024)
-    ).toFixed(2) + " MB";
-
+function formatBytes(bytes){
+    if(bytes < 1024) return bytes+" B";
+    if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
+    return (bytes/(1024*1024)).toFixed(2)+" MB";
 }
 
-
-/* =========================================================
-   KOMPRESI GAMBAR
-   ========================================================= */
-
-function compressImage(file) {
-
-    return new Promise(
-        function (resolve, reject) {
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function (event) {
-
-                    const img =
-                        new Image();
-
-
-                    img.onload =
-                        function () {
-
-                            let width =
-                                img.width;
-
-                            let height =
-                                img.height;
-
-
-                            /* BATAS UKURAN */
-
-                            if (
-                                width >
-                                    MAX_IMAGE_SIZE ||
-                                height >
-                                    MAX_IMAGE_SIZE
-                            ) {
-
-                                if (
-                                    width >
-                                    height
-                                ) {
-
-                                    height =
-                                        Math.round(
-                                            height *
-                                            MAX_IMAGE_SIZE /
-                                            width
-                                        );
-
-                                    width =
-                                        MAX_IMAGE_SIZE;
-
-                                } else {
-
-                                    width =
-                                        Math.round(
-                                            width *
-                                            MAX_IMAGE_SIZE /
-                                            height
-                                        );
-
-                                    height =
-                                        MAX_IMAGE_SIZE;
-
-                                }
-
-                            }
-
-
-                            /* CANVAS */
-
-                            const canvas =
-                                document.createElement(
-                                    "canvas"
-                                );
-
-
-                            canvas.width =
-                                width;
-
-                            canvas.height =
-                                height;
-
-
-                            const ctx =
-                                canvas.getContext(
-                                    "2d"
-                                );
-
-
-                            if (!ctx) {
-
-                                reject(
-                                    new Error(
-                                        "Browser tidak mendukung canvas."
-                                    )
-                                );
-
-                                return;
-
-                            }
-
-
-                            /* BACKGROUND PUTIH */
-
-                            ctx.fillStyle =
-                                "#ffffff";
-
-                            ctx.fillRect(
-                                0,
-                                0,
-                                width,
-                                height
-                            );
-
-
-                            /* GAMBAR */
-
-                            ctx.drawImage(
-                                img,
-                                0,
-                                0,
-                                width,
-                                height
-                            );
-
-
-                            /* JPEG */
-
-                            canvas.toBlob(
-                                function (blob) {
-
-                                    if (!blob) {
-
-                                        reject(
-                                            new Error(
-                                                "Gagal melakukan kompresi foto."
-                                            )
-                                        );
-
-                                        return;
-
-                                    }
-
-
-                                    const originalName =
-                                        file.name
-                                            .replace(
-                                                /\.[^/.]+$/,
-                                                ""
-                                            )
-                                            .replace(
-                                                /[^a-zA-Z0-9-_]/g,
-                                                "-"
-                                            );
-
-
-                                    const newFile =
-                                        new File(
-                                            [
-                                                blob
-                                            ],
-                                            originalName +
-                                                ".jpg",
-                                            {
-                                                type:
-                                                    "image/jpeg",
-
-                                                lastModified:
-                                                    Date.now()
-                                            }
-                                        );
-
-
-                                    resolve(
-                                        newFile
-                                    );
-
-                                },
-
-                                "image/jpeg",
-
-                                JPEG_QUALITY
-                            );
-
-                        };
-
-
-                    img.onerror =
-                        function () {
-
-                            reject(
-                                new Error(
-                                    "Foto tidak dapat dibaca."
-                                )
-                            );
-
-                        };
-
-
-                    img.src =
-                        event.target.result;
-
-                };
-
-
-            reader.onerror =
-                function () {
-
-                    reject(
-                        new Error(
-                            "Gagal membaca foto."
-                        )
-                    );
-
-                };
-
-
-            reader.readAsDataURL(file);
-
-        }
-    );
-
+function showSuccess(text){
+    msg.className="msg ok";
+    msg.innerHTML=text;
 }
 
+function showError(text){
+    msg.className="msg err";
+    msg.textContent="Gagal: "+text;
+}
 
-/* =========================================================
-   FILE → BASE64
-   ========================================================= */
+function clearMessage(){
+    msg.className="msg";
+    msg.textContent="";
+}
 
-function fileToBase64(file) {
+function compressImage(file){
+    return new Promise((resolve,reject)=>{
+        const reader=new FileReader();
 
-    return new Promise(
-        function (resolve, reject) {
+        reader.onload=(event)=>{
+            const img=new Image();
 
-            const reader =
-                new FileReader();
+            img.onload=()=>{
+                let width=img.width;
+                let height=img.height;
 
-
-            reader.onload =
-                function () {
-
-                    const result =
-                        reader.result;
-
-
-                    if (!result) {
-
-                        reject(
-                            new Error(
-                                "Data foto kosong."
-                            )
-                        );
-
-                        return;
-
+                if(width>MAX_IMAGE_SIZE || height>MAX_IMAGE_SIZE){
+                    if(width>height){
+                        height=Math.round(height*MAX_IMAGE_SIZE/width);
+                        width=MAX_IMAGE_SIZE;
+                    }else{
+                        width=Math.round(width*MAX_IMAGE_SIZE/height);
+                        height=MAX_IMAGE_SIZE;
                     }
-
-
-                    const parts =
-                        result
-                            .toString()
-                            .split(",");
-
-
-                    if (parts.length < 2) {
-
-                        reject(
-                            new Error(
-                                "Format Base64 tidak valid."
-                            )
-                        );
-
-                        return;
-
-                    }
-
-
-                    resolve(
-                        parts[1]
-                    );
-
-                };
-
-
-            reader.onerror =
-                function () {
-
-                    reject(
-                        new Error(
-                            "Gagal mengubah foto menjadi Base64."
-                        )
-                    );
-
-                };
-
-
-            reader.readAsDataURL(file);
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PREVIEW
-   ========================================================= */
-
-imageInput.addEventListener(
-    "change",
-    async function () {
-
-        const originalFile =
-            imageInput.files[0];
-
-
-        if (!originalFile) {
-
-            return;
-
-        }
-
-
-        if (
-            !originalFile.type.startsWith(
-                "image/"
-            )
-        ) {
-
-            showError(
-                "File yang dipilih bukan gambar."
-            );
-
-            imageInput.value = "";
-
-            return;
-
-        }
-
-
-        try {
-
-            imageInfo.style.display =
-                "block";
-
-
-            imageInfo.innerHTML =
-                "Foto asli: " +
-                formatBytes(
-                    originalFile.size
-                );
-
-
-            compressInfo.style.display =
-                "block";
-
-
-            compressInfo.textContent =
-                "Mengoptimalkan foto...";
-
-
-            const compressedFile =
-                await compressImage(
-                    originalFile
-                );
-
-
-            /* GANTI FILE INPUT */
-
-            try {
-
-                const dataTransfer =
-                    new DataTransfer();
-
-
-                dataTransfer.items.add(
-                    compressedFile
-                );
-
-
-                imageInput.files =
-                    dataTransfer.files;
-
-            } catch (error) {
-
-                console.warn(
-                    "Tidak dapat mengganti file input.",
-                    error
-                );
-
-            }
-
-
-            /* PREVIEW */
-
-            if (
-                preview.dataset.url
-            ) {
-
-                URL.revokeObjectURL(
-                    preview.dataset.url
-                );
-
-            }
-
-
-            const previewUrl =
-                URL.createObjectURL(
-                    compressedFile
-                );
-
-
-            preview.dataset.url =
-                previewUrl;
-
-            preview.src =
-                previewUrl;
-
-            preview.style.display =
-                "block";
-
-
-            /* INFO */
-
-            const originalSize =
-                originalFile.size;
-
-            const compressedSize =
-                compressedFile.size;
-
-
-            let percentage = 0;
-
-
-            if (originalSize > 0) {
-
-                percentage =
-                    Math.round(
-                        (
-                            1 -
-                            compressedSize /
-                                originalSize
-                        ) * 100
-                    );
-
-            }
-
-
-            imageInfo.innerHTML =
-                "Foto asli: " +
-                formatBytes(
-                    originalSize
-                ) +
-                "<br>" +
-                "Setelah kompresi: " +
-                formatBytes(
-                    compressedSize
-                );
-
-
-            compressInfo.textContent =
-                "Foto berhasil dioptimalkan" +
-                (
-                    percentage > 0
-                        ? " • Hemat sekitar " +
-                          percentage +
-                          "%"
-                        : ""
-                );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            imageInput.value = "";
-
-            preview.style.display =
-                "none";
-
-            imageInfo.style.display =
-                "none";
-
-            compressInfo.style.display =
-                "none";
-
-            showError(
-                error.message ||
-                "Gagal memproses foto."
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   MESSAGE
-   ========================================================= */
-
-function clearMessage() {
-
-    msg.className =
-        "msg";
-
-    msg.textContent =
-        "";
-
-}
-
-
-function showSuccess(message) {
-
-    msg.className =
-        "msg ok";
-
-    msg.innerHTML =
-        message;
-
-}
-
-
-function showError(message) {
-
-    msg.className =
-        "msg err";
-
-    msg.textContent =
-        "Gagal: " + message;
-
-}
-
-
-/* =========================================================
-   SUBMIT
-   ========================================================= */
-
-form.addEventListener(
-    "submit",
-    async function (e) {
-
-        e.preventDefault();
-
-
-        /* URL */
-
-        if (
-            !API_URL ||
-            API_URL.includes("GANTI")
-        ) {
-
-            showError(
-                "URL Google Apps Script belum dikonfigurasi."
-            );
-
-            return;
-
-        }
-
-
-        /* NAMA */
-
-        const productName =
-            nameInput.value.trim();
-
-
-        if (!productName) {
-
-            showError(
-                "Nama produk belum diisi."
-            );
-
-            nameInput.focus();
-
-            return;
-
-        }
-
-
-        /* ID */
-
-        const productId =
-            idInput.value.trim();
-
-
-        if (!productId) {
-
-            showError(
-                "ID produk belum dibuat."
-            );
-
-            return;
-
-        }
-
-
-        /* FOTO */
-
-        const file =
-            imageInput.files[0];
-
-
-        if (!file) {
-
-            showError(
-                "Pilih foto produk terlebih dahulu."
-            );
-
-            return;
-
-        }
-
-
-        /* UKURAN */
-
-        if (
-            file.size >
-            MAX_UPLOAD_SIZE
-        ) {
-
-            showError(
-                "Foto masih terlalu besar. Maksimal 5 MB."
-            );
-
-            return;
-
-        }
-
-
-        clearMessage();
-
-
-        btn.disabled =
-            true;
-
-        btn.textContent =
-            "Menyiapkan data...";
-
-
-        progress.style.display =
-            "block";
-
-        bar.style.width =
-            "10%";
-
-
-        try {
-
-            /* =========================================
-               DATA FORM
-            ========================================= */
-
-            const formData =
-                new FormData(form);
-
-
-            const data = {};
-
-
-            formData.forEach(
-                function (value, key) {
-
-                    if (
-                        key !== "image"
-                    ) {
-
-                        data[key] =
-                            value;
-
-                    }
-
                 }
-            );
 
+                const canvas=document.createElement("canvas");
+                canvas.width=width;
+                canvas.height=height;
 
-            data.small =
-                Number(
-                    data.small || 0
-                );
-
-
-            data.medium =
-                Number(
-                    data.medium || 0
-                );
-
-
-            /* =========================================
-               FOTO
-            ========================================= */
-
-            data.imageName =
-                file.name;
-
-
-            data.imageMimeType =
-                "image/jpeg";
-
-
-            bar.style.width =
-                "30%";
-
-
-            btn.textContent =
-                "Memproses foto...";
-
-
-            /* =========================================
-               BASE64
-            ========================================= */
-
-            data.imageBase64 =
-                await fileToBase64(
-                    file
-                );
-
-
-            bar.style.width =
-                "55%";
-
-
-            btn.textContent =
-                "Mengirim produk...";
-
-
-            /* =========================================
-               KIRIM KE GOOGLE APPS SCRIPT
-               
-               PENTING:
-               mode no-cors digunakan agar browser
-               tidak memblokir request Apps Script.
-            ========================================= */
-
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    mode: "no-cors",
-
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body:
-                        JSON.stringify(data)
+                const ctx=canvas.getContext("2d");
+                if(!ctx){
+                    reject(new Error("Browser tidak mendukung canvas."));
+                    return;
                 }
-            );
 
+                ctx.fillStyle="#ffffff";
+                ctx.fillRect(0,0,width,height);
+                ctx.drawImage(img,0,0,width,height);
 
-            /* =========================================
-               REQUEST TERKIRIM
-            ========================================= */
-
-            bar.style.width =
-                "100%";
-
-
-            showSuccess(
-                "Produk <b>" +
-                productName +
-                "</b> sedang dikirim.<br>" +
-                "<small>" +
-                "Data akan disimpan ke Google Sheets dan foto ke Google Drive." +
-                "</small>"
-            );
-
-
-            /* =========================================
-               RESET
-            ========================================= */
-
-            setTimeout(
-                function () {
-
-                    form.reset();
-
-                    idInput.value =
-                        "";
-
-                    if (
-                        preview.dataset.url
-                    ) {
-
-                        URL.revokeObjectURL(
-                            preview.dataset.url
-                        );
-
-                        delete preview.dataset.url;
-
+                canvas.toBlob(blob=>{
+                    if(!blob){
+                        reject(new Error("Gagal melakukan kompresi foto."));
+                        return;
                     }
 
+                    const originalName=file.name
+                        .replace(/\.[^/.]+$/,"")
+                        .replace(/[^a-zA-Z0-9-_]/g,"-");
 
-                    preview.src =
-                        "";
+                    resolve(new File([blob],originalName+".jpg",{
+                        type:"image/jpeg",
+                        lastModified:Date.now()
+                    }));
+                },"image/jpeg",JPEG_QUALITY);
+            };
 
-                    preview.style.display =
-                        "none";
+            img.onerror=()=>reject(new Error("Foto tidak dapat dibaca."));
+            img.src=event.target.result;
+        };
 
+        reader.onerror=()=>reject(new Error("Gagal membaca foto."));
+        reader.readAsDataURL(file);
+    });
+}
 
-                    imageInfo.innerHTML =
-                        "";
+function fileToBase64(file){
+    return new Promise((resolve,reject)=>{
+        const reader=new FileReader();
 
-                    imageInfo.style.display =
-                        "none";
+        reader.onload=()=>{
+            const result=reader.result;
+            if(!result){
+                reject(new Error("Data foto kosong."));
+                return;
+            }
 
+            const parts=result.toString().split(",");
+            if(parts.length<2){
+                reject(new Error("Format Base64 tidak valid."));
+                return;
+            }
 
-                    compressInfo.textContent =
-                        "";
+            resolve(parts[1]);
+        };
 
-                    compressInfo.style.display =
-                        "none";
+        reader.onerror=()=>reject(new Error("Gagal mengubah foto menjadi Base64."));
+        reader.readAsDataURL(file);
+    });
+}
 
-                },
-                1000
-            );
+imageInput.addEventListener("change",async()=>{
+    const originalFile=imageInput.files[0];
+    if(!originalFile) return;
 
+    if(!originalFile.type.startsWith("image/")){
+        showError("File yang dipilih bukan gambar.");
+        imageInput.value="";
+        return;
+    }
 
-        } catch (error) {
+    try{
+        imageInfo.style.display="block";
+        imageInfo.textContent="Foto asli: "+formatBytes(originalFile.size);
 
-            console.error(
-                "UPLOAD ERROR:",
-                error
-            );
+        compressInfo.style.display="block";
+        compressInfo.textContent="Mengoptimalkan foto...";
 
+        const compressedFile=await compressImage(originalFile);
 
-            showError(
-                error.message ||
-                "Gagal mengirim data ke Google Apps Script."
-            );
-
-
-        } finally {
-
-            btn.disabled =
-                false;
-
-            btn.textContent =
-                "Simpan Produk";
-
-
-            setTimeout(
-                function () {
-
-                    progress.style.display =
-                        "none";
-
-                    bar.style.width =
-                        "0%";
-
-                },
-                1500
-            );
-
+        try{
+            const dt=new DataTransfer();
+            dt.items.add(compressedFile);
+            imageInput.files=dt.files;
+        }catch(e){
+            console.warn("Tidak dapat mengganti file input.",e);
         }
 
-    }
-);
+        if(preview.dataset.url){
+            URL.revokeObjectURL(preview.dataset.url);
+        }
 
+        const previewUrl=URL.createObjectURL(compressedFile);
+        preview.dataset.url=previewUrl;
+        preview.src=previewUrl;
+        preview.style.display="block";
+
+        const originalSize=originalFile.size;
+        const compressedSize=compressedFile.size;
+
+        let percentage=0;
+        if(originalSize>0){
+            percentage=Math.round((1-compressedSize/originalSize)*100);
+        }
+
+        imageInfo.innerHTML=
+            "Foto asli: "+formatBytes(originalSize)+
+            "<br>Setelah kompresi: "+formatBytes(compressedSize);
+
+        compressInfo.textContent=
+            "Foto berhasil dioptimalkan"+
+            (percentage>0?" • Hemat sekitar "+percentage+"%":"");
+
+    }catch(error){
+        console.error(error);
+        imageInput.value="";
+        preview.style.display="none";
+        imageInfo.style.display="none";
+        compressInfo.style.display="none";
+        showError(error.message||"Gagal memproses foto.");
+    }
+});
+
+/* =========================================================
+   KIRIM DATA
+   ========================================================= */
+form.addEventListener("submit",async(e)=>{
+    e.preventDefault();
+
+    if(!API_URL || API_URL.includes("GANTI")){
+        showError("URL Google Apps Script belum dikonfigurasi.");
+        return;
+    }
+
+    const productName=nameInput.value.trim();
+    const productId=idInput.value.trim();
+    const file=imageInput.files[0];
+
+    if(!productName){
+        showError("Nama produk belum diisi.");
+        nameInput.focus();
+        return;
+    }
+
+    if(!productId){
+        showError("ID produk belum dibuat.");
+        return;
+    }
+
+    if(!file){
+        showError("Pilih foto produk terlebih dahulu.");
+        return;
+    }
+
+    if(file.size>MAX_UPLOAD_SIZE){
+        showError("Foto masih terlalu besar. Maksimal 5 MB.");
+        return;
+    }
+
+    clearMessage();
+    btn.disabled=true;
+    btn.textContent="Menyiapkan data...";
+    progress.style.display="block";
+    bar.style.width="10%";
+
+    try{
+        const compressedFile=await compressImage(file);
+
+        if(compressedFile.size>MAX_UPLOAD_SIZE){
+            throw new Error("Foto setelah kompresi masih lebih dari 5 MB.");
+        }
+
+        bar.style.width="35%";
+        btn.textContent="Membaca foto...";
+
+        const base64=await fileToBase64(compressedFile);
+
+        const data={
+            id:productId,
+            name:productName,
+            desc:document.getElementById("desc").value.trim(),
+            small:Number(document.getElementById("small").value||0),
+            medium:Number(document.getElementById("medium").value||0),
+            status:document.getElementById("status").value,
+            imageName:compressedFile.name,
+            imageMimeType:"image/jpeg",
+            imageBase64:base64
+        };
+
+        bar.style.width="55%";
+        btn.textContent="Mengirim produk...";
+
+        /*
+         * text/plain adalah request sederhana sehingga tidak
+         * meminta preflight OPTIONS seperti application/json.
+         *
+         * no-cors sengaja digunakan untuk kompatibilitas
+         * GitHub Pages -> Apps Script.
+         *
+         * Apps Script tetap memproses data di server.
+         */
+        await fetch(API_URL,{
+            method:"POST",
+            mode:"no-cors",
+            headers:{
+                "Content-Type":"text/plain;charset=utf-8"
+            },
+            body:JSON.stringify(data)
+        });
+
+        bar.style.width="100%";
+
+        showSuccess(
+            "Produk <b>"+productName+"</b> berhasil dikirim.<br>"+
+            "<small>Silakan cek Google Sheets dan Google Drive.</small>"
+        );
+
+        setTimeout(()=>{
+            form.reset();
+            idInput.value="";
+            preview.src="";
+            preview.style.display="none";
+
+            if(preview.dataset.url){
+                URL.revokeObjectURL(preview.dataset.url);
+                delete preview.dataset.url;
+            }
+
+            imageInfo.innerHTML="";
+            imageInfo.style.display="none";
+            compressInfo.textContent="";
+            compressInfo.style.display="none";
+        },1200);
+
+    }catch(error){
+        console.error("UPLOAD ERROR:",error);
+        showError(error.message||"Gagal mengirim data ke Google Apps Script.");
+    }finally{
+        btn.disabled=false;
+        btn.textContent="Simpan Produk";
+
+        setTimeout(()=>{
+            progress.style.display="none";
+            bar.style.width="0%";
+        },1500);
+    }
+});
 </script>
-
 </body>
 </html>
