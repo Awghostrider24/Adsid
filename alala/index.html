@@ -1,384 +1,2979 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#111827">
-<title>Alala Jusss — Admin</title>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<style>
-*{box-sizing:border-box}
-:root{--ink:#111827;--muted:#667085;--line:#e5e7eb;--soft:#f8fafc;--danger:#b42318}
-body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);
-background:radial-gradient(circle at 15% 10%,rgba(17,24,39,.06),transparent 28%),radial-gradient(circle at 90% 20%,rgba(17,24,39,.045),transparent 25%),#f3f5f8}
-.page{width:min(680px,100%);margin:auto;padding:28px 16px 48px}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding:0 4px}
-.brand{display:flex;align-items:center;gap:11px}.brandmark{width:42px;height:42px;border-radius:13px;background:#111827;color:#fff;display:grid;place-items:center;font-weight:900;font-size:17px;box-shadow:0 8px 20px rgba(17,24,39,.18)}
-.brand strong{display:block;font-size:15px}.brand span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.badge{padding:8px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;color:#475467}
-.card{background:rgba(255,255,255,.97);border:1px solid rgba(17,24,39,.07);border-radius:26px;padding:28px;box-shadow:0 20px 60px rgba(15,23,42,.10)}
-h1{margin:0;font-size:28px;letter-spacing:-.8px}.sub{margin:7px 0 25px;color:var(--muted);line-height:1.55;font-size:14px}
-.section{margin-top:23px}.section-title{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;margin-bottom:9px}.num{width:23px;height:23px;border-radius:8px;background:#eef0f3;display:grid;place-items:center;font-size:11px}
-label{display:block;font-weight:750;font-size:13px;margin:16px 0 7px}label small{font-weight:500;color:#98a2b3}
-input,textarea,select{width:100%;border:1px solid #d9dee7;background:#fff;color:#111827;border-radius:12px;padding:13px 14px;font:inherit;font-size:14px;outline:none;transition:.18s}
-input:focus,textarea:focus,select:focus{border-color:#111827;box-shadow:0 0 0 4px rgba(17,24,39,.07)}
-input[readonly]{background:#f8fafc;color:#667085}textarea{min-height:94px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.filebox{border:1.5px dashed #cbd2dc;border-radius:17px;padding:15px;background:#fafbfc;overflow:hidden}
-.filebox input[type=file]{padding:11px;background:#fff;cursor:pointer}
-.filehint{display:flex;gap:9px;align-items:flex-start;margin-top:10px;color:#667085;font-size:12px;line-height:1.45}.hinticon{width:24px;height:24px;flex:0 0 24px;border-radius:8px;background:#eef1f5;display:grid;place-items:center}
-.preview-wrap{display:none;margin-top:13px;position:relative}.preview{width:100%;height:240px;object-fit:contain;border-radius:14px;background:#eef1f5;border:1px solid #e5e7eb;display:block}
-.preview-label{position:absolute;left:10px;top:10px;background:rgba(17,24,39,.82);color:#fff;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;z-index:2}
-.sizegrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}.sizeitem{padding:10px;border:1px solid #e7eaf0;border-radius:11px;background:#fff}.sizeitem span{display:block;color:#98a2b3;font-size:10px;margin-bottom:3px}.sizeitem strong{font-size:12px}
-.progressbox{display:none;margin-top:17px;padding:15px;border-radius:16px;background:#f7f8fa;border:1px solid #e8ebef}
-.progresshead{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;font-size:12px}.progresshead strong{font-size:13px}.progressline{height:8px;border-radius:99px;background:#e6e9ee;overflow:hidden}.progressbar{height:100%;width:0%;background:#111827;border-radius:99px;transition:width .3s ease}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
-button{width:100%;border:0;border-radius:12px;padding:14px 16px;background:#111827;color:#fff;font:inherit;font-weight:800;font-size:14px;cursor:pointer;transition:.18s;box-shadow:0 7px 16px rgba(17,24,39,.13)}
-button:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(17,24,39,.17)}button:disabled{opacity:.55;cursor:not-allowed;transform:none}.secondary{display:none;background:#eef1f5;color:#111827;box-shadow:none}
-.msg{display:none;margin-top:13px;padding:12px 14px;border-radius:12px;font-size:12px;line-height:1.5}.msg.info{display:block;background:#f1f5f9;color:#334155}.msg.err{display:block;background:#fff1f0;color:var(--danger);border:1px solid #ffd6d2}
-.footer{text-align:center;color:#98a2b3;font-size:11px;margin-top:15px}
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}.modal.show{display:flex}
-.modalcard{width:min(410px,100%);background:#fff;border-radius:24px;padding:28px;text-align:center;box-shadow:0 28px 80px rgba(0,0,0,.28);animation:pop .2s ease-out}
-@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
-.successicon{width:70px;height:70px;margin:0 auto 15px;display:grid;place-items:center;border-radius:50%;background:#ecfdf3;color:#15803d}.successicon svg{width:34px;height:34px}
-.modalcard h2{margin:0;font-size:22px;letter-spacing:-.4px}.modalcard p{margin:8px 0 0;color:#667085;font-size:13px;line-height:1.55}
-.modalstats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px;text-align:left}.modalstat{padding:10px;border-radius:11px;background:#f8fafc}.modalstat span{display:block;color:#98a2b3;font-size:10px}.modalstat strong{font-size:12px}
-@media(max-width:520px){.page{padding:18px 12px 35px}.card{padding:20px;border-radius:21px}h1{font-size:24px}.row,.actions{grid-template-columns:1fr}.preview{height:205px}.badge{display:none}}
 
-.login-screen{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 20% 10%,rgba(17,24,39,.08),transparent 30%),#f3f5f8}
-.login-card{width:min(420px,100%);background:#fff;border:1px solid rgba(17,24,39,.08);border-radius:26px;padding:30px;box-shadow:0 25px 80px rgba(15,23,42,.16);text-align:center}
-.login-mark{width:64px;height:64px;border-radius:18px;background:#111827;color:#fff;display:grid;place-items:center;margin:0 auto 16px;font-weight:900;font-size:22px;box-shadow:0 12px 28px rgba(17,24,39,.18)}
-.login-card h2{margin:0;font-size:24px;letter-spacing:-.5px}.login-card p{margin:8px 0 22px;color:#667085;font-size:13px;line-height:1.55}
-.google-box{display:flex;justify-content:center;min-height:44px}.login-user{display:none;margin-top:16px;padding:11px 12px;border-radius:12px;background:#f8fafc;text-align:left;font-size:12px;color:#475467}.login-user strong{display:block;color:#111827;font-size:13px;margin-bottom:2px}.login-error{display:none;margin-top:14px;padding:11px 12px;border-radius:12px;background:#fff1f0;color:#b42318;border:1px solid #ffd6d2;font-size:12px;line-height:1.45}
-.app-hidden{display:none!important}
-.user-chip{display:flex;align-items:center;gap:8px;padding:6px 9px 6px 6px;border:1px solid var(--line);background:#fff;border-radius:999px;font-size:11px;color:#475467}
-.user-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#eef1f5}
-.logout-btn{width:auto;padding:7px 10px;margin-left:3px;font-size:11px;border-radius:9px;box-shadow:none}
-@media(max-width:520px){.user-chip span{display:none}.login-card{padding:24px}}
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#111827"
+>
+
+<title>
+Alala Jusss — Tambah Produk
+</title>
+
+<style>
+
+*{
+  box-sizing:border-box
+}
+
+:root{
+  --ink:#111827;
+  --muted:#667085;
+  --line:#e5e7eb;
+  --soft:#f8fafc;
+  --danger:#b42318;
+  --success:#15803d;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(17,24,39,.06),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(17,24,39,.045),
+      transparent 25%
+    ),
+    #f3f5f8;
+}
+
+.page{
+  width:min(680px,100%);
+  margin:auto;
+  padding:28px 16px 48px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+  padding:0 4px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.brandmark{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#111827;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:17px;
+  box-shadow:
+    0 8px 20px rgba(17,24,39,.18);
+}
+
+.brand strong{
+  display:block;
+  font-size:15px;
+}
+
+.brand span{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.badge{
+  padding:8px 11px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  font-size:12px;
+  color:#475467;
+}
+
+.card{
+  background:rgba(255,255,255,.97);
+  border:1px solid rgba(17,24,39,.07);
+  border-radius:26px;
+  padding:28px;
+  box-shadow:
+    0 20px 60px rgba(15,23,42,.10);
+}
+
+h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:-.8px;
+}
+
+.sub{
+  margin:7px 0 25px;
+  color:var(--muted);
+  line-height:1.55;
+  font-size:14px;
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+.loginbox{
+  padding:18px;
+  border-radius:18px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  margin-bottom:22px;
+}
+
+.login-title{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.login-desc{
+  color:#667085;
+  font-size:12px;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+
+.google-button{
+  min-height:44px;
+}
+
+.userbox{
+  display:none;
+  padding:13px 14px;
+  border-radius:14px;
+  background:#ecfdf3;
+  border:1px solid #bbf7d0;
+}
+
+.userbox.allowed{
+  display:block;
+}
+
+.userbox.denied{
+  display:block;
+  background:#fff1f0;
+  border-color:#ffd6d2;
+}
+
+.useremail{
+  font-size:12px;
+  font-weight:800;
+  word-break:break-word;
+}
+
+.userstatus{
+  margin-top:4px;
+  font-size:11px;
+  line-height:1.5;
+  color:#475467;
+}
+
+.denied .userstatus{
+  color:#b42318;
+}
+
+#productSection{
+  display:none;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.section{
+  margin-top:23px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:9px;
+}
+
+.num{
+  width:23px;
+  height:23px;
+  border-radius:8px;
+  background:#eef0f3;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+}
+
+label{
+  display:block;
+  font-weight:750;
+  font-size:13px;
+  margin:16px 0 7px;
+}
+
+label small{
+  font-weight:500;
+  color:#98a2b3;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid #d9dee7;
+  background:#fff;
+  color:#111827;
+  border-radius:12px;
+  padding:13px 14px;
+  font:inherit;
+  font-size:14px;
+  outline:none;
+  transition:.18s;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#111827;
+  box-shadow:
+    0 0 0 4px rgba(17,24,39,.07);
+}
+
+input[readonly]{
+  background:#f8fafc;
+  color:#667085;
+}
+
+textarea{
+  min-height:94px;
+  resize:vertical;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.filebox{
+  border:1.5px dashed #cbd2dc;
+  border-radius:17px;
+  padding:15px;
+  background:#fafbfc;
+  overflow:hidden;
+}
+
+.filebox input[type=file]{
+  padding:11px;
+  background:#fff;
+  cursor:pointer;
+}
+
+.filehint{
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+  margin-top:10px;
+  color:#667085;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.hinticon{
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+  border-radius:8px;
+  background:#eef1f5;
+  display:grid;
+  place-items:center;
+}
+
+.preview-wrap{
+  display:none;
+  margin-top:13px;
+  position:relative;
+}
+
+.preview{
+  width:100%;
+  height:240px;
+  object-fit:contain;
+  border-radius:14px;
+  background:#eef1f5;
+  border:1px solid #e5e7eb;
+  display:block;
+}
+
+.preview-label{
+  position:absolute;
+  left:10px;
+  top:10px;
+  background:rgba(17,24,39,.82);
+  color:#fff;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  z-index:2;
+}
+
+.sizegrid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+
+.sizeitem{
+  padding:10px;
+  border:1px solid #e7eaf0;
+  border-radius:11px;
+  background:#fff;
+}
+
+.sizeitem span{
+  display:block;
+  color:#98a2b3;
+  font-size:10px;
+  margin-bottom:3px;
+}
+
+.sizeitem strong{
+  font-size:12px;
+}
+
+.progressbox{
+  display:none;
+  margin-top:17px;
+  padding:15px;
+  border-radius:16px;
+  background:#f7f8fa;
+  border:1px solid #e8ebef;
+}
+
+.progresshead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:11px;
+  font-size:12px;
+}
+
+.progresshead strong{
+  font-size:13px;
+}
+
+.progressline{
+  height:8px;
+  border-radius:99px;
+  background:#e6e9ee;
+  overflow:hidden;
+}
+
+.progressbar{
+  height:100%;
+  width:0%;
+  background:#111827;
+  border-radius:99px;
+  transition:width .3s ease;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:14px 16px;
+  background:#111827;
+  color:#fff;
+  font:inherit;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  transition:.18s;
+  box-shadow:
+    0 7px 16px rgba(17,24,39,.13);
+}
+
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:
+    0 10px 22px rgba(17,24,39,.17);
+}
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.secondary{
+  display:none;
+  background:#eef1f5;
+  color:#111827;
+  box-shadow:none;
+}
+
+.msg{
+  display:none;
+  margin-top:13px;
+  padding:12px 14px;
+  border-radius:12px;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.msg.info{
+  display:block;
+  background:#f1f5f9;
+  color:#334155;
+}
+
+.msg.err{
+  display:block;
+  background:#fff1f0;
+  color:var(--danger);
+  border:1px solid #ffd6d2;
+}
+
+.msg.ok{
+  display:block;
+  background:#ecfdf3;
+  color:#166534;
+  border:1px solid #bbf7d0;
+}
+
+.footer{
+  text-align:center;
+  color:#98a2b3;
+  font-size:11px;
+  margin-top:15px;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.58);
+  backdrop-filter:blur(5px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalcard{
+  width:min(410px,100%);
+  background:#fff;
+  border-radius:24px;
+  padding:28px;
+  text-align:center;
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.28);
+  animation:pop .2s ease-out;
+}
+
+@keyframes pop{
+  from{
+    opacity:0;
+    transform:translateY(8px) scale(.98)
+  }
+  to{
+    opacity:1;
+    transform:none
+  }
+}
+
+.successicon{
+  width:70px;
+  height:70px;
+  margin:0 auto 15px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#ecfdf3;
+  color:#15803d;
+}
+
+.successicon svg{
+  width:34px;
+  height:34px;
+}
+
+.modalcard h2{
+  margin:0;
+  font-size:22px;
+  letter-spacing:-.4px;
+}
+
+.modalcard p{
+  margin:8px 0 0;
+  color:#667085;
+  font-size:13px;
+  line-height:1.55;
+}
+
+.modalstats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:17px;
+  text-align:left;
+}
+
+.modalstat{
+  padding:10px;
+  border-radius:11px;
+  background:#f8fafc;
+}
+
+.modalstat span{
+  display:block;
+  color:#98a2b3;
+  font-size:10px;
+}
+
+.modalstat strong{
+  font-size:12px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:520px){
+
+  .page{
+    padding:18px 12px 35px;
+  }
+
+  .card{
+    padding:20px;
+    border-radius:21px;
+  }
+
+  h1{
+    font-size:24px;
+  }
+
+  .row,
+  .actions{
+    grid-template-columns:1fr;
+  }
+
+  .preview{
+    height:205px;
+  }
+
+  .badge{
+    display:none;
+  }
+
+}
+
 </style>
+
+
+<!-- =======================================================
+     GOOGLE IDENTITY SERVICES
+     ======================================================= -->
+
+<script
+  src="https://accounts.google.com/gsi/client"
+  async
+  defer>
+</script>
+
 </head>
+
+
 <body>
 
-<div id="loginScreen" class="login-screen">
-  <div class="login-card">
-    <div class="login-mark">AJ</div>
-    <h2>Alala Jusss Admin</h2>
-    <p>Silakan masuk menggunakan akun Google untuk mengakses panel produk.</p>
-    <div id="googleButton" class="google-box"></div>
-    <div id="loginUser" class="login-user"></div>
-    <div id="loginError" class="login-error"></div>
-    <div style="margin-top:16px;color:#98a2b3;font-size:10px;line-height:1.5">
-      Gunakan melalui HTTPS atau localhost. File HTML yang dibuka langsung dengan <b>file://</b> tidak cocok untuk Google Sign-In.
-    </div>
-  </div>
-</div>
 
-<div id="appPage" class="page app-hidden">
+<div class="page">
+
+
+  <!-- =====================================================
+       TOPBAR
+       ===================================================== -->
+
   <div class="topbar">
-    <div class="brand"><div class="brandmark">AJ</div><div><strong>Alala Jusss</strong><span>Panel Produk</span></div></div>
-    <div class="user-chip" id="userChip">
-      <img id="userAvatar" class="user-avatar" alt="">
-      <span id="userEmail">-</span>
-      <button type="button" class="logout-btn" id="logoutBtn">Keluar</button>
+
+    <div class="brand">
+
+      <div class="brandmark">
+        AJ
+      </div>
+
+      <div>
+
+        <strong>
+          Alala Jusss
+        </strong>
+
+        <span>
+          Panel Produk
+        </span>
+
+      </div>
+
     </div>
+
+
+    <div class="badge">
+      Tambah Produk
+    </div>
+
   </div>
+
+
+  <!-- =====================================================
+       MAIN CARD
+       ===================================================== -->
 
   <main class="card">
-    <h1>Tambah Produk</h1>
-    <p class="sub">Masukkan informasi produk. Foto akan otomatis dioptimalkan agar tetap jernih namun ringan saat dikirim ke server.</p>
 
-    <form id="productForm" method="POST" action="https://script.google.com/macros/s/AKfycbytCn63MmYrjNBaJpG9pz7dg45hlmA08oKN-t5ljH7j-2ETeMlK57XMG5QxvlNXdFnSNA/exec">
-      <div class="section">
-        <div class="section-title"><span class="num">01</span> Informasi Produk</div>
-        <label for="id">ID Produk <small>(otomatis)</small></label>
-        <input id="id" name="id" readonly placeholder="Otomatis dari nama produk">
-        <label for="name">Nama Produk</label>
-        <input id="name" name="name" required placeholder="Contoh: Jus Alpukat" autocomplete="off">
-        <label for="desc">Deskripsi Produk</label>
-        <textarea id="desc" name="desc" required placeholder="Deskripsi singkat produk"></textarea>
-        <div class="row">
-          <div><label for="small">Harga Small</label><input id="small" name="small" type="number" min="0" required placeholder="10000"></div>
-          <div><label for="medium">Harga Medium</label><input id="medium" name="medium" type="number" min="0" required placeholder="15000"></div>
-        </div>
+
+    <h1>
+      Tambah Produk
+    </h1>
+
+
+    <p class="sub">
+      Login dengan akun Google yang memiliki
+      izin untuk mengelola produk.
+    </p>
+
+
+    <!-- ===================================================
+         LOGIN
+         =================================================== -->
+
+    <div class="loginbox">
+
+      <div class="login-title">
+        Akses Panel
       </div>
 
-      <div class="section">
-        <div class="section-title"><span class="num">02</span> Foto Produk</div>
-        <div class="filebox">
-          <input id="image" type="file" accept="image/*" required>
-          <div class="filehint"><div class="hinticon">↗</div><div><b>Optimasi otomatis</b><br>Foto diperkecil maksimal 900×900 px dengan target sekitar 350 KB.</div></div>
-          <div id="previewWrap" class="preview-wrap">
-            <span class="preview-label">Preview</span>
-            <img id="preview" class="preview" alt="Preview Produk">
-            <div id="sizeInfo" class="sizegrid">
-              <div class="sizeitem"><span>ASLI</span><strong id="originalSize">-</strong></div>
-              <div class="sizeitem"><span>HASIL KOMPRES</span><strong id="compressedSize">-</strong></div>
-              <div class="sizeitem"><span>HEMAT</span><strong id="savingSize">-</strong></div>
-            </div>
+      <div class="login-desc">
+        Hanya akun Google yang telah diberikan
+        izin yang dapat menambahkan produk.
+      </div>
+
+
+      <div
+        id="googleLoginButton"
+        class="google-button">
+      </div>
+
+
+      <div
+        id="userBox"
+        class="userbox">
+
+        <div
+          id="userEmail"
+          class="useremail">
+        </div>
+
+        <div
+          id="userStatus"
+          class="userstatus">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         PRODUCT SECTION
+         =================================================== -->
+
+    <div id="productSection">
+
+
+      <form
+        id="productForm"
+        method="POST"
+        action="https://script.google.com/macros/s/AKfycbytCn63MmYrjNBaJpG9pz7dg45hlmA08oKN-t5ljH7j-2ETeMlK57XMG5QxvlNXdFnSNA/exec"
+      >
+
+
+        <div class="section">
+
+          <div class="section-title">
+
+            <span class="num">
+              01
+            </span>
+
+            Informasi Produk
+
           </div>
+
+
+          <label for="id">
+            ID Produk
+            <small>
+              (otomatis)
+            </small>
+          </label>
+
+          <input
+            id="id"
+            name="id"
+            readonly
+            placeholder="Otomatis dari nama produk"
+          >
+
+
+          <label for="name">
+            Nama Produk
+          </label>
+
+          <input
+            id="name"
+            name="name"
+            required
+            placeholder="Contoh: Jus Alpukat"
+            autocomplete="off"
+          >
+
+
+          <label for="desc">
+            Deskripsi Produk
+          </label>
+
+          <textarea
+            id="desc"
+            name="desc"
+            required
+            placeholder="Deskripsi singkat produk">
+          </textarea>
+
+
+          <div class="row">
+
+            <div>
+
+              <label for="small">
+                Harga Small
+              </label>
+
+              <input
+                id="small"
+                name="small"
+                type="number"
+                min="0"
+                required
+                placeholder="10000"
+              >
+
+            </div>
+
+
+            <div>
+
+              <label for="medium">
+                Harga Medium
+              </label>
+
+              <input
+                id="medium"
+                name="medium"
+                type="number"
+                min="0"
+                required
+                placeholder="15000"
+              >
+
+            </div>
+
+          </div>
+
         </div>
-      </div>
 
-      <div class="section">
-        <div class="section-title"><span class="num">03</span> Ketersediaan</div>
-        <label for="status">Status Produk</label>
-        <select id="status" name="status"><option value="tersedia">Tersedia</option><option value="habis">Tidak tersedia</option></select>
-      </div>
 
-      <input type="hidden" id="imageBase64" name="imageBase64">
-      <input type="hidden" id="imageName" name="imageName">
-      <input type="hidden" id="imageMimeType" name="imageMimeType">
+        <!-- =================================================
+             FOTO
+             ================================================= -->
 
-      <div id="progressBox" class="progressbox">
-        <div class="progresshead"><span id="progressText">Menyiapkan...</span><strong id="progressPercent">0%</strong></div>
-        <div class="progressline"><div id="progressBar" class="progressbar"></div></div>
-      </div>
+        <div class="section">
 
-      <div class="actions">
-        <button id="submitBtn" type="submit">Simpan Produk</button>
-        <button id="resetBtn" type="button" class="secondary">Tambah Produk Lagi</button>
-      </div>
-      <div id="message" class="msg"></div>
-    </form>
+          <div class="section-title">
+
+            <span class="num">
+              02
+            </span>
+
+            Foto Produk
+
+          </div>
+
+
+          <div class="filebox">
+
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              required
+            >
+
+
+            <div class="filehint">
+
+              <div class="hinticon">
+                ↗
+              </div>
+
+              <div>
+
+                <b>
+                  Optimasi otomatis
+                </b>
+
+                <br>
+
+                Foto diperkecil maksimal
+                900×900 px dengan target
+                sekitar 350 KB.
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="previewWrap"
+              class="preview-wrap">
+
+              <span class="preview-label">
+                Preview
+              </span>
+
+
+              <img
+                id="preview"
+                class="preview"
+                alt="Preview Produk"
+              >
+
+
+              <div
+                id="sizeInfo"
+                class="sizegrid">
+
+                <div class="sizeitem">
+
+                  <span>
+                    ASLI
+                  </span>
+
+                  <strong id="originalSize">
+                    -
+                  </strong>
+
+                </div>
+
+
+                <div class="sizeitem">
+
+                  <span>
+                    HASIL KOMPRES
+                  </span>
+
+                  <strong id="compressedSize">
+                    -
+                  </strong>
+
+                </div>
+
+
+                <div class="sizeitem">
+
+                  <span>
+                    HEMAT
+                  </span>
+
+                  <strong id="savingSize">
+                    -
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STATUS
+             ================================================= -->
+
+        <div class="section">
+
+          <div class="section-title">
+
+            <span class="num">
+              03
+            </span>
+
+            Ketersediaan
+
+          </div>
+
+
+          <label for="status">
+            Status Produk
+          </label>
+
+
+          <select
+            id="status"
+            name="status">
+
+            <option value="tersedia">
+              Tersedia
+            </option>
+
+            <option value="habis">
+              Tidak tersedia
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- =================================================
+             HIDDEN
+             ================================================= -->
+
+        <input
+          type="hidden"
+          id="imageBase64"
+          name="imageBase64"
+        >
+
+
+        <input
+          type="hidden"
+          id="imageName"
+          name="imageName"
+        >
+
+
+        <input
+          type="hidden"
+          id="imageMimeType"
+          name="imageMimeType"
+        >
+
+
+        <input
+          type="hidden"
+          id="idToken"
+          name="idToken"
+        >
+
+
+        <!-- =================================================
+             PROGRESS
+             ================================================= -->
+
+        <div
+          id="progressBox"
+          class="progressbox">
+
+          <div class="progresshead">
+
+            <span id="progressText">
+              Menyiapkan...
+            </span>
+
+            <strong id="progressPercent">
+              0%
+            </strong>
+
+          </div>
+
+
+          <div class="progressline">
+
+            <div
+              id="progressBar"
+              class="progressbar">
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="actions">
+
+          <button
+            id="submitBtn"
+            type="submit">
+
+            Simpan Produk
+
+          </button>
+
+
+          <button
+            id="resetBtn"
+            type="button"
+            class="secondary">
+
+            Tambah Produk Lagi
+
+          </button>
+
+        </div>
+
+
+        <div
+          id="message"
+          class="msg">
+        </div>
+
+
+      </form>
+
+
+    </div>
+
+
   </main>
-  <div class="footer">Alala Jusss • Product Management</div>
+
+
+  <div class="footer">
+    Alala Jusss • Product Management
+  </div>
+
+
 </div>
 
-<div id="successModal" class="modal" aria-hidden="true">
+
+<!-- =======================================================
+     SUCCESS MODAL
+     ======================================================= -->
+
+<div
+  id="successModal"
+  class="modal"
+  aria-hidden="true">
+
   <div class="modalcard">
+
     <div class="successicon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5">
+
+        <path
+          d="m5 12 4 4L19 6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+      </svg>
+
     </div>
-    <h2>Produk Berhasil Disimpan</h2>
-    <p>Data produk dan foto sudah dikirim ke server.</p>
+
+
+    <h2>
+      Produk Berhasil Disimpan
+    </h2>
+
+
+    <p>
+      Data produk dan foto sudah dikirim
+      ke server.
+    </p>
+
+
     <div class="modalstats">
-      <div class="modalstat"><span>PRODUK</span><strong id="successProduct">-</strong></div>
-      <div class="modalstat"><span>FOTO</span><strong id="successPhoto">-</strong></div>
+
+      <div class="modalstat">
+
+        <span>
+          PRODUK
+        </span>
+
+        <strong id="successProduct">
+          -
+        </strong>
+
+      </div>
+
+
+      <div class="modalstat">
+
+        <span>
+          FOTO
+        </span>
+
+        <strong id="successPhoto">
+          -
+        </strong>
+
+      </div>
+
     </div>
-    <button id="modalAddBtn" type="button">Tambah Produk Lagi</button>
+
+
+    <button
+      id="modalAddBtn"
+      type="button">
+
+      Tambah Produk Lagi
+
+    </button>
+
   </div>
+
 </div>
+
 
 <script>
 
-/* ================= GOOGLE LOGIN =================
-   Untuk mode produksi, isi ADMIN_EMAILS dengan email admin
-   dan set ALLOW_ANY_GOOGLE_ACCOUNT = false.
-*/
-const GOOGLE_CLIENT_ID = "610820778176-3jm1jub7il9nks4eocm9qt1llsa6phke.apps.googleusercontent.com";
-const ADMIN_EMAILS = [suportumkmlokal@gmail.com];
-const ALLOW_ANY_GOOGLE_ACCOUNT = false; // ubah ke false untuk membatasi email admin
+/* =========================================================
+ * KONFIGURASI
+ * ========================================================= */
 
-const loginScreen = document.getElementById("loginScreen");
-const appPage = document.getElementById("appPage");
-const loginError = document.getElementById("loginError");
-const loginUser = document.getElementById("loginUser");
-const userEmail = document.getElementById("userEmail");
-const userAvatar = document.getElementById("userAvatar");
-const logoutBtn = document.getElementById("logoutBtn");
 
-function base64UrlDecode(str){
-  str = str.replace(/-/g,'+').replace(/_/g,'/');
-  while(str.length % 4) str += '=';
-  return decodeURIComponent(atob(str).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-}
-function decodeGoogleCredential(credential){
-  const parts=credential.split('.');
-  if(parts.length!==3) throw new Error("Token Google tidak valid.");
-  return JSON.parse(base64UrlDecode(parts[1]));
-}
-function showLoginError(text){
-  loginError.textContent=text;
-  loginError.style.display="block";
-}
-function enterApp(payload){
-  loginError.style.display="none";
-  loginUser.innerHTML="<strong>"+(payload.name||"Pengguna Google")+"</strong>"+payload.email;
-  loginUser.style.display="block";
-  userEmail.textContent=payload.email||"";
-  userAvatar.src=payload.picture||"";
-  loginScreen.style.display="none";
-  appPage.classList.remove("app-hidden");
-  sessionStorage.setItem("alalaGoogleUser",JSON.stringify({
-    name:payload.name||"",email:payload.email||"",picture:payload.picture||""
-  }));
-}
-function logoutGoogle(){
-  try{
-    if(window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect();
-  }catch(e){}
-  sessionStorage.removeItem("alalaGoogleUser");
-  appPage.classList.add("app-hidden");
-  loginScreen.style.display="flex";
-  loginUser.style.display="none";
-}
-logoutBtn.addEventListener("click",logoutGoogle);
+/*
+ * MASUKKAN GOOGLE OAUTH CLIENT ID DI SINI
+ */
 
-function handleCredentialResponse(response){
-  try{
-    const payload=decodeGoogleCredential(response.credential);
-    if(payload.aud!==GOOGLE_CLIENT_ID) throw new Error("Client ID Google tidak sesuai.");
-    if(payload.email_verified!==true) throw new Error("Email Google belum terverifikasi.");
-    if(!ALLOW_ANY_GOOGLE_ACCOUNT){
-      const allowed=ADMIN_EMAILS.map(x=>x.toLowerCase().trim()).includes((payload.email||"").toLowerCase());
-      if(!allowed) throw new Error("Akun ini tidak terdaftar sebagai admin Alala Jusss.");
+const GOOGLE_CLIENT_ID =
+  "610820778176-3jm1jub7il9nks4eocm9qt1llsa6phke.apps.googleusercontent.com";
+
+
+/*
+ * EMAIL YANG DIIZINKAN
+ *
+ * HANYA UNTUK TAMPILAN FRONTEND.
+ *
+ * KEAMANAN SEBENARNYA TETAP DI CODE.GS.
+ */
+
+const ALLOWED_EMAIL =
+  "suportumkmlokal@gmail.com";
+
+
+/*
+ * URL APPS SCRIPT
+ */
+
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbytCn63MmYrjNBaJpG9pz7dg45hlmA08oKN-t5ljH7j-2ETeMlK57XMG5QxvlNXdFnSNA/exec";
+
+
+/* =========================================================
+ * ELEMENT
+ * ========================================================= */
+
+const form =
+  document.getElementById(
+    "productForm"
+  );
+
+
+const nameInput =
+  document.getElementById(
+    "name"
+  );
+
+
+const idInput =
+  document.getElementById(
+    "id"
+  );
+
+
+const imageInput =
+  document.getElementById(
+    "image"
+  );
+
+
+const preview =
+  document.getElementById(
+    "preview"
+  );
+
+
+const previewWrap =
+  document.getElementById(
+    "previewWrap"
+  );
+
+
+const imageBase64 =
+  document.getElementById(
+    "imageBase64"
+  );
+
+
+const imageName =
+  document.getElementById(
+    "imageName"
+  );
+
+
+const imageMimeType =
+  document.getElementById(
+    "imageMimeType"
+  );
+
+
+const idTokenInput =
+  document.getElementById(
+    "idToken"
+  );
+
+
+const btn =
+  document.getElementById(
+    "submitBtn"
+  );
+
+
+const resetBtn =
+  document.getElementById(
+    "resetBtn"
+  );
+
+
+const msg =
+  document.getElementById(
+    "message"
+  );
+
+
+const progressBox =
+  document.getElementById(
+    "progressBox"
+  );
+
+
+const progressBar =
+  document.getElementById(
+    "progressBar"
+  );
+
+
+const progressText =
+  document.getElementById(
+    "progressText"
+  );
+
+
+const progressPercent =
+  document.getElementById(
+    "progressPercent"
+  );
+
+
+const originalSize =
+  document.getElementById(
+    "originalSize"
+  );
+
+
+const compressedSize =
+  document.getElementById(
+    "compressedSize"
+  );
+
+
+const savingSize =
+  document.getElementById(
+    "savingSize"
+  );
+
+
+const successModal =
+  document.getElementById(
+    "successModal"
+  );
+
+
+const modalAddBtn =
+  document.getElementById(
+    "modalAddBtn"
+  );
+
+
+const successProduct =
+  document.getElementById(
+    "successProduct"
+  );
+
+
+const successPhoto =
+  document.getElementById(
+    "successPhoto"
+  );
+
+
+const userBox =
+  document.getElementById(
+    "userBox"
+  );
+
+
+const userEmail =
+  document.getElementById(
+    "userEmail"
+  );
+
+
+const userStatus =
+  document.getElementById(
+    "userStatus"
+  );
+
+
+const productSection =
+  document.getElementById(
+    "productSection"
+  );
+
+
+/* =========================================================
+ * GLOBAL USER
+ * ========================================================= */
+
+let currentGoogleUser =
+  null;
+
+
+/* =========================================================
+ * GOOGLE LOGIN
+ * ========================================================= */
+
+window.onload =
+  function(){
+
+    if (
+      GOOGLE_CLIENT_ID ===
+      "YOUR_GOOGLE_CLIENT_ID"
+    ){
+
+      showLoginError(
+        "Google Client ID belum diatur. " +
+        "Masukkan Web Client ID pada kode HTML."
+      );
+
+      return;
+
     }
-    enterApp(payload);
-  }catch(err){
-    showLoginError(err.message||"Login Google gagal.");
-  }
-}
 
-function initGoogleLogin(){
-  if(!window.google || !google.accounts || !google.accounts.id){
-    setTimeout(initGoogleLogin,300);
-    return;
-  }
-  google.accounts.id.initialize({
-    client_id:GOOGLE_CLIENT_ID,
-    callback:handleCredentialResponse,
-    auto_select:false,
-    cancel_on_tap_outside:false
-  });
-  google.accounts.id.renderButton(document.getElementById("googleButton"),{
-    theme:"outline",size:"large",type:"standard",text:"signin_with",
-    shape:"rectangular",logo_alignment:"left",width:320
-  });
 
-  const saved=sessionStorage.getItem("alalaGoogleUser");
-  if(saved){
-    try{enterApp(JSON.parse(saved));}catch(e){sessionStorage.removeItem("alalaGoogleUser");}
-  }
-}
-window.addEventListener("load",initGoogleLogin);
+    if (
+      !window.google ||
+      !google.accounts ||
+      !google.accounts.id
+    ){
 
-const form=document.getElementById("productForm");
-const nameInput=document.getElementById("name");
-const idInput=document.getElementById("id");
-const imageInput=document.getElementById("image");
-const preview=document.getElementById("preview");
-const previewWrap=document.getElementById("previewWrap");
-const imageBase64=document.getElementById("imageBase64");
-const imageName=document.getElementById("imageName");
-const imageMimeType=document.getElementById("imageMimeType");
-const btn=document.getElementById("submitBtn");
-const resetBtn=document.getElementById("resetBtn");
-const msg=document.getElementById("message");
-const progressBox=document.getElementById("progressBox");
-const progressBar=document.getElementById("progressBar");
-const progressText=document.getElementById("progressText");
-const progressPercent=document.getElementById("progressPercent");
-const originalSize=document.getElementById("originalSize");
-const compressedSize=document.getElementById("compressedSize");
-const savingSize=document.getElementById("savingSize");
-const successModal=document.getElementById("successModal");
-const modalAddBtn=document.getElementById("modalAddBtn");
-const successProduct=document.getElementById("successProduct");
-const successPhoto=document.getElementById("successPhoto");
+      showLoginError(
+        "Google Login belum berhasil dimuat. " +
+        "Silakan refresh halaman."
+      );
 
-function slugify(text){return text.toLowerCase().trim().replace(/[^a-z0-9\s-]/g,"").replace(/\s+/g,"-").replace(/-+/g,"-")}
-function formatBytes(bytes){if(bytes<1024)return bytes+" B";if(bytes<1024*1024)return (bytes/1024).toFixed(1)+" KB";return (bytes/(1024*1024)).toFixed(2)+" MB"}
-function setProgress(value,text){value=Math.max(0,Math.min(100,value));progressBar.style.width=value+"%";progressPercent.textContent=value+"%";progressText.textContent=text}
-function showMessage(type,text){msg.className="msg "+type;msg.innerHTML=text}
+      return;
 
-function compressImage(file,maxWidth=900,maxHeight=900,maxBytes=350*1024){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=event=>{
-      const img=new Image();
-      img.onload=async()=>{
-        try{
-          let width=img.width,height=img.height;
-          const scale=Math.min(1,maxWidth/width,maxHeight/height);
-          width=Math.max(1,Math.round(width*scale));height=Math.max(1,Math.round(height*scale));
-          const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
-          const ctx=canvas.getContext("2d",{alpha:false});ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);
-          ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(img,0,0,width,height);
-          let quality=.82;
-          let blob=await new Promise(res=>canvas.toBlob(res,"image/jpeg",quality));
-          while(blob&&blob.size>maxBytes&&quality>.40){quality-=.07;blob=await new Promise(res=>canvas.toBlob(res,"image/jpeg",quality))}
-          if(!blob)throw new Error("Gagal mengompres foto.");
-          resolve(blob);
-        }catch(err){reject(err)}
-      };
-      img.onerror=()=>reject(new Error("Foto tidak dapat dibaca."));
-      img.src=event.target.result;
+    }
+
+
+    google.accounts.id.initialize({
+
+      client_id:
+        GOOGLE_CLIENT_ID,
+
+      callback:
+        handleGoogleCredential,
+
+      auto_select:
+        false,
+
+      cancel_on_tap_outside:
+        false
+
+    });
+
+
+    google.accounts.id.renderButton(
+
+      document.getElementById(
+        "googleLoginButton"
+      ),
+
+      {
+
+        theme:
+          "outline",
+
+        size:
+          "large",
+
+        text:
+          "signin_with",
+
+        shape:
+          "rectangular",
+
+        width:
+          330
+
+      }
+
+    );
+
+  };
+
+
+/* =========================================================
+ * GOOGLE CALLBACK
+ * ========================================================= */
+
+async function handleGoogleCredential(
+  response
+){
+
+  try{
+
+    if(
+      !response ||
+      !response.credential
+    ){
+
+      throw new Error(
+        "ID Token Google tidak diterima."
+      );
+
+    }
+
+
+    const token =
+      response.credential;
+
+
+    idTokenInput.value =
+      token;
+
+
+    /*
+     * Decode payload hanya untuk UI.
+     *
+     * Server tetap melakukan verifikasi.
+     */
+
+    const payload =
+      parseJwtPayload(
+        token
+      );
+
+
+    if(
+      !payload ||
+      !payload.email
+    ){
+
+      throw new Error(
+        "Data akun Google tidak ditemukan."
+      );
+
+    }
+
+
+    currentGoogleUser = {
+
+      email:
+        payload.email,
+
+      name:
+        payload.name || "",
+
+      token:
+        token
+
     };
-    reader.onerror=()=>reject(new Error("Gagal membaca foto."));
-    reader.readAsDataURL(file);
-  });
+
+
+    /*
+     * Tampilkan akun
+     */
+
+    userEmail.textContent =
+      payload.email;
+
+
+    /*
+     * Periksa akses ke server.
+     */
+
+    userStatus.textContent =
+      "Memeriksa izin upload...";
+
+
+    userBox.className =
+      "userbox allowed";
+
+
+    const access =
+      await checkAccess(
+        token
+      );
+
+
+    if(
+      access.allowed
+    ){
+
+      userBox.className =
+        "userbox allowed";
+
+
+      userStatus.textContent =
+        "✓ Akses upload aktif. " +
+        "Anda dapat menambahkan produk.";
+
+
+      productSection.style.display =
+        "block";
+
+    }else{
+
+      userBox.className =
+        "userbox denied";
+
+
+      userStatus.textContent =
+        "✕ Akses upload ditolak. " +
+        "Hanya akun " +
+        ALLOWED_EMAIL +
+        " yang dapat menambahkan produk.";
+
+
+      productSection.style.display =
+        "none";
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    showLoginError(
+      error.message
+    );
+
+  }
+
 }
 
-function blobToBase64(blob){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=()=>{const result=reader.result;if(!result)return reject(new Error("Foto kosong."));const parts=result.split(",");if(parts.length<2)return reject(new Error("Format Base64 tidak valid."));resolve(parts[1])};
-    reader.onerror=()=>reject(new Error("Gagal membaca foto."));reader.readAsDataURL(blob);
-  });
+
+/* =========================================================
+ * CHECK ACCESS
+ * ========================================================= */
+
+async function checkAccess(
+  token
+){
+
+  const url =
+    SCRIPT_URL +
+    "?action=checkAccess&idToken=" +
+    encodeURIComponent(
+      token
+    );
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        method:
+          "GET",
+
+        cache:
+          "no-store"
+      }
+    );
+
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+      "Server tidak dapat memeriksa akses."
+    );
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  if(
+    !data.success &&
+    !data.allowed
+  ){
+
+    return {
+
+      allowed:
+        false,
+
+      message:
+        data.message || ""
+
+    };
+
+  }
+
+
+  return data;
+
 }
 
-nameInput.addEventListener("input",()=>{idInput.value=slugify(nameInput.value)});
 
-imageInput.addEventListener("change",()=>{
-  const file=imageInput.files[0];
-  if(!file){previewWrap.style.display="none";return}
-  if(file.type&&!file.type.startsWith("image/")){showMessage("err","File harus berupa gambar.");imageInput.value="";return}
-  preview.src=URL.createObjectURL(file);previewWrap.style.display="block";
-  originalSize.textContent=formatBytes(file.size);compressedSize.textContent="Menunggu...";savingSize.textContent="-";msg.style.display="none";
-});
+/* =========================================================
+ * LOGIN ERROR
+ * ========================================================= */
+
+function showLoginError(
+  text
+){
+
+  userBox.className =
+    "userbox denied";
+
+
+  userEmail.textContent =
+    "Login Google";
+
+
+  userStatus.textContent =
+    "✕ " +
+    text;
+
+
+  productSection.style.display =
+    "none";
+
+}
+
+
+/* =========================================================
+ * JWT PAYLOAD
+ *
+ * Hanya untuk membaca tampilan.
+ * BUKAN VALIDASI KEAMANAN.
+ * ========================================================= */
+
+function parseJwtPayload(
+  token
+){
+
+  try{
+
+    const parts =
+      token.split(".");
+
+
+    if(
+      parts.length !== 3
+    ){
+
+      return null;
+
+    }
+
+
+    const base64 =
+      parts[1]
+        .replace(
+          /-/g,
+          "+"
+        )
+        .replace(
+          /_/g,
+          "/"
+        );
+
+
+    const json =
+      decodeURIComponent(
+
+        atob(
+          base64
+        )
+        .split("")
+        .map(
+          function(c){
+
+            return "%" +
+              (
+                "00" +
+                c.charCodeAt(
+                  0
+                ).toString(16)
+              ).slice(-2);
+
+          }
+        )
+        .join("")
+
+      );
+
+
+    return JSON.parse(
+      json
+    );
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+ * SLUG
+ * ========================================================= */
+
+function slugify(
+  text
+){
+
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(
+      /[^a-z0-9\s-]/g,
+      ""
+    )
+    .replace(
+      /\s+/g,
+      "-"
+    )
+    .replace(
+      /-+/g,
+      "-"
+    );
+
+}
+
+
+/* =========================================================
+ * FORMAT BYTES
+ * ========================================================= */
+
+function formatBytes(
+  bytes
+){
+
+  if(
+    bytes < 1024
+  ){
+
+    return bytes +
+      " B";
+
+  }
+
+
+  if(
+    bytes <
+    1024 * 1024
+  ){
+
+    return (
+      bytes /
+      1024
+    ).toFixed(1) +
+      " KB";
+
+  }
+
+
+  return (
+    bytes /
+    (1024 * 1024)
+  ).toFixed(2) +
+    " MB";
+
+}
+
+
+/* =========================================================
+ * PROGRESS
+ * ========================================================= */
+
+function setProgress(
+  value,
+  text
+){
+
+  value =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        value
+      )
+    );
+
+
+  progressBar.style.width =
+    value + "%";
+
+
+  progressPercent.textContent =
+    value + "%";
+
+
+  progressText.textContent =
+    text;
+
+}
+
+
+/* =========================================================
+ * MESSAGE
+ * ========================================================= */
+
+function showMessage(
+  type,
+  text
+){
+
+  msg.className =
+    "msg " +
+    type;
+
+
+  msg.innerHTML =
+    text;
+
+}
+
+
+/* =========================================================
+ * COMPRESS IMAGE
+ * ========================================================= */
+
+function compressImage(
+  file,
+  maxWidth=900,
+  maxHeight=900,
+  maxBytes=350*1024
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        event => {
+
+          const img =
+            new Image();
+
+
+          img.onload =
+            async()=>{
+
+              try{
+
+                let width =
+                  img.width;
+
+
+                let height =
+                  img.height;
+
+
+                const scale =
+                  Math.min(
+                    1,
+                    maxWidth /
+                      width,
+                    maxHeight /
+                      height
+                  );
+
+
+                width =
+                  Math.max(
+                    1,
+                    Math.round(
+                      width *
+                      scale
+                    )
+                  );
+
+
+                height =
+                  Math.max(
+                    1,
+                    Math.round(
+                      height *
+                      scale
+                    )
+                  );
+
+
+                const canvas =
+                  document.createElement(
+                    "canvas"
+                  );
+
+
+                canvas.width =
+                  width;
+
+
+                canvas.height =
+                  height;
+
+
+                const ctx =
+                  canvas.getContext(
+                    "2d",
+                    {
+                      alpha:false
+                    }
+                  );
+
+
+                ctx.fillStyle =
+                  "#fff";
+
+
+                ctx.fillRect(
+                  0,
+                  0,
+                  width,
+                  height
+                );
+
+
+                ctx.imageSmoothingEnabled =
+                  true;
+
+
+                ctx.imageSmoothingQuality =
+                  "high";
+
+
+                ctx.drawImage(
+                  img,
+                  0,
+                  0,
+                  width,
+                  height
+                );
+
+
+                let quality =
+                  .82;
+
+
+                let blob =
+                  await new Promise(
+                    res =>
+                      canvas.toBlob(
+                        res,
+                        "image/jpeg",
+                        quality
+                      )
+                  );
+
+
+                while(
+                  blob &&
+                  blob.size >
+                    maxBytes &&
+                  quality >
+                    .40
+                ){
+
+                  quality -=
+                    .07;
+
+
+                  blob =
+                    await new Promise(
+                      res =>
+                        canvas.toBlob(
+                          res,
+                          "image/jpeg",
+                          quality
+                        )
+                    );
+
+                }
+
+
+                if(!blob){
+
+                  throw new Error(
+                    "Gagal mengompres foto."
+                  );
+
+                }
+
+
+                resolve(
+                  blob
+                );
+
+
+              }catch(err){
+
+                reject(
+                  err
+                );
+
+              }
+
+            };
+
+
+          img.onerror =
+            () =>
+              reject(
+                new Error(
+                  "Foto tidak dapat dibaca."
+                )
+              );
+
+
+          img.src =
+            event.target.result;
+
+        };
+
+
+      reader.onerror =
+        () =>
+          reject(
+            new Error(
+              "Gagal membaca foto."
+            )
+          );
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+ * BLOB TO BASE64
+ * ========================================================= */
+
+function blobToBase64(
+  blob
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        ()=>{
+
+          const result =
+            reader.result;
+
+
+          if(!result){
+
+            return reject(
+              new Error(
+                "Foto kosong."
+              )
+            );
+
+          }
+
+
+          const parts =
+            result.split(
+              ","
+            );
+
+
+          if(
+            parts.length < 2
+          ){
+
+            return reject(
+              new Error(
+                "Format Base64 tidak valid."
+              )
+            );
+
+          }
+
+
+          resolve(
+            parts[1]
+          );
+
+        };
+
+
+      reader.onerror =
+        () =>
+          reject(
+            new Error(
+              "Gagal membaca foto."
+            )
+          );
+
+
+      reader.readAsDataURL(
+        blob
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+ * NAME → ID
+ * ========================================================= */
+
+nameInput.addEventListener(
+  "input",
+  ()=>{
+
+    idInput.value =
+      slugify(
+        nameInput.value
+      );
+
+  }
+);
+
+
+/* =========================================================
+ * IMAGE PREVIEW
+ * ========================================================= */
+
+imageInput.addEventListener(
+  "change",
+  ()=>{
+
+    const file =
+      imageInput.files[0];
+
+
+    if(!file){
+
+      previewWrap.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    if(
+      file.type &&
+      !file.type.startsWith(
+        "image/"
+      )
+    ){
+
+      showMessage(
+        "err",
+        "File harus berupa gambar."
+      );
+
+
+      imageInput.value =
+        "";
+
+
+      return;
+
+    }
+
+
+    preview.src =
+      URL.createObjectURL(
+        file
+      );
+
+
+    previewWrap.style.display =
+      "block";
+
+
+    originalSize.textContent =
+      formatBytes(
+        file.size
+      );
+
+
+    compressedSize.textContent =
+      "Menunggu...";
+
+
+    savingSize.textContent =
+      "-";
+
+
+    msg.className =
+      "msg";
+
+
+    msg.style.display =
+      "none";
+
+  }
+);
+
+
+/* =========================================================
+ * RESET
+ * ========================================================= */
 
 function resetProductForm(){
-  form.reset();idInput.value="";imageBase64.value="";imageName.value="";imageMimeType.value="";
-  preview.src="";previewWrap.style.display="none";originalSize.textContent="-";compressedSize.textContent="-";savingSize.textContent="-";
-  progressBox.style.display="none";setProgress(0,"Menyiapkan...");msg.className="msg";msg.style.display="none";
-  btn.disabled=false;btn.textContent="Simpan Produk";resetBtn.style.display="none";
+
+  form.reset();
+
+
+  idInput.value =
+    "";
+
+
+  imageBase64.value =
+    "";
+
+
+  imageName.value =
+    "";
+
+
+  imageMimeType.value =
+    "";
+
+
+  idTokenInput.value =
+    currentGoogleUser
+      ? currentGoogleUser.token
+      : "";
+
+
+  preview.src =
+    "";
+
+
+  previewWrap.style.display =
+    "none";
+
+
+  originalSize.textContent =
+    "-";
+
+
+  compressedSize.textContent =
+    "-";
+
+
+  savingSize.textContent =
+    "-";
+
+
+  progressBox.style.display =
+    "none";
+
+
+  setProgress(
+    0,
+    "Menyiapkan..."
+  );
+
+
+  msg.className =
+    "msg";
+
+
+  msg.style.display =
+    "none";
+
+
+  btn.disabled =
+    false;
+
+
+  btn.textContent =
+    "Simpan Produk";
+
+
+  resetBtn.style.display =
+    "none";
+
 }
-function openSuccessModal(productName,photoSize){successProduct.textContent=productName||"-";successPhoto.textContent=photoSize||"-";successModal.classList.add("show");successModal.setAttribute("aria-hidden","false")}
-function closeSuccessModal(){successModal.classList.remove("show");successModal.setAttribute("aria-hidden","true")}
-modalAddBtn.addEventListener("click",()=>{closeSuccessModal();resetProductForm();nameInput.focus()});
-resetBtn.addEventListener("click",()=>{closeSuccessModal();resetProductForm();nameInput.focus()});
-successModal.addEventListener("click",e=>{if(e.target===successModal)closeSuccessModal()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSuccessModal()});
 
-form.addEventListener("submit",async e=>{
-  e.preventDefault();
-  const name=nameInput.value.trim(),id=idInput.value.trim(),desc=document.getElementById("desc").value.trim();
-  const small=document.getElementById("small").value,medium=document.getElementById("medium").value,file=imageInput.files[0];
 
-  if(!name)return showMessage("err","Nama produk wajib diisi.");
-  if(!id)return showMessage("err","ID produk belum terbentuk.");
-  if(!desc)return showMessage("err","Deskripsi wajib diisi.");
-  if(small===""||Number(small)<0)return showMessage("err","Harga Small tidak valid.");
-  if(medium===""||Number(medium)<0)return showMessage("err","Harga Medium tidak valid.");
-  if(!file)return showMessage("err","Silakan pilih foto produk.");
-  if(file.size>15*1024*1024)return showMessage("err","Ukuran foto asli maksimal 15 MB.");
+/* =========================================================
+ * SUCCESS MODAL
+ * ========================================================= */
 
-  btn.disabled=true;resetBtn.style.display="none";progressBox.style.display="block";msg.style.display="none";setProgress(8,"Membaca foto...");
+function openSuccessModal(
+  productName,
+  photoSize
+){
 
-  try{
-    const compressed=await compressImage(file,900,900,350*1024);
-    setProgress(38,"Foto berhasil dikompres...");
-    if(compressed.size>500*1024)throw new Error("Foto setelah dikompres masih terlalu besar. Silakan pilih foto lain.");
+  successProduct.textContent =
+    productName || "-";
 
-    const saved=Math.max(0,file.size-compressed.size);
-    const savedPercent=file.size?Math.round(saved/file.size*100):0;
-    compressedSize.textContent=formatBytes(compressed.size);savingSize.textContent=savedPercent+"%";
-    setProgress(58,"Menyiapkan data upload...");
-    const base64=await blobToBase64(compressed);
-    imageBase64.value=base64;imageName.value=id+".jpg";imageMimeType.value="image/jpeg";
-    setProgress(72,"Mengirim ke server...");
 
-    let uploadFrame=document.getElementById("uploadFrame");
-    if(!uploadFrame){uploadFrame=document.createElement("iframe");uploadFrame.id="uploadFrame";uploadFrame.name="uploadFrame";uploadFrame.style.display="none";document.body.appendChild(uploadFrame)}
-    form.target="uploadFrame";form.submit();
+  successPhoto.textContent =
+    photoSize || "-";
 
-    setProgress(100,"Selesai");btn.textContent="Tersimpan ✓";
-    openSuccessModal(name,formatBytes(compressed.size));resetBtn.style.display="block";
-  }catch(error){
-    console.error(error);showMessage("err","<b>Gagal.</b><br><small>"+error.message+"</small>");
-    progressBox.style.display="none";btn.disabled=false;btn.textContent="Simpan Produk";
+
+  successModal.classList.add(
+    "show"
+  );
+
+
+  successModal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+
+function closeSuccessModal(){
+
+  successModal.classList.remove(
+    "show"
+  );
+
+
+  successModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+/* =========================================================
+ * MODAL EVENTS
+ * ========================================================= */
+
+modalAddBtn.addEventListener(
+  "click",
+  ()=>{
+
+    closeSuccessModal();
+
+    resetProductForm();
+
+    nameInput.focus();
+
   }
-});
+);
+
+
+resetBtn.addEventListener(
+  "click",
+  ()=>{
+
+    closeSuccessModal();
+
+    resetProductForm();
+
+    nameInput.focus();
+
+  }
+);
+
+
+successModal.addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target ===
+      successModal
+    ){
+
+      closeSuccessModal();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if(
+      e.key ===
+      "Escape"
+    ){
+
+      closeSuccessModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+ * SUBMIT
+ * ========================================================= */
+
+form.addEventListener(
+  "submit",
+  async e => {
+
+    e.preventDefault();
+
+
+    /*
+     * Pastikan login.
+     */
+
+    if(
+      !currentGoogleUser ||
+      !currentGoogleUser.token
+    ){
+
+      showMessage(
+        "err",
+        "<b>Akses ditolak.</b><br>" +
+        "Silakan login dengan Google terlebih dahulu."
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * Pastikan token terbaru dimasukkan.
+     */
+
+    idTokenInput.value =
+      currentGoogleUser.token;
+
+
+    /*
+     * Validasi email UI.
+     *
+     * SERVER TETAP MEMVALIDASI LAGI.
+     */
+
+    if(
+      currentGoogleUser.email
+        .toLowerCase() !==
+      ALLOWED_EMAIL
+        .toLowerCase()
+    ){
+
+      showMessage(
+        "err",
+        "<b>Akses ditolak.</b><br>" +
+        "Akun Google Anda tidak memiliki izin upload."
+      );
+
+
+      return;
+
+    }
+
+
+    const name =
+      nameInput.value.trim();
+
+
+    const id =
+      idInput.value.trim();
+
+
+    const desc =
+      document
+        .getElementById(
+          "desc"
+        )
+        .value
+        .trim();
+
+
+    const small =
+      document
+        .getElementById(
+          "small"
+        )
+        .value;
+
+
+    const medium =
+      document
+        .getElementById(
+          "medium"
+        )
+        .value;
+
+
+    const file =
+      imageInput.files[0];
+
+
+    if(!name){
+
+      showMessage(
+        "err",
+        "Nama produk wajib diisi."
+      );
+
+      return;
+
+    }
+
+
+    if(!id){
+
+      showMessage(
+        "err",
+        "ID produk belum terbentuk."
+      );
+
+      return;
+
+    }
+
+
+    if(!desc){
+
+      showMessage(
+        "err",
+        "Deskripsi wajib diisi."
+      );
+
+      return;
+
+    }
+
+
+    if(
+      small === "" ||
+      Number(small) < 0
+    ){
+
+      showMessage(
+        "err",
+        "Harga Small tidak valid."
+      );
+
+      return;
+
+    }
+
+
+    if(
+      medium === "" ||
+      Number(medium) < 0
+    ){
+
+      showMessage(
+        "err",
+        "Harga Medium tidak valid."
+      );
+
+      return;
+
+    }
+
+
+    if(!file){
+
+      showMessage(
+        "err",
+        "Silakan pilih foto produk."
+      );
+
+      return;
+
+    }
+
+
+    if(
+      file.size >
+      15 *
+      1024 *
+      1024
+    ){
+
+      showMessage(
+        "err",
+        "Ukuran foto asli maksimal 15 MB."
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * START
+     */
+
+    btn.disabled =
+      true;
+
+
+    resetBtn.style.display =
+      "none";
+
+
+    progressBox.style.display =
+      "block";
+
+
+    msg.style.display =
+      "none";
+
+
+    setProgress(
+      8,
+      "Membaca foto..."
+    );
+
+
+    try{
+
+      /*
+       * Compress
+       */
+
+      const compressed =
+        await compressImage(
+          file,
+          900,
+          900,
+          350 *
+          1024
+        );
+
+
+      setProgress(
+        38,
+        "Foto berhasil dikompres..."
+      );
+
+
+      if(
+        compressed.size >
+        500 *
+        1024
+      ){
+
+        throw new Error(
+          "Foto setelah dikompres masih terlalu besar. Silakan pilih foto lain."
+        );
+
+      }
+
+
+      const saved =
+        Math.max(
+          0,
+          file.size -
+          compressed.size
+        );
+
+
+      const savedPercent =
+        file.size
+          ? Math.round(
+              saved /
+              file.size *
+              100
+            )
+          : 0;
+
+
+      compressedSize.textContent =
+        formatBytes(
+          compressed.size
+        );
+
+
+      savingSize.textContent =
+        savedPercent +
+        "%";
+
+
+      setProgress(
+        58,
+        "Menyiapkan data upload..."
+      );
+
+
+      /*
+       * Base64
+       */
+
+      const base64 =
+        await blobToBase64(
+          compressed
+        );
+
+
+      imageBase64.value =
+        base64;
+
+
+      imageName.value =
+        id +
+        ".jpg";
+
+
+      imageMimeType.value =
+        "image/jpeg";
+
+
+      /*
+       * Token
+       */
+
+      idTokenInput.value =
+        currentGoogleUser.token;
+
+
+      setProgress(
+        72,
+        "Mengirim ke server..."
+      );
+
+
+      /*
+       * IFRAME
+       */
+
+      let uploadFrame =
+        document.getElementById(
+          "uploadFrame"
+        );
+
+
+      if(!uploadFrame){
+
+        uploadFrame =
+          document.createElement(
+            "iframe"
+          );
+
+
+        uploadFrame.id =
+          "uploadFrame";
+
+
+        uploadFrame.name =
+          "uploadFrame";
+
+
+        uploadFrame.style.display =
+          "none";
+
+
+        document.body.appendChild(
+          uploadFrame
+        );
+
+      }
+
+
+      form.target =
+        "uploadFrame";
+
+
+      /*
+       * SUBMIT
+       */
+
+      form.submit();
+
+
+      /*
+       * Apps Script menerima
+       * request secara asynchronous.
+       */
+
+      setProgress(
+        100,
+        "Data dikirim ke server..."
+      );
+
+
+      btn.textContent =
+        "Tersimpan ✓";
+
+
+      /*
+       * Tampilkan modal setelah
+       * request terkirim.
+       */
+
+      setTimeout(
+        ()=>{
+
+          openSuccessModal(
+            name,
+            formatBytes(
+              compressed.size
+            )
+          );
+
+
+          resetBtn.style.display =
+            "block";
+
+        },
+        800
+      );
+
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+
+      showMessage(
+        "err",
+        "<b>Gagal.</b><br><small>" +
+        error.message +
+        "</small>"
+      );
+
+
+      progressBox.style.display =
+        "none";
+
+
+      btn.disabled =
+        false;
+
+
+      btn.textContent =
+        "Simpan Produk";
+
+    }
+
+  }
+);
+
 </script>
+
 </body>
 </html>
