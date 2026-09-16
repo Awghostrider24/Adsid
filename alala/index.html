@@ -324,7 +324,6 @@ Foto akan otomatis dikompres sebelum dikirim ke Google Drive.
   id="productForm"
   method="POST"
   action="https://script.google.com/macros/s/AKfycbyzNbi14XlQrLOm-BXUaTiMehFCn-P-zp2mp-wLPh-y8S_y06ds3UKf2AFDNDqS-53GcA/exec"
-  target="_blank"
 >
 
 <!-- =====================================================
@@ -1249,21 +1248,50 @@ form.addEventListener(
        * 403 pada googleusercontent dalam iframe.
        * ==================================================
        */
-
-      form.submit();
-
-
       /*
-       * Tab baru akan menampilkan hasil
-       * dari Code.gs.
+       * ==================================================
+       * SUBMIT TANPA MEMBUKA TAB BARU
+       * ==================================================
+       * Form dikirim ke iframe tersembunyi.
+       * Halaman utama tetap terbuka.
        */
 
-      btn.textContent =
-        "Terkirim";
+      let uploadFrame = document.getElementById("uploadFrame");
 
+      if (!uploadFrame) {
+        uploadFrame = document.createElement("iframe");
+        uploadFrame.id = "uploadFrame";
+        uploadFrame.name = "uploadFrame";
+        uploadFrame.style.display = "none";
+        document.body.appendChild(uploadFrame);
+      }
 
-      bar.style.width =
-        "100%";
+      form.target = "uploadFrame";
+      form.submit();
+
+      btn.textContent = "Terkirim ✓";
+      bar.style.width = "100%";
+
+      showMessage(
+        "info",
+        "<b>Produk berhasil dikirim.</b><br>" +
+        "<small>Data dan foto sedang diproses oleh server.</small>"
+      );
+
+      setTimeout(function(){
+        form.reset();
+        idInput.value = "";
+        preview.src = "";
+        preview.style.display = "none";
+        imageBase64.value = "";
+        imageName.value = "";
+        imageMimeType.value = "";
+        progress.style.display = "none";
+        bar.style.width = "0%";
+        btn.disabled = false;
+        btn.textContent = "Simpan Produk";
+      }, 1200);
+
 
 
     }catch(error){
