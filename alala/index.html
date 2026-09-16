@@ -502,21 +502,7 @@ name="imageMimeType"
 
 >
 
-<!-- =====================================================
-     PROGRESS
-     ===================================================== -->
 
-<div
-  class="progress"
-  id="progress"
->
-
-<div
-  class="bar"
-  id="bar"
-></div>
-
-</div>
 
 <!-- =====================================================
      BUTTON
@@ -545,6 +531,15 @@ Simpan Produk
 
 </div>
 
+</div>
+
+<div id="successModal" class="modal" aria-hidden="true">
+  <div class="modalcard">
+    <div class="successicon">✓</div>
+    <h2>Produk Berhasil Disimpan</h2>
+    <p id="successDetail">Data produk dan foto berhasil dikirim ke server.</p>
+    <button id="modalAddBtn" type="button">Tambah Produk Lagi</button>
+  </div>
 </div>
 
 <script>
@@ -603,15 +598,19 @@ const msg =
     "message"
   );
 
-const progress =
-  document.getElementById(
-    "progress"
-  );
+const sizeInfo = document.getElementById("sizeInfo");
+const originalSize = document.getElementById("originalSize");
+const compressedSize = document.getElementById("compressedSize");
+const savingSize = document.getElementById("savingSize");
 
-const bar =
-  document.getElementById(
-    "bar"
-  );
+const progressBox = document.getElementById("progressBox");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+const progressPercent = document.getElementById("progressPercent");
+
+const resetBtn = document.getElementById("resetBtn");
+const successModal = document.getElementById("successModal");
+const modalAddBtn = document.getElementById("modalAddBtn");
 
 
 /* =========================================================
@@ -694,6 +693,11 @@ imageInput.addEventListener(
 
     preview.style.display =
       "block";
+
+    originalSize.textContent = formatBytes(file.size);
+    compressedSize.textContent = "sedang diproses...";
+    savingSize.textContent = "-";
+    sizeInfo.style.display = "block";
 
   }
 );
@@ -915,6 +919,76 @@ function showMessage(
 }
 
 
+function formatBytes(bytes){
+  if(bytes < 1024) return bytes + " B";
+  if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
+
+function updateSizeInfo(original, compressed){
+  compressedSize.textContent = formatBytes(compressed);
+
+  const saved = Math.max(0, original - compressed);
+  const percent = original > 0
+    ? Math.round((saved / original) * 100)
+    : 0;
+
+  savingSize.textContent =
+    formatBytes(saved) + " (" + percent + "% lebih kecil)";
+}
+
+function resetProductForm(){
+  form.reset();
+  idInput.value = "";
+  preview.src = "";
+  preview.style.display = "none";
+
+  imageBase64.value = "";
+  imageName.value = "";
+  imageMimeType.value = "";
+
+  sizeInfo.style.display = "none";
+  originalSize.textContent = "-";
+  compressedSize.textContent = "-";
+  savingSize.textContent = "-";
+
+  progressBox.style.display = "none";
+  progressBar.style.width = "0%";
+  progressPercent.textContent = "0%";
+  progressText.textContent = "Menyiapkan...";
+
+  msg.className = "msg";
+  msg.style.display = "none";
+
+  btn.disabled = false;
+  btn.textContent = "Simpan Produk";
+
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function openSuccessModal(){
+  successModal.classList.add("show");
+  successModal.setAttribute("aria-hidden","false");
+}
+
+function closeSuccessModal(){
+  successModal.classList.remove("show");
+  successModal.setAttribute("aria-hidden","true");
+}
+
+resetBtn.addEventListener("click", function(){
+  resetProductForm();
+});
+
+modalAddBtn.addEventListener("click", function(){
+  closeSuccessModal();
+  resetProductForm();
+});
+
+successModal.addEventListener("click", function(e){
+  if(e.target === successModal) closeSuccessModal();
+});
+
 /* =========================================================
    SUBMIT
    ========================================================= */
@@ -1060,12 +1134,10 @@ form.addEventListener(
       "Mengoptimalkan foto...";
 
 
-    progress.style.display =
-      "block";
+    progressBox.style.display = "block";
 
 
-    bar.style.width =
-      "10%";
+    progressBar.style.width = "10%"; progressPercent.textContent = "10%"; progressText.textContent = "Membaca foto...";
 
 
     msg.className =
@@ -1092,8 +1164,7 @@ form.addEventListener(
         );
 
 
-      bar.style.width =
-        "35%";
+      progressBar.style.width = "35%"; progressPercent.textContent = "35%"; progressText.textContent = "Mengompres foto...";
 
 
       if(
@@ -1122,8 +1193,7 @@ form.addEventListener(
         );
 
 
-      bar.style.width =
-        "55%";
+      progressBar.style.width = "55%"; progressPercent.textContent = "55%"; progressText.textContent = "Menyiapkan data...";
 
 
       /* ===================================================
@@ -1184,15 +1254,14 @@ form.addEventListener(
 
         "<small>" +
 
-        "Klik tombol sekali lagi jika browser meminta membuka tab baru." +
+        "Produk sedang dikirim tanpa membuka tab baru." +
 
         "</small>"
 
       );
 
 
-      bar.style.width =
-        "75%";
+      progressBar.style.width = "75%"; progressPercent.textContent = "75%"; progressText.textContent = "Mengirim ke server...";
 
 
       btn.textContent =
@@ -1241,21 +1310,10 @@ form.addEventListener(
         "info",
         "<b>Produk berhasil dikirim.</b><br>" +
         "<small>Data dan foto sedang diproses oleh server.</small>"
-      );
-
-      setTimeout(function(){
-        form.reset();
-        idInput.value = "";
-        preview.src = "";
-        preview.style.display = "none";
-        imageBase64.value = "";
-        imageName.value = "";
-        imageMimeType.value = "";
-        progress.style.display = "none";
-        bar.style.width = "0%";
-        btn.disabled = false;
-        btn.textContent = "Simpan Produk";
-      }, 1200);
+      );setTimeout(function(){
+        openSuccessModal();
+        resetBtn.style.display = "block";
+      }, 700);
 
 
 
@@ -1287,11 +1345,9 @@ form.addEventListener(
         "Simpan Produk";
 
 
-      progress.style.display =
-        "none";
+      progressBox.style.display = "none";
 
-      bar.style.width =
-        "0%";
+      progressBar.style.width = "0%"; progressPercent.textContent = "0%";
 
     }
 
