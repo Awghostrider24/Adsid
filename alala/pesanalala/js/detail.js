@@ -139,10 +139,9 @@ async function tampilkanDetail() {
     const total = price * quantity;
 
     /*
-     * GANTI NOMOR DI BAWAH DENGAN NOMOR WHATSAPP ALALA JUSSS.
-     * Format: 628xxxxxxxxxx
+     WA CS LEK
      */
-    const whatsappNumber = "628XXXXXXXXXX";
+    const whatsappNumber = "6287767283778";
 
     const message = [
       "🍹 *PESANAN ALALA JUSSS*",
