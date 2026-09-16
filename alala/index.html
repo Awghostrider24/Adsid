@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#111827">
-<title>Alala Jusss — Tambah Produk</title>
+<title>Alala Jusss — Admin</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box}
 :root{--ink:#111827;--muted:#667085;--line:#e5e7eb;--soft:#f8fafc;--danger:#b42318}
@@ -43,13 +44,43 @@ button:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(17,24,39,.17
 .modalcard h2{margin:0;font-size:22px;letter-spacing:-.4px}.modalcard p{margin:8px 0 0;color:#667085;font-size:13px;line-height:1.55}
 .modalstats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px;text-align:left}.modalstat{padding:10px;border-radius:11px;background:#f8fafc}.modalstat span{display:block;color:#98a2b3;font-size:10px}.modalstat strong{font-size:12px}
 @media(max-width:520px){.page{padding:18px 12px 35px}.card{padding:20px;border-radius:21px}h1{font-size:24px}.row,.actions{grid-template-columns:1fr}.preview{height:205px}.badge{display:none}}
+
+.login-screen{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 20% 10%,rgba(17,24,39,.08),transparent 30%),#f3f5f8}
+.login-card{width:min(420px,100%);background:#fff;border:1px solid rgba(17,24,39,.08);border-radius:26px;padding:30px;box-shadow:0 25px 80px rgba(15,23,42,.16);text-align:center}
+.login-mark{width:64px;height:64px;border-radius:18px;background:#111827;color:#fff;display:grid;place-items:center;margin:0 auto 16px;font-weight:900;font-size:22px;box-shadow:0 12px 28px rgba(17,24,39,.18)}
+.login-card h2{margin:0;font-size:24px;letter-spacing:-.5px}.login-card p{margin:8px 0 22px;color:#667085;font-size:13px;line-height:1.55}
+.google-box{display:flex;justify-content:center;min-height:44px}.login-user{display:none;margin-top:16px;padding:11px 12px;border-radius:12px;background:#f8fafc;text-align:left;font-size:12px;color:#475467}.login-user strong{display:block;color:#111827;font-size:13px;margin-bottom:2px}.login-error{display:none;margin-top:14px;padding:11px 12px;border-radius:12px;background:#fff1f0;color:#b42318;border:1px solid #ffd6d2;font-size:12px;line-height:1.45}
+.app-hidden{display:none!important}
+.user-chip{display:flex;align-items:center;gap:8px;padding:6px 9px 6px 6px;border:1px solid var(--line);background:#fff;border-radius:999px;font-size:11px;color:#475467}
+.user-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#eef1f5}
+.logout-btn{width:auto;padding:7px 10px;margin-left:3px;font-size:11px;border-radius:9px;box-shadow:none}
+@media(max-width:520px){.user-chip span{display:none}.login-card{padding:24px}}
 </style>
 </head>
 <body>
-<div class="page">
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-mark">AJ</div>
+    <h2>Alala Jusss Admin</h2>
+    <p>Silakan masuk menggunakan akun Google untuk mengakses panel produk.</p>
+    <div id="googleButton" class="google-box"></div>
+    <div id="loginUser" class="login-user"></div>
+    <div id="loginError" class="login-error"></div>
+    <div style="margin-top:16px;color:#98a2b3;font-size:10px;line-height:1.5">
+      Gunakan melalui HTTPS atau localhost. File HTML yang dibuka langsung dengan <b>file://</b> tidak cocok untuk Google Sign-In.
+    </div>
+  </div>
+</div>
+
+<div id="appPage" class="page app-hidden">
   <div class="topbar">
     <div class="brand"><div class="brandmark">AJ</div><div><strong>Alala Jusss</strong><span>Panel Produk</span></div></div>
-    <div class="badge">Tambah Produk</div>
+    <div class="user-chip" id="userChip">
+      <img id="userAvatar" class="user-avatar" alt="">
+      <span id="userEmail">-</span>
+      <button type="button" class="logout-btn" id="logoutBtn">Keluar</button>
+    </div>
   </div>
 
   <main class="card">
@@ -129,6 +160,100 @@ button:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(17,24,39,.17
 </div>
 
 <script>
+
+/* ================= GOOGLE LOGIN =================
+   Untuk mode produksi, isi ADMIN_EMAILS dengan email admin
+   dan set ALLOW_ANY_GOOGLE_ACCOUNT = false.
+*/
+const GOOGLE_CLIENT_ID = "610820778176-3jm1jub7il9nks4eocm9qt1llsa6phke.apps.googleusercontent.com";
+const ADMIN_EMAILS = [
+  // "emailadmin@gmail.com"
+];
+const ALLOW_ANY_GOOGLE_ACCOUNT = true; // ubah ke false untuk membatasi email admin
+
+const loginScreen = document.getElementById("loginScreen");
+const appPage = document.getElementById("appPage");
+const loginError = document.getElementById("loginError");
+const loginUser = document.getElementById("loginUser");
+const userEmail = document.getElementById("userEmail");
+const userAvatar = document.getElementById("userAvatar");
+const logoutBtn = document.getElementById("logoutBtn");
+
+function base64UrlDecode(str){
+  str = str.replace(/-/g,'+').replace(/_/g,'/');
+  while(str.length % 4) str += '=';
+  return decodeURIComponent(atob(str).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+}
+function decodeGoogleCredential(credential){
+  const parts=credential.split('.');
+  if(parts.length!==3) throw new Error("Token Google tidak valid.");
+  return JSON.parse(base64UrlDecode(parts[1]));
+}
+function showLoginError(text){
+  loginError.textContent=text;
+  loginError.style.display="block";
+}
+function enterApp(payload){
+  loginError.style.display="none";
+  loginUser.innerHTML="<strong>"+(payload.name||"Pengguna Google")+"</strong>"+payload.email;
+  loginUser.style.display="block";
+  userEmail.textContent=payload.email||"";
+  userAvatar.src=payload.picture||"";
+  loginScreen.style.display="none";
+  appPage.classList.remove("app-hidden");
+  sessionStorage.setItem("alalaGoogleUser",JSON.stringify({
+    name:payload.name||"",email:payload.email||"",picture:payload.picture||""
+  }));
+}
+function logoutGoogle(){
+  try{
+    if(window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect();
+  }catch(e){}
+  sessionStorage.removeItem("alalaGoogleUser");
+  appPage.classList.add("app-hidden");
+  loginScreen.style.display="flex";
+  loginUser.style.display="none";
+}
+logoutBtn.addEventListener("click",logoutGoogle);
+
+function handleCredentialResponse(response){
+  try{
+    const payload=decodeGoogleCredential(response.credential);
+    if(payload.aud!==GOOGLE_CLIENT_ID) throw new Error("Client ID Google tidak sesuai.");
+    if(payload.email_verified!==true) throw new Error("Email Google belum terverifikasi.");
+    if(!ALLOW_ANY_GOOGLE_ACCOUNT){
+      const allowed=ADMIN_EMAILS.map(x=>x.toLowerCase().trim()).includes((payload.email||"").toLowerCase());
+      if(!allowed) throw new Error("Akun ini tidak terdaftar sebagai admin Alala Jusss.");
+    }
+    enterApp(payload);
+  }catch(err){
+    showLoginError(err.message||"Login Google gagal.");
+  }
+}
+
+function initGoogleLogin(){
+  if(!window.google || !google.accounts || !google.accounts.id){
+    setTimeout(initGoogleLogin,300);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id:GOOGLE_CLIENT_ID,
+    callback:handleCredentialResponse,
+    auto_select:false,
+    cancel_on_tap_outside:false
+  });
+  google.accounts.id.renderButton(document.getElementById("googleButton"),{
+    theme:"outline",size:"large",type:"standard",text:"signin_with",
+    shape:"rectangular",logo_alignment:"left",width:320
+  });
+
+  const saved=sessionStorage.getItem("alalaGoogleUser");
+  if(saved){
+    try{enterApp(JSON.parse(saved));}catch(e){sessionStorage.removeItem("alalaGoogleUser");}
+  }
+}
+window.addEventListener("load",initGoogleLogin);
+
 const form=document.getElementById("productForm");
 const nameInput=document.getElementById("name");
 const idInput=document.getElementById("id");
