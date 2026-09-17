@@ -141,7 +141,7 @@ async function tampilkanDetail() {
     /*
      WA CS LEK
      */
-    const whatsappNumber = "6287767283778";
+    const whatsappNumber = "62882007583303";
 
     const message = [
       "🍹 *PESANAN ALALA JUSSS*",
