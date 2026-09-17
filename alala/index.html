@@ -617,6 +617,88 @@ button:disabled{
 
 }
 
+
+/* RESPONSIVE MOBILE OVERRIDES */
+.loginbox,
+.google-button,
+.userbox,
+.useremail {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.loginbox,
+.google-button,
+.userbox {
+  overflow: hidden;
+}
+
+.google-button {
+  width: 100%;
+}
+
+.google-button iframe,
+.google-button > div {
+  max-width: 100% !important;
+}
+
+.useremail {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 520px) {
+  .page {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 8px 28px;
+  }
+
+  .card {
+    width: 100%;
+    min-width: 0;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .loginbox {
+    padding: 13px;
+    border-radius: 15px;
+  }
+
+  .google-button,
+  .google-button iframe {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  .filebox input[type="file"] {
+    width: 100%;
+    min-width: 0;
+    font-size: 12px;
+  }
+
+  .sizegrid,
+  .modalstats {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modalcard {
+    width: 100%;
+    padding: 22px 16px;
+  }
+}
+
 </style>
 
 
