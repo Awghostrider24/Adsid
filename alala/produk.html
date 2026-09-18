@@ -1302,10 +1302,6 @@ const firebaseConfig = {
  * KEAMANAN SEBENARNYA TETAP DI CODE.GS.
  */
 
-const ALLOWED_EMAIL =
-  "suportumkmlokal@gmail.com";
-
-
 /*
  * URL APPS SCRIPT
  */
@@ -1499,6 +1495,7 @@ let currentGoogleUser =
  * ========================================================= */
 
 let currentGoogleUser = null;
+let currentUserRole = "";
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -1526,16 +1523,19 @@ async function signInWithGoogle(){
     };
 
     userEmail.textContent = user.email || "";
-    userStatus.textContent = "Memeriksa izin upload...";
+    userStatus.textContent = "Memeriksa role dan izin...";
     userBox.className = "userbox allowed";
 
     const access = await checkAccess(token);
     if(access.allowed){
-      userStatus.textContent = "✓ Akses upload aktif. Anda dapat menambahkan produk.";
-      productSection.style.display = "block";
+      currentUserRole = access.role || "";
+      userStatus.textContent = "✓ Login aktif | Role: " + currentUserRole +
+        (access.canUpload ? " | Dapat menambah produk." : " | Hanya akses lihat.");
+      productSection.style.display = access.canUpload ? "block" : "none";
     }else{
+      currentUserRole = "";
       userBox.className = "userbox denied";
-      userStatus.textContent = "✕ Akses upload ditolak. Hanya akun " + ALLOWED_EMAIL + " yang dapat menambahkan produk.";
+      userStatus.textContent = "✕ " + (access.message || "Akses ditolak.");
       productSection.style.display = "none";
     }
   }catch(error){
@@ -2474,22 +2474,12 @@ form.addEventListener(
      * SERVER TETAP MEMVALIDASI LAGI.
      */
 
-    if(
-      currentGoogleUser.email
-        .toLowerCase() !==
-      ALLOWED_EMAIL
-        .toLowerCase()
-    ){
-
+    if (!["admin", "editor"].includes(currentUserRole)) {
       showMessage(
         "err",
-        "<b>Akses ditolak.</b><br>" +
-        "Akun Google Anda tidak memiliki izin upload."
+        "<b>Akses ditolak.</b><br>Role admin atau editor diperlukan untuk upload."
       );
-
-
       return;
-
     }
 
 
