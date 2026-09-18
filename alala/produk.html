@@ -706,11 +706,8 @@ button:disabled{
      GOOGLE IDENTITY SERVICES
      ======================================================= -->
 
-<script
-  src="https://accounts.google.com/gsi/client"
-  async
-  defer>
-</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 </head>
 
@@ -768,7 +765,7 @@ button:disabled{
 
 
     <p class="sub">
-      Login dengan akun Google yang memiliki
+      Login dengan akun Google melalui Firebase yang memiliki
       izin untuk mengelola produk.
     </p>
 
@@ -1285,12 +1282,16 @@ button:disabled{
  * ========================================================= */
 
 
-/*
- * MASUKKAN GOOGLE OAUTH CLIENT ID DI SINI
- */
-
-const GOOGLE_CLIENT_ID =
-  "610820778176-3jm1jub7il9nks4eocm9qt1llsa6phke.apps.googleusercontent.com";
+/* Firebase Configuration */
+const firebaseConfig = {
+  apiKey: "AIzaSyAmbfwmxLS5HuwbAWGnl5oSP4h1-geNWbM",
+  authDomain: "alalajusss.firebaseapp.com",
+  projectId: "alalajusss",
+  storageBucket: "alalajusss.firebasestorage.app",
+  messagingSenderId: "1027131491565",
+  appId: "1:1027131491565:web:d303bcafaa7ce73294b8e4",
+  measurementId: "G-LE4XX3SJLJ"
+};
 
 
 /*
@@ -1494,234 +1495,54 @@ let currentGoogleUser =
 
 
 /* =========================================================
- * GOOGLE LOGIN
+ * FIREBASE GOOGLE LOGIN
  * ========================================================= */
 
-window.onload =
-  function(){
+let currentGoogleUser = null;
 
-    if (
-      GOOGLE_CLIENT_ID ===
-      "YOUR_GOOGLE_CLIENT_ID"
-    ){
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-      showLoginError(
-        "Google Client ID belum diatur. " +
-        "Masukkan Web Client ID pada kode HTML."
-      );
+window.onload = function(){
+  const loginButton = document.getElementById("googleLoginButton");
+  loginButton.innerHTML = `<button type="button" id="firebaseLoginBtn">
+    Masuk dengan Google
+  </button>`;
+  document.getElementById("firebaseLoginBtn").addEventListener("click", signInWithGoogle);
+};
 
-      return;
-
-    }
-
-
-    if (
-      !window.google ||
-      !google.accounts ||
-      !google.accounts.id
-    ){
-
-      showLoginError(
-        "Google Login belum berhasil dimuat. " +
-        "Silakan refresh halaman."
-      );
-
-      return;
-
-    }
-
-
-    google.accounts.id.initialize({
-
-      client_id:
-        GOOGLE_CLIENT_ID,
-
-      callback:
-        handleGoogleCredential,
-
-      auto_select:
-        false,
-
-      cancel_on_tap_outside:
-        false
-
-    });
-
-
-    google.accounts.id.renderButton(
-
-      document.getElementById(
-        "googleLoginButton"
-      ),
-
-      {
-
-        theme:
-          "outline",
-
-        size:
-          "large",
-
-        text:
-          "signin_with",
-
-        shape:
-          "rectangular",
-
-        width:
-          330
-
-      }
-
-    );
-
-  };
-
-
-/* =========================================================
- * GOOGLE CALLBACK
- * ========================================================= */
-
-async function handleGoogleCredential(
-  response
-){
-
+async function signInWithGoogle(){
   try{
+    const result = await auth.signInWithPopup(googleProvider);
+    const user = result.user;
+    const token = await user.getIdToken(true);
 
-    if(
-      !response ||
-      !response.credential
-    ){
-
-      throw new Error(
-        "ID Token Google tidak diterima."
-      );
-
-    }
-
-
-    const token =
-      response.credential;
-
-
-    idTokenInput.value =
-      token;
-
-
-    /*
-     * Decode payload hanya untuk UI.
-     *
-     * Server tetap melakukan verifikasi.
-     */
-
-    const payload =
-      parseJwtPayload(
-        token
-      );
-
-
-    if(
-      !payload ||
-      !payload.email
-    ){
-
-      throw new Error(
-        "Data akun Google tidak ditemukan."
-      );
-
-    }
-
-
+    idTokenInput.value = token;
     currentGoogleUser = {
-
-      email:
-        payload.email,
-
-      name:
-        payload.name || "",
-
-      token:
-        token
-
+      email: user.email || "",
+      name: user.displayName || "",
+      token: token
     };
 
+    userEmail.textContent = user.email || "";
+    userStatus.textContent = "Memeriksa izin upload...";
+    userBox.className = "userbox allowed";
 
-    /*
-     * Tampilkan akun
-     */
-
-    userEmail.textContent =
-      payload.email;
-
-
-    /*
-     * Periksa akses ke server.
-     */
-
-    userStatus.textContent =
-      "Memeriksa izin upload...";
-
-
-    userBox.className =
-      "userbox allowed";
-
-
-    const access =
-      await checkAccess(
-        token
-      );
-
-
-    if(
-      access.allowed
-    ){
-
-      userBox.className =
-        "userbox allowed";
-
-
-      userStatus.textContent =
-        "✓ Akses upload aktif. " +
-        "Anda dapat menambahkan produk.";
-
-
-      productSection.style.display =
-        "block";
-
+    const access = await checkAccess(token);
+    if(access.allowed){
+      userStatus.textContent = "✓ Akses upload aktif. Anda dapat menambahkan produk.";
+      productSection.style.display = "block";
     }else{
-
-      userBox.className =
-        "userbox denied";
-
-
-      userStatus.textContent =
-        "✕ Akses upload ditolak. " +
-        "Hanya akun " +
-        ALLOWED_EMAIL +
-        " yang dapat menambahkan produk.";
-
-
-      productSection.style.display =
-        "none";
-
+      userBox.className = "userbox denied";
+      userStatus.textContent = "✕ Akses upload ditolak. Hanya akun " + ALLOWED_EMAIL + " yang dapat menambahkan produk.";
+      productSection.style.display = "none";
     }
-
-
   }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    showLoginError(
-      error.message
-    );
-
+    console.error(error);
+    showLoginError(error.message || "Login Firebase gagal.");
   }
-
 }
-
 
 /* =========================================================
  * CHECK ACCESS
