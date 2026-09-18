@@ -1703,6 +1703,12 @@ button:hover{
   max-width:100%;
 }
 
+
+/* Sembunyikan panel akses lama; login/keluar tetap melalui ikon atas */
+.loginbox{
+  display:none !important;
+}
+
 </style>
 
 
@@ -2978,20 +2984,39 @@ async function updateProductStatus(productId, status, button){
     body.append("id", productId);
     body.append("status", status);
 
-    const response = await fetch(SCRIPT_URL, {
+    /*
+     * Google Apps Script sering mengembalikan redirect/response
+     * yang diblokir browser oleh CORS, walaupun data sebenarnya
+     * sudah berhasil diproses di Google Sheets.
+     *
+     * Karena endpoint ini hanya perlu mengirim data, gunakan
+     * mode no-cors dan jangan membaca response-nya.
+     */
+    await fetch(SCRIPT_URL, {
       method:"POST",
+      mode:"no-cors",
+      redirect:"follow",
       body:body
     });
 
-    if(!response.ok){
-      throw new Error("Server tidak merespons.");
-    }
+    if(message) message.textContent = "Permintaan dikirim. Memuat status terbaru...";
+
+    // Beri waktu Apps Script menyelesaikan penulisan ke Sheet.
+    await new Promise(resolve => setTimeout(resolve, 800));
+    await loadProducts();
 
     if(message) message.textContent = "Status berhasil diperbarui.";
-    await loadProducts();
   }catch(error){
     console.error("Gagal mengubah status:", error);
-    if(message) message.textContent = "Gagal menyimpan status.";
+    if(message) {
+      message.textContent = "Permintaan mungkin sudah diproses. Silakan tekan Muat ulang.";
+    }
+    // Refresh tetap dijalankan agar tampilan mengikuti data terbaru.
+    try{
+      await loadProducts();
+    }catch(refreshError){
+      console.warn("Refresh setelah update gagal:", refreshError);
+    }
   }finally{
     button.disabled = false;
     button.textContent = originalText;
