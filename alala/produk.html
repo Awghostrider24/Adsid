@@ -184,6 +184,16 @@ h1{
   background:#f2f4f7;
 }
 
+.logout-btn{
+  background:#111827;
+  color:#ffffff;
+  border-color:#111827;
+}
+
+.logout-btn:hover{
+  background:#374151;
+}
+
 .userbox{
   display:none;
   padding:13px 14px;
@@ -1511,13 +1521,9 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-document.addEventListener("DOMContentLoaded", function(){
+function renderLoginButton(){
   const loginButton = document.getElementById("googleLoginButton");
-
-  if (!loginButton) {
-    console.error("Elemen #googleLoginButton tidak ditemukan.");
-    return;
-  }
+  if (!loginButton) return;
 
   loginButton.innerHTML = `
     <button type="button" id="firebaseLoginBtn" class="firebase-login-btn">
@@ -1525,10 +1531,43 @@ document.addEventListener("DOMContentLoaded", function(){
     </button>
   `;
 
-  const firebaseLoginBtn = document.getElementById("firebaseLoginBtn");
-  if (firebaseLoginBtn) {
-    firebaseLoginBtn.addEventListener("click", signInWithGoogle);
+  const button = document.getElementById("firebaseLoginBtn");
+  if (button) button.addEventListener("click", signInWithGoogle);
+}
+
+function renderLogoutButton(){
+  const loginButton = document.getElementById("googleLoginButton");
+  if (!loginButton) return;
+
+  loginButton.innerHTML = `
+    <button type="button" id="firebaseLogoutBtn" class="firebase-login-btn logout-btn">
+      Keluar
+    </button>
+  `;
+
+  const button = document.getElementById("firebaseLogoutBtn");
+  if (button) button.addEventListener("click", signOutFromGoogle);
+}
+
+async function signOutFromGoogle(){
+  try{
+    await auth.signOut();
+    currentGoogleUser = null;
+    currentUserRole = "";
+    idTokenInput.value = "";
+    userEmail.textContent = "";
+    userStatus.textContent = "";
+    userBox.className = "userbox";
+    productSection.style.display = "none";
+    renderLoginButton();
+  }catch(error){
+    console.error(error);
+    showLoginError("Gagal keluar dari akun Google.");
   }
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  renderLoginButton();
 });
 
 async function signInWithGoogle(){
@@ -1554,6 +1593,7 @@ async function signInWithGoogle(){
       userStatus.textContent = "✓ Login aktif | Role: " + currentUserRole +
         (access.canUpload ? " | Dapat menambah produk." : " | Hanya akses lihat.");
       productSection.style.display = access.canUpload ? "block" : "none";
+      renderLogoutButton();
     }else{
       currentUserRole = "";
       userBox.className = "userbox denied";
