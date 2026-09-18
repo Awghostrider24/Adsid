@@ -162,8 +162,26 @@ h1{
   margin-bottom:14px;
 }
 
-.google-button{
+ .google-button{
   min-height:44px;
+}
+
+.firebase-login-btn{
+  display:block;
+  width:100%;
+  min-height:44px;
+  padding:12px 16px;
+  border:1px solid #d0d5dd;
+  border-radius:12px;
+  background:#ffffff;
+  color:#101828;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.firebase-login-btn:hover{
+  background:#f2f4f7;
 }
 
 .userbox{
@@ -1483,15 +1501,7 @@ const productSection =
 
 
 /* =========================================================
- * GLOBAL USER
- * ========================================================= */
-
-let currentGoogleUser =
-  null;
-
-
-/* =========================================================
- * FIREBASE GOOGLE LOGIN
+ * GLOBAL USER / FIREBASE GOOGLE LOGIN
  * ========================================================= */
 
 let currentGoogleUser = null;
@@ -1501,13 +1511,25 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-window.onload = function(){
+document.addEventListener("DOMContentLoaded", function(){
   const loginButton = document.getElementById("googleLoginButton");
-  loginButton.innerHTML = `<button type="button" id="firebaseLoginBtn">
-    Masuk dengan Google
-  </button>`;
-  document.getElementById("firebaseLoginBtn").addEventListener("click", signInWithGoogle);
-};
+
+  if (!loginButton) {
+    console.error("Elemen #googleLoginButton tidak ditemukan.");
+    return;
+  }
+
+  loginButton.innerHTML = `
+    <button type="button" id="firebaseLoginBtn" class="firebase-login-btn">
+      Masuk dengan Google
+    </button>
+  `;
+
+  const firebaseLoginBtn = document.getElementById("firebaseLoginBtn");
+  if (firebaseLoginBtn) {
+    firebaseLoginBtn.addEventListener("click", signInWithGoogle);
+  }
+});
 
 async function signInWithGoogle(){
   try{
