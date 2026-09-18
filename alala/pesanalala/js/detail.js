@@ -51,7 +51,7 @@ async function tampilkanDetail() {
           <label for="size">Pilih Ukuran</label>
           <select id="size">
             <option value="small">Small — ${rupiah(product.small)}</option>
-            <option value="medium">Medium — ${rupiah(product.medium)}</option>
+            <option value="medium">Large — ${rupiah(product.medium)}</option>
           </select>
         </div>
 
@@ -131,7 +131,7 @@ async function tampilkanDetail() {
 
     const quantity = Number(qty.value);
     const selectedSize = size.value;
-    const sizeName = selectedSize === "medium" ? "Medium" : "Small";
+    const sizeName = selectedSize === "medium" ? "Large" : "Small";
     const price = selectedSize === "medium"
       ? product.medium
       : product.small;
