@@ -1085,6 +1085,239 @@ button:hover{
   }
 }
 
+
+/* =========================================================
+   DASHBOARD NAVIGATION AND OVERVIEW
+   ========================================================= */
+
+.dashboard-nav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  overflow-x:auto;
+  padding:6px;
+  margin:0 0 18px;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  background:rgba(255,255,255,.88);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
+  scrollbar-width:thin;
+}
+
+.nav-item{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:40px;
+  padding:10px 13px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:#667085;
+  font-size:12px;
+  font-weight:600;
+  box-shadow:none;
+  white-space:nowrap;
+}
+
+.nav-item span{
+  font-size:15px;
+}
+
+.nav-item b{
+  font-weight:700;
+}
+
+.nav-item:hover{
+  background:#f3f4f6;
+  color:#111827;
+  box-shadow:none;
+}
+
+.nav-item.active{
+  background:#111827;
+  color:#fff;
+  box-shadow:0 5px 12px rgba(15,23,42,.14);
+}
+
+.dashboard-overview{
+  padding:0 0 26px;
+  margin-bottom:26px;
+  border-bottom:1px solid #edf0f4;
+}
+
+.overview-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:20px;
+}
+
+.overview-heading h2{
+  margin:0;
+  font-size:22px;
+  line-height:1.2;
+  letter-spacing:-.65px;
+}
+
+.overview-heading p{
+  margin:8px 0 0;
+  color:#667085;
+  font-size:13px;
+}
+
+.overview-status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 11px;
+  border:1px solid #bbf7d0;
+  border-radius:999px;
+  background:#f0fdf4;
+  color:#166534;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#22c55e;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.stat-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+  padding:16px;
+  border:1px solid #e7ebf0;
+  border-radius:17px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(15,23,42,.035);
+}
+
+.stat-icon{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  border-radius:12px;
+  background:#f0fdf4;
+  font-size:18px;
+}
+
+.stat-card small{
+  display:block;
+  margin-bottom:5px;
+  color:#667085;
+  font-size:10px;
+  font-weight:700;
+}
+
+.stat-card strong{
+  display:block;
+  font-size:22px;
+  letter-spacing:-.5px;
+}
+
+.utility-panel{
+  display:none;
+  align-items:flex-start;
+  gap:13px;
+  padding:18px;
+  margin-bottom:22px;
+  border:1px solid #e4e7ec;
+  border-radius:18px;
+  background:#f8fafc;
+}
+
+.utility-panel.visible{
+  display:flex;
+}
+
+.utility-icon{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#e0f2fe;
+  font-size:18px;
+  flex:0 0 38px;
+}
+
+.utility-panel h3{
+  margin:0 0 5px;
+  font-size:14px;
+}
+
+.utility-panel p{
+  margin:0;
+  color:#667085;
+  font-size:12px;
+  line-height:1.6;
+}
+
+@media(max-width:900px){
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:560px){
+  .dashboard-nav{
+    border-radius:15px;
+  }
+
+  .nav-item{
+    padding:9px 11px;
+    font-size:11px;
+  }
+
+  .overview-heading{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .overview-heading h2{
+    font-size:20px;
+  }
+
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+
+  .stat-card{
+    padding:12px;
+    gap:9px;
+  }
+
+  .stat-icon{
+    width:32px;
+    height:32px;
+    flex-basis:32px;
+    font-size:15px;
+  }
+
+  .stat-card strong{
+    font-size:19px;
+  }
+}
+
 </style>
 
 
@@ -1138,12 +1371,100 @@ button:hover{
 
   </div>
 
+  <!-- =====================================================
+       DASHBOARD NAVIGATION
+       ===================================================== -->
+
+  <nav class="dashboard-nav" aria-label="Navigasi dashboard">
+    <button class="nav-item active" data-target="dashboardOverview">
+      <span>🏠</span>
+      <b>Dashboard</b>
+    </button>
+
+    <button class="nav-item" data-target="productSection">
+      <span>🛍️</span>
+      <b>Semua Produk</b>
+    </button>
+
+    <button class="nav-item" data-target="productSection">
+      <span>➕</span>
+      <b>Tambah Produk</b>
+    </button>
+
+    <button class="nav-item" data-target="productSection">
+      <span>📦</span>
+      <b>Status Produk</b>
+    </button>
+
+    <button class="nav-item admin-only" id="userManagementNav" data-target="userManagementPanel" hidden>
+      <span>👤</span>
+      <b>Manajemen Pengguna</b>
+    </button>
+
+    <button class="nav-item" data-target="settingsPanel">
+      <span>⚙️</span>
+      <b>Pengaturan</b>
+    </button>
+  </nav>
+
 
   <!-- =====================================================
        MAIN CARD
        ===================================================== -->
 
   <main class="card">
+
+    <!-- ===================================================
+         DASHBOARD OVERVIEW
+         =================================================== -->
+
+    <section id="dashboardOverview" class="dashboard-overview">
+      <div class="overview-heading">
+        <div>
+          <div class="eyebrow">RINGKASAN DASHBOARD</div>
+          <h2>Selamat datang di panel Alala Jusss 👋</h2>
+          <p>Kelola produk dan akses pengguna dari satu tempat.</p>
+        </div>
+        <div class="overview-status">
+          <span class="status-dot"></span>
+          Sistem aktif
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">📦</span>
+          <div>
+            <small>Total Produk</small>
+            <strong id="totalProductsStat">—</strong>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-icon">✅</span>
+          <div>
+            <small>Produk Tersedia</small>
+            <strong id="availableProductsStat">—</strong>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-icon">⛔</span>
+          <div>
+            <small>Produk Habis</small>
+            <strong id="soldOutProductsStat">—</strong>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-icon">👤</span>
+          <div>
+            <small>Role Aktif</small>
+            <strong id="activeRoleStat">—</strong>
+          </div>
+        </div>
+      </div>
+    </section>
 
 
     <div class="eyebrow">WORKSPACE PRODUK</div>
@@ -1199,6 +1520,27 @@ button:hover{
       </div>
 
     </div>
+
+
+    <!-- ===================================================
+         ADMIN AND SETTINGS PANELS
+         =================================================== -->
+
+    <section id="userManagementPanel" class="utility-panel admin-only" hidden>
+      <div class="utility-icon">👤</div>
+      <div>
+        <h3>Manajemen Pengguna</h3>
+        <p>Menu ini khusus admin. Pengelolaan role dan status pengguna tetap dilakukan melalui sheet <b>user</b> di Google Sheets.</p>
+      </div>
+    </section>
+
+    <section id="settingsPanel" class="utility-panel">
+      <div class="utility-icon">⚙️</div>
+      <div>
+        <h3>Pengaturan</h3>
+        <p>Pengaturan sistem dapat dikembangkan lebih lanjut, seperti preferensi tampilan, informasi toko, dan konfigurasi katalog.</p>
+      </div>
+    </section>
 
 
     <!-- ===================================================
@@ -1915,6 +2257,15 @@ async function signOutFromGoogle(){
     userStatus.textContent = "";
     userBox.className = "userbox";
     productSection.style.display = "none";
+
+    const roleStat = document.getElementById("activeRoleStat");
+    if(roleStat) roleStat.textContent = "—";
+
+    const userManagementNav = document.getElementById("userManagementNav");
+    const userManagementPanel = document.getElementById("userManagementPanel");
+    if(userManagementNav) userManagementNav.hidden = true;
+    if(userManagementPanel) userManagementPanel.hidden = true;
+
     renderLoginButton();
   }catch(error){
     console.error(error);
@@ -1924,6 +2275,32 @@ async function signOutFromGoogle(){
 
 document.addEventListener("DOMContentLoaded", function(){
   renderLoginButton();
+
+  const navItems = document.querySelectorAll(".nav-item[data-target]");
+
+  navItems.forEach(function(item){
+    item.addEventListener("click", function(){
+      const targetId = item.getAttribute("data-target");
+      const target = document.getElementById(targetId);
+
+      navItems.forEach(function(nav){
+        nav.classList.remove("active");
+      });
+
+      item.classList.add("active");
+
+      if(target){
+        if(targetId === "userManagementPanel"){
+          target.classList.add("visible");
+        }
+
+        target.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+      }
+    });
+  });
 });
 
 async function signInWithGoogle(){
@@ -1946,9 +2323,28 @@ async function signInWithGoogle(){
     const access = await checkAccess(token);
     if(access.allowed){
       currentUserRole = access.role || "";
+
       userStatus.textContent = "✓ Login aktif | Role: " + currentUserRole +
         (access.canUpload ? " | Dapat menambah produk." : " | Hanya akses lihat.");
+
       productSection.style.display = access.canUpload ? "block" : "none";
+
+      const roleStat = document.getElementById("activeRoleStat");
+      if(roleStat){
+        roleStat.textContent = currentUserRole || "—";
+      }
+
+      const userManagementNav = document.getElementById("userManagementNav");
+      const userManagementPanel = document.getElementById("userManagementPanel");
+
+      if(currentUserRole.toLowerCase() === "admin"){
+        if(userManagementNav) userManagementNav.hidden = false;
+        if(userManagementPanel) userManagementPanel.hidden = false;
+      }else{
+        if(userManagementNav) userManagementNav.hidden = true;
+        if(userManagementPanel) userManagementPanel.hidden = true;
+      }
+
       renderLogoutButton();
     }else{
       currentUserRole = "";
