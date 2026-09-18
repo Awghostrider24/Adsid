@@ -47,7 +47,7 @@ async function tampilkanProduk() {
         </div>
 
         <div class="price-row">
-          <span>Medium</span>
+          <span>Large</span>
           <strong>${rupiah(p.medium)}</strong>
         </div>
 
