@@ -1684,13 +1684,23 @@ button:hover{
 
   .add-product-toolbar{
     align-items:flex-start;
-    flex-direction:column;
-    padding:16px;
+    flex-direction:row;
+    padding:0;
   }
 
   .add-product-btn{
-    width:100%;
+    width:auto !important;
+    max-width:100%;
+    padding:10px 13px;
+    font-size:11px;
   }
+}
+
+
+/* Final compact add-product button adjustment */
+.add-product-toolbar .add-product-btn{
+  width:max-content !important;
+  max-width:100%;
 }
 
 </style>
@@ -1882,8 +1892,6 @@ button:hover{
     </section>
 
 
-    <div class="eyebrow">WORKSPACE PRODUK</div>
-
     <h1>
       Kelola Produk dengan Lebih Mudah
     </h1>
@@ -1965,11 +1973,6 @@ button:hover{
     <div id="productSection">
 
       <div class="add-product-toolbar">
-        <div>
-          <div class="eyebrow">AKSI PRODUK</div>
-          <h2>Tambah Produk</h2>
-          <p>Formulir hanya ditampilkan ketika tombol ini ditekan.</p>
-        </div>
         <button type="button" id="toggleAddProductBtn" class="add-product-btn">
           ＋ Tambah Produk
         </button>
