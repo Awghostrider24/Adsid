@@ -1502,6 +1502,197 @@ button:hover{
   }
 }
 
+
+/* =========================================================
+   FINAL DASHBOARD UX
+   ========================================================= */
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.top-auth-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.auth-icon-btn{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  padding:0;
+  border:1px solid #dce3eb;
+  border-radius:14px;
+  background:#fff;
+  color:#101828;
+  font-size:18px;
+  box-shadow:0 5px 14px rgba(15,23,42,.06);
+}
+
+.auth-icon-btn:hover{
+  background:#f0fdf4;
+  color:#166534;
+  box-shadow:0 8px 18px rgba(15,23,42,.10);
+}
+
+.auth-icon-btn.logout{
+  background:#111827;
+  border-color:#111827;
+  color:#fff;
+}
+
+.auth-icon-btn.logout:hover{
+  background:#374151;
+  color:#fff;
+}
+
+#mainDashboardCard{
+  transition:opacity .2s ease;
+}
+
+#mainDashboardCard:not(.logged-in){
+  display:block;
+  padding:0;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+}
+
+#mainDashboardCard:not(.logged-in) > *:not(#loginRequiredView){
+  display:none !important;
+}
+
+#mainDashboardCard:not(.logged-in) #loginRequiredView{
+  display:block;
+}
+
+.login-required-view{
+  display:none;
+  text-align:center;
+  padding:48px 18px;
+}
+
+.login-required-icon{
+  font-size:36px;
+  margin-bottom:10px;
+}
+
+.login-required-view h2{
+  margin:0 0 8px;
+  font-size:22px;
+}
+
+.login-required-view p{
+  margin:0;
+  color:#667085;
+  font-size:13px;
+}
+
+.add-product-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin:0 0 20px;
+  padding:20px;
+  border:1px solid #e7ebf0;
+  border-radius:20px;
+  background:linear-gradient(135deg,#f8fffa,#f8fafc);
+}
+
+.add-product-toolbar h2{
+  margin:0;
+  font-size:20px;
+  letter-spacing:-.5px;
+}
+
+.add-product-toolbar p{
+  margin:6px 0 0;
+  color:#667085;
+  font-size:12px;
+}
+
+.add-product-btn{
+  flex:0 0 auto;
+  min-height:44px;
+  padding:11px 15px;
+  border-radius:13px;
+  background:#166534;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+}
+
+.add-product-btn:hover{
+  background:#14532d;
+}
+
+.status-control{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:12px;
+}
+
+.status-control select{
+  min-width:0;
+  flex:1;
+  margin:0;
+  padding:8px 9px;
+  font-size:11px;
+}
+
+.status-save-btn{
+  min-height:35px;
+  padding:8px 10px;
+  border-radius:10px;
+  background:#111827;
+  color:#fff;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.status-save-btn:disabled{
+  opacity:.55;
+  cursor:wait;
+}
+
+.status-update-message{
+  margin-top:7px;
+  font-size:10px;
+  color:#667085;
+}
+
+@media(max-width:560px){
+  .top-actions{
+    gap:6px;
+  }
+
+  .badge{
+    display:none;
+  }
+
+  .auth-icon-btn{
+    width:39px;
+    height:39px;
+    border-radius:12px;
+  }
+
+  .add-product-toolbar{
+    align-items:flex-start;
+    flex-direction:column;
+    padding:16px;
+  }
+
+  .add-product-btn{
+    width:100%;
+  }
+}
+
 </style>
 
 
@@ -1548,9 +1739,12 @@ button:hover{
     </div>
 
 
-    <div class="badge">
-      <span class="badge-dot"></span>
-      Panel Produk
+    <div class="top-actions">
+      <span class="badge">
+        <span class="badge-dot"></span>
+        Panel Produk
+      </span>
+      <div id="topAuthButton" class="top-auth-button" aria-label="Akses akun"></div>
     </div>
 
   </div>
@@ -1596,7 +1790,12 @@ button:hover{
        MAIN CARD
        ===================================================== -->
 
-  <main class="card">
+  <main class="card" id="mainDashboardCard">
+    <section id="loginRequiredView" class="login-required-view">
+      <div class="login-required-icon">🔐</div>
+      <h2>Masuk untuk membuka dashboard</h2>
+      <p>Gunakan ikon akun di bagian atas untuk masuk menggunakan Google.</p>
+    </section>
 
     <!-- ===================================================
          DASHBOARD OVERVIEW
@@ -1765,6 +1964,18 @@ button:hover{
 
     <div id="productSection">
 
+      <div class="add-product-toolbar">
+        <div>
+          <div class="eyebrow">AKSI PRODUK</div>
+          <h2>Tambah Produk</h2>
+          <p>Formulir hanya ditampilkan ketika tombol ini ditekan.</p>
+        </div>
+        <button type="button" id="toggleAddProductBtn" class="add-product-btn">
+          ＋ Tambah Produk
+        </button>
+      </div>
+
+      <div id="addProductFormWrap" hidden>
 
       <form
         id="productForm"
@@ -2436,31 +2647,54 @@ const auth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 function renderLoginButton(){
-  const loginButton = document.getElementById("googleLoginButton");
+  const loginButton = document.getElementById("topAuthButton");
   if (!loginButton) return;
 
   loginButton.innerHTML = `
-    <button type="button" id="firebaseLoginBtn" class="firebase-login-btn">
-      Masuk dengan Google
-    </button>
+    <button type="button" class="auth-icon-btn" id="firebaseLoginBtn"
+      title="Masuk dengan Google" aria-label="Masuk dengan Google">👤</button>
   `;
 
   const button = document.getElementById("firebaseLoginBtn");
-  if (button) button.addEventListener("click", signInWithGoogle);
+  if(button) button.addEventListener("click", signInWithGoogle);
 }
 
 function renderLogoutButton(){
-  const loginButton = document.getElementById("googleLoginButton");
+  const loginButton = document.getElementById("topAuthButton");
   if (!loginButton) return;
 
   loginButton.innerHTML = `
-    <button type="button" id="firebaseLogoutBtn" class="firebase-login-btn logout-btn">
-      Keluar
-    </button>
+    <button type="button" class="auth-icon-btn logout" id="firebaseLogoutBtn"
+      title="Keluar" aria-label="Keluar">↪</button>
   `;
 
   const button = document.getElementById("firebaseLogoutBtn");
-  if (button) button.addEventListener("click", signOutFromGoogle);
+  if(button) button.addEventListener("click", signOutFromGoogle);
+}
+
+function setLoggedInView(isLoggedIn){
+  const card = document.getElementById("mainDashboardCard");
+  const loginView = document.getElementById("loginRequiredView");
+
+  if(card) card.classList.toggle("logged-in", !!isLoggedIn);
+  if(loginView) loginView.style.display = isLoggedIn ? "none" : "block";
+}
+
+function setDashboardVisibility(access){
+  const canUpload = !!access.canUpload;
+  const canManageStatus = !!access.canManageStatus;
+
+  productSection.style.display = canUpload ? "block" : "none";
+
+  const addToolbar = document.querySelector(".add-product-toolbar");
+  if(addToolbar) addToolbar.style.display = canUpload ? "flex" : "none";
+
+  const toggleAdd = document.getElementById("toggleAddProductBtn");
+  if(toggleAdd) toggleAdd.style.display = canUpload ? "inline-flex" : "none";
+
+  document.querySelectorAll(".status-control").forEach(function(control){
+    control.style.display = canManageStatus ? "flex" : "none";
+  });
 }
 
 async function signOutFromGoogle(){
@@ -2473,6 +2707,7 @@ async function signOutFromGoogle(){
     userStatus.textContent = "";
     userBox.className = "userbox";
     productSection.style.display = "none";
+    setLoggedInView(false);
 
     const roleStat = document.getElementById("activeRoleStat");
     if(roleStat) roleStat.textContent = "—";
@@ -2519,10 +2754,8 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 
-async function signInWithGoogle(){
+async function handleAuthenticatedUser(user){
   try{
-    const result = await auth.signInWithPopup(googleProvider);
-    const user = result.user;
     const token = await user.getIdToken(true);
 
     idTokenInput.value = token;
@@ -2537,43 +2770,67 @@ async function signInWithGoogle(){
     userBox.className = "userbox allowed";
 
     const access = await checkAccess(token);
-    if(access.allowed){
-      currentUserRole = access.role || "";
 
-      userStatus.textContent = "✓ Login aktif | Role: " + currentUserRole +
-        (access.canUpload ? " | Dapat menambah produk." : " | Hanya akses lihat.");
-
-      productSection.style.display = access.canUpload ? "block" : "none";
-
-      const roleStat = document.getElementById("activeRoleStat");
-      if(roleStat){
-        roleStat.textContent = currentUserRole || "—";
-      }
-
-      const userManagementNav = document.getElementById("userManagementNav");
-      const userManagementPanel = document.getElementById("userManagementPanel");
-
-      if(currentUserRole.toLowerCase() === "admin"){
-        if(userManagementNav) userManagementNav.hidden = false;
-        if(userManagementPanel) userManagementPanel.hidden = false;
-      }else{
-        if(userManagementNav) userManagementNav.hidden = true;
-        if(userManagementPanel) userManagementPanel.hidden = true;
-      }
-
-      renderLogoutButton();
-    }else{
+    if(!access.allowed){
       currentUserRole = "";
       userBox.className = "userbox denied";
       userStatus.textContent = "✕ " + (access.message || "Akses ditolak.");
-      productSection.style.display = "none";
+      setLoggedInView(false);
+      renderLoginButton();
+      return;
     }
+
+    currentUserRole = access.role || "";
+    userStatus.textContent = "✓ Login aktif | Role: " + currentUserRole +
+      (access.canUpload ? " | Dapat menambah produk." : " | Hanya akses lihat.");
+
+    const roleStat = document.getElementById("activeRoleStat");
+    if(roleStat) roleStat.textContent = currentUserRole || "—";
+
+    const userManagementNav = document.getElementById("userManagementNav");
+    const userManagementPanel = document.getElementById("userManagementPanel");
+
+    const isAdmin = currentUserRole.toLowerCase() === "admin";
+    if(userManagementNav) userManagementNav.hidden = !isAdmin;
+    if(userManagementPanel) userManagementPanel.hidden = !isAdmin;
+
+    setLoggedInView(true);
+    setDashboardVisibility(access);
+    renderLogoutButton();
+
+    // Refresh the token whenever the page is reopened/reloaded.
+    loadProducts();
   }catch(error){
     console.error(error);
     showLoginError(error.message || "Login Firebase gagal.");
   }
 }
 
+async function signInWithGoogle(){
+  try{
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    await auth.signInWithPopup(googleProvider);
+    // Processing is handled by onAuthStateChanged.
+  }catch(error){
+    console.error(error);
+    showLoginError(error.message || "Login Firebase gagal.");
+  }
+}
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(error){
+  console.warn("Firebase persistence gagal diatur:", error);
+});
+
+auth.onAuthStateChanged(async function(user){
+  if(user){
+    await handleAuthenticatedUser(user);
+  }else{
+    currentGoogleUser = null;
+    currentUserRole = "";
+    setLoggedInView(false);
+    renderLoginButton();
+  }
+});
 
 /* =========================================================
  * LIVE PRODUCTS AND DASHBOARD STATISTICS
@@ -2637,12 +2894,24 @@ function renderProducts(products){
     const status = normalizeProductStatus(product.status);
     const isAvailable = status === "tersedia";
     const card = document.createElement("article");
-
     card.className = "product-card";
 
     const image = product.image
       ? `<img class="product-card-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name || "Produk")}" loading="lazy">`
       : `<div class="product-card-image"></div>`;
+
+    const adminControl = currentUserRole.toLowerCase() === "admin"
+      ? `
+        <div class="status-control">
+          <select class="status-select" data-product-id="${escapeHtml(product.id)}">
+            <option value="tersedia" ${status === "tersedia" ? "selected" : ""}>Tersedia</option>
+            <option value="habis" ${status === "habis" ? "selected" : ""}>Tidak tersedia</option>
+          </select>
+          <button type="button" class="status-save-btn" data-product-id="${escapeHtml(product.id)}">Simpan</button>
+        </div>
+        <div class="status-update-message" id="status-message-${escapeHtml(product.id)}"></div>
+      `
+      : "";
 
     card.innerHTML = `
       ${image}
@@ -2662,11 +2931,68 @@ function renderProducts(products){
           </span>
           <span class="product-id">${escapeHtml(product.id || "")}</span>
         </div>
+
+        ${adminControl}
       </div>
     `;
 
     grid.appendChild(card);
   });
+
+  if(currentUserRole.toLowerCase() === "admin"){
+    grid.querySelectorAll(".status-save-btn").forEach(function(button){
+      button.addEventListener("click", function(){
+        const id = button.getAttribute("data-product-id");
+        const select = grid.querySelector('.status-select[data-product-id="' + CSS.escape(id) + '"]');
+        if(select) updateProductStatus(id, select.value, button);
+      });
+    });
+  }
+}
+
+async function updateProductStatus(productId, status, button){
+  if(currentUserRole.toLowerCase() !== "admin"){
+    alert("Hanya admin yang dapat mengubah status produk.");
+    return;
+  }
+
+  const user = auth.currentUser;
+  if(!user){
+    alert("Sesi login tidak ditemukan. Silakan login kembali.");
+    return;
+  }
+
+  const message = document.getElementById("status-message-" + productId);
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Menyimpan...";
+
+  try{
+    const token = await user.getIdToken(true);
+    const body = new URLSearchParams();
+    body.append("action", "updateStatus");
+    body.append("idToken", token);
+    body.append("id", productId);
+    body.append("status", status);
+
+    const response = await fetch(SCRIPT_URL, {
+      method:"POST",
+      body:body
+    });
+
+    if(!response.ok){
+      throw new Error("Server tidak merespons.");
+    }
+
+    if(message) message.textContent = "Status berhasil diperbarui.";
+    await loadProducts();
+  }catch(error){
+    console.error("Gagal mengubah status:", error);
+    if(message) message.textContent = "Gagal menyimpan status.";
+  }finally{
+    button.disabled = false;
+    button.textContent = originalText;
+  }
 }
 
 async function loadProducts(){
@@ -2706,7 +3032,20 @@ document.addEventListener("DOMContentLoaded", function(){
     refreshButton.addEventListener("click", loadProducts);
   }
 
-  loadProducts();
+  const toggleAddProductBtn = document.getElementById("toggleAddProductBtn");
+  const addProductFormWrap = document.getElementById("addProductFormWrap");
+
+  if(toggleAddProductBtn && addProductFormWrap){
+    toggleAddProductBtn.addEventListener("click", function(){
+      const willOpen = addProductFormWrap.hidden;
+      addProductFormWrap.hidden = !willOpen;
+      toggleAddProductBtn.textContent = willOpen ? "− Tutup Formulir" : "＋ Tambah Produk";
+
+      if(willOpen){
+        addProductFormWrap.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    });
+  }
 });
 
 /* =========================================================
@@ -2799,6 +3138,8 @@ function showLoginError(
 
   productSection.style.display =
     "none";
+
+  setLoggedInView(false);
 
 }
 
