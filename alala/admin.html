@@ -1708,6 +1708,26 @@ button:hover{
 .loginbox{
   display:none !important;
 }
+  .delete-product-btn {
+  margin-top: 8px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #dc2626;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.delete-product-btn:hover {
+  background: #b91c1c;
+}
+
+.delete-product-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 </style>
 
@@ -2906,6 +2926,9 @@ function renderProducts(products){
             <option value="habis" ${status === "habis" ? "selected" : ""}>Tidak tersedia</option>
           </select>
           <button type="button" class="status-save-btn" data-product-id="${escapeHtml(product.id)}">Simpan</button>
+          <button type="button" class="delete-product-btn" data-product-id="${escapeHtml(product.id)}">
+  🗑️ Hapus
+</button>
         </div>
         <div class="status-update-message" id="status-message-${escapeHtml(product.id)}"></div>
       `
@@ -3130,7 +3153,33 @@ async function checkAccess(
   return data;
 
 }
+  /* =========================================================
+ * Hapus Produk
+ * ========================================================= */
 
+  document.addEventListener("click", function(event) {
+
+  const button = event.target.closest(".delete-product-btn");
+
+  if (!button) return;
+
+  const productId = button.dataset.productId;
+
+  if (!productId) {
+    alert("ID produk tidak ditemukan.");
+    return;
+  }
+
+  const confirmation = confirm(
+    "Yakin ingin menghapus produk ini?\n\n" +
+    "Produk dan foto di Google Drive akan dihapus."
+  );
+
+  if (!confirmation) return;
+
+  deleteProduct(productId, button);
+
+});
 
 /* =========================================================
  * LOGIN ERROR
@@ -3159,7 +3208,54 @@ function showLoginError(
   setLoggedInView(false);
 
 }
+  
 
+  async function deleteProduct(productId, button) {
+
+  const token = await getFirebaseIdToken();
+
+  if (!token) {
+    alert("Silakan login terlebih dahulu.");
+    return;
+  }
+
+  const originalText = button.textContent;
+
+  button.disabled = true;
+  button.textContent = "Menghapus...";
+
+  try {
+
+    const formData = new URLSearchParams();
+
+    formData.append("action", "deleteProduct");
+    formData.append("idToken", token);
+    formData.append("id", productId);
+
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: formData
+    });
+
+    alert("Permintaan penghapusan telah dikirim.");
+
+    await loadProducts();
+
+  } catch (error) {
+
+    console.error("Gagal menghapus produk:", error);
+
+    alert(
+      "Gagal menghapus produk. Silakan coba lagi."
+    );
+
+    button.disabled = false;
+    button.textContent = originalText;
+
+  }
+
+}
 
 /* =========================================================
  * JWT PAYLOAD
