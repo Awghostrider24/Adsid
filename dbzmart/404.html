@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <script>
+    (function () {
+      const p = window.location.pathname;
+      const base = p.endsWith('/') ? p : p + '/';
+
+      if (!p.endsWith('/') && (
+        p === '/dashboard-admin' ||
+        p === '/dashboard-user'
+      )) {
+        window.location.replace(base + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
+</head>
+<body>Redirecting…</body>
+</html>
