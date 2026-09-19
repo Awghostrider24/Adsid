@@ -3212,9 +3212,9 @@ function showLoginError(
 
   async function deleteProduct(productId, button) {
 
-  const token = await getFirebaseIdToken();
+  const user = auth.currentUser;
 
-  if (!token) {
+  if (!user) {
     alert("Silakan login terlebih dahulu.");
     return;
   }
@@ -3225,6 +3225,8 @@ function showLoginError(
   button.textContent = "Menghapus...";
 
   try {
+
+    const token = await user.getIdToken(true);
 
     const formData = new URLSearchParams();
 
@@ -3238,22 +3240,66 @@ function showLoginError(
       body: formData
     });
 
-    alert("Permintaan penghapusan telah dikirim.");
+    // Tunggu sebentar agar Apps Script menyelesaikan proses
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
+    // Muat ulang daftar produk
     await loadProducts();
+
+    // Pesan sukses
+    showDeleteSuccessMessage(
+      "✓ Produk berhasil dihapus."
+    );
 
   } catch (error) {
 
     console.error("Gagal menghapus produk:", error);
 
-    alert(
-      "Gagal menghapus produk. Silakan coba lagi."
+    showDeleteSuccessMessage(
+      "✕ Gagal menghapus produk."
     );
 
     button.disabled = false;
     button.textContent = originalText;
 
   }
+
+}
+  function showDeleteSuccessMessage(message) {
+
+  let messageBox = document.getElementById(
+    "delete-success-message"
+  );
+
+  if (!messageBox) {
+
+    messageBox = document.createElement("div");
+
+    messageBox.id = "delete-success-message";
+
+    messageBox.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      background: #166534;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 25px #0003;
+    `;
+
+    document.body.appendChild(messageBox);
+  }
+
+  messageBox.textContent = message;
+  messageBox.style.display = "block";
+
+  setTimeout(() => {
+    messageBox.style.display = "none";
+  }, 3500);
 
 }
 
