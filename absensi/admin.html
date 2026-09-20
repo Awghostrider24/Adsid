@@ -674,13 +674,36 @@ function renderPayroll(rows) {
       "salary"
     );
 
+    const overtime = getValue(
+      row,
+      "overtime",
+      "lembur"
+    );
+
+    const deduction = getValue(
+      row,
+      "deduction",
+      "potongan"
+    );
+
+    const attendance = getValue(
+      row,
+      "hadir",
+      "present"
+    );
+
     return `
       <div class="mini">
         <div class="mini-main">
           <b>${esc(name || "-")}</b>
-          <span>${esc(
-            getValue(row, "status", "Status") || "Payroll"
-          )}</span>
+          <span>
+            ${esc(
+              getValue(row, "status", "Status") || "Payroll"
+            )}
+            · Hadir ${esc(attendance || 0)}
+            · Lembur ${esc(overtime || 0)}
+            · Potongan ${money(deduction || 0)}
+          </span>
         </div>
         <div class="money">${money(amount)}</div>
       </div>
