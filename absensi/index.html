@@ -1425,12 +1425,12 @@ const CONFIG = {
     'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
 
   FIREBASE_CONFIG: {
-    apiKey: 'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
-    authDomain: 'absensiamil.firebaseapp.com',
-    projectId: 'absensiamil',
-    storageBucket: 'absensiamil.firebasestorage.app',
-    messagingSenderId: '962926272481',
-    appId: '1:962926272481:web:d6d5bae6d890ebecc2bca0'
+    apiKey: 'PASTE_FIREBASE_WEB_API_KEY',
+    authDomain: 'PASTE_FIREBASE_PROJECT_ID.firebaseapp.com',
+    projectId: 'PASTE_FIREBASE_PROJECT_ID',
+    storageBucket: 'PASTE_FIREBASE_STORAGE_BUCKET',
+    messagingSenderId: 'PASTE_FIREBASE_MESSAGING_SENDER_ID',
+    appId: 'PASTE_FIREBASE_APP_ID'
   }
 
 };
@@ -2087,7 +2087,7 @@ function poll(
 ){
 
   const MAX_TRIES =
-    30;
+    45;
 
 
   const cb =
@@ -2144,15 +2144,40 @@ function poll(
         data.state === 'NOT_FOUND'
       ){
 
-        onDone({
+        /*
+         * Race-condition protection:
+         * POST Apps Script bisa belum selesai membuat
+         * record REQUESTS ketika polling pertama datang.
+         * Jangan langsung menganggap request gagal.
+         */
+        if(tries >= MAX_TRIES){
 
-          ok:false,
+          onDone({
 
-          error:
-            data.error ||
-            'Data login tidak ditemukan di server.'
+            ok:false,
 
-        });
+            error:
+              data.error ||
+              'Request tidak ditemukan setelah beberapa kali percobaan.'
+
+          });
+
+          return;
+
+        }
+
+        setTimeout(
+          () => {
+
+            poll(
+              requestId,
+              onDone,
+              tries + 1
+            );
+
+          },
+          700
+        );
 
         return;
 
@@ -2162,6 +2187,21 @@ function poll(
       finished =
         false;
 
+
+      if(tries >= MAX_TRIES){
+
+        onDone({
+
+          ok:false,
+
+          error:
+            'Waktu menunggu respons server habis. Silakan periksa riwayat absensi sebelum mencoba lagi.'
+
+        });
+
+        return;
+
+      }
 
       setTimeout(
         () => {
@@ -2173,7 +2213,7 @@ function poll(
           );
 
         },
-        500
+        600
       );
 
     };
@@ -2492,9 +2532,7 @@ function request(
   const requestId =
     makeId();
 
-
-  postForm(
-
+  const payload =
     Object.assign(
 
       {
@@ -2509,16 +2547,29 @@ function request(
 
       },
 
-      extra
+      extra || {}
 
-    )
+    );
 
-  );
+  /*
+   * Beri Apps Script sedikit waktu untuk membuat
+   * record REQUESTS sebelum polling pertama.
+   * Polling berikutnya tetap akan melakukan retry
+   * jika request belum terlihat.
+   */
+  postForm(payload);
 
+  setTimeout(
+    () => {
 
-  poll(
-    requestId,
-    onDone
+      poll(
+        requestId,
+        onDone,
+        0
+      );
+
+    },
+    300
   );
 
 }
