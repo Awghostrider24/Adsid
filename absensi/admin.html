@@ -94,6 +94,7 @@
 <div id="loading" class="loading hidden"><div class="loading-card"><div class="spin"></div><b>Memuat dashboard...</b></div></div>
 
 <script type="module">
+  
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
@@ -102,6 +103,206 @@ const CONFIG={
   FIREBASE_CONFIG:{apiKey:'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',authDomain:'absensiamil.firebaseapp.com',projectId:'absensiamil',storageBucket:'absensiamil.firebasestorage.app',messagingSenderId:'962926272481',appId:'1:962926272481:web:d6d5bae6d890ebecc2bca0'}
 };
 let app,auth,provider,sessionToken=localStorage.getItem('absen_admin_session')||'',user=null,attendanceFilter='ALL';
+  async function loginAdmin(){
+
+  if(loginProcessing){
+    return;
+  }
+
+  try{
+
+    loginProcessing = true;
+
+    const button =
+      document.getElementById('loginAdminButton');
+
+    if(button){
+
+      button.disabled = true;
+
+      button.innerHTML = `
+        <span class="material-symbols-rounded">
+          progress_activity
+        </span>
+        Menghubungkan...
+      `;
+
+    }
+
+    /* Pastikan Firebase sudah siap */
+    if(!firebaseReady){
+
+      const ready =
+        await initFirebase();
+
+      if(!ready){
+        throw new Error(
+          'Firebase belum siap.'
+        );
+      }
+
+    }
+
+    if(!firebaseAuth){
+
+      throw new Error(
+        'Firebase Authentication belum tersedia.'
+      );
+
+    }
+
+    /*
+     * Login menggunakan Google
+     */
+    const {
+      signInWithPopup
+    } = await import(
+      'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+    );
+
+    const result =
+      await signInWithPopup(
+        firebaseAuth,
+        firebaseGoogleProvider
+      );
+
+    const user =
+      result.user;
+
+    if(!user){
+
+      throw new Error(
+        'Data akun Google tidak ditemukan.'
+      );
+
+    }
+
+    loading(
+      true,
+      'Memverifikasi Admin',
+      'Memeriksa hak akses administrator...'
+    );
+
+    /*
+     * Kirim Firebase ID Token ke Apps Script
+     */
+    const idToken =
+      await user.getIdToken(
+        true
+      );
+
+    const requestId =
+      makeId();
+
+    await postForm({
+
+      action:
+        'firebaseLogin',
+
+      requestId:
+        requestId,
+
+      firebaseIdToken:
+        idToken
+
+    });
+
+    /*
+     * Tunggu hasil login
+     */
+    poll(
+      requestId,
+      async function(response){
+
+        if(
+          !response ||
+          response.ok === false
+        ){
+
+          throw new Error(
+            response?.message ||
+            'Login gagal.'
+          );
+
+        }
+
+        const session =
+          response.session ||
+          response.data?.session;
+
+        if(!session){
+
+          throw new Error(
+            'Session admin tidak diterima server.'
+          );
+
+        }
+
+        sessionToken =
+          session.token ||
+          session.sessionToken;
+
+        if(!sessionToken){
+
+          throw new Error(
+            'Token session tidak ditemukan.'
+          );
+
+        }
+
+        localStorage.setItem(
+          'adminSessionToken',
+          sessionToken
+        );
+
+        /*
+         * Validasi profile + ROLE ADMIN
+         */
+        await validateAdminSession();
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(
+      'LOGIN ADMIN ERROR:',
+      error
+    );
+
+    loading(
+      false
+    );
+
+    showToast(
+      firebaseErrorMessage_(error)
+    );
+
+    loginProcessing =
+      false;
+
+    const button =
+      document.getElementById(
+        'loginAdminButton'
+      );
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.innerHTML = `
+        <span class="material-symbols-rounded">
+          login
+        </span>
+        Masuk sebagai Admin
+      `;
+
+    }
+
+  }
+
+}
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
