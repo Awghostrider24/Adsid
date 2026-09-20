@@ -1771,6 +1771,98 @@ h1,h2,h3,p,button,span,div{overflow-wrap:break-word}
   }
 }
 
+
+/* =====================================================
+   FINAL CLEAN MOBILE LAYOUT
+===================================================== */
+.big-time{
+  min-width:0;
+  max-width:100%;
+  white-space:normal !important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  font-variant-numeric:tabular-nums;
+}
+
+.big-time span{
+  white-space:nowrap;
+}
+
+@media (max-width:699px){
+  .top{
+    overflow:hidden;
+  }
+
+  .wrap{
+    box-sizing:border-box;
+    width:100%;
+    max-width:620px;
+    margin:12px auto 110px !important;
+  }
+
+  .attendance-card{
+    box-sizing:border-box;
+    overflow:hidden;
+  }
+
+  .attendance-status{
+    grid-template-columns:58px minmax(0,1fr) !important;
+    align-items:center;
+  }
+
+  .attendance-time{
+    overflow:hidden;
+  }
+
+  .big-time{
+    font-size:clamp(29px,8.5vw,42px) !important;
+    line-height:1.08 !important;
+    letter-spacing:-.8px !important;
+  }
+
+  .badge{
+    white-space:normal !important;
+    line-height:1.25;
+  }
+
+  .actions{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .action{
+    min-width:0 !important;
+    min-height:132px !important;
+  }
+
+  .action strong,
+  .action b{
+    max-width:100%;
+    text-align:center;
+    overflow-wrap:anywhere;
+  }
+}
+
+@media (max-width:380px){
+  .attendance-status{
+    grid-template-columns:48px minmax(0,1fr) !important;
+    padding:10px !important;
+  }
+
+  .status-symbol{
+    width:48px !important;
+    height:48px !important;
+    font-size:26px !important;
+  }
+
+  .big-time{
+    font-size:28px !important;
+  }
+
+  .action{
+    min-height:116px !important;
+  }
+}
+
 </style>
 </head>
 
@@ -3922,6 +4014,38 @@ updateClock();
    DATE NORMALIZER
 ===================================================== */
 
+
+function formatAttendanceTime_(value){
+  if(value === null || value === undefined || value === '') return '--:--';
+
+  const raw = String(value).trim();
+
+  // Google Sheets may return a time-only value as a Date string
+  // such as: Sat Dec 30 1899 12:39:45 GMT+0700.
+  const clockMatch = raw.match(/\b(\d{1,2}):(\d{2})(?::\d{2})?\b/);
+  if(clockMatch){
+    return `${String(Number(clockMatch[1])).padStart(2,'0')}:${clockMatch[2]}`;
+  }
+
+  // Support HH.MM and HH-MM values.
+  const shortMatch = raw.match(/^\s*(\d{1,2})[.: -](\d{2})\s*(?:WIB)?\s*$/i);
+  if(shortMatch){
+    return `${String(Number(shortMatch[1])).padStart(2,'0')}:${shortMatch[2]}`;
+  }
+
+  const parsed = new Date(raw);
+  if(!Number.isNaN(parsed.getTime())){
+    return new Intl.DateTimeFormat('en-GB',{
+      timeZone:'Asia/Jakarta',
+      hour:'2-digit',
+      minute:'2-digit',
+      hour12:false
+    }).format(parsed);
+  }
+
+  return '--:--';
+}
+
 function normalizeDate_(value){
   if(value === null || value === undefined || value === '') return '';
 
@@ -4240,7 +4364,7 @@ function renderTodayAttendanceCard_(item){
           </div>
 
           <div class="today-attendance-value today-attendance-time">
-            ${escapeHtml(item.time || '--:--')} WIB
+            ${escapeHtml(formatAttendanceTime_(item.time))} WIB
           </div>
 
         </div>
@@ -4359,7 +4483,7 @@ function renderHistory(items){
 
     $('arrivalTime').innerHTML =
       escapeHtml(
-        String(masuk.time)
+        formatAttendanceTime_(masuk.time)
       ) +
       ' <span>WIB</span>';
 
@@ -4409,7 +4533,7 @@ function renderHistory(items){
       'badge warn';
 
     $('statusSymbol')
-      .textContent =
+      .innerHTML =
       '<span class="material-symbols-rounded">login</span>';
 
   }
