@@ -2849,6 +2849,9 @@ async function openCamera(type){
     .style.display =
     'none';
 
+  $('captureBtn').textContent =
+    '📸 Ambil Foto';
+
 
   $('cameraModal')
     .classList.add(
@@ -3016,18 +3019,17 @@ function capturePhoto(){
   }
 
 
-  const maxWidth =
-    960;
-
+  const maxWidth = 800;
 
   const ratio =
     video.videoHeight /
     video.videoWidth;
 
-
   const w =
-    maxWidth;
-
+    Math.min(
+      maxWidth,
+      video.videoWidth
+    );
 
   const h =
     Math.round(
@@ -3044,7 +3046,8 @@ function capturePhoto(){
 
   const ctx =
     canvas.getContext(
-      '2d'
+      '2d',
+      {alpha:false}
     );
 
 
@@ -3057,11 +3060,65 @@ function capturePhoto(){
   );
 
 
-  capturedDataUrl =
-    canvas.toDataURL(
-      'image/jpeg',
-      .72
+  /*
+   * Kompres adaptif.
+   * Target sekitar <= 600 KB agar aman
+   * dikirim ke Apps Script.
+   */
+  const MAX_CLIENT_BYTES =
+    600 * 1024;
+
+  let quality = 0.78;
+  let dataUrl = '';
+
+
+  for(let i = 0; i < 6; i++){
+
+    dataUrl =
+      canvas.toDataURL(
+        'image/jpeg',
+        quality
+      );
+
+    const estimatedBytes =
+      Math.floor(
+        dataUrl.length * 0.75
+      );
+
+    if(
+      estimatedBytes <=
+      MAX_CLIENT_BYTES
+    ){
+      break;
+    }
+
+    quality -= 0.08;
+
+    if(quality < 0.38){
+      quality = 0.38;
+    }
+
+  }
+
+
+  if(
+    !dataUrl ||
+    !dataUrl.startsWith(
+      'data:image/jpeg;base64,'
+    )
+  ){
+
+    showToast(
+      'Foto gagal diproses. Silakan ambil foto lagi.'
     );
+
+    return;
+
+  }
+
+
+  capturedDataUrl =
+    dataUrl;
 
 
   $('preview').src =
@@ -3074,6 +3131,10 @@ function capturePhoto(){
 
   $('preview').style.display =
     'block';
+
+
+  $('captureBtn').textContent =
+    '📸 Ambil Ulang';
 
 
   $('submitPhotoBtn')
@@ -3105,13 +3166,39 @@ function closeCamera(){
 
 function submitAttendance(){
 
+  const photoToSend =
+    String(
+      capturedDataUrl || ''
+    ).trim();
+
+  const locationToSend =
+    currentLocation
+      ? {
+          latitude:
+            Number(
+              currentLocation.latitude
+            ),
+          longitude:
+            Number(
+              currentLocation.longitude
+            ),
+          accuracy:
+            Number(
+              currentLocation.accuracy
+            )
+        }
+      : null;
+
+
   if(
-    !capturedDataUrl ||
-    !currentLocation
+    !photoToSend ||
+    !photoToSend.startsWith(
+      'data:image/'
+    )
   ){
 
     showToast(
-      'Foto dan lokasi belum siap.'
+      'Foto selfie belum siap. Silakan ambil foto terlebih dahulu.'
     );
 
     return;
@@ -3119,6 +3206,45 @@ function submitAttendance(){
   }
 
 
+  if(
+    !locationToSend ||
+    !isFinite(
+      locationToSend.latitude
+    ) ||
+    !isFinite(
+      locationToSend.longitude
+    ) ||
+    !isFinite(
+      locationToSend.accuracy
+    )
+  ){
+
+    showToast(
+      'Lokasi GPS belum siap. Silakan tunggu sampai lokasi tersedia.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    locationToSend.accuracy <= 0
+  ){
+
+    showToast(
+      'Akurasi GPS belum valid. Silakan tunggu sebentar.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * Tutup kamera setelah semua data sudah
+   * disalin ke variabel lokal.
+   */
   closeCamera();
 
 
@@ -3139,16 +3265,21 @@ function submitAttendance(){
         attendanceType,
 
       latitude:
-        currentLocation.latitude,
+        locationToSend.latitude,
 
       longitude:
-        currentLocation.longitude,
+        locationToSend.longitude,
 
       accuracy:
-        currentLocation.accuracy,
+        locationToSend.accuracy,
 
-      photoData:
-        capturedDataUrl
+      /*
+       * Backend versi baru menerima "photo".
+       * Ini sengaja TIDAK menggunakan photoData
+       * agar nama parameter konsisten.
+       */
+      photo:
+        photoToSend
 
     },
 
@@ -3157,11 +3288,14 @@ function submitAttendance(){
       loading(false);
 
 
-      if(!r.ok){
+      if(
+        !r ||
+        !r.ok
+      ){
 
         showToast(
-          r.error ||
-          'Absen gagal.'
+          r?.error ||
+          'Absen gagal. Silakan coba lagi.'
         );
 
         return;
@@ -3171,18 +3305,19 @@ function submitAttendance(){
 
       $('resultTime')
         .textContent =
-        r.time;
+        r.time || '-';
 
 
       $('resultDate')
         .textContent =
-        r.date;
+        r.date || '-';
 
 
       $('resultLoc')
         .textContent =
 
-        r.distance === null
+        r.distance === null ||
+        r.distance === undefined
 
           ?
 
@@ -3195,15 +3330,26 @@ function submitAttendance(){
           ' meter';
 
 
+      /*
+       * Gunakan salinan foto yang benar-benar
+       * dikirim ke server.
+       */
       $('resultPhoto')
         .src =
-        capturedDataUrl;
+        photoToSend;
 
 
       $('resultModal')
         .classList.add(
           'show'
         );
+
+
+      /*
+       * Bersihkan foto setelah server
+       * mengonfirmasi absensi berhasil.
+       */
+      capturedDataUrl = '';
 
 
       refreshAll();
