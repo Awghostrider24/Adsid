@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1769e0">
+<title>Admin Absensi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0" rel="stylesheet">
+<style>
+:root{--p:#1769e0;--p2:#0f55bf;--soft:#edf5ff;--ink:#10233f;--muted:#6d7d91;--line:#e5ebf2;--bg:#f5f8fc;--white:#fff;--green:#12a36b;--greenSoft:#e9f9f2;--red:#e25555;--redSoft:#fff0f0;--orange:#e79a28;--orangeSoft:#fff7e8;--shadow:0 12px 35px rgba(25,65,120,.08)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.login{min-height:100dvh;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#eef6ff,#f8fbff)}
+.login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow);text-align:center}
+.logo{width:72px;height:72px;border-radius:22px;margin:0 auto 18px;display:grid;place-items:center;background:var(--soft);color:var(--p);font-size:34px}
+.login h1{margin:0 0 8px;font-size:25px}.login p{margin:0 0 24px;color:var(--muted);font-size:13px;line-height:1.6}
+.google{width:100%;min-height:52px;border-radius:15px;background:var(--p);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px}.google:disabled{opacity:.6}
+.app{min-height:100dvh}.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1400px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:11px}.brand-icon{width:42px;height:42px;border-radius:13px;background:var(--soft);color:var(--p);display:grid;place-items:center}.brand strong{font-size:15px}.brand small{display:block;color:var(--muted);margin-top:2px;font-size:10px}.userbox{display:flex;align-items:center;gap:9px}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--soft)}.logout{color:#66778c;background:#f2f5f8;border-radius:11px;padding:9px 12px;font-size:11px;font-weight:800}
+.main{max-width:1400px;margin:auto;padding:22px 20px 50px}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px}.hero h1{margin:0;font-size:28px}.hero p{margin:6px 0 0;color:var(--muted);font-size:12px}.filters{display:flex;gap:8px;flex-wrap:wrap}.field{height:42px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:0 12px;color:var(--ink);font-size:12px;outline:0}.primary{height:42px;padding:0 15px;border-radius:12px;background:var(--p);color:#fff;font-weight:800;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 5px 18px rgba(25,65,120,.04)}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px;font-weight:800}.stat-icon{width:34px;height:34px;border-radius:10px;background:var(--soft);color:var(--p);display:grid;place-items:center}.stat b{display:block;margin-top:12px;font-size:25px}.stat.green .stat-icon{background:var(--greenSoft);color:var(--green)}.stat.red .stat-icon{background:var(--redSoft);color:var(--red)}.stat.orange .stat-icon{background:var(--orangeSoft);color:var(--orange)}
+.grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}.panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 5px 18px rgba(25,65,120,.04);overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-head h2{font-size:14px;margin:0}.panel-head small{color:var(--muted);font-size:10px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:720px}.table th{background:#f8fafc;color:#7b8b9e;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.04em;padding:11px 13px;white-space:nowrap}.table td{padding:12px 13px;border-top:1px solid var(--line);font-size:11px;white-space:nowrap}.name{font-weight:800}.sub{display:block;color:var(--muted);font-size:9px;margin-top:3px}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800}.hadir{background:var(--greenSoft);color:#087d50}.belum{background:#f1f4f7;color:#758397}.terlambat{background:var(--orangeSoft);color:#a66a08}
+.mini-list{padding:8px 17px 14px}.mini{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.mini:last-child{border:0}.mini-main{min-width:0}.mini-main b{display:block;font-size:11px}.mini-main span{display:block;color:var(--muted);font-size:9px;margin-top:3px}.money{font-weight:900;font-size:12px}
+.section{margin-top:16px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.empty{padding:35px;text-align:center;color:var(--muted);font-size:12px}.tabs{display:flex;gap:7px;flex-wrap:wrap}.tab{padding:8px 11px;border-radius:10px;background:#f1f5f8;color:#6d7d91;font-size:10px;font-weight:800}.tab.active{background:var(--soft);color:var(--p)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#13243b;color:#fff;padding:11px 15px;border-radius:12px;font-size:11px;z-index:100;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+.loading{position:fixed;inset:0;background:rgba(255,255,255,.78);backdrop-filter:blur(5px);z-index:200;display:grid;place-items:center}.loading-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 25px;text-align:center;box-shadow:var(--shadow)}.spin{width:28px;height:28px;border:3px solid #dce8f7;border-top-color:var(--p);border-radius:50%;margin:auto auto 10px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:650px){.top-in,.main{padding-left:13px;padding-right:13px}.hero{display:block}.hero h1{font-size:23px}.filters{margin-top:15px}.cards{grid-template-columns:repeat(2,1fr)}.stat{padding:14px}.stat b{font-size:22px}.userbox .logout{padding:8px}.brand small{display:none}}
+</style>
+</head>
+<body>
+
+<section id="login" class="login">
+  <div class="login-card">
+    <div class="logo"><span class="material-symbols-rounded">admin_panel_settings</span></div>
+    <h1>Dashboard Admin</h1>
+    <p>Kelola absensi, rekap kehadiran, data pegawai, dan payroll dari satu dashboard.</p>
+    <button id="loginBtn" class="google" onclick="loginAdmin()"><span class="material-symbols-rounded">login</span> Login dengan Google</button>
+  </div>
+</section>
+
+<section id="app" class="app hidden">
+  <header class="top">
+    <div class="top-in">
+      <div class="brand"><div class="brand-icon"><span class="material-symbols-rounded">dashboard</span></div><div><strong>Absensi Admin</strong><small id="todayText">-</small></div></div>
+      <div class="userbox"><img id="avatar" class="avatar" alt=""><button class="logout" onclick="logout()">Keluar</button></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="hero">
+      <div><h1>Dashboard</h1><p id="welcome">Memuat data...</p></div>
+      <div class="filters">
+        <input id="dateFilter" class="field" type="date">
+        <select id="monthFilter" class="field"></select>
+        <button class="primary" onclick="loadAll()"><span class="material-symbols-rounded" style="font-size:16px;vertical-align:middle">refresh</span> Refresh</button>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="stat"><div class="stat-top">TOTAL PEGAWAI <span class="stat-icon"><span class="material-symbols-rounded">groups</span></span></div><b id="sTotal">0</b></div>
+      <div class="stat green"><div class="stat-top">SUDAH MASUK <span class="stat-icon"><span class="material-symbols-rounded">login</span></span></div><b id="sMasuk">0</b></div>
+      <div class="stat red"><div class="stat-top">BELUM MASUK <span class="stat-icon"><span class="material-symbols-rounded">person_off</span></span></div><b id="sBelum">0</b></div>
+      <div class="stat orange"><div class="stat-top">TERLAMBAT <span class="stat-icon"><span class="material-symbols-rounded">schedule</span></span></div><b id="sLate">0</b></div>
+      <div class="stat"><div class="stat-top">SUDAH PULANG <span class="stat-icon"><span class="material-symbols-rounded">logout</span></span></div><b id="sPulang">0</b></div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-head"><div><h2>Absensi Hari Ini</h2><small id="attendanceInfo">-</small></div><div class="tabs"><button class="tab active" id="tabAll" onclick="setAttendanceFilter('ALL')">Semua</button><button class="tab" id="tabBelum" onclick="setAttendanceFilter('BELUM')">Belum Masuk</button></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Pegawai</th><th>Jabatan</th><th>Masuk</th><th>Pulang</th><th>Durasi</th><th>Status</th></tr></thead><tbody id="attendanceBody"></tbody></table></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Payroll</h2><small id="payrollInfo">Bulan terpilih</small></div></div>
+        <div class="mini-list" id="payrollList"></div>
+      </section>
+    </div>
+
+    <section class="panel section">
+      <div class="panel-head"><div><h2>Rekap Bulanan</h2><small>Ringkasan kehadiran per pegawai</small></div></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Pegawai</th><th>Hari Kerja</th><th>Hadir</th><th>Terlambat</th><th>Izin</th><th>Sakit</th><th>Tidak Hadir</th><th>Jam Kerja</th></tr></thead><tbody id="monthlyBody"></tbody></table></div>
+    </section>
+
+    <section class="panel section">
+      <div class="panel-head"><div><h2>Data Pegawai</h2><small>Master pegawai yang terdaftar</small></div></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Pegawai</th><th>NIP</th><th>Jabatan</th><th>Role</th><th>Status</th><th>Gaji Pokok</th><th>Tunjangan</th></tr></thead><tbody id="employeeBody"></tbody></table></div>
+    </section>
+  </main>
+</section>
+
+<div id="toast" class="toast"></div>
+<div id="loading" class="loading hidden"><div class="loading-card"><div class="spin"></div><b>Memuat dashboard...</b></div></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+const CONFIG={
+  WEB_APP_URL:'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
+  FIREBASE_CONFIG:{apiKey:'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',authDomain:'absensiamil.firebaseapp.com',projectId:'absensiamil',storageBucket:'absensiamil.firebasestorage.app',messagingSenderId:'962926272481',appId:'1:962926272481:web:d6d5bae6d890ebecc2bca0'}
+};
+let app,auth,provider,sessionToken=localStorage.getItem('absen_admin_session')||'',user=null,attendanceFilter='ALL';
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const money=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(n)||0);
+const todayISO=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta'}).format(new Date());
+function toast(m){$('toast').textContent=m;$('toast').classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>$('toast').classList.remove('show'),3000)}
+function loading(v){$('loading').classList.toggle('hidden',!v)}
+function makeId(){return crypto.randomUUID().replaceAll('-','')}
+function postForm(fields){const body=new URLSearchParams();Object.entries(fields).forEach(([k,v])=>body.append(k,v??''));return fetch(CONFIG.WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body,keepalive:true}).then(()=>true).catch(()=>false)}
+function poll(id,onDone,tries=0){const cb='admincb_'+makeId();let finished=false;window[cb]=data=>{if(finished)return;finished=true;delete window[cb];document.getElementById('jsonp_'+cb)?.remove();if(data?.state==='DONE'){onDone(data.result||data);return}if(tries>=45){onDone({ok:false,error:data?.error||'Waktu menunggu server habis.'});return}setTimeout(()=>poll(id,onDone,tries+1),650)};const s=document.createElement('script');s.id='jsonp_'+cb;s.src=CONFIG.WEB_APP_URL+'?action=status&requestId='+encodeURIComponent(id)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();s.onerror=()=>{delete window[cb];s.remove();if(tries>=45)onDone({ok:false,error:'Server tidak merespons.'});else setTimeout(()=>poll(id,onDone,tries+1),800)};document.body.appendChild(s)}
+function request(action,extra={}){return new Promise(resolve=>{const id=makeId();postForm({action,requestId:id,sessionToken,...extra}).then(ok=>{if(!ok){resolve({ok:false,error:'Gagal mengirim permintaan.'});return}setTimeout(()=>poll(id,resolve),300)})})}
+
+async function loginAdmin(){
+  try{
+    $('loginBtn').disabled=true;
+    if(!auth){app=initializeApp(CONFIG.FIREBASE_CONFIG);auth=getAuth(app);provider=new GoogleAuthProvider()}
+    const cred=await signInWithPopup(auth,provider);
+    const token=await cred.user.getIdToken(true);
+    loading(true);
+    const r=await request('firebaseLogin',{firebaseIdToken:token});
+    loading(false);
+    if(!r?.ok)throw new Error(r?.error||'Login gagal');
+    if(String(r.user?.role||'').toUpperCase()!=='ADMIN')throw new Error('Akun berhasil login, tetapi role bukan ADMIN.');
+    sessionToken=r.sessionToken;localStorage.setItem('absen_admin_session',sessionToken);user=r.user;showApp();
+  }catch(e){loading(false);toast(e.message||'Login gagal.');try{await signOut(auth)}catch(_){}}
+  $('loginBtn').disabled=false;
+}
+async function logout(){try{if(auth)await signOut(auth)}catch(_){}localStorage.removeItem('absen_admin_session');sessionToken='';location.reload()}
+function showApp(){ $('login').classList.add('hidden');$('app').classList.remove('hidden'); $('welcome').textContent=`Selamat datang, ${user?.name||'Admin'}`; $('avatar').src=user?.photo||avatar(user?.name); $('dateFilter').value=todayISO(); fillMonths(); loadAll() }
+function avatar(name){const i=esc(String(name||'A').charAt(0).toUpperCase());return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100%" height="100%" rx="50" fill="#edf5ff"/><text x="50%" y="58%" text-anchor="middle" font-family="Arial" font-size="45" font-weight="700" fill="#1769e0">${i}</text></svg>`)}
+function fillMonths(){const d=new Date();const el=$('monthFilter');el.innerHTML='';for(let i=0;i<12;i++){const x=new Date(d.getFullYear(),d.getMonth()-i,1);const v=x.toISOString().slice(0,7);const o=document.createElement('option');o.value=v;o.textContent=x.toLocaleDateString('id-ID',{month:'long',year:'numeric'});el.appendChild(o)}}
+function setAttendanceFilter(v){attendanceFilter=v;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));$('tab'+(v==='ALL'?'All':'Belum')).classList.add('active');renderAttendance(window.attendanceData||[])}
+async function loadAll(){loading(true);const date=$('dateFilter').value||todayISO(),month=$('monthFilter').value||todayISO().slice(0,7);const [d,a,m,p,e]=await Promise.all([request('adminDashboard',{date,month}),request('adminAttendance',{date}),request('adminMonthly',{month}),request('adminPayroll',{month}),request('adminEmployees')]);loading(false);if(!d.ok){toast(d.error||'Gagal memuat dashboard');if(/sesi|session|izin|admin/i.test(d.error||'')){localStorage.removeItem('absen_admin_session');location.reload()}return}renderDashboard(d);renderAttendance(a.ok?a.items:[]);renderMonthly(m.ok?m.items:[]);renderPayroll(p.ok?p.items:[]);renderEmployees(e.ok?e.items:[])}
+function renderDashboard(d){const s=d.summary||{};$('sTotal').textContent=s.totalEmployees||0;$('sMasuk').textContent=s.masuk||0;$('sBelum').textContent=s.belum||0;$('sLate').textContent=s.terlambat||0;$('sPulang').textContent=s.pulang||0;$('attendanceInfo').textContent=`${d.date||'-'} • ${s.masuk||0} dari ${s.totalEmployees||0} sudah masuk`;$('todayText').textContent=d.date||todayISO()}
+function renderAttendance(items){window.attendanceData=items;const rows=attendanceFilter==='BELUM'?items.filter(x=>!x.masuk):items;const body=$('attendanceBody');if(!rows.length){body.innerHTML='<tr><td colspan="6"><div class="empty">Tidak ada data.</div></td></tr>';return}body.innerHTML=rows.map(x=>`<tr><td><span class="name">${esc(x.name)}</span><span class="sub">${esc(x.nip||'-')}</span></td><td>${esc(x.position||'-')}</td><td><b>${esc(x.masuk||'—')}</b></td><td><b>${esc(x.pulang||'—')}</b></td><td>${esc(x.duration||'—')}</td><td><span class="badge ${x.statusClass||'belum'}">${esc(x.status||'Belum')}</span></td></tr>`).join('')}
+function renderMonthly(items){$('monthlyBody').innerHTML=items.length?items.map(x=>`<tr><td><span class="name">${esc(x.name)}</span><span class="sub">${esc(x.nip||'-')}</span></td><td>${x.workDays||0}</td><td>${x.hadir||0}</td><td>${x.terlambat||0}</td><td>${x.izin||0}</td><td>${x.sakit||0}</td><td>${x.tidakHadir||0}</td><td>${esc(x.workHours||'0j 0m')}</td></tr>`).join(''):'<tr><td colspan="8"><div class="empty">Belum ada rekap.</div></td></tr>'}
+function renderPayroll(items){$('payrollInfo').textContent=$('monthFilter').selectedOptions[0]?.textContent||'';$('payrollList').innerHTML=items.length?items.slice(0,12).map(x=>`<div class="mini"><div class="mini-main"><b>${esc(x.name)}</b><span>${esc(x.nip||'-')} • ${x.hadir||0} hadir</span></div><div class="money">${money(x.total)}</div></div>`).join(''):'<div class="empty">Belum ada data payroll.</div>'}
+function renderEmployees(items){$('employeeBody').innerHTML=items.length?items.map(x=>`<tr><td><span class="name">${esc(x.name)}</span><span class="sub">${esc(x.email||'-')}</span></td><td>${esc(x.nip||'-')}</td><td>${esc(x.position||'-')}</td><td>${esc(x.role||'-')}</td><td><span class="badge ${String(x.status).toUpperCase()==='AKTIF'?'hadir':'belum'}">${esc(x.status||'-')}</span></td><td>${money(x.basicSalary)}</td><td>${money(x.allowance)}</td></tr>`).join(''):'<tr><td colspan="7"><div class="empty">Belum ada data pegawai.</div></td></tr>'}
+$('dateFilter').addEventListener('change',loadAll);$('monthFilter').addEventListener('change',loadAll);
+
+(async()=>{
+  app=initializeApp(CONFIG.FIREBASE_CONFIG);auth=getAuth(app);provider=new GoogleAuthProvider();
+  if(sessionToken){
+    const r=await request('profile',{}); // validates session
+    if(r.ok && String(r.user?.role||'').toUpperCase()==='ADMIN'){user=r.user;showApp();return}
+    localStorage.removeItem('absen_admin_session');sessionToken='';
+  }
+})();
+</script>
+</body>
+</html>
