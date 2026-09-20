@@ -94,318 +94,282 @@
 <div id="loading" class="loading hidden"><div class="loading-card"><div class="spin"></div><b>Memuat dashboard...</b></div></div>
 
 <script type="module">
-  
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import {getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-const CONFIG={
-  WEB_APP_URL:'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
-  FIREBASE_CONFIG:{apiKey:'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',authDomain:'absensiamil.firebaseapp.com',projectId:'absensiamil',storageBucket:'absensiamil.firebasestorage.app',messagingSenderId:'962926272481',appId:'1:962926272481:web:d6d5bae6d890ebecc2bca0'}
+const CONFIG = {
+  WEB_APP_URL: "https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec",
+  FIREBASE_CONFIG: {
+    apiKey: "AIzaSyAHU_FdW5CGZ_iR19sxQ9yPhpem5YbLQe8",
+    authDomain: "absensiamil.firebaseapp.com",
+    projectId: "absensiamil",
+    storageBucket: "absensiamil.firebasestorage.app",
+    messagingSenderId: "962926272481",
+    appId: "1:962926272481:web:d6d5bae6d890ebecc2bca0"
+  }
 };
-let app,auth,provider,sessionToken=localStorage.getItem('absen_admin_session')||'',user=null,attendanceFilter='ALL';
-  async function loginAdmin(){
 
-  if(loginProcessing){
-    return;
-  }
+let app = null;
+let auth = null;
+let provider = null;
+let sessionToken = localStorage.getItem("absen_admin_session") || "";
+let user = null;
+let attendanceFilter = "ALL";
+let loginProcessing = false;
 
-  try{
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+}[char]));
 
-    loginProcessing = true;
+const money = value =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0
+  }).format(Number(value) || 0);
 
-    const button =
-      document.getElementById('loginAdminButton');
+const todayISO = () =>
+  new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta"
+  }).format(new Date());
 
-    if(button){
-
-      button.disabled = true;
-
-      button.innerHTML = `
-        <span class="material-symbols-rounded">
-          progress_activity
-        </span>
-        Menghubungkan...
-      `;
-
-    }
-
-    /* Pastikan Firebase sudah siap */
-    if(!firebaseReady){
-
-      const ready =
-        await initFirebase();
-
-      if(!ready){
-        throw new Error(
-          'Firebase belum siap.'
-        );
-      }
-
-    }
-
-    if(!firebaseAuth){
-
-      throw new Error(
-        'Firebase Authentication belum tersedia.'
-      );
-
-    }
-
-    /*
-     * Login menggunakan Google
-     */
-    const {
-      signInWithPopup
-    } = await import(
-      'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-    );
-
-    const result =
-      await signInWithPopup(
-        firebaseAuth,
-        firebaseGoogleProvider
-      );
-
-    const user =
-      result.user;
-
-    if(!user){
-
-      throw new Error(
-        'Data akun Google tidak ditemukan.'
-      );
-
-    }
-
-    loading(
-      true,
-      'Memverifikasi Admin',
-      'Memeriksa hak akses administrator...'
-    );
-
-    /*
-     * Kirim Firebase ID Token ke Apps Script
-     */
-    const idToken =
-      await user.getIdToken(
-        true
-      );
-
-    const requestId =
-      makeId();
-
-    await postForm({
-
-      action:
-        'firebaseLogin',
-
-      requestId:
-        requestId,
-
-      firebaseIdToken:
-        idToken
-
-    });
-
-    /*
-     * Tunggu hasil login
-     */
-    poll(
-      requestId,
-      async function(response){
-
-        if(
-          !response ||
-          response.ok === false
-        ){
-
-          throw new Error(
-            response?.message ||
-            'Login gagal.'
-          );
-
-        }
-
-        const session =
-          response.session ||
-          response.data?.session;
-
-        if(!session){
-
-          throw new Error(
-            'Session admin tidak diterima server.'
-          );
-
-        }
-
-        sessionToken =
-          session.token ||
-          session.sessionToken;
-
-        if(!sessionToken){
-
-          throw new Error(
-            'Token session tidak ditemukan.'
-          );
-
-        }
-
-        localStorage.setItem(
-          'adminSessionToken',
-          sessionToken
-        );
-
-        /*
-         * Validasi profile + ROLE ADMIN
-         */
-        await validateAdminSession();
-
-      }
-    );
-
-  }catch(error){
-
-    console.error(
-      'LOGIN ADMIN ERROR:',
-      error
-    );
-
-    loading(
-      false
-    );
-
-    showToast(
-      firebaseErrorMessage_(error)
-    );
-
-    loginProcessing =
-      false;
-
-    const button =
-      document.getElementById(
-        'loginAdminButton'
-      );
-
-    if(button){
-
-      button.disabled =
-        false;
-
-      button.innerHTML = `
-        <span class="material-symbols-rounded">
-          login
-        </span>
-        Masuk sebagai Admin
-      `;
-
-    }
-
-  }
-
+function makeId() {
+  return crypto.randomUUID().replaceAll("-", "");
 }
 
-const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const money=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(n)||0);
-const todayISO=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta'}).format(new Date());
-function toast(m){$('toast').textContent=m;$('toast').classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>$('toast').classList.remove('show'),3000)}
-function loading(v){$('loading').classList.toggle('hidden',!v)}
-function makeId(){return crypto.randomUUID().replaceAll('-','')}
-function postForm(fields){const body=new URLSearchParams();Object.entries(fields).forEach(([k,v])=>body.append(k,v??''));return fetch(CONFIG.WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body,keepalive:true}).then(()=>true).catch(()=>false)}
-function poll(id,onDone,tries=0){const cb='admincb_'+makeId();let finished=false;window[cb]=data=>{if(finished)return;finished=true;delete window[cb];document.getElementById('jsonp_'+cb)?.remove();if(data?.state==='DONE'){onDone(data.result||data);return}if(tries>=45){onDone({ok:false,error:data?.error||'Waktu menunggu server habis.'});return}setTimeout(()=>poll(id,onDone,tries+1),650)};const s=document.createElement('script');s.id='jsonp_'+cb;s.src=CONFIG.WEB_APP_URL+'?action=status&requestId='+encodeURIComponent(id)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();s.onerror=()=>{delete window[cb];s.remove();if(tries>=45)onDone({ok:false,error:'Server tidak merespons.'});else setTimeout(()=>poll(id,onDone,tries+1),800)};document.body.appendChild(s)}
-function request(action,extra={}){return new Promise(resolve=>{const id=makeId();postForm({action,requestId:id,sessionToken,...extra}).then(ok=>{if(!ok){resolve({ok:false,error:'Gagal mengirim permintaan.'});return}setTimeout(()=>poll(id,resolve),300)})})}
+function toast(message) {
+  const el = $("toast");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove("show"), 3000);
+}
 
-  async function loginAdmin(){
-  const btn = $('loginBtn');
+function loading(show) {
+  $("loading")?.classList.toggle("hidden", !show);
+}
+
+/*
+ * Apps Script endpoint:
+ * POST starts an asynchronous request, then JSONP polling reads its result.
+ * This preserves the transport pattern already used by the original file.
+ */
+function postForm(fields) {
+  const body = new URLSearchParams();
+
+  Object.entries(fields).forEach(([key, value]) => {
+    body.append(key, value ?? "");
+  });
+
+  return fetch(CONFIG.WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+    },
+    body,
+    keepalive: true
+  })
+    .then(() => true)
+    .catch(error => {
+      console.error("POST ERROR:", error);
+      return false;
+    });
+}
+
+function poll(requestId, onDone, tries = 0) {
+  const callbackName = "admincb_" + makeId();
+  let finished = false;
+
+  const finish = result => {
+    if (finished) return;
+    finished = true;
+    delete window[callbackName];
+    document.getElementById("jsonp_" + callbackName)?.remove();
+    onDone(result);
+  };
+
+  window[callbackName] = data => {
+    if (data?.state === "DONE") {
+      finish(data.result || data);
+      return;
+    }
+
+    if (tries >= 45) {
+      finish({
+        ok: false,
+        error: data?.error || "Waktu menunggu server habis."
+      });
+      return;
+    }
+
+    setTimeout(
+      () => poll(requestId, onDone, tries + 1),
+      650
+    );
+  };
+
+  const script = document.createElement("script");
+  script.id = "jsonp_" + callbackName;
+  script.src =
+    CONFIG.WEB_APP_URL +
+    "?action=status" +
+    "&requestId=" + encodeURIComponent(requestId) +
+    "&callback=" + encodeURIComponent(callbackName) +
+    "&_=" + Date.now();
+
+  script.onerror = () => {
+    delete window[callbackName];
+    script.remove();
+
+    if (tries >= 45) {
+      finish({
+        ok: false,
+        error: "Server tidak merespons."
+      });
+    } else {
+      setTimeout(
+        () => poll(requestId, onDone, tries + 1),
+        800
+      );
+    }
+  };
+
+  document.body.appendChild(script);
+}
+
+async function request(action, extra = {}) {
+  const requestId = makeId();
+
+  const ok = await postForm({
+    action,
+    requestId,
+    sessionToken,
+    ...extra
+  });
+
+  if (!ok) {
+    return {
+      ok: false,
+      error: "Gagal mengirim permintaan ke server."
+    };
+  }
+
+  return new Promise(resolve => {
+    setTimeout(() => poll(requestId, resolve), 300);
+  });
+}
+
+async function initFirebase() {
+  if (auth) return true;
 
   try {
-    btn.disabled = true;
-    btn.innerHTML = `
-      <span class="material-symbols-rounded">progress_activity</span>
-      Menghubungkan...
-    `;
+    app = getApps().length
+      ? getApps()[0]
+      : initializeApp(CONFIG.FIREBASE_CONFIG);
+
+    auth = getAuth(app);
+    provider = new GoogleAuthProvider();
+
+    provider.setCustomParameters({
+      prompt: "select_account"
+    });
+
+    return true;
+  } catch (error) {
+    console.error("FIREBASE INIT ERROR:", error);
+    return false;
+  }
+}
+
+async function loginAdmin() {
+  if (loginProcessing) return;
+
+  const btn = $("loginBtn");
+
+  try {
+    loginProcessing = true;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `
+        <span class="material-symbols-rounded">progress_activity</span>
+        Menghubungkan...
+      `;
+    }
 
     loading(true);
 
-    // Pastikan Firebase sudah tersedia
-    if (!auth) {
-      app = initializeApp(CONFIG.FIREBASE_CONFIG);
-      auth = getAuth(app);
-      provider = new GoogleAuthProvider();
+    if (!(await initFirebase())) {
+      throw new Error("Firebase belum siap.");
     }
 
-    // Login Google
-    const cred = await signInWithPopup(auth, provider);
+    const credential = await signInWithPopup(auth, provider);
 
-    if (!cred || !cred.user) {
-      throw new Error('Akun Google tidak ditemukan.');
+    if (!credential?.user) {
+      throw new Error("Akun Google tidak ditemukan.");
     }
 
-    // Ambil Firebase ID Token
-    const token = await cred.user.getIdToken(true);
+    const firebaseIdToken =
+      await credential.user.getIdToken(true);
 
-    // Kirim ke Apps Script
-    const r = await request('firebaseLogin', {
-      firebaseIdToken: token
+    const response = await request("firebaseLogin", {
+      firebaseIdToken
     });
 
-    if (!r || !r.ok) {
+    if (!response?.ok) {
       throw new Error(
-        r?.error ||
-        r?.message ||
-        'Login gagal.'
+        response?.error ||
+        response?.message ||
+        "Login gagal."
       );
     }
 
-    /*
-     * Backend bisa mengembalikan session dalam:
-     * r.session
-     * atau langsung r.sessionToken
-     */
     const session =
-      r.session ||
-      r.data?.session ||
+      response.session ||
+      response.data?.session ||
       null;
 
-    const newSessionToken =
+    const token =
       session?.token ||
       session?.sessionToken ||
-      r.sessionToken ||
-      r.data?.sessionToken ||
-      '';
+      response.sessionToken ||
+      response.data?.sessionToken ||
+      "";
 
-    if (!newSessionToken) {
-      console.error('Response login:', r);
-      throw new Error('Token session tidak diterima server.');
+    if (!token) {
+      throw new Error("Token session tidak diterima server.");
     }
 
-    /*
-     * Ambil user dari response backend.
-     * Jika backend belum mengembalikan user,
-     * validasi lewat endpoint profile.
-     */
-    let adminUser =
-      r.user ||
-      r.data?.user ||
-      session?.user ||
-      null;
-
-    sessionToken = newSessionToken;
+    sessionToken = token;
 
     localStorage.setItem(
-      'absen_admin_session',
+      "absen_admin_session",
       sessionToken
     );
 
-    // Jika user belum tersedia, ambil dari profile
+    let adminUser =
+      response.user ||
+      response.data?.user ||
+      session?.user ||
+      null;
+
     if (!adminUser) {
-      const profile = await request('profile');
+      const profile = await request("profile");
 
       if (!profile?.ok) {
         throw new Error(
           profile?.error ||
           profile?.message ||
-          'Gagal membaca profil admin.'
+          "Gagal membaca profil admin."
         );
       }
 
@@ -416,59 +380,563 @@ function request(action,extra={}){return new Promise(resolve=>{const id=makeId()
     }
 
     if (!adminUser) {
-      throw new Error('Profil pengguna tidak ditemukan.');
+      throw new Error("Profil pengguna tidak ditemukan.");
     }
 
-    // Pastikan role ADMIN
-    const role =
-      String(
-        adminUser.role ||
-        adminUser.Role ||
-        ''
-      ).trim().toUpperCase();
+    const role = String(
+      adminUser.role ||
+      adminUser.Role ||
+      ""
+    ).trim().toUpperCase();
 
-    if (role !== 'ADMIN') {
-      localStorage.removeItem('absen_admin_session');
-      sessionToken = '';
-
+    if (role !== "ADMIN") {
+      localStorage.removeItem("absen_admin_session");
+      sessionToken = "";
       throw new Error(
-        'Akun berhasil login, tetapi tidak memiliki akses ADMIN.'
+        "Akun berhasil login, tetapi tidak memiliki akses ADMIN."
       );
     }
 
     user = adminUser;
-
     loading(false);
-
     showApp();
 
   } catch (error) {
-
-    console.error('LOGIN ADMIN ERROR:', error);
-
-    loading(false);
+    console.error("LOGIN ADMIN ERROR:", error);
 
     try {
-      if (auth) {
-        await signOut(auth);
-      }
+      if (auth) await signOut(auth);
     } catch (_) {}
 
-    localStorage.removeItem('absen_admin_session');
-    sessionToken = '';
+    localStorage.removeItem("absen_admin_session");
+    sessionToken = "";
+    loading(false);
 
     toast(
       error?.message ||
-      'Login admin gagal.'
+      "Login admin gagal."
     );
 
-    btn.disabled = false;
-    btn.innerHTML = `
-      <span class="material-symbols-rounded">login</span>
-      Login dengan Google
-    `;
+  } finally {
+    loginProcessing = false;
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `
+        <span class="material-symbols-rounded">login</span>
+        Login dengan Google
+      `;
+    }
   }
 }
+
+async function logout() {
+  try {
+    if (auth) await signOut(auth);
+  } catch (error) {
+    console.warn("SIGN OUT WARNING:", error);
+  }
+
+  localStorage.removeItem("absen_admin_session");
+  sessionToken = "";
+  user = null;
+
+  $("app")?.classList.add("hidden");
+  $("login")?.classList.remove("hidden");
+  toast("Anda telah keluar.");
+}
+
+function showApp() {
+  $("login")?.classList.add("hidden");
+  $("app")?.classList.remove("hidden");
+
+  const name =
+    user?.name ||
+    user?.nama ||
+    user?.displayName ||
+    user?.email ||
+    "Admin";
+
+  const photo =
+    user?.photoURL ||
+    user?.foto ||
+    user?.photo ||
+    "";
+
+  if ($("welcome")) {
+    $("welcome").textContent =
+      `Selamat datang, ${name}.`;
+  }
+
+  if ($("avatar")) {
+    $("avatar").src = photo || "";
+    $("avatar").alt = name;
+  }
+
+  if ($("todayText")) {
+    $("todayText").textContent =
+      new Intl.DateTimeFormat("id-ID", {
+        dateStyle: "full",
+        timeZone: "Asia/Jakarta"
+      }).format(new Date());
+  }
+
+  initializeFilters();
+  loadAll();
+}
+
+function initializeFilters() {
+  const date = $("dateFilter");
+  if (date && !date.value) {
+    date.value = todayISO();
+  }
+
+  const month = $("monthFilter");
+
+  if (month && !month.options.length) {
+    const now = new Date();
+
+    for (let i = 0; i < 12; i++) {
+      const d = new Date(
+        now.getFullYear(),
+        now.getMonth() - i,
+        1
+      );
+
+      const value =
+        d.getFullYear() +
+        "-" +
+        String(d.getMonth() + 1).padStart(2, "0");
+
+      const label =
+        new Intl.DateTimeFormat("id-ID", {
+          month: "long",
+          year: "numeric"
+        }).format(d);
+
+      month.add(new Option(label, value));
+    }
+  }
+}
+
+function setAttendanceFilter(filter) {
+  attendanceFilter = filter;
+
+  $("tabAll")?.classList.toggle(
+    "active",
+    filter === "ALL"
+  );
+
+  $("tabBelum")?.classList.toggle(
+    "active",
+    filter === "BELUM"
+  );
+
+  renderAttendance(window.__attendanceData || []);
+}
+
+function normalizeArray(value) {
+  if (Array.isArray(value)) return value;
+  if (Array.isArray(value?.data)) return value.data;
+  if (Array.isArray(value?.rows)) return value.rows;
+  if (Array.isArray(value?.items)) return value.items;
+  return [];
+}
+
+function getValue(row, ...keys) {
+  for (const key of keys) {
+    if (
+      row &&
+      row[key] !== undefined &&
+      row[key] !== null &&
+      row[key] !== ""
+    ) {
+      return row[key];
+    }
+  }
+
+  return "";
+}
+
+function renderAttendance(rows) {
+  const body = $("attendanceBody");
+  if (!body) return;
+
+  const filtered =
+    attendanceFilter === "BELUM"
+      ? rows.filter(row => {
+          const masuk = getValue(
+            row,
+            "masuk",
+            "Masuk",
+            "jamMasuk",
+            "checkIn"
+          );
+
+          return !masuk;
+        })
+      : rows;
+
+  if (!filtered.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="6">
+          <div class="empty">Tidak ada data absensi.</div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  body.innerHTML = filtered.map(row => {
+    const name = getValue(
+      row, "nama", "name", "pegawai", "employeeName"
+    );
+
+    const jabatan = getValue(
+      row, "jabatan", "position", "role"
+    );
+
+    const masuk = getValue(
+      row, "masuk", "Masuk", "jamMasuk", "checkIn"
+    );
+
+    const pulang = getValue(
+      row, "pulang", "Pulang", "jamPulang", "checkOut"
+    );
+
+    const durasi = getValue(
+      row, "durasi", "Durasi", "workDuration"
+    );
+
+    const status = String(
+      getValue(row, "status", "Status") || ""
+    ).toLowerCase();
+
+    let badgeClass = "belum";
+
+    if (
+      status.includes("terlambat") ||
+      status.includes("late")
+    ) {
+      badgeClass = "terlambat";
+    } else if (
+      status.includes("hadir") ||
+      masuk
+    ) {
+      badgeClass = "hadir";
+    }
+
+    body.insertAdjacentHTML("beforeend", "");
+    return `
+      <tr>
+        <td>
+          <span class="name">${esc(name || "-")}</span>
+          <span class="sub">${esc(
+            getValue(row, "nip", "NIP", "id") || ""
+          )}</span>
+        </td>
+        <td>${esc(jabatan || "-")}</td>
+        <td>${esc(masuk || "-")}</td>
+        <td>${esc(pulang || "-")}</td>
+        <td>${esc(durasi || "-")}</td>
+        <td>
+          <span class="badge ${badgeClass}">
+            ${esc(getValue(row, "status", "Status") || "Belum")}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderPayroll(rows) {
+  const list = $("payrollList");
+  if (!list) return;
+
+  if (!rows.length) {
+    list.innerHTML =
+      `<div class="empty">Tidak ada data payroll.</div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(row => {
+    const name = getValue(
+      row, "nama", "name", "pegawai", "employeeName"
+    );
+
+    const amount = getValue(
+      row,
+      "total",
+      "totalGaji",
+      "gajiBersih",
+      "netSalary",
+      "salary"
+    );
+
+    return `
+      <div class="mini">
+        <div class="mini-main">
+          <b>${esc(name || "-")}</b>
+          <span>${esc(
+            getValue(row, "status", "Status") || "Payroll"
+          )}</span>
+        </div>
+        <div class="money">${money(amount)}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderMonthly(rows) {
+  const body = $("monthlyBody");
+  if (!body) return;
+
+  if (!rows.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="empty">Tidak ada rekap bulanan.</div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  body.innerHTML = rows.map(row => `
+    <tr>
+      <td>
+        <span class="name">${esc(
+          getValue(row, "nama", "name", "pegawai") || "-"
+        )}</span>
+      </td>
+      <td>${esc(getValue(row, "hariKerja", "workDays") || 0)}</td>
+      <td>${esc(getValue(row, "hadir", "present") || 0)}</td>
+      <td>${esc(getValue(row, "terlambat", "late") || 0)}</td>
+      <td>${esc(getValue(row, "izin", "leave") || 0)}</td>
+      <td>${esc(getValue(row, "sakit", "sick") || 0)}</td>
+      <td>${esc(getValue(row, "tidakHadir", "absent") || 0)}</td>
+      <td>${esc(getValue(row, "jamKerja", "workHours") || 0)}</td>
+    </tr>
+  `).join("");
+}
+
+function renderEmployees(rows) {
+  const body = $("employeeBody");
+  if (!body) return;
+
+  if (!rows.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty">Tidak ada data pegawai.</div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  body.innerHTML = rows.map(row => `
+    <tr>
+      <td>
+        <span class="name">${esc(
+          getValue(row, "nama", "name", "pegawai") || "-"
+        )}</span>
+        <span class="sub">${esc(
+          getValue(row, "email", "Email") || ""
+        )}</span>
+      </td>
+      <td>${esc(getValue(row, "nip", "NIP") || "-")}</td>
+      <td>${esc(getValue(row, "jabatan", "position") || "-")}</td>
+      <td>${esc(getValue(row, "role", "Role") || "-")}</td>
+      <td>${esc(getValue(row, "status", "Status") || "-")}</td>
+      <td>${money(getValue(
+        row, "gajiPokok", "basicSalary", "salary"
+      ))}</td>
+      <td>${money(getValue(
+        row, "tunjangan", "allowance"
+      ))}</td>
+    </tr>
+  `).join("");
+}
+
+function updateStats(data) {
+  const stats = data?.stats || data?.summary || {};
+
+  const set = (id, ...keys) => {
+    const el = $(id);
+    if (!el) return;
+
+    const value = getValue(stats, ...keys);
+    if (value !== "") el.textContent = value;
+  };
+
+  set("sTotal", "total", "totalPegawai", "employees");
+  set("sMasuk", "masuk", "sudahMasuk", "present");
+  set("sBelum", "belum", "belumMasuk", "absent");
+  set("sLate", "terlambat", "late");
+  set("sPulang", "pulang", "sudahPulang", "checkedOut");
+}
+
+async function loadAll() {
+  if (!sessionToken) return;
+
+  const date =
+    $("dateFilter")?.value || todayISO();
+
+  const month =
+    $("monthFilter")?.value ||
+    todayISO().slice(0, 7);
+
+  loading(true);
+
+  try {
+    /*
+     * The action name "dashboard" is used as the single dashboard
+     * request. If your Apps Script uses another action name, change
+     * only this line; the rendering layer stays intact.
+     */
+    const response = await request("dashboard", {
+      date,
+      month
+    });
+
+    if (!response?.ok) {
+      throw new Error(
+        response?.error ||
+        response?.message ||
+        "Gagal memuat dashboard."
+      );
+    }
+
+    const data =
+      response.data ||
+      response.dashboard ||
+      response;
+
+    const attendance =
+      normalizeArray(
+        data.attendance ||
+        data.absensi ||
+        data.attendanceToday
+      );
+
+    const payroll =
+      normalizeArray(
+        data.payroll
+      );
+
+    const monthly =
+      normalizeArray(
+        data.monthly ||
+        data.rekapBulanan ||
+        data.monthlyRecap
+      );
+
+    const employees =
+      normalizeArray(
+        data.employees ||
+        data.pegawai ||
+        data.employee
+      );
+
+    window.__attendanceData = attendance;
+
+    updateStats(data);
+    renderAttendance(attendance);
+    renderPayroll(payroll);
+    renderMonthly(monthly);
+    renderEmployees(employees);
+
+    if ($("attendanceInfo")) {
+      $("attendanceInfo").textContent =
+        `${attendance.length} data`;
+    }
+
+    if ($("payrollInfo")) {
+      $("payrollInfo").textContent =
+        $("monthFilter")?.selectedOptions?.[0]?.text ||
+        "Bulan terpilih";
+    }
+
+  } catch (error) {
+    console.error("LOAD DASHBOARD ERROR:", error);
+    toast(
+      error?.message ||
+      "Gagal memuat dashboard."
+    );
+  } finally {
+    loading(false);
+  }
+}
+
+/* Event listeners */
+$("dateFilter")?.addEventListener(
+  "change",
+  loadAll
+);
+
+$("monthFilter")?.addEventListener(
+  "change",
+  loadAll
+);
+
+/*
+ * If an existing session is present, show the app.
+ * The backend remains the authority for ADMIN authorization.
+ */
+async function restoreSession() {
+  if (!sessionToken) return;
+
+  try {
+    const response = await request("profile");
+
+    if (!response?.ok) {
+      throw new Error(
+        response?.error ||
+        response?.message ||
+        "Session tidak valid."
+      );
+    }
+
+    const profile =
+      response.user ||
+      response.data?.user ||
+      null;
+
+    const role = String(
+      profile?.role ||
+      profile?.Role ||
+      ""
+    ).trim().toUpperCase();
+
+    if (role !== "ADMIN") {
+      throw new Error("Session bukan milik admin.");
+    }
+
+    user = profile;
+    showApp();
+
+  } catch (error) {
+    console.warn("RESTORE SESSION:", error);
+
+    localStorage.removeItem(
+      "absen_admin_session"
+    );
+
+    sessionToken = "";
+    user = null;
+  }
+}
+
+/* Expose functions because the HTML uses onclick="..." */
+window.loginAdmin = loginAdmin;
+window.logout = logout;
+window.loadAll = loadAll;
+window.setAttendanceFilter = setAttendanceFilter;
+
+initializeFilters();
+restoreSession();
 </script>
 </body>
 </html>
