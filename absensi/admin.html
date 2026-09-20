@@ -27,6 +27,13 @@
 .loading{position:fixed;inset:0;background:rgba(255,255,255,.78);backdrop-filter:blur(5px);z-index:200;display:grid;place-items:center}.loading-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 25px;text-align:center;box-shadow:var(--shadow)}.spin{width:28px;height:28px;border:3px solid #dce8f7;border-top-color:var(--p);border-radius:50%;margin:auto auto 10px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
 @media(max-width:650px){.top-in,.main{padding-left:13px;padding-right:13px}.hero{display:block}.hero h1{font-size:23px}.filters{margin-top:15px}.cards{grid-template-columns:repeat(2,1fr)}.stat{padding:14px}.stat b{font-size:22px}.userbox .logout{padding:8px}.brand small{display:none}}
+
+.payroll-filter .input{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #d9e2ef;border-radius:10px;background:#fff;font:inherit}
+.payroll-summary{display:flex;gap:16px;flex-wrap:wrap;padding:12px;border:1px solid #e5eaf1;border-radius:12px;background:#f8fafc}
+.payroll-summary b{display:block;font-size:15px}.payroll-summary span{font-size:11px;color:#64748b}
+.slip-actions{display:flex;gap:8px;margin-top:12px}.btn-slip{border:0;border-radius:9px;padding:8px 12px;cursor:pointer;background:#1769e0;color:#fff}
+@media print{body>*:not(#salarySlipPrint){display:none!important}#salarySlipPrint{display:block!important}}
+#salarySlipPrint{display:none}
 </style>
 </head>
 <body>
@@ -74,6 +81,12 @@
 
       <section class="panel">
         <div class="panel-head"><div><h2>Payroll</h2><small id="payrollInfo">Bulan terpilih</small></div></div>
+        <div class="payroll-filter" style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:0 0 14px">
+          <select id="payrollMonthFilter" class="input"></select>
+          <select id="payrollEmployeeFilter" class="input"><option value="ALL">Semua Karyawan</option></select>
+          <button class="btn" type="button" onclick="applyPayrollFilter()">Tampilkan</button>
+        </div>
+        <div id="payrollSummary" class="payroll-summary" style="display:none;margin-bottom:12px"></div>
         <div class="mini-list" id="payrollList"></div>
       </section>
     </div>
@@ -657,6 +670,57 @@ function renderAttendance(rows) {
   }).join("");
 }
 
+let payrollRowsRaw = [];
+let payrollRowsFiltered = [];
+
+function getPayrollEmployeeKey(row) {
+  return String(getValue(row,"uid","UID","nip","NIP","email","Email","nama","name","pegawai","employeeName") || "").trim().toLowerCase();
+}
+function getPayrollMonth(row) {
+  return String(getValue(row,"month","bulan","periode","period","Month","Bulan") || "").slice(0,7);
+}
+function fillPayrollFilters(employees, rows) {
+  const ef = $("payrollEmployeeFilter"), mf = $("payrollMonthFilter");
+  if (!ef || !mf) return;
+  const currentE = ef.value || "ALL", currentM = mf.value || ($("monthFilter")?.value || todayISO().slice(0,7));
+  const seen = new Map();
+  employees.forEach(e => { const key=String(getValue(e,"uid","UID","nip","NIP","email","Email","nama","name")||"").trim(); if(key) seen.set(key, getValue(e,"nama","name","Nama")||key); });
+  rows.forEach(r => { const key=getPayrollEmployeeKey(r); if(key && !seen.has(key)) seen.set(key,getValue(r,"nama","name","pegawai","employeeName")||key); });
+  ef.innerHTML='<option value="ALL">Semua Karyawan</option>'+Array.from(seen.entries()).map(([k,n])=>`<option value="${esc(k)}">${esc(n)}</option>`).join("");
+  ef.value = Array.from(ef.options).some(o=>o.value===currentE) ? currentE : "ALL";
+  const months = [...new Set(rows.map(getPayrollMonth).filter(Boolean))];
+  if (!months.includes(currentM)) months.unshift(currentM);
+  mf.innerHTML = months.map(m=>`<option value="${esc(m)}">${esc(formatMonthLabel(m))}</option>`).join("");
+  mf.value=currentM;
+}
+function formatMonthLabel(m){ if(!/^\d{4}-\d{2}$/.test(m)) return m||"Bulan"; const d=new Date(m+"-01T00:00:00"); return d.toLocaleDateString("id-ID",{month:"long",year:"numeric"}); }
+function applyPayrollFilter(){
+  const month=$("payrollMonthFilter")?.value || $("monthFilter")?.value || "";
+  const employee=$("payrollEmployeeFilter")?.value || "ALL";
+  payrollRowsFiltered = payrollRowsRaw.filter(r => {
+    const rm=getPayrollMonth(r); const rk=getPayrollEmployeeKey(r);
+    const monthOk=!rm || !month || rm===month;
+    const empOk=employee==="ALL" || rk===employee;
+    return monthOk && empOk;
+  });
+  renderPayroll(payrollRowsFiltered);
+}
+function openSalarySlip(row){
+  const name=getValue(row,"nama","name","pegawai","employeeName")||"-";
+  const nip=getValue(row,"nip","NIP")||"-", pos=getValue(row,"jabatan","position","Jabatan")||"-";
+  const month=getPayrollMonth(row)||$("payrollMonthFilter")?.value||$("monthFilter")?.value||"";
+  const vals={
+    hariKerja:getValue(row,"hariKerja","workingDays","workDays")||0, hadir:getValue(row,"hadir","present","attendance")||0,
+    izin:getValue(row,"izin","leave")||0, sakit:getValue(row,"sakit","sick")||0, tidakHadir:getValue(row,"tidakHadir","absent")||0,
+    terlambat:getValue(row,"terlambat","late","lateCount")||0, jamKerja:getValue(row,"jamKerja","workHours")||0, lemburJam:getValue(row,"lemburJam","overtimeHours")||0,
+    pokok:getValue(row,"gajiPokok","basicSalary")||0, tunjangan:getValue(row,"tunjangan","allowance")||0, insentif:getValue(row,"insentif","attendanceIncentive")||0,
+    lembur:getValue(row,"lembur","overtime")||0, bonus:getValue(row,"bonus")||0, potongan:getValue(row,"potongan","deduction","deductions")||0,
+    total:getValue(row,"total","totalGaji","gajiBersih","netSalary","salary")||0
+  };
+  const win=window.open("","_blank","width=850,height=900"); if(!win)return;
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Slip Gaji - ${esc(name)}</title><style>body{font-family:Arial,sans-serif;color:#111827;margin:40px}.head{text-align:center;border-bottom:2px solid #111827;padding-bottom:16px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #e5e7eb;padding:8px 0}.section{margin-top:24px}.total{font-size:20px;font-weight:700;border-top:2px solid #111827;padding-top:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media print{button{display:none}}</style></head><body><div class="head"><h1>SLIP GAJI</h1><h3>${esc(formatMonthLabel(month))}</h3></div><div class="section grid"><div><b>Nama</b><div>${esc(name)}</div></div><div><b>NIP</b><div>${esc(nip)}</div></div><div><b>Jabatan</b><div>${esc(pos)}</div></div><div><b>Periode</b><div>${esc(formatMonthLabel(month))}</div></div></div><div class="section"><h3>KEHADIRAN</h3>${[["Hari Kerja",vals.hariKerja+" Hari"],["Hadir",vals.hadir+" Hari"],["Izin",vals.izin+" Hari"],["Sakit",vals.sakit+" Hari"],["Tidak Hadir",vals.tidakHadir+" Hari"],["Terlambat",vals.terlambat+" Kali"],["Jam Kerja",vals.jamKerja],["Lembur",vals.lemburJam+" Jam"]].map(x=>`<div class="row"><span>${x[0]}</span><b>${esc(x[1])}</b></div>`).join("")}</div><div class="section"><h3>PENGHASILAN</h3>${[["Gaji Pokok",vals.pokok],["Tunjangan",vals.tunjangan],["Insentif",vals.insentif],["Lembur",vals.lembur],["Bonus",vals.bonus]].map(x=>`<div class="row"><span>${x[0]}</span><b>${money(x[1])}</b></div>`).join("")}<div class="row"><span>Potongan</span><b>- ${money(vals.potongan)}</b></div><div class="row total"><span>GAJI BERSIH</span><b>${money(vals.total)}</b></div></div><div style="margin-top:70px;text-align:right">${new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"})}<br><br><br><b>ADMIN / HRD</b></div><script>window.onload=()=>window.print()<\/script></body></html>`); win.document.close();
+}
+
 function renderPayroll(rows) {
   const list = $("payrollList");
   if (!list) return;
@@ -689,7 +753,7 @@ function renderPayroll(rows) {
             getValue(row, "status", "Status") || "Payroll"
           )}</span>
         </div>
-        <div class="money">${money(amount)}</div>
+        <div style="display:flex;align-items:center;gap:8px"><div class="money">${money(amount)}</div><button class="btn-slip" type="button" onclick='openSalarySlip(${JSON.stringify(row).replace(/'/g,"&#39;")})'>Slip</button></div>
       </div>
     `;
   }).join("");
@@ -847,11 +911,14 @@ async function loadAll() {
         data.employee
       );
 
+    payrollRowsRaw = payroll;
+    fillPayrollFilters(employees, payroll);
+    applyPayrollFilter();
+
     window.__attendanceData = attendance;
 
     updateStats(data);
     renderAttendance(attendance);
-    renderPayroll(payroll);
     renderMonthly(monthly);
     renderEmployees(employees);
 
@@ -1034,6 +1101,8 @@ window.loginAdmin = loginAdmin;
 window.logout = logout;
 window.loadAll = loadAll;
 window.setAttendanceFilter = setAttendanceFilter;
+window.applyPayrollFilter = applyPayrollFilter;
+window.openSalarySlip = openSalarySlip;
 
 initializeFilters();
 restoreSession();
