@@ -11,6 +11,9 @@
 <meta name="theme-color" content="#1976e8">
 
 <title>Absensi Pegawai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0" rel="stylesheet">
 
 <style>
 :root{
@@ -1620,6 +1623,60 @@ img{
     border-radius:18px 18px 0 0;
   }
 }
+
+/* =====================================================
+   MODERN UI OVERRIDES
+===================================================== */
+:root{
+  --primary:#2563eb;
+  --primary2:#1d4ed8;
+  --ink:#172554;
+  --muted:#64748b;
+  --bg:#f5f8ff;
+  --line:#e5eaf3;
+  --radius:24px;
+  --shadow:0 12px 35px rgba(30,64,175,.08);
+}
+.material-symbols-rounded{
+  font-family:'Material Symbols Rounded';
+  font-weight:normal;
+  font-style:normal;
+  font-size:1.25em;
+  line-height:1;
+  letter-spacing:normal;
+  text-transform:none;
+  display:inline-block;
+  white-space:nowrap;
+  word-wrap:normal;
+  direction:ltr;
+  -webkit-font-feature-settings:'liga';
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:'liga';
+  vertical-align:middle;
+}
+h1,h2,h3,p,button,span,div{overflow-wrap:break-word}
+.section-heading h2{font-size:clamp(18px,3.5vw,28px);letter-spacing:-.4px}
+.card{border:1px solid rgba(226,232,240,.8);box-shadow:var(--shadow)}
+.action{min-height:132px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.action .icon{font-size:32px}
+.nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.nav button .material-symbols-rounded{font-size:23px}
+.nav button small{font-size:11px}
+.status-symbol{box-shadow:0 8px 18px rgba(16,185,129,.18)}
+@media(max-width:699px){
+  .top{padding-bottom:28px}
+  .clock-head{font-variant-numeric:tabular-nums}
+  .attendance-status{grid-template-columns:58px minmax(0,1fr)}
+  .action{min-height:108px}
+  .section-heading h2{font-size:19px}
+  .small-label{font-size:13px}
+  .big-time{font-size:clamp(28px,8vw,40px)}
+}
+@media(max-width:380px){
+  .action{min-height:100px}
+  .action small{font-size:9px}
+}
+
 </style>
 </head>
 
@@ -1634,7 +1691,7 @@ img{
   <div class="loginbox">
 
     <div class="logo">
-      📍
+      <span class="material-symbols-rounded">location_on</span>
     </div>
 
     <h1>
@@ -1688,7 +1745,7 @@ img{
     <div class="headline">
 
       <div class="date-head">
-        <span class="calendar-icon">▣</span>
+        <span class="calendar-icon"><span class="material-symbols-rounded">calendar_month</span></span>
         <span id="dateText">-</span>
       </div>
 
@@ -1755,7 +1812,7 @@ img{
     <div class="section-heading">
 
       <div class="heading-icon">
-        ◷
+        <span class="material-symbols-rounded">schedule</span>
       </div>
 
       <h2>
@@ -1770,7 +1827,7 @@ img{
         id="statusSymbol"
         class="status-symbol"
       >
-        ↗
+        <span class="material-symbols-rounded">login</span>
       </div>
 
       <div class="attendance-time">
@@ -1807,7 +1864,7 @@ img{
         type="button"
       >
         <span class="icon">
-          ▣
+          <span class="material-symbols-rounded">calendar_month</span>
         </span>
 
         Absen Masuk
@@ -1825,7 +1882,7 @@ img{
         type="button"
       >
         <span class="icon">
-          ⇥
+          <span class="material-symbols-rounded">logout</span>
         </span>
 
         Absen Pulang
@@ -1841,7 +1898,7 @@ img{
     <div class="location-mini">
 
       <span>
-        ⌖
+        <span class="material-symbols-rounded">location_on</span>
       </span>
 
       <div>
@@ -1872,7 +1929,7 @@ img{
         title="Perbarui lokasi"
         type="button"
       >
-        ↻
+        <span class="material-symbols-rounded">refresh</span>
       </button>
 
     </div>
@@ -1887,7 +1944,7 @@ img{
     <div class="section-heading">
 
       <div class="heading-icon history-icon">
-        ◔
+        <span class="material-symbols-rounded">history</span>
       </div>
 
       <h2>
@@ -2037,7 +2094,7 @@ img{
       onclick="showPage('home')"
       type="button"
     >
-      ⌂
+      <span class="material-symbols-rounded">home</span>
       <br>
       <small>Home</small>
     </button>
@@ -2047,7 +2104,7 @@ img{
       onclick="showPage('history')"
       type="button"
     >
-      ▣
+      <span class="material-symbols-rounded">calendar_month</span>
       <br>
       <small>Riwayat</small>
     </button>
@@ -2057,7 +2114,7 @@ img{
       onclick="showPage('profile')"
       type="button"
     >
-      ♙
+      <span class="material-symbols-rounded">person</span>
       <br>
       <small>Profil</small>
     </button>
@@ -2133,7 +2190,7 @@ img{
         onclick="switchCamera()"
         type="button"
       >
-        🔄 Ganti Kamera
+        <span class="material-symbols-rounded">flip_camera_android</span> Ganti Kamera
       </button>
 
       <button
@@ -2142,7 +2199,7 @@ img{
         onclick="capturePhoto()"
         type="button"
       >
-        📸 Ambil Foto
+        <span class="material-symbols-rounded">photo_camera</span> Ambil Foto
       </button>
 
     </div>
@@ -3772,115 +3829,46 @@ updateClock();
 ===================================================== */
 
 function normalizeDate_(value){
+  if(value === null || value === undefined || value === '') return '';
 
-  if(!value){
+  const raw = String(value).trim();
 
-    return '';
-
-  }
-
-  const raw =
-    String(value).trim();
-
-  const iso =
-    raw.match(
-      /(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
-    );
-
+  // ISO date/datetime: preserve the calendar date exactly as supplied.
+  const iso = raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
   if(iso){
-
-    return (
-      iso[1] +
-      '-' +
-      String(iso[2]).padStart(2,'0') +
-      '-' +
-      String(iso[3]).padStart(2,'0')
-    );
-
-  }
-
-  const dmy =
-    raw.match(
-      /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
-    );
-
-  if(dmy){
-
-    return (
-      dmy[3] +
-      '-' +
-      String(dmy[2]).padStart(2,'0') +
-      '-' +
-      String(dmy[1]).padStart(2,'0')
-    );
-
-  }
-
-  const parsed =
-    new Date(raw);
-
-  if(
-    !isNaN(
-      parsed.getTime()
-    )
-  ){
-
-    const parts =
-      new Intl.DateTimeFormat(
-        'en-GB',
-        {
-
-          timeZone:'Asia/Jakarta',
-
-          year:'numeric',
-
-          month:'2-digit',
-
-          day:'2-digit'
-
-        }
-      ).formatToParts(parsed);
-
-    const get =
-      type =>
-        parts.find(
-          x => x.type === type
-        )?.value || '';
-
-    const year =
-      get('year');
-
-    const month =
-      get('month');
-
-    const day =
-      get('day');
-
-    if(
-      year &&
-      month &&
-      day
-    ){
-
-      return (
-        year +
-        '-' +
-        month +
-        '-' +
-        day
-      );
-
+    const y = Number(iso[1]), m = Number(iso[2]), d = Number(iso[3]);
+    if(m >= 1 && m <= 12 && d >= 1 && d <= 31){
+      return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     }
-
   }
 
-  return raw.slice(
-    0,
-    10
-  );
+  // Numeric dates. Support both DD/MM/YYYY and MM/DD/YYYY safely.
+  const numeric = raw.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  if(numeric){
+    let a = Number(numeric[1]);
+    let b = Number(numeric[2]);
+    const y = Number(numeric[3]);
+    let day = a, month = b;
 
+    if(a <= 12 && b > 12){ month = a; day = b; }
+    if(month >= 1 && month <= 12 && day >= 1 && day <= 31){
+      return `${y}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    }
+  }
+
+  // For native Date strings, format in Jakarta without shifting the date.
+  const parsed = new Date(raw);
+  if(!Number.isNaN(parsed.getTime())){
+    const parts = new Intl.DateTimeFormat('en-GB',{
+      timeZone:'Asia/Jakarta', year:'numeric', month:'2-digit', day:'2-digit'
+    }).formatToParts(parsed);
+    const get = type => parts.find(x => x.type === type)?.value || '';
+    if(get('year') && get('month') && get('day')){
+      return `${get('year')}-${get('month')}-${get('day')}`;
+    }
+  }
+  return raw.slice(0,10);
 }
-
 
 /* =====================================================
    TODAY
@@ -4036,7 +4024,7 @@ function attendanceTypeLabel_(type){
 
     return {
       label:'Absen Masuk',
-      icon:'↗',
+      icon:'<span class="material-symbols-rounded">login</span>',
       className:'masuk'
     };
 
@@ -4048,7 +4036,7 @@ function attendanceTypeLabel_(type){
 
     return {
       label:'Absen Pulang',
-      icon:'⇥',
+      icon:'<span class="material-symbols-rounded">logout</span>',
       className:'pulang'
     };
 
@@ -4184,7 +4172,7 @@ function renderTodayAttendanceCard_(item){
           <div class="today-attendance-value today-attendance-location">
 
             <span class="today-attendance-location-icon">
-              ⌖
+              <span class="material-symbols-rounded">location_on</span>
             </span>
 
             <span>
@@ -4328,7 +4316,7 @@ function renderHistory(items){
 
     $('statusSymbol')
       .textContent =
-      '↗';
+      '<span class="material-symbols-rounded">login</span>';
 
   }
 
@@ -4551,7 +4539,7 @@ async function openCamera(type){
     false;
 
   $('captureBtn').textContent =
-    '📸 Ambil Foto';
+    '<span class="material-symbols-rounded">photo_camera</span> Ambil Foto';
 
   $('cameraModal')
     .classList.add('show');
@@ -4775,7 +4763,7 @@ async function switchCamera(){
         false;
 
       button.textContent =
-        '🔄 Ganti Kamera';
+        '<span class="material-symbols-rounded">flip_camera_android</span> Ganti Kamera';
 
     }
 
