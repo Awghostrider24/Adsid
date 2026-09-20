@@ -1,3607 +1,3085 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"
->
-
-<meta name="theme-color" content="#1976e8">
-
-<title>Absensi Pegawai</title>
-
-<link rel="preconnect" href="https://accounts.google.com">
-<link rel="preconnect" href="https://accounts.gstatic.com" crossorigin>
-
-<script
-  src="https://accounts.google.com/gsi/client"
-  async
-  defer
-></script>
-
-<style>
-:root{
-  --primary:#1976e8;
-  --primary2:#0d5fd1;
-  --green:#12b76a;
-  --red:#f04438;
-  --ink:#17324d;
-  --muted:#71839a;
-  --bg:#f3f7fc;
-  --card:#fff;
-  --line:#e4ebf3;
-  --shadow:0 10px 30px rgba(20,60,100,.10);
-  --radius:22px;
-}
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
-  width:100%;
-  min-height:100%;
-  margin:0;
-}
-
-body{
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-  overflow-x:hidden;
-}
-
-button,input{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-  border:0;
-  touch-action:manipulation;
-}
-
-/* =========================
-   APP
-========================= */
-
-.app{
-  min-height:100vh;
-  min-height:100dvh;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.top{
-  background:linear-gradient(145deg,#1b7af0,#1263d7);
-  color:#fff;
-  padding:
-    calc(22px + env(safe-area-inset-top))
-    16px
-    76px;
-  border-radius:0 0 30px 30px;
-}
-
-.toprow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:100%;
-  max-width:620px;
-  margin:auto;
-}
-
-.profile{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  min-width:0;
-}
-
-.avatar{
-  width:52px;
-  height:52px;
-  flex:0 0 52px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#fff8;
-  border:2px solid #ffffff99;
-}
-
-.hello{
-  font-size:12px;
-  opacity:.82;
-}
-
-.name{
-  font-weight:800;
-  font-size:18px;
-  margin-top:2px;
-  max-width:230px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.position{
-  font-size:12px;
-  opacity:.82;
-  margin-top:2px;
-  max-width:240px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.bell{
-  width:42px;
-  height:42px;
-  flex:0 0 42px;
-  border-radius:14px;
-  background:#ffffff1d;
-  color:#fff;
-  font-size:20px;
-}
-
-/* =========================
-   CONTENT
-========================= */
-
-.wrap{
-  width:100%;
-  max-width:620px;
-  margin:
-    -52px auto
-    calc(90px + env(safe-area-inset-bottom));
-  padding:0 12px;
-}
-
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:16px;
-  margin-bottom:14px;
-  overflow:hidden;
-}
-
-/* =========================
-   LOCATION
-========================= */
-
-.location{
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-
-.pin{
-  width:44px;
-  height:44px;
-  flex:0 0 44px;
-  border-radius:15px;
-  background:#eaf5ff;
-  color:var(--primary);
-  display:grid;
-  place-items:center;
-  font-size:21px;
-}
-
-.location > div:nth-child(2){
-  min-width:0;
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.strong{
-  font-weight:800;
-}
-
-.locline{
-  margin-top:3px;
-  font-size:14px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.accuracy{
-  font-size:12px;
-  color:var(--green);
-  margin-top:3px;
-}
-
-/* =========================
-   CLOCK
-========================= */
-
-.date{
-  text-align:center;
-  color:#55718f;
-  font-weight:700;
-  font-size:13px;
-}
-
-.clock{
-  text-align:center;
-  font-size:30px;
-  font-weight:900;
-  color:#1559b9;
-  margin:2px 0 12px;
-}
-
-/* =========================
-   STATUS
-========================= */
-
-.statusbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  border:1px solid var(--line);
-  padding:10px 12px;
-  border-radius:14px;
-  font-size:13px;
-}
-
-.badge{
-  padding:6px 10px;
-  border-radius:999px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.badge.warn{
-  background:#fff0f0;
-  color:var(--red);
-}
-
-.badge.ok{
-  background:#eafaf2;
-  color:#0c9c5a;
-}
-
-/* =========================
-   ACTION BUTTON
-========================= */
-
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:12px;
-}
-
-.action{
-  padding:14px 8px;
-  border-radius:17px;
-  color:#fff;
-  font-weight:800;
-  min-height:88px;
-  box-shadow:0 7px 16px rgba(0,0,0,.10);
-  transition:transform .15s ease,opacity .15s ease;
-}
-
-.action:active{
-  transform:scale(.97);
-}
-
-.action.green{
-  background:linear-gradient(145deg,#19c775,#0da961);
-}
-
-.action.red{
-  background:linear-gradient(145deg,#ff554d,#e62d35);
-}
-
-.action:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-  filter:grayscale(.2);
-}
-
-.action .icon{
-  font-size:25px;
-  display:block;
-  margin-bottom:5px;
-}
-
-.action small{
-  display:block;
-  opacity:.82;
-  font-weight:600;
-  margin-top:4px;
-  font-size:11px;
-}
-
-/* =========================
-   SECTION
-========================= */
-
-.section-title{
-  font-weight:900;
-  font-size:17px;
-  margin-bottom:10px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:13px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.row:last-child{
-  border-bottom:0;
-}
-
-.dot{
-  display:inline-block;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:var(--green);
-  margin-right:8px;
-}
-
-.empty{
-  text-align:center;
-  color:var(--muted);
-  padding:22px 5px;
-  font-size:14px;
-}
-
-/* =========================
-   BOTTOM NAV
-========================= */
-
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#fff;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:center;
-  z-index:20;
-  padding:
-    7px
-    10px
-    calc(7px + env(safe-area-inset-bottom));
-  box-shadow:0 -5px 20px rgba(20,60,100,.05);
-}
-
-.navin{
-  width:100%;
-  max-width:620px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:5px;
-}
-
-.nav button{
-  background:none;
-  color:#71839a;
-  padding:8px;
-  border-radius:13px;
-  min-height:52px;
-}
-
-.nav button.active{
-  color:var(--primary);
-  background:#eef6ff;
-  font-weight:800;
-}
-
-/* =========================
-   PAGE
-========================= */
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-.btn{
-  width:100%;
-  padding:13px 15px;
-  border-radius:14px;
-  background:var(--primary);
-  color:#fff;
-  font-weight:800;
-  min-height:48px;
-}
-
-.btn:active{
-  transform:scale(.98);
-}
-
-.btn.secondary{
-  background:#eef5ff;
-  color:var(--primary);
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:#071525b8;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  z-index:50;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.sheet{
-  background:#fff;
-  width:100%;
-  max-width:620px;
-  border-radius:28px 28px 0 0;
-  padding:
-    18px
-    16px
-    calc(18px + env(safe-area-inset-bottom));
-  max-height:92vh;
-  max-height:92dvh;
-  overflow:auto;
-}
-
-.sheethead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-}
-
-.close{
-  background:#eef3f8;
-  border-radius:50%;
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-  font-size:18px;
-}
-
-/* =========================
-   CAMERA
-========================= */
-
-.camera{
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  background:#111;
-  border-radius:20px;
-}
-
-.preview{
-  display:none;
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  border-radius:20px;
-}
-
-.camera-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:12px;
-}
-
-.camera-actions button{
-  padding:13px;
-  border-radius:14px;
-  font-weight:800;
-  min-height:48px;
-}
-
-.capture{
-  background:var(--green);
-  color:#fff;
-}
-
-.switch{
-  background:#eef5ff;
-  color:var(--primary);
-}
-
-/* =========================
-   RESULT
-========================= */
-
-.result{
-  text-align:center;
-  padding:20px 4px;
-}
-
-.check{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  background:#dff8eb;
-  color:#0aa75e;
-  display:grid;
-  place-items:center;
-  font-size:52px;
-  margin:4px auto 14px;
-}
-
-.result h2{
-  color:#0a9b59;
-  margin:5px 0;
-}
-
-.result .time{
-  font-size:34px;
-  font-weight:900;
-  color:#087d4b;
-}
-
-.photo{
-  width:150px;
-  height:150px;
-  object-fit:cover;
-  border-radius:18px;
-  margin:12px auto;
-  display:block;
-}
-
-/* =========================
-   TOAST
-========================= */
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:calc(82px + env(safe-area-inset-bottom));
-  transform:translateX(-50%);
-  background:#142437;
-  color:#fff;
-  padding:12px 16px;
-  border-radius:14px;
-  box-shadow:var(--shadow);
-  display:none;
-  z-index:100;
-  width:max-content;
-  max-width:90%;
-  text-align:center;
-  font-size:13px;
-}
-
-.toast.show{
-  display:block;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-  position:fixed;
-  inset:0;
-  background:rgba(255,255,255,.96);
-  display:none;
-  place-items:center;
-  z-index:9999;
-  padding:20px;
-  backdrop-filter:blur(5px);
-}
-
-.loading.show{
-  display:grid;
-}
-
-.loadingbox{
-  width:min(340px,90vw);
-  background:#fff;
-  border-radius:24px;
-  padding:28px 22px;
-  text-align:center;
-  box-shadow:0 15px 50px rgba(20,60,100,.15);
-}
-
-.spinner{
-  width:48px;
-  height:48px;
-  margin:auto;
-  border:4px solid #dbe8f7;
-  border-top-color:var(--primary);
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-
-.loading-title{
-  margin-top:16px;
-  font-weight:900;
-  color:#1559b9;
-  font-size:16px;
-}
-
-.loading-text{
-  margin-top:5px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
+/* =========================================================
+ * ABSENSI MOBILE - FIREBASE AUTH
+ * Google Apps Script Backend
+ *
+ * Authentication:
+ *   Firebase Authentication (Google provider)
+ *
+ * UID:
+ *   Firebase UID disimpan pada USERS dan ATTENDANCE
+ *
+ * Location:
+ *   GPS untuk validasi radius + reverse geocoding
+ *   UI hanya menampilkan Kecamatan / Kabupaten
+ * ========================================================= */
+
+const APP = {
+  TIMEZONE: 'Asia/Jakarta',
+  SESSION_TTL: 6 * 60 * 60,
+  REQUEST_TTL: 10 * 60,
+  MAX_PHOTO_BYTES: 700 * 1024,
+
+  ROLE_KANTOR: 'KANTOR',
+  ROLE_LAPANGAN: 'LAPANGAN',
+
+  SHEETS: {
+    SETTINGS: 'SETTINGS',
+    USERS: 'USERS',
+    ATTENDANCE: 'ATTENDANCE',
+    REQUESTS: 'REQUESTS'
   }
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-.login{
-  min-height:100vh;
-  min-height:100dvh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:
-    calc(18px + env(safe-area-inset-top))
-    16px
-    calc(18px + env(safe-area-inset-bottom));
-  background:linear-gradient(145deg,#eaf4ff,#f7fbff);
-}
-
-.loginbox{
-  width:100%;
-  max-width:420px;
-  background:#fff;
-  border-radius:28px;
-  padding:28px 22px;
-  box-shadow:0 15px 45px rgba(20,60,100,.12);
-  text-align:center;
-}
-
-.logo{
-  width:72px;
-  height:72px;
-  border-radius:22px;
-  background:#eaf4ff;
-  display:grid;
-  place-items:center;
-  margin:0 auto 14px;
-  font-size:34px;
-}
-
-.login h1{
-  margin:0 0 7px;
-  font-size:25px;
-}
-
-.login p{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.55;
-  margin:0 auto;
-}
-
-.google{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  width:100%;
-  margin-top:20px;
-  min-height:44px;
-  overflow:hidden;
-}
-
-.google > div{
-  max-width:100%;
-}
-
-/* =========================
-   PROFILE
-========================= */
-
-.profilegrid{
-  display:grid;
-  grid-template-columns:90px 1fr;
-  gap:14px;
-  align-items:center;
-}
-
-.bigavatar{
-  width:90px;
-  height:90px;
-  border-radius:24px;
-  object-fit:cover;
-  background:#edf4fb;
-}
-
-.kv{
-  padding:11px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.kv:last-child{
-  border:0;
-}
-
-.kv b{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:3px;
-}
-
-/* =========================
-   SMALL PHONE
-========================= */
-
-@media(max-width:380px){
-
-  .login{
-    padding-left:12px;
-    padding-right:12px;
-  }
-
-  .loginbox{
-    padding:24px 16px;
-    border-radius:24px;
-  }
-
-  .login h1{
-    font-size:22px;
-  }
-
-  .login p{
-    font-size:13px;
-  }
-
-  .actions{
-    gap:8px;
-  }
-
-  .action{
-    padding:13px 6px;
-  }
-
-  .action .icon{
-    font-size:23px;
-  }
-
-  .profilegrid{
-    grid-template-columns:75px 1fr;
-  }
-
-  .bigavatar{
-    width:75px;
-    height:75px;
-  }
-}
-
-/* =========================
-   DESKTOP
-========================= */
-
-@media(min-width:700px){
-
-  .top{
-    padding-top:
-      calc(30px + env(safe-area-inset-top));
-  }
-
-  .wrap{
-    padding:0 20px;
-  }
-
-  .nav{
-    left:50%;
-    right:auto;
-    transform:translateX(-50%);
-    width:620px;
-    border-radius:18px 18px 0 0;
-  }
-}
-
-</style>
-</head>
-
-<body>
-
-<!-- =====================================================
-     LOGIN
-===================================================== -->
-
-<div id="loginView" class="login">
-
-  <div class="loginbox">
-
-    <div class="logo">
-      📍
-    </div>
-
-    <h1>
-      Absensi Pegawai
-    </h1>
-
-    <p>
-      Absensi berbasis foto dan lokasi.
-      Silakan masuk menggunakan akun Google
-      yang telah terdaftar.
-    </p>
-
-    <div
-      id="googleButton"
-      class="google"
-    ></div>
-
-    <p
-      class="small"
-      style="margin-top:15px"
-    >
-      Akun harus berstatus
-      <b>AKTIF</b>
-      di data pengguna.
-    </p>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     APP
-===================================================== -->
-
-<div
-  id="appView"
-  class="app"
-  style="display:none"
->
-
-<header class="top">
-
-  <div class="toprow">
-
-    <div class="profile">
-
-      <img
-        id="avatar"
-        class="avatar"
-        alt="Foto profil"
-      >
-
-      <div>
-
-        <div class="hello">
-          Selamat Pagi
-        </div>
-
-        <div
-          id="userName"
-          class="name"
-        >
-          -
-        </div>
-
-        <div
-          id="userPosition"
-          class="position"
-        >
-          -
-        </div>
-
-      </div>
-
-    </div>
-
-    <button
-      class="bell"
-      onclick="refreshAll()"
-      title="Refresh"
-    >
-      ↻
-    </button>
-
-  </div>
-
-</header>
-
-
-<main class="wrap">
-
-<!-- HOME -->
-
-<section
-  id="homePage"
-  class="page active"
->
-
-  <div class="card">
-
-    <div class="location">
-
-      <div class="pin">
-        ⌖
-      </div>
-
-      <div style="flex:1">
-
-        <div class="small">
-          Lokasi Saat Ini (GPS)
-        </div>
-
-        <div
-          id="locationText"
-          class="locline strong"
-        >
-          Mengambil lokasi...
-        </div>
-
-        <div
-          id="accuracyText"
-          class="accuracy"
-        >
-          -
-        </div>
-
-      </div>
-
-      <button
-        class="close"
-        onclick="getLocation(true)"
-        style="width:40px;height:40px"
-      >
-        ↻
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div
-      id="dateText"
-      class="date"
-    >
-      -
-    </div>
-
-    <div
-      id="clockText"
-      class="clock"
-    >
-      --:-- WIB
-    </div>
-
-    <div class="statusbar">
-
-      <span>
-        Status Kehadiran Hari Ini
-      </span>
-
-      <span
-        id="statusBadge"
-        class="badge warn"
-      >
-        Belum Absen
-      </span>
-
-    </div>
-
-    <div class="actions">
-
-      <button
-        id="btnMasuk"
-        class="action green"
-        onclick="openCamera('MASUK')"
-      >
-        <span class="icon">
-          📷
-        </span>
-        Absen Masuk
-        <small>
-          (GPS • Selfie)
-        </small>
-      </button>
-
-      <button
-        id="btnPulang"
-        class="action red"
-        onclick="openCamera('PULANG')"
-      >
-        <span class="icon">
-          🚪
-        </span>
-        Absen Pulang
-        <small>
-          (GPS • Selfie)
-        </small>
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="section-title">
-      Riwayat Hari Ini
-    </div>
-
-    <div id="todayHistory"></div>
-
-  </div>
-
-</section>
-
-
-<!-- HISTORY -->
-
-<section
-  id="historyPage"
-  class="page"
->
-
-  <div class="card">
-
-    <div class="section-title">
-      Riwayat Absensi
-    </div>
-
-    <div id="historyList">
-
-      <div class="empty">
-        Memuat...
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- PROFILE -->
-
-<section
-  id="profilePage"
-  class="page"
->
-
-  <div class="card">
-
-    <div class="profilegrid">
-
-      <img
-        id="profilePhoto"
-        class="bigavatar"
-        alt="Foto profil"
-      >
-
-      <div>
-
-        <div class="small">
-          Profil Pegawai
-        </div>
-
-        <h2
-          id="profileName"
-          style="margin:3px 0"
-        >
-          -
-        </h2>
-
-        <div
-          id="profilePosition"
-          class="small"
-        >
-          -
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div style="margin-top:16px">
-
-      <div class="kv">
-        <b>NIP</b>
-        <span id="profileNip">-</span>
-      </div>
-
-      <div class="kv">
-        <b>Email</b>
-        <span id="profileEmail">-</span>
-      </div>
-
-      <div class="kv">
-        <b>Role</b>
-        <span id="profileRole">-</span>
-      </div>
-
-      <div class="kv">
-        <b>Status</b>
-        <span id="profileStatus">-</span>
-      </div>
-
-    </div>
-
-
-    <button
-      class="btn secondary"
-      style="margin-top:15px"
-      onclick="logout()"
-    >
-      Keluar
-    </button>
-
-  </div>
-
-</section>
-
-</main>
-
-
-<!-- NAV -->
-
-<nav class="nav">
-
-  <div class="navin">
-
-    <button
-      id="navHome"
-      class="active"
-      onclick="showPage('home')"
-    >
-      ⌂
-      <br>
-      <small>Home</small>
-    </button>
-
-    <button
-      id="navHistory"
-      onclick="showPage('history')"
-    >
-      ▣
-      <br>
-      <small>Riwayat</small>
-    </button>
-
-    <button
-      id="navProfile"
-      onclick="showPage('profile')"
-    >
-      ♙
-      <br>
-      <small>Profil</small>
-    </button>
-
-  </div>
-
-</nav>
-
-</div>
-
-
-<!-- =====================================================
-     CAMERA
-===================================================== -->
-
-<div
-  id="cameraModal"
-  class="modal"
->
-
-  <div class="sheet">
-
-    <div class="sheethead">
-
-      <div>
-
-        <b id="cameraTitle">
-          Absen Masuk
-        </b>
-
-        <div class="small">
-          Pastikan wajah terlihat jelas.
-        </div>
-
-      </div>
-
-      <button
-        class="close"
-        onclick="closeCamera()"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <video
-      id="video"
-      class="camera"
-      autoplay
-      playsinline
-      muted
-    ></video>
-
-
-    <img
-      id="preview"
-      class="preview"
-      alt="Preview foto"
-    >
-
-
-    <div class="camera-actions">
-
-      <button
-        class="switch"
-        onclick="switchCamera()"
-      >
-        🔄 Ganti Kamera
-      </button>
-
-      <button
-        id="captureBtn"
-        class="capture"
-        onclick="capturePhoto()"
-      >
-        📸 Ambil Foto
-      </button>
-
-    </div>
-
-
-    <button
-      id="submitPhotoBtn"
-      class="btn"
-      style="margin-top:10px;display:none"
-      onclick="submitAttendance()"
-    >
-      Gunakan Foto & Absen
-    </button>
-
-
-    <canvas
-      id="canvas"
-      style="display:none"
-    ></canvas>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     RESULT
-===================================================== -->
-
-<div
-  id="resultModal"
-  class="modal"
->
-
-  <div class="sheet">
-
-    <div class="result">
-
-      <div class="check">
-        ✓
-      </div>
-
-      <h2>
-        Absensi Berhasil!
-      </h2>
-
-      <p>
-        Absensi telah tercatat dengan benar.
-      </p>
-
-      <div
-        id="resultTime"
-        class="time"
-      >
-        --:-- WIB
-      </div>
-
-      <p
-        id="resultDate"
-        class="small"
-      >
-        -
-      </p>
-
-      <p
-        id="resultLoc"
-        class="small"
-      >
-        -
-      </p>
-
-      <img
-        id="resultPhoto"
-        class="photo"
-        alt="Foto absensi"
-      >
-
-      <button
-        class="btn"
-        onclick="closeResult()"
-      >
-        Lihat Detail
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     LOADING
-===================================================== -->
-
-<div
-  id="loading"
-  class="loading"
->
-
-  <div class="loadingbox">
-
-    <div class="spinner"></div>
-
-    <div
-      id="loadingTitle"
-      class="loading-title"
-    >
-      Memuat...
-    </div>
-
-    <div
-      id="loadingText"
-      class="loading-text"
-    >
-      Mohon tunggu sebentar.
-    </div>
-
-  </div>
-
-</div>
-
-
-<div
-  id="toast"
-  class="toast"
-></div>
-
-
-<iframe
-  name="postFrame"
-  id="postFrame"
-  style="display:none"
-></iframe>
-
-
-<script>
-
-/* =====================================================
-   CONFIG
-===================================================== */
-
-const CONFIG = {
-
-  WEB_APP_URL:
-    'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
-
-  GOOGLE_CLIENT_ID:
-    '558871442842-cbonr3ac7kd7d673pjnf2v6oqlvj95eq.apps.googleusercontent.com'
-
 };
 
 
-/* =====================================================
-   GLOBAL
-===================================================== */
+/* =========================================================
+   HTTP GET
+========================================================= */
 
-let sessionToken =
-  localStorage.getItem('absen_session') || '';
+function doGet(e) {
+  e = e || {};
+  const params = e.parameter || {};
+  const action = String(params.action || '').trim();
 
-let currentUser = null;
-let currentLocation = null;
-let cameraStream = null;
-let facingMode = 'user';
-let attendanceType = 'MASUK';
-let capturedDataUrl = '';
-let loginProcessing = false;
+  try {
 
+    if (action === 'status') {
 
-/* =====================================================
-   HELPER
-===================================================== */
+      const requestId = String(params.requestId || '').trim();
 
-const $ = id =>
-  document.getElementById(id);
-
-
-/* =====================================================
-   CONFIG CHECK
-===================================================== */
-
-function validConfig(){
-
-  return (
-    CONFIG.WEB_APP_URL.startsWith('https://') &&
-    CONFIG.GOOGLE_CLIENT_ID.includes(
-      '.apps.googleusercontent.com'
-    )
-  );
-
-}
-
-
-/* =====================================================
-   TOAST
-===================================================== */
-
-function showToast(msg){
-
-  $('toast').textContent =
-    msg;
-
-  $('toast').classList.add(
-    'show'
-  );
-
-  clearTimeout(
-    window.toastTimer
-  );
-
-  window.toastTimer =
-    setTimeout(
-      () => {
-
-        $('toast')
-          .classList.remove(
-            'show'
-          );
-
-      },
-      3500
-    );
-
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-function loading(
-  on,
-  title='Memproses...',
-  text='Mohon tunggu sebentar.'
-){
-
-  $('loadingTitle')
-    .textContent =
-    title;
-
-  $('loadingText')
-    .textContent =
-    text;
-
-  $('loading')
-    .classList.toggle(
-      'show',
-      on
-    );
-
-}
-
-
-/* =====================================================
-   GOOGLE INIT
-===================================================== */
-
-function initGoogle(){
-
-  loading(
-    true,
-    'Menyiapkan Login',
-    'Menghubungkan ke Google...'
-  );
-
-
-  if(!validConfig()){
-
-    loading(false);
-
-    showToast(
-      'Konfigurasi login belum benar.'
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !window.google ||
-    !window.google.accounts ||
-    !window.google.accounts.id
-  ){
-
-    setTimeout(
-      initGoogle,
-      500
-    );
-
-    return;
-
-  }
-
-
-  try{
-
-    google.accounts.id.initialize({
-
-      client_id:
-        CONFIG.GOOGLE_CLIENT_ID,
-
-      callback:
-        onGoogleCredential,
-
-      auto_select:false,
-
-      cancel_on_tap_outside:true
-
-    });
-
-
-    const googleButton =
-      $('googleButton');
-
-
-    googleButton.innerHTML =
-      '';
-
-
-    const width =
-      Math.min(
-        360,
-        Math.max(
-          220,
-          window.innerWidth - 70
-        )
-      );
-
-
-    google.accounts.id.renderButton(
-
-      googleButton,
-
-      {
-
-        theme:'outline',
-
-        size:'large',
-
-        shape:'pill',
-
-        text:'signin_with',
-
-        width:width
-
+      if (!requestId) {
+        return jsonp_(
+          { ok: false, error: 'Request ID tidak ditemukan.' },
+          params.callback
+        );
       }
 
-    );
+      const result = getRequest_(requestId);
 
+      if (!result) {
+        return jsonp_(
+          { ok: false, state: 'NOT_FOUND', error: 'Request tidak ditemukan.' },
+          params.callback
+        );
+      }
 
-    loading(false);
+      return jsonp_(result, params.callback);
+    }
 
-  }catch(error){
+    if (action === 'ping') {
+      return jsonResponse_({
+        ok: true,
+        message: 'API Absensi Firebase aktif.',
+        time: nowString_()
+      });
+    }
 
-    console.error(
-      'Google Login Error:',
-      error
-    );
+    return jsonResponse_({
+      ok: true,
+      message: 'API Absensi Firebase aktif.'
+    });
 
-    loading(false);
+  } catch (err) {
 
-    showToast(
-      'Google Login gagal dimuat. Silakan refresh halaman.'
-    );
-
+    return jsonResponse_({
+      ok: false,
+      error: err.message || String(err)
+    });
   }
-
 }
 
 
-/* =====================================================
-   GOOGLE CALLBACK
-===================================================== */
+/* =========================================================
+   HTTP POST
+========================================================= */
 
-async function onGoogleCredential(response){
+function doPost(e) {
 
-  if(loginProcessing){
-    return;
-  }
+  let requestId = '';
 
+  try {
 
-  loginProcessing = true;
+    const p = getPostParams_(e);
+    const action = String(p.action || '').trim();
 
+    requestId = String(p.requestId || '').trim();
 
-  loading(
-    true,
-    'Memverifikasi Akun',
-    'Menghubungkan akun Google dengan data pegawai...'
-  );
+    if (!requestId) {
+      requestId = makeId_();
+    }
 
-
-  const requestId =
-    makeId();
-
-
-  console.log(
-    'LOGIN REQUEST ID:',
-    requestId
-  );
-
-
-  const sent =
-    await postForm({
-
-      action:'login',
-
-      requestId:
-        requestId,
-
-      idToken:
-        response.credential
-
-    });
-
-
-  if(!sent){
-
-    loginProcessing = false;
-
-    loading(false);
-
-    showToast(
-      'Tidak dapat mengirim data login ke server.'
+    putRequest_(
+      requestId,
+      {
+        ok: true,
+        state: 'PROCESSING',
+        requestId: requestId
+      }
     );
 
-    return;
+    let result;
 
-  }
+    if (action === 'firebaseLogin') {
+      result = handleFirebaseLogin_(p);
 
+    } else if (action === 'profile') {
+      result = handleProfile_(p);
 
-  console.log(
-    'LOGIN DATA TERKIRIM'
-  );
+    } else if (action === 'history') {
+      result = handleHistory_(p);
 
+    } else if (action === 'attendance') {
+      result = handleAttendance_(p);
 
-  poll(
+    } else if (action === 'location') {
+      result = handleLocation_(p);
 
-    requestId,
+    } else {
+      throw new Error('Action tidak dikenal: ' + action);
+    }
 
-    result => {
-
-      console.log(
-        'LOGIN RESULT:',
+    putRequest_(
+      requestId,
+      Object.assign(
+        { state: 'DONE', requestId: requestId },
         result
-      );
-
-
-      loginProcessing = false;
-
-
-      if(
-        !result ||
-        !result.ok
-      ){
-
-        loading(false);
-
-        showToast(
-          result?.error ||
-          'Login gagal. Akun mungkin belum terdaftar.'
-        );
-
-        return;
-
-      }
-
-
-      loading(
-        true,
-        'Login Berhasil',
-        'Menyiapkan tampilan absensi...'
-      );
-
-
-      sessionToken =
-        result.sessionToken;
-
-
-      localStorage.setItem(
-        'absen_session',
-        sessionToken
-      );
-
-
-      currentUser =
-        result.user;
-
-
-      setTimeout(
-        () => {
-
-          showApp();
-
-          refreshAll();
-
-          loading(false);
-
-        },
-        500
-      );
-
-    }
-
-  );
-
-}
-
-
-/* =====================================================
-   ID
-===================================================== */
-
-function makeId(){
-
-  if(
-    window.crypto &&
-    crypto.randomUUID
-  ){
-
-    return crypto
-      .randomUUID()
-      .replaceAll(
-        '-',
-        ''
-      );
-
-  }
-
-
-  return (
-    Date.now().toString(36) +
-    Math.random().toString(36).slice(2) +
-    Date.now().toString(36)
-  );
-
-}
-
-
-/* =====================================================
-   POST TO APPS SCRIPT
-===================================================== */
-
-async function postForm(fields){
-
-  const body =
-    new URLSearchParams();
-
-
-  Object.entries(fields)
-    .forEach(
-      ([key,value]) => {
-
-        body.append(
-          key,
-          value ?? ''
-        );
-
-      }
+      )
     );
 
-
-  try{
-
-    await fetch(
-
-      CONFIG.WEB_APP_URL,
-
-      {
-
-        method:'POST',
-
-        mode:'no-cors',
-
-        headers:{
-          'Content-Type':
-            'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-
-        body:
-          body.toString(),
-
-        redirect:'follow',
-
-        keepalive:true
-
-      }
-
-    );
-
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      'POST Apps Script gagal:',
-      error
-    );
-
-
-    /*
-     * FALLBACK
-     * Untuk browser yang gagal
-     * menggunakan fetch.
-     */
-
-    try{
-
-      const form =
-        document.createElement(
-          'form'
-        );
-
-
-      form.method =
-        'POST';
-
-
-      form.action =
-        CONFIG.WEB_APP_URL;
-
-
-      form.target =
-        'postFrame';
-
-
-      form.style.display =
-        'none';
-
-
-      Object.entries(fields)
-        .forEach(
-          ([key,value]) => {
-
-            const input =
-              document.createElement(
-                'input'
-              );
-
-            input.type =
-              'hidden';
-
-            input.name =
-              key;
-
-            input.value =
-              value ?? '';
-
-            form.appendChild(
-              input
-            );
-
-          }
-        );
-
-
-      document.body.appendChild(
-        form
-      );
-
-
-      form.submit();
-
-
-      setTimeout(
-        () => {
-
-          form.remove();
-
-        },
-        1000
-      );
-
-
-      return true;
-
-    }catch(fallbackError){
-
-      console.error(
-        'Fallback POST gagal:',
-        fallbackError
-      );
-
-      return false;
-
-    }
-
-  }
-
-}
-
-
-/* =====================================================
-   POLL STATUS
-===================================================== */
-
-function poll(
-  requestId,
-  onDone,
-  tries=0
-){
-
-  const MAX_TRIES =
-    30;
-
-
-  const cb =
-    'cb_' + makeId();
-
-
-  let finished =
-    false;
-
-
-  window[cb] =
-    function(data){
-
-      if(finished){
-        return;
-      }
-
-
-      finished =
-        true;
-
-
-      delete window[cb];
-
-
-      const oldScript =
-        document.getElementById(
-          'jsonp_' + cb
-        );
-
-
-      if(oldScript){
-
-        oldScript.remove();
-
-      }
-
-
-      if(
-        data.state === 'DONE'
-      ){
-
-        onDone(
-          data.result ||
-          data
-        );
-
-        return;
-
-      }
-
-
-      if(
-        data.state === 'NOT_FOUND'
-      ){
-
-        onDone({
-
-          ok:false,
-
-          error:
-            data.error ||
-            'Data login tidak ditemukan di server.'
-
-        });
-
-        return;
-
-      }
-
-
-      finished =
-        false;
-
-
-      setTimeout(
-        () => {
-
-          poll(
-            requestId,
-            onDone,
-            tries + 1
-          );
-
-        },
-        500
-      );
-
+    return textResponse_('OK');
+
+  } catch (err) {
+
+    const errorResult = {
+      ok: false,
+      state: 'DONE',
+      requestId: requestId,
+      error: err.message || String(err)
     };
 
+    if (requestId) {
+      putRequest_(requestId, errorResult);
+    }
 
-  const script =
-    document.createElement(
-      'script'
-    );
-
-
-  script.id =
-    'jsonp_' + cb;
+    return textResponse_('ERROR');
+  }
+}
 
 
-  script.src =
-    CONFIG.WEB_APP_URL +
-    '?action=status' +
-    '&requestId=' +
-    encodeURIComponent(
-      requestId
-    ) +
-    '&callback=' +
-    encodeURIComponent(
-      cb
-    ) +
-    '&_=' +
-    Date.now();
+function getPostParams_(e) {
+  if (!e) return {};
+  return e.parameter || {};
+}
 
 
-  script.onerror =
-    function(){
+/* =========================================================
+   FIREBASE LOGIN
+========================================================= */
 
-      delete window[cb];
+function handleFirebaseLogin_(p) {
 
-      script.remove();
+  const firebaseIdToken =
+    String(p.firebaseIdToken || '').trim();
 
+  if (!firebaseIdToken) {
+    throw new Error('Firebase ID Token tidak ditemukan.');
+  }
 
-      if(
-        tries >= MAX_TRIES
-      ){
+  const firebaseUser =
+    verifyFirebaseToken_(firebaseIdToken);
 
-        onDone({
+  if (firebaseUser.disabled) {
+    throw new Error('Akun Firebase dinonaktifkan.');
+  }
 
-          ok:false,
+  if (!firebaseUser.email) {
+    throw new Error('Email Firebase tidak ditemukan.');
+  }
 
-          error:
-            'Server tidak merespons. Periksa koneksi internet atau Apps Script.'
-
-        });
-
-        return;
-
-      }
-
-
-      setTimeout(
-        () => {
-
-          poll(
-            requestId,
-            onDone,
-            tries + 1
-          );
-
-        },
-        800
-      );
-
-    };
-
-
-  document.body.appendChild(
-    script
-  );
-
+  if (firebaseUser.emailVerified !== true) {
+    throw new Error('Email Firebase belum terverifikasi.');
+  }
 
   /*
-   * Timeout tambahan
+   * USERS tetap menjadi sumber data pegawai.
+   * Jika email sudah ada tetapi UID kosong, UID Firebase
+   * otomatis ditulis ke USERS. Setelah itu pencarian utama
+   * menggunakan UID.
    */
+  let user =
+    findUserByUid_(firebaseUser.uid);
 
-  if(
-    tries >= MAX_TRIES
-  ){
-
-    setTimeout(
-      () => {
-
-        if(!finished){
-
-          finished =
-            true;
-
-          delete window[cb];
-
-          const oldScript =
-            document.getElementById(
-              'jsonp_' + cb
-            );
-
-          if(oldScript){
-
-            oldScript.remove();
-
-          }
-
-
-          onDone({
-
-            ok:false,
-
-            error:
-              'Waktu verifikasi habis. Silakan coba login kembali.'
-
-          });
-
-        }
-
-      },
-      25000
-    );
-
+  if (!user) {
+    user =
+      findUserByEmail_(firebaseUser.email);
   }
 
-}
-
-
-/* =====================================================
-   SHOW APP
-===================================================== */
-
-function showApp(){
-
-  $('loginView')
-    .style.display =
-    'none';
-
-
-  $('appView')
-    .style.display =
-    'block';
-
-
-  if(currentUser){
-
-    renderUser(
-      currentUser
+  if (!user) {
+    throw new Error(
+      'Email belum terdaftar sebagai pengguna aplikasi.'
     );
-
   }
 
-}
-
-
-/* =====================================================
-   RENDER USER
-===================================================== */
-
-function renderUser(u){
-
-  $('userName')
-    .textContent =
-    u.name || '-';
-
-
-  $('userPosition')
-    .textContent =
-    (u.position || '-') +
-    ' • ' +
-    (u.role || '-');
-
-
-  $('profileName')
-    .textContent =
-    u.name || '-';
-
-
-  $('profilePosition')
-    .textContent =
-    u.position || '-';
-
-
-  $('profileNip')
-    .textContent =
-    u.nip || '-';
-
-
-  $('profileEmail')
-    .textContent =
-    u.email || '-';
-
-
-  $('profileRole')
-    .textContent =
-    u.role || '-';
-
-
-  $('profileStatus')
-    .textContent =
-    u.status || '-';
-
-
-  const photo =
-    u.photo || '';
-
-
-  $('avatar').src =
-    photo ||
-    avatarData(
-      u.name
+  if (
+    user.email &&
+    user.email.toLowerCase() !== firebaseUser.email.toLowerCase()
+  ) {
+    throw new Error(
+      'Email Firebase tidak sesuai dengan data pegawai.'
     );
-
-
-  $('profilePhoto').src =
-    photo ||
-    avatarData(
-      u.name
-    );
-
-}
-
-
-/* =====================================================
-   AVATAR
-===================================================== */
-
-function avatarData(name){
-
-  return (
-    'data:image/svg+xml;charset=UTF-8,' +
-    encodeURIComponent(
-
-      '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">' +
-
-      '<rect width="100%" height="100%" rx="40" fill="#eaf4ff"/>' +
-
-      '<text x="50%" y="57%" text-anchor="middle" font-family="Arial" font-size="80" fill="#1976e8">' +
-
-      (name || '?')
-        .charAt(0)
-        .toUpperCase() +
-
-      '</text>' +
-
-      '</svg>'
-
-    )
-  );
-
-}
-
-
-/* =====================================================
-   REFRESH
-===================================================== */
-
-function refreshAll(){
-
-  if(!sessionToken){
-    return;
   }
 
-
-  getLocation(false);
-
-
-  request(
-    'profile',
-    {},
-    r => {
-
-      if(r.ok){
-
-        currentUser =
-          r.user;
-
-        renderUser(
-          currentUser
-        );
-
-      }
-
-    }
-  );
-
-
-  request(
-    'history',
-    {limit:60},
-    r => {
-
-      if(r.ok){
-
-        renderHistory(
-          r.items || []
-        );
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   REQUEST
-===================================================== */
-
-function request(
-  action,
-  extra,
-  onDone
-){
-
-  const requestId =
-    makeId();
-
-
-  postForm(
-
-    Object.assign(
-
-      {
-        action:
-          action,
-
-        requestId:
-          requestId,
-
-        sessionToken:
-          sessionToken
-
-      },
-
-      extra
-
-    )
-
-  );
-
-
-  poll(
-    requestId,
-    onDone
-  );
-
-}
-
-
-/* =====================================================
-   LOCATION
-===================================================== */
-
-function getLocation(force){
-
-  if(
-    !navigator.geolocation
-  ){
-
-    $('locationText')
-      .textContent =
-      'Browser tidak mendukung GPS';
-
-    return;
-
+  if (
+    String(user.status || '')
+      .trim()
+      .toUpperCase() !== 'AKTIF'
+  ) {
+    throw new Error('Akun Anda tidak aktif.');
   }
 
+  /*
+   * Simpan UID Firebase ke USERS jika belum ada.
+   * Jika UID yang tersimpan berbeda, jangan menimpa otomatis.
+   */
+  if (!user.uid) {
 
-  $('locationText')
-    .textContent =
-    'Mengambil lokasi...';
-
-
-  $('accuracyText')
-    .textContent =
-    'Mohon izinkan lokasi pada browser.';
-
-
-  navigator.geolocation.getCurrentPosition(
-
-    pos => {
-
-      currentLocation = {
-
-        latitude:
-          pos.coords.latitude,
-
-        longitude:
-          pos.coords.longitude,
-
-        accuracy:
-          pos.coords.accuracy
-
-      };
-
-
-      $('locationText')
-        .textContent =
-
-        `Lat ${
-          currentLocation.latitude
-            .toFixed(6)
-        }, Lng ${
-          currentLocation.longitude
-            .toFixed(6)
-        }`;
-
-
-      $('accuracyText')
-        .textContent =
-
-        'Akurasi GPS: ' +
-        Math.round(
-          currentLocation.accuracy
-        ) +
-        ' meter';
-
-    },
-
-    err => {
-
-      $('locationText')
-        .textContent =
-        'Lokasi belum tersedia';
-
-
-      $('accuracyText')
-        .textContent =
-        err.message ||
-        'Aktifkan izin lokasi.';
-
-    },
-
-    {
-
-      enableHighAccuracy:true,
-
-      timeout:15000,
-
-      maximumAge:
-        force
-          ? 0
-          : 30000
-
-    }
-
-  );
-
-}
-
-
-/* =====================================================
-   CLOCK
-===================================================== */
-
-function updateClock(){
-
-  const d =
-    new Date();
-
-
-  $('dateText')
-    .textContent =
-
-    new Intl.DateTimeFormat(
-      'id-ID',
-      {
-        weekday:'long',
-        day:'2-digit',
-        month:'long',
-        year:'numeric',
-        timeZone:'Asia/Jakarta'
-      }
-    ).format(d);
-
-
-  $('clockText')
-    .textContent =
-
-    new Intl.DateTimeFormat(
-      'id-ID',
-      {
-        hour:'2-digit',
-        minute:'2-digit',
-        hour12:false,
-        timeZone:'Asia/Jakarta'
-      }
-    ).format(d) +
-
-    ' WIB';
-
-}
-
-
-setInterval(
-  updateClock,
-  1000
-);
-
-
-updateClock();
-
-
-/* =====================================================
-   HISTORY
-===================================================== */
-
-function renderHistory(items){
-
-  const today =
-    new Intl.DateTimeFormat(
-      'en-CA',
-      {
-        timeZone:'Asia/Jakarta',
-        year:'numeric',
-        month:'2-digit',
-        day:'2-digit'
-      }
-    ).format(
-      new Date()
+    updateUserUidByEmail_(
+      user.email,
+      firebaseUser.uid
     );
 
-
-  const todayItems =
-    items.filter(
-      x =>
-        x.date === today
-    );
-
-
-  const masuk =
-    todayItems.find(
-      x =>
-        x.type === 'MASUK'
-    );
-
-
-  const pulang =
-    todayItems.find(
-      x =>
-        x.type === 'PULANG'
-    );
-
-
-  $('btnMasuk')
-    .disabled =
-    !!masuk;
-
-
-  $('btnPulang')
-    .disabled =
-    !masuk ||
-    !!pulang;
-
-
-  if(
-    masuk &&
-    pulang
-  ){
-
-    $('statusBadge')
-      .textContent =
-      'Lengkap';
-
-    $('statusBadge')
-      .className =
-      'badge ok';
-
-  }
-
-  else if(masuk){
-
-    $('statusBadge')
-      .textContent =
-      'Sudah Absen Masuk';
-
-    $('statusBadge')
-      .className =
-      'badge ok';
-
-  }
-
-  else{
-
-    $('statusBadge')
-      .textContent =
-      'Belum Absen';
-
-    $('statusBadge')
-      .className =
-      'badge warn';
-
-  }
-
-
-  $('todayHistory')
-    .innerHTML =
-
-    todayItems.length
-
-      ?
-
-      todayItems.map(
-        x => `
-
-        <div class="row">
-
-          <span>
-
-            <span class="dot"></span>
-
-            ${escapeHtml(
-              x.type
-            )}
-
-          </span>
-
-          <b>
-            ${escapeHtml(
-              x.time
-            )}
-          </b>
-
-        </div>
-
-      `
-      ).join('')
-
-      :
-
-      '<div class="empty">Belum ada absensi hari ini.</div>';
-
-
-  $('historyList')
-    .innerHTML =
-
-    items.length
-
-      ?
-
-      items.map(
-        x => `
-
-        <div class="row">
-
-          <div>
-
-            <b>
-              ${escapeHtml(
-                x.date
-              )}
-            </b>
-
-            <div class="small">
-
-              ${escapeHtml(
-                x.type
-              )}
-
-              •
-
-              ${escapeHtml(
-                x.district ||
-                'Lokasi tercatat'
-              )}
-
-            </div>
-
-          </div>
-
-          <div style="text-align:right">
-
-            <b>
-              ${escapeHtml(
-                x.time
-              )}
-            </b>
-
-            <div class="small">
-
-              ${
-                x.distance
-                  ? Math.round(
-                      x.distance
-                    ) + ' m'
-                  : ''
-              }
-
-            </div>
-
-          </div>
-
-        </div>
-
-      `
-      ).join('')
-
-      :
-
-      '<div class="empty">Belum ada riwayat.</div>';
-
-}
-
-
-/* =====================================================
-   ESCAPE
-===================================================== */
-
-function escapeHtml(s){
-
-  return String(
-    s ?? ''
-  ).replace(
-    /[&<>"']/g,
-    m => ({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#039;'
-    }[m])
-  );
-
-}
-
-
-/* =====================================================
-   CAMERA
-===================================================== */
-
-async function openCamera(type){
-
-  if(!currentLocation){
-
-    getLocation(true);
-
-    showToast(
-      'Lokasi sedang diambil. Tunggu sampai lokasi tersedia.'
-    );
-
-    return;
-
-  }
-
-
-  attendanceType =
-    type;
-
-
-  capturedDataUrl =
-    '';
-
-
-  $('cameraTitle')
-    .textContent =
-    'Absen ' +
-    (
-      type === 'MASUK'
-        ? 'Masuk'
-        : 'Pulang'
-    );
-
-
-  $('preview')
-    .style.display =
-    'none';
-
-
-  $('video')
-    .style.display =
-    'block';
-
-
-  $('submitPhotoBtn')
-    .style.display =
-    'none';
-
-  $('captureBtn').textContent =
-    '📸 Ambil Foto';
-
-
-  $('cameraModal')
-    .classList.add(
-      'show'
-    );
-
-
-  try{
-
-    await startCamera();
-
-  }catch(e){
-
-    console.error(e);
-
-    showToast(
-      'Kamera tidak dapat dibuka. Pastikan izin kamera diberikan.'
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   START CAMERA
-===================================================== */
-
-async function startCamera(){
-
-  if(
-    !navigator.mediaDevices ||
-    !navigator.mediaDevices.getUserMedia
-  ){
+    user.uid =
+      firebaseUser.uid;
+
+  } else if (
+    user.uid !== firebaseUser.uid
+  ) {
 
     throw new Error(
-      'Browser tidak mendukung kamera.'
+      'UID Firebase akun ini tidak sesuai dengan data pegawai.'
     );
-
   }
 
+  const sessionToken =
+    makeId_();
 
-  stopCamera();
+  const session = {
+    uid: firebaseUser.uid,
+    email: user.email,
+    createdAt: Date.now()
+  };
 
-
-  cameraStream =
-    await navigator.mediaDevices.getUserMedia({
-
-      video:{
-
-        facingMode:{
-          ideal:
-            facingMode
-        },
-
-        width:{
-          ideal:1280
-        },
-
-        height:{
-          ideal:1280
-        }
-
-      },
-
-      audio:false
-
-    });
-
-
-  $('video').srcObject =
-    cameraStream;
-
-
-  try{
-
-    await $('video').play();
-
-  }catch(e){
-
-    console.log(
-      'Video autoplay:',
-      e
+  CacheService
+    .getScriptCache()
+    .put(
+      'SESSION_' + sessionToken,
+      JSON.stringify(session),
+      APP.SESSION_TTL
     );
 
-  }
-
+  return {
+    ok: true,
+    sessionToken: sessionToken,
+    user: publicUser_(user)
+  };
 }
 
 
-/* =====================================================
-   STOP CAMERA
-===================================================== */
+/* =========================================================
+   VERIFY FIREBASE ID TOKEN
+========================================================= */
 
-function stopCamera(){
+function verifyFirebaseToken_(idToken) {
 
-  if(cameraStream){
+  const apiKey =
+    getSetting_('FIREBASE_WEB_API_KEY');
 
-    cameraStream
-      .getTracks()
-      .forEach(
-        track =>
-          track.stop()
+  if (!apiKey) {
+    throw new Error(
+      'FIREBASE_WEB_API_KEY belum diisi pada SETTINGS.'
+    );
+  }
+
+  const url =
+    'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' +
+    encodeURIComponent(apiKey);
+
+  const response =
+    UrlFetchApp.fetch(
+      url,
+      {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify({
+          idToken: idToken
+        }),
+        muteHttpExceptions: true
+      }
+    );
+
+  const code =
+    response.getResponseCode();
+
+  let data = {};
+
+  try {
+    data =
+      JSON.parse(
+        response.getContentText() || '{}'
       );
-
-    cameraStream =
-      null;
-
+  } catch (err) {
+    data = {};
   }
 
-}
-
-
-/* =====================================================
-   SWITCH CAMERA
-===================================================== */
-
-async function switchCamera(){
-
-  facingMode =
-    facingMode === 'user'
-      ? 'environment'
-      : 'user';
-
-
-  try{
-
-    await startCamera();
-
-  }catch(e){
-
-    showToast(
-      'Kamera tidak tersedia.'
+  if (code !== 200) {
+    throw new Error(
+      'Firebase ID Token tidak valid.'
     );
-
   }
 
-}
-
-
-/* =====================================================
-   CAPTURE
-===================================================== */
-
-function capturePhoto(){
-
-  const video =
-    $('video');
-
-  const canvas =
-    $('canvas');
-
-
-  if(
-    !video.videoWidth ||
-    !video.videoHeight
-  ){
-
-    showToast(
-      'Kamera belum siap. Tunggu sebentar.'
+  if (
+    !data.users ||
+    !data.users.length
+  ) {
+    throw new Error(
+      'Akun Firebase tidak ditemukan.'
     );
-
-    return;
-
   }
 
-
-  const maxWidth = 800;
-
-  const ratio =
-    video.videoHeight /
-    video.videoWidth;
-
-  const w =
-    Math.min(
-      maxWidth,
-      video.videoWidth
-    );
-
-  const h =
-    Math.round(
-      w * ratio
-    );
-
-
-  canvas.width =
-    w;
-
-  canvas.height =
-    h;
-
-
-  const ctx =
-    canvas.getContext(
-      '2d',
-      {alpha:false}
-    );
-
-
-  ctx.drawImage(
-    video,
-    0,
-    0,
-    w,
-    h
-  );
-
+  const u =
+    data.users[0];
 
   /*
-   * Kompres adaptif.
-   * Target sekitar <= 600 KB agar aman
-   * dikirim ke Apps Script.
+   * Pastikan provider Google memang terhubung.
    */
-  const MAX_CLIENT_BYTES =
-    600 * 1024;
+  const providerUserInfo =
+    u.providerUserInfo || [];
 
-  let quality = 0.78;
-  let dataUrl = '';
-
-
-  for(let i = 0; i < 6; i++){
-
-    dataUrl =
-      canvas.toDataURL(
-        'image/jpeg',
-        quality
-      );
-
-    const estimatedBytes =
-      Math.floor(
-        dataUrl.length * 0.75
-      );
-
-    if(
-      estimatedBytes <=
-      MAX_CLIENT_BYTES
-    ){
-      break;
-    }
-
-    quality -= 0.08;
-
-    if(quality < 0.38){
-      quality = 0.38;
-    }
-
-  }
-
-
-  if(
-    !dataUrl ||
-    !dataUrl.startsWith(
-      'data:image/jpeg;base64,'
-    )
-  ){
-
-    showToast(
-      'Foto gagal diproses. Silakan ambil foto lagi.'
+  const googleProvider =
+    providerUserInfo.some(
+      function(provider) {
+        return String(
+          provider.providerId || ''
+        ) === 'google.com';
+      }
     );
 
-    return;
-
+  if (!googleProvider) {
+    throw new Error(
+      'Akun harus login menggunakan Google melalui Firebase.'
+    );
   }
 
+  return {
+    uid:
+      String(u.localId || '').trim(),
 
-  capturedDataUrl =
-    dataUrl;
+    email:
+      String(u.email || '')
+        .trim()
+        .toLowerCase(),
 
+    emailVerified:
+      u.emailVerified === true,
 
-  $('preview').src =
-    capturedDataUrl;
+    displayName:
+      String(u.displayName || '').trim(),
 
+    photoUrl:
+      String(u.photoUrl || '').trim(),
 
-  $('video').style.display =
-    'none';
-
-
-  $('preview').style.display =
-    'block';
-
-
-  $('captureBtn').textContent =
-    '📸 Ambil Ulang';
-
-
-  $('submitPhotoBtn')
-    .style.display =
-    'block';
-
+    disabled:
+      u.disabled === true
+  };
 }
 
 
-/* =====================================================
-   CLOSE CAMERA
-===================================================== */
+/* =========================================================
+   PROFILE
+========================================================= */
 
-function closeCamera(){
+function handleProfile_(p) {
 
-  stopCamera();
+  const session =
+    requireSession_(p.sessionToken);
 
-  $('cameraModal')
-    .classList.remove(
-      'show'
+  const user =
+    findUserByUid_(session.uid);
+
+  if (!user) {
+    throw new Error(
+      'Data pengguna tidak ditemukan.'
     );
+  }
 
+  return {
+    ok: true,
+    user: publicUser_(user)
+  };
 }
 
 
-/* =====================================================
-   SUBMIT ATTENDANCE
-===================================================== */
+/* =========================================================
+   HISTORY
+========================================================= */
 
-function submitAttendance(){
+function handleHistory_(p) {
 
-  const photoToSend =
-    String(
-      capturedDataUrl || ''
-    ).trim();
+  const session =
+    requireSession_(p.sessionToken);
 
-  const locationToSend =
-    currentLocation
-      ? {
-          latitude:
-            Number(
-              currentLocation.latitude
-            ),
-          longitude:
-            Number(
-              currentLocation.longitude
-            ),
-          accuracy:
-            Number(
-              currentLocation.accuracy
-            )
-        }
-      : null;
+  const user =
+    findUserByUid_(session.uid);
 
-
-  if(
-    !photoToSend ||
-    !photoToSend.startsWith(
-      'data:image/'
-    )
-  ){
-
-    showToast(
-      'Foto selfie belum siap. Silakan ambil foto terlebih dahulu.'
+  if (!user) {
+    throw new Error(
+      'Data pengguna tidak ditemukan.'
     );
-
-    return;
-
   }
 
+  const ss =
+    getSpreadsheet_();
 
-  if(
-    !locationToSend ||
-    !isFinite(
-      locationToSend.latitude
-    ) ||
-    !isFinite(
-      locationToSend.longitude
-    ) ||
-    !isFinite(
-      locationToSend.accuracy
-    )
-  ){
-
-    showToast(
-      'Lokasi GPS belum siap. Silakan tunggu sampai lokasi tersedia.'
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.ATTENDANCE
     );
 
-    return;
-
+  if (!sheet) {
+    return {
+      ok: true,
+      items: []
+    };
   }
 
+  const values =
+    sheet.getDataRange().getValues();
 
-  if(
-    locationToSend.accuracy <= 0
-  ){
+  if (values.length <= 1) {
+    return {
+      ok: true,
+      items: []
+    };
+  }
 
-    showToast(
-      'Akurasi GPS belum valid. Silakan tunggu sebentar.'
+  const headers =
+    values[0].map(
+      function(v) {
+        return String(v || '').trim();
+      }
     );
 
-    return;
+  const col =
+    buildColumnMap_(headers);
 
-  }
+  const items = [];
 
+  for (
+    let i = values.length - 1;
+    i >= 1 && items.length < 60;
+    i--
+  ) {
 
-  /*
-   * Tutup kamera setelah semua data sudah
-   * disalin ke variabel lokal.
-   */
-  closeCamera();
+    const row =
+      values[i];
 
+    const rowUid =
+      getCell_(row, col, 'UID');
 
-  loading(
-    true,
-    'Menyimpan Absensi',
-    'Mengirim foto, lokasi, dan data absensi...'
-  );
+    const rowEmail =
+      String(
+        getCell_(row, col, 'Email') || ''
+      )
+      .trim()
+      .toLowerCase();
 
+    /*
+     * UID menjadi identitas utama.
+     * Email menjadi fallback untuk data lama sebelum migrasi.
+     */
+    const match =
+      rowUid
+        ? rowUid === user.uid
+        : rowEmail === user.email.toLowerCase();
 
-  request(
+    if (!match) {
+      continue;
+    }
 
-    'attendance',
+    items.push({
 
-    {
+      timestamp:
+        formatDateTime_(
+          getCell_(row, col, 'Timestamp')
+        ),
+
+      date:
+        String(
+          getCell_(row, col, 'Tanggal') || ''
+        ),
+
+      time:
+        String(
+          getCell_(row, col, 'Jam') || ''
+        ),
 
       type:
-        attendanceType,
+        String(
+          getCell_(row, col, 'Jenis') || ''
+        ),
 
-      latitude:
-        locationToSend.latitude,
+      district:
+        String(
+          getCell_(row, col, 'Kecamatan') || ''
+        ),
 
-      longitude:
-        locationToSend.longitude,
+      regency:
+        String(
+          getCell_(row, col, 'Kabupaten') || ''
+        ),
+
+      province:
+        String(
+          getCell_(row, col, 'Provinsi') || ''
+        ),
 
       accuracy:
-        locationToSend.accuracy,
+        getCell_(row, col, 'Akurasi GPS (m)') || '',
 
-      /*
-       * Backend versi baru menerima "photo".
-       * Ini sengaja TIDAK menggunakan photoData
-       * agar nama parameter konsisten.
-       */
-      photo:
-        photoToSend
+      distance:
+        getCell_(row, col, 'Jarak Kantor (m)') === ''
+          ? ''
+          : getCell_(row, col, 'Jarak Kantor (m)'),
 
-    },
+      photoUrl:
+        String(
+          getCell_(row, col, 'Foto URL') || ''
+        ),
 
-    r => {
+      status:
+        String(
+          getCell_(row, col, 'Status') || ''
+        )
+    });
+  }
 
-      loading(false);
-
-
-      if(
-        !r ||
-        !r.ok
-      ){
-
-        showToast(
-          r?.error ||
-          'Absen gagal. Silakan coba lagi.'
-        );
-
-        return;
-
-      }
-
-
-      $('resultTime')
-        .textContent =
-        r.time || '-';
-
-
-      $('resultDate')
-        .textContent =
-        r.date || '-';
-
-
-      $('resultLoc')
-        .textContent =
-
-        r.distance === null ||
-        r.distance === undefined
-
-          ?
-
-          'Staff Lapangan • lokasi tercatat'
-
-          :
-
-          'Jarak dari kantor: ' +
-          r.distance +
-          ' meter';
-
-
-      /*
-       * Gunakan salinan foto yang benar-benar
-       * dikirim ke server.
-       */
-      $('resultPhoto')
-        .src =
-        photoToSend;
-
-
-      $('resultModal')
-        .classList.add(
-          'show'
-        );
-
-
-      /*
-       * Bersihkan foto setelah server
-       * mengonfirmasi absensi berhasil.
-       */
-      capturedDataUrl = '';
-
-
-      refreshAll();
-
-    }
-
-  );
-
+  return {
+    ok: true,
+    items: items
+  };
 }
 
 
-/* =====================================================
-   CLOSE RESULT
-===================================================== */
+/* =========================================================
+   LOCATION
+========================================================= */
 
-function closeResult(){
+function handleLocation_(p) {
 
-  $('resultModal')
-    .classList.remove(
-      'show'
+  requireSession_(p.sessionToken);
+
+  const latitude =
+    Number(p.latitude);
+
+  const longitude =
+    Number(p.longitude);
+
+  if (
+    !isFinite(latitude) ||
+    !isFinite(longitude)
+  ) {
+    throw new Error(
+      'Koordinat lokasi tidak valid.'
+    );
+  }
+
+  const area =
+    reverseGeocodeArea_(
+      latitude,
+      longitude
     );
 
+  return {
+    ok: true,
+    district: area.district,
+    regency: area.regency,
+    province: area.province,
+    display:
+      [
+        area.district,
+        area.regency
+      ]
+      .filter(Boolean)
+      .join(', ')
+  };
 }
 
 
-/* =====================================================
-   NAVIGATION
-===================================================== */
+/* =========================================================
+   ATTENDANCE
+========================================================= */
 
-function showPage(page){
+function handleAttendance_(p) {
 
-  [
-    'home',
-    'history',
-    'profile'
-  ].forEach(
-    p => {
+  const session =
+    requireSession_(p.sessionToken);
 
-      $(p + 'Page')
-        .classList.toggle(
-          'active',
-          p === page
+  const user =
+    findUserByUid_(session.uid);
+
+  if (!user) {
+    throw new Error(
+      'Data pengguna tidak ditemukan.'
+    );
+  }
+
+  const type =
+    String(p.type || '')
+      .trim()
+      .toUpperCase();
+
+  if (
+    type !== 'MASUK' &&
+    type !== 'PULANG'
+  ) {
+    throw new Error(
+      'Jenis absensi tidak valid.'
+    );
+  }
+
+  const latitude =
+    Number(p.latitude);
+
+  const longitude =
+    Number(p.longitude);
+
+  const accuracy =
+    Number(p.accuracy);
+
+  if (
+    !isFinite(latitude) ||
+    !isFinite(longitude)
+  ) {
+    throw new Error(
+      'Lokasi GPS tidak valid.'
+    );
+  }
+
+  if (
+    latitude < -90 ||
+    latitude > 90 ||
+    longitude < -180 ||
+    longitude > 180
+  ) {
+    throw new Error(
+      'Koordinat GPS tidak valid.'
+    );
+  }
+
+  if (
+    !isFinite(accuracy) ||
+    accuracy <= 0
+  ) {
+    throw new Error(
+      'Akurasi GPS tidak valid.'
+    );
+  }
+
+  const role =
+    String(user.role || '')
+      .trim()
+      .toUpperCase();
+
+  let distance = null;
+
+  if (
+    role === APP.ROLE_KANTOR
+  ) {
+
+    const officeLat =
+      Number(
+        getSetting_('OFFICE_LAT')
+      );
+
+    const officeLng =
+      Number(
+        getSetting_('OFFICE_LNG')
+      );
+
+    const officeRadius =
+      Number(
+        getSetting_('OFFICE_RADIUS')
+      );
+
+    if (
+      !isFinite(officeLat) ||
+      !isFinite(officeLng) ||
+      !isFinite(officeRadius) ||
+      officeRadius <= 0
+    ) {
+      throw new Error(
+        'Lokasi kantor belum dikonfigurasi di SETTINGS.'
+      );
+    }
+
+    distance =
+      calculateDistance_(
+        latitude,
+        longitude,
+        officeLat,
+        officeLng
+      );
+
+    if (
+      distance > officeRadius
+    ) {
+      throw new Error(
+        'Anda berada di luar area kantor. Jarak Anda sekitar ' +
+        Math.round(distance) +
+        ' meter dari kantor.'
+      );
+    }
+
+  } else if (
+    role === APP.ROLE_LAPANGAN
+  ) {
+
+    distance = null;
+
+  } else {
+
+    throw new Error(
+      'Role pengguna tidak valid.'
+    );
+  }
+
+
+  /* -------------------------------------------------------
+     FOTO
+  ------------------------------------------------------- */
+
+  const photoData =
+    String(
+      p.photo ||
+      p.photoData ||
+      ''
+    ).trim();
+
+  if (!photoData) {
+    throw new Error(
+      'Foto selfie wajib diambil.'
+    );
+  }
+
+  if (
+    !/^data:image\/[^;]+;base64,/i.test(photoData)
+  ) {
+    throw new Error(
+      'Format foto tidak valid. Foto harus berupa JPEG/PNG base64.'
+    );
+  }
+
+  const photoBytes =
+    base64Bytes_(photoData);
+
+  if (
+    photoBytes > APP.MAX_PHOTO_BYTES
+  ) {
+    throw new Error(
+      'Ukuran foto terlalu besar. Maksimal 700 KB.'
+    );
+  }
+
+
+  /* -------------------------------------------------------
+     WAKTU
+  ------------------------------------------------------- */
+
+  const now =
+    new Date();
+
+  const date =
+    Utilities.formatDate(
+      now,
+      APP.TIMEZONE,
+      'yyyy-MM-dd'
+    );
+
+  const time =
+    Utilities.formatDate(
+      now,
+      APP.TIMEZONE,
+      'HH:mm:ss'
+    );
+
+
+  /* -------------------------------------------------------
+     CEGAH ABSEN GANDA
+  ------------------------------------------------------- */
+
+  const lock =
+    LockService.getScriptLock();
+
+  lock.waitLock(15000);
+
+  try {
+
+    const existing =
+      findTodayAttendance_(
+        user.uid,
+        user.email,
+        date,
+        type
+      );
+
+    if (existing) {
+      throw new Error(
+        'Anda sudah melakukan absensi ' +
+        type.toLowerCase() +
+        ' hari ini pada pukul ' +
+        existing.time +
+        '.'
+      );
+    }
+
+
+    /* -----------------------------------------------------
+       REVERSE GEOCODING
+    ----------------------------------------------------- */
+
+    const area =
+      reverseGeocodeArea_(
+        latitude,
+        longitude
+      );
+
+
+    /* -----------------------------------------------------
+       UPLOAD FOTO
+    ----------------------------------------------------- */
+
+    const photoUrl =
+      savePhoto_(
+        photoData,
+        user,
+        type,
+        now
+      );
+
+
+    /* -----------------------------------------------------
+       SHEET
+    ----------------------------------------------------- */
+
+    const ss =
+      getSpreadsheet_();
+
+    const sheet =
+      ss.getSheetByName(
+        APP.SHEETS.ATTENDANCE
+      );
+
+    if (!sheet) {
+      throw new Error(
+        'Sheet ATTENDANCE belum tersedia.'
+      );
+    }
+
+    ensureAttendanceHeaders_(sheet);
+
+    const headers =
+      sheet.getRange(
+        1,
+        1,
+        1,
+        sheet.getLastColumn()
+      ).getValues()[0];
+
+    const col =
+      buildColumnMap_(headers);
+
+    const row =
+      new Array(
+        sheet.getLastColumn()
+      ).fill('');
+
+    setCell_(
+      row,
+      col,
+      'Timestamp',
+      now
+    );
+
+    setCell_(
+      row,
+      col,
+      'UID',
+      user.uid
+    );
+
+    setCell_(
+      row,
+      col,
+      'Email',
+      user.email
+    );
+
+    setCell_(
+      row,
+      col,
+      'Nama',
+      user.name
+    );
+
+    setCell_(
+      row,
+      col,
+      'NIP',
+      user.nip
+    );
+
+    setCell_(
+      row,
+      col,
+      'Jabatan',
+      user.position
+    );
+
+    setCell_(
+      row,
+      col,
+      'Role',
+      user.role
+    );
+
+    setCell_(
+      row,
+      col,
+      'Tanggal',
+      date
+    );
+
+    setCell_(
+      row,
+      col,
+      'Jam',
+      time
+    );
+
+    setCell_(
+      row,
+      col,
+      'Jenis',
+      type
+    );
+
+    setCell_(
+      row,
+      col,
+      'Latitude',
+      latitude
+    );
+
+    setCell_(
+      row,
+      col,
+      'Longitude',
+      longitude
+    );
+
+    setCell_(
+      row,
+      col,
+      'Akurasi GPS (m)',
+      accuracy
+    );
+
+    setCell_(
+      row,
+      col,
+      'Jarak Kantor (m)',
+      distance === null
+        ? ''
+        : Math.round(distance)
+    );
+
+    setCell_(
+      row,
+      col,
+      'Kecamatan',
+      area.district
+    );
+
+    setCell_(
+      row,
+      col,
+      'Kabupaten',
+      area.regency
+    );
+
+    setCell_(
+      row,
+      col,
+      'Provinsi',
+      area.province
+    );
+
+    setCell_(
+      row,
+      col,
+      'Drive File ID',
+      extractFileId_(photoUrl)
+    );
+
+    setCell_(
+      row,
+      col,
+      'Foto URL',
+      photoUrl
+    );
+
+    setCell_(
+      row,
+      col,
+      'Status',
+      'HADIR'
+    );
+
+    sheet.appendRow(row);
+
+    SpreadsheetApp.flush();
+
+    return {
+      ok: true,
+
+      message:
+        'Absensi ' +
+        type.toLowerCase() +
+        ' berhasil disimpan.',
+
+      timestamp:
+        now.toISOString(),
+
+      time:
+        time,
+
+      date:
+        date,
+
+      type:
+        type,
+
+      distance:
+        distance === null
+          ? null
+          : Math.round(distance),
+
+      district:
+        area.district,
+
+      regency:
+        area.regency,
+
+      province:
+        area.province,
+
+      photoUrl:
+        photoUrl
+    };
+
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+
+/* =========================================================
+   CEK ABSENSI HARI INI
+========================================================= */
+
+function findTodayAttendance_(
+  uid,
+  email,
+  date,
+  type
+) {
+
+  const ss =
+    getSpreadsheet_();
+
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.ATTENDANCE
+    );
+
+  if (!sheet) {
+    return null;
+  }
+
+  const values =
+    sheet.getDataRange().getValues();
+
+  if (values.length <= 1) {
+    return null;
+  }
+
+  const headers =
+    values[0].map(
+      function(v) {
+        return String(v || '').trim();
+      }
+    );
+
+  const col =
+    buildColumnMap_(headers);
+
+  for (
+    let i = values.length - 1;
+    i >= 1;
+    i--
+  ) {
+
+    const row =
+      values[i];
+
+    const rowUid =
+      String(
+        getCell_(row, col, 'UID') || ''
+      ).trim();
+
+    const rowEmail =
+      String(
+        getCell_(row, col, 'Email') || ''
+      )
+      .trim()
+      .toLowerCase();
+
+    const rowDate =
+      String(
+        getCell_(row, col, 'Tanggal') || ''
+      ).trim();
+
+    const rowType =
+      String(
+        getCell_(row, col, 'Jenis') || ''
+      )
+      .trim()
+      .toUpperCase();
+
+    const identityMatch =
+      rowUid
+        ? rowUid === uid
+        : rowEmail === String(email || '')
+            .trim()
+            .toLowerCase();
+
+    if (
+      identityMatch &&
+      rowDate === date &&
+      rowType === type
+    ) {
+
+      return {
+        time:
+          String(
+            getCell_(row, col, 'Jam') || ''
+          )
+      };
+    }
+  }
+
+  return null;
+}
+
+
+/* =========================================================
+   SAVE PHOTO
+========================================================= */
+
+function savePhoto_(
+  dataUrl,
+  user,
+  type,
+  now
+) {
+
+  const folderId =
+    getSetting_('DRIVE_FOLDER_ID');
+
+  if (!folderId) {
+    throw new Error(
+      'DRIVE_FOLDER_ID belum diisi.'
+    );
+  }
+
+  const rootFolder =
+    DriveApp.getFolderById(folderId);
+
+  const year =
+    Utilities.formatDate(
+      now,
+      APP.TIMEZONE,
+      'yyyy'
+    );
+
+  const month =
+    Utilities.formatDate(
+      now,
+      APP.TIMEZONE,
+      'MM'
+    );
+
+  const date =
+    Utilities.formatDate(
+      now,
+      APP.TIMEZONE,
+      'yyyy-MM-dd'
+    );
+
+  const yearFolder =
+    getOrCreateFolder_(
+      rootFolder,
+      year
+    );
+
+  const monthFolder =
+    getOrCreateFolder_(
+      yearFolder,
+      month
+    );
+
+  const dateFolder =
+    getOrCreateFolder_(
+      monthFolder,
+      date
+    );
+
+  const typeFolder =
+    getOrCreateFolder_(
+      dateFolder,
+      type
+    );
+
+  const parts =
+    dataUrl.split(',');
+
+  if (parts.length !== 2) {
+    throw new Error(
+      'Data foto tidak valid.'
+    );
+  }
+
+  const mimeMatch =
+    parts[0].match(
+      /data:(image\/[a-zA-Z0-9.+-]+);base64/
+    );
+
+  const mimeType =
+    mimeMatch
+      ? mimeMatch[1]
+      : 'image/jpeg';
+
+  const base64 =
+    String(parts[1] || '')
+      .replace(/\s/g, '');
+
+  if (!base64) {
+    throw new Error(
+      'Data foto kosong.'
+    );
+  }
+
+  let bytes;
+
+  try {
+
+    bytes =
+      Utilities.base64Decode(
+        base64
+      );
+
+  } catch (err) {
+
+    throw new Error(
+      'Data foto tidak dapat didekode.'
+    );
+  }
+
+  const safeUid =
+    String(
+      user.uid || user.email
+    )
+    .replace(
+      /[^a-zA-Z0-9._-]/g,
+      '_'
+    );
+
+  const timestamp =
+    Utilities.formatDate(
+      now,
+      APP.TIMEZONE,
+      'yyyyMMdd_HHmmss'
+    );
+
+  const filename =
+    safeUid +
+    '_' +
+    type +
+    '_' +
+    timestamp +
+    '.jpg';
+
+  const blob =
+    Utilities.newBlob(
+      bytes,
+      mimeType,
+      filename
+    );
+
+  const file =
+    typeFolder.createFile(blob);
+
+  return file.getUrl();
+}
+
+
+function getOrCreateFolder_(
+  parent,
+  name
+) {
+
+  const folders =
+    parent.getFoldersByName(name);
+
+  if (folders.hasNext()) {
+    return folders.next();
+  }
+
+  return parent.createFolder(name);
+}
+
+
+/* =========================================================
+   REVERSE GEOCODING
+========================================================= */
+
+function reverseGeocodeArea_(
+  latitude,
+  longitude
+) {
+
+  const empty = {
+    district: '',
+    regency: '',
+    province: ''
+  };
+
+  try {
+
+    const result =
+      Maps.newGeocoder()
+        .setLanguage('id')
+        .reverseGeocode(
+          latitude,
+          longitude
         );
 
+    if (
+      !result ||
+      !result.results ||
+      !result.results.length
+    ) {
+      return empty;
     }
-  );
 
+    /*
+     * Cari komponen administrasi dari seluruh hasil.
+     * Di Indonesia umumnya:
+     * level_3 = Kecamatan
+     * level_2 = Kabupaten/Kota
+     * level_1 = Provinsi
+     */
+    let district = '';
+    let regency = '';
+    let province = '';
 
-  [
-    'Home',
-    'History',
-    'Profile'
-  ].forEach(
-    p => {
+    for (
+      let r = 0;
+      r < result.results.length;
+      r++
+    ) {
 
-      $('nav' + p)
-        .classList.toggle(
-          'active',
-          p.toLowerCase() === page
-        );
+      const components =
+        result.results[r]
+          .address_components || [];
 
-    }
-  );
+      for (
+        let i = 0;
+        i < components.length;
+        i++
+      ) {
 
+        const component =
+          components[i];
 
-  if(
-    page === 'history'
-  ){
+        const types =
+          component.types || [];
 
-    request(
-      'history',
-      {limit:60},
-      r => {
-
-        if(r.ok){
-
-          renderHistory(
-            r.items || []
-          );
-
+        if (
+          !district &&
+          types.indexOf(
+            'administrative_area_level_3'
+          ) !== -1
+        ) {
+          district =
+            component.long_name;
         }
 
+        if (
+          !regency &&
+          types.indexOf(
+            'administrative_area_level_2'
+          ) !== -1
+        ) {
+          regency =
+            component.long_name;
+        }
+
+        if (
+          !province &&
+          types.indexOf(
+            'administrative_area_level_1'
+          ) !== -1
+        ) {
+          province =
+            component.long_name;
+        }
+      }
+    }
+
+    /*
+     * Fallback: jika level_3 tidak ada,
+     * gunakan sublocality/locality agar tetap ada
+     * area yang bisa ditampilkan.
+     */
+    if (!district) {
+
+      for (
+        let r = 0;
+        r < result.results.length;
+        r++
+      ) {
+
+        const components =
+          result.results[r]
+            .address_components || [];
+
+        for (
+          let i = 0;
+          i < components.length;
+          i++
+        ) {
+
+          const component =
+            components[i];
+
+          const types =
+            component.types || [];
+
+          if (
+            types.indexOf(
+              'sublocality_level_1'
+            ) !== -1
+          ) {
+            district =
+              component.long_name;
+            break;
+          }
+        }
+
+        if (district) break;
+      }
+    }
+
+    return {
+      district:
+        cleanAreaName_(
+          district
+        ),
+
+      regency:
+        cleanAreaName_(
+          regency
+        ),
+
+      province:
+        cleanAreaName_(
+          province
+        )
+    };
+
+  } catch (err) {
+
+    console.log(
+      'REVERSE GEOCODE ERROR: ' +
+      err.message
+    );
+
+    return empty;
+  }
+}
+
+
+function cleanAreaName_(value) {
+
+  return String(value || '')
+    .trim()
+    .replace(
+      /^(Kecamatan|Kec\.|Kabupaten|Kab\.|Kota)\s+/i,
+      ''
+    )
+    .trim();
+}
+
+
+/* =========================================================
+   USER / FIREBASE UID
+========================================================= */
+
+function findUserByUid_(uid) {
+
+  uid =
+    String(uid || '').trim();
+
+  if (!uid) {
+    return null;
+  }
+
+  const ss =
+    getSpreadsheet_();
+
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.USERS
+    );
+
+  if (!sheet) {
+    return null;
+  }
+
+  const values =
+    sheet.getDataRange().getValues();
+
+  if (values.length <= 1) {
+    return null;
+  }
+
+  const headers =
+    values[0].map(
+      function(v) {
+        return String(v || '').trim();
       }
     );
 
-  }
+  const col =
+    buildColumnMap_(headers);
 
-}
+  for (
+    let i = 1;
+    i < values.length;
+    i++
+  ) {
 
+    const row =
+      values[i];
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+    const rowUid =
+      String(
+        getCell_(row, col, 'UID') || ''
+      ).trim();
 
-function logout(){
-
-  localStorage.removeItem(
-    'absen_session'
-  );
-
-
-  sessionToken =
-    '';
-
-  currentUser =
-    null;
-
-
-  location.reload();
-
-}
-
-
-/* =====================================================
-   INITIALIZATION
-===================================================== */
-
-window.addEventListener(
-  'load',
-  () => {
-
-    if(sessionToken){
-
-      loading(
-        true,
-        'Memuat Absensi',
-        'Memeriksa sesi login Anda...'
+    if (
+      rowUid &&
+      rowUid === uid
+    ) {
+      return userFromRow_(
+        row,
+        col
       );
-
-
-      showApp();
-
-
-      setTimeout(
-        () => {
-
-          refreshAll();
-
-          loading(false);
-
-        },
-        500
-      );
-
-    }else{
-
-      initGoogle();
-
     }
-
   }
-);
+
+  return null;
+}
 
 
-/* =====================================================
-   RESIZE GOOGLE BUTTON
-===================================================== */
+function findUserByEmail_(email) {
 
-let resizeTimer = null;
+  const target =
+    String(email || '')
+      .trim()
+      .toLowerCase();
 
-window.addEventListener(
-  'resize',
-  () => {
+  if (!target) {
+    return null;
+  }
 
-    clearTimeout(
-      resizeTimer
+  const ss =
+    getSpreadsheet_();
+
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.USERS
     );
 
+  if (!sheet) {
+    return null;
+  }
 
-    resizeTimer =
-      setTimeout(
-        () => {
+  const values =
+    sheet.getDataRange().getValues();
 
-          if(
-            loginProcessing
-          ){
+  if (values.length <= 1) {
+    return null;
+  }
 
-            return;
+  const headers =
+    values[0].map(
+      function(v) {
+        return String(v || '').trim();
+      }
+    );
 
-          }
+  const col =
+    buildColumnMap_(headers);
+
+  for (
+    let i = 1;
+    i < values.length;
+    i++
+  ) {
+
+    const row =
+      values[i];
+
+    const rowEmail =
+      String(
+        getCell_(row, col, 'Email') || ''
+      )
+      .trim()
+      .toLowerCase();
+
+    if (
+      rowEmail === target
+    ) {
+
+      return userFromRow_(
+        row,
+        col
+      );
+    }
+  }
+
+  return null;
+}
 
 
-          if(
-            $('appView').style.display !==
-            'none'
-          ){
+function updateUserUidByEmail_(
+  email,
+  uid
+) {
 
-            return;
+  const ss =
+    getSpreadsheet_();
 
-          }
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.USERS
+    );
+
+  if (!sheet) {
+    throw new Error(
+      'Sheet USERS belum tersedia.'
+    );
+  }
+
+  const values =
+    sheet.getDataRange().getValues();
+
+  if (values.length <= 1) {
+    throw new Error(
+      'Data USERS belum tersedia.'
+    );
+  }
+
+  const headers =
+    values[0].map(
+      function(v) {
+        return String(v || '').trim();
+      }
+    );
+
+  const col =
+    buildColumnMap_(headers);
+
+  const target =
+    String(email || '')
+      .trim()
+      .toLowerCase();
+
+  if (
+    col['UID'] === undefined ||
+    col['Email'] === undefined
+  ) {
+    throw new Error(
+      'Kolom UID dan Email belum tersedia di USERS.'
+    );
+  }
+
+  for (
+    let i = 1;
+    i < values.length;
+    i++
+  ) {
+
+    const row =
+      values[i];
+
+    const rowEmail =
+      String(
+        row[col['Email']] || ''
+      )
+      .trim()
+      .toLowerCase();
+
+    if (
+      rowEmail === target
+    ) {
+
+      const rowUid =
+        String(
+          row[col['UID']] || ''
+        ).trim();
+
+      if (
+        rowUid &&
+        rowUid !== uid
+      ) {
+        throw new Error(
+          'UID Firebase pada data pegawai sudah terisi dengan UID berbeda.'
+        );
+      }
+
+      sheet
+        .getRange(
+          i + 1,
+          col['UID'] + 1
+        )
+        .setValue(uid);
+
+      return true;
+    }
+  }
+
+  return false;
+}
 
 
-          if(
-            window.google?.accounts?.id
-          ){
+function userFromRow_(
+  row,
+  col
+) {
 
-            try{
+  return {
 
-              const width =
-                Math.min(
-                  360,
-                  Math.max(
-                    220,
-                    window.innerWidth - 70
-                  )
-                );
+    uid:
+      String(
+        getCell_(row, col, 'UID') || ''
+      ).trim(),
+
+    email:
+      String(
+        getCell_(row, col, 'Email') || ''
+      )
+      .trim()
+      .toLowerCase(),
+
+    name:
+      String(
+        getCell_(row, col, 'Nama') || ''
+      ).trim(),
+
+    nip:
+      String(
+        getCell_(row, col, 'NIP') || ''
+      ).trim(),
+
+    position:
+      String(
+        getCell_(row, col, 'Jabatan') || ''
+      ).trim(),
+
+    role:
+      String(
+        getCell_(row, col, 'Role') || ''
+      )
+      .trim()
+      .toUpperCase(),
+
+    photo:
+      String(
+        getCell_(row, col, 'Foto') || ''
+      ).trim(),
+
+    status:
+      String(
+        getCell_(row, col, 'Status') || ''
+      ).trim()
+  };
+}
 
 
-              $('googleButton')
-                .innerHTML =
-                '';
+function publicUser_(user) {
+
+  return {
+
+    uid:
+      user.uid,
+
+    email:
+      user.email,
+
+    name:
+      user.name,
+
+    nip:
+      user.nip,
+
+    position:
+      user.position,
+
+    role:
+      user.role,
+
+    photo:
+      user.photo,
+
+    status:
+      user.status
+  };
+}
 
 
-              google.accounts.id.renderButton(
+/* =========================================================
+   SESSION
+========================================================= */
 
-                $('googleButton'),
+function requireSession_(
+  token
+) {
 
-                {
+  token =
+    String(token || '').trim();
 
-                  theme:'outline',
+  if (!token) {
+    throw new Error(
+      'Session tidak ditemukan. Silakan login kembali.'
+    );
+  }
 
-                  size:'large',
-
-                  shape:'pill',
-
-                  text:'signin_with',
-
-                  width:width
-
-                }
-
-              );
-
-            }catch(e){
-
-              console.log(
-                'Resize Google button:',
-                e
-              );
-
-            }
-
-          }
-
-        },
-        250
+  const raw =
+    CacheService
+      .getScriptCache()
+      .get(
+        'SESSION_' + token
       );
 
+  if (!raw) {
+    throw new Error(
+      'Session sudah berakhir. Silakan login kembali.'
+    );
   }
-);
 
-</script>
+  let session;
 
-</body>
-</html>
+  try {
+    session =
+      JSON.parse(raw);
+  } catch (err) {
+    throw new Error(
+      'Session tidak valid.'
+    );
+  }
+
+  if (
+    !session.uid
+  ) {
+    throw new Error(
+      'Session tidak valid.'
+    );
+  }
+
+  return session;
+}
+
+
+/* =========================================================
+   REQUEST STORAGE
+========================================================= */
+
+function putRequest_(
+  requestId,
+  data
+) {
+
+  requestId =
+    String(requestId || '').trim();
+
+  if (!requestId) return;
+
+  const payload =
+    JSON.stringify(data);
+
+  try {
+
+    CacheService
+      .getScriptCache()
+      .put(
+        'REQUEST_' + requestId,
+        payload,
+        APP.REQUEST_TTL
+      );
+
+  } catch (err) {}
+
+
+  try {
+
+    const ss =
+      getSpreadsheet_();
+
+    let sheet =
+      ss.getSheetByName(
+        APP.SHEETS.REQUESTS
+      );
+
+    if (!sheet) {
+      sheet =
+        createRequestsSheet_(ss);
+    }
+
+    const lock =
+      LockService.getScriptLock();
+
+    lock.waitLock(10000);
+
+    try {
+
+      let rowNumber =
+        getRequestRow_(requestId);
+
+      const now =
+        new Date();
+
+      if (!rowNumber) {
+
+        sheet.appendRow([
+          requestId,
+          String(data.state || ''),
+          now,
+          now,
+          payload
+        ]);
+
+        rowNumber =
+          sheet.getLastRow();
+
+        PropertiesService
+          .getScriptProperties()
+          .setProperty(
+            'REQROW_' + requestId,
+            String(rowNumber)
+          );
+
+      } else {
+
+        sheet
+          .getRange(
+            rowNumber,
+            2,
+            1,
+            4
+          )
+          .setValues([[
+            String(data.state || ''),
+            sheet.getRange(
+              rowNumber,
+              3
+            ).getValue(),
+            now,
+            payload
+          ]]);
+      }
+
+    } finally {
+      lock.releaseLock();
+    }
+
+  } catch (err) {
+
+    console.log(
+      'REQUEST STORE ERROR: ' +
+      err.message
+    );
+  }
+}
+
+
+function getRequest_(
+  requestId
+) {
+
+  requestId =
+    String(requestId || '').trim();
+
+  if (!requestId) {
+    return null;
+  }
+
+  try {
+
+    const cached =
+      CacheService
+        .getScriptCache()
+        .get(
+          'REQUEST_' + requestId
+        );
+
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+  } catch (err) {}
+
+
+  try {
+
+    const ss =
+      getSpreadsheet_();
+
+    const sheet =
+      ss.getSheetByName(
+        APP.SHEETS.REQUESTS
+      );
+
+    if (!sheet) {
+      return null;
+    }
+
+    const rowNumber =
+      getRequestRow_(requestId);
+
+    if (!rowNumber) {
+      return null;
+    }
+
+    const resultJson =
+      sheet
+        .getRange(
+          rowNumber,
+          5
+        )
+        .getValue();
+
+    if (!resultJson) {
+      return null;
+    }
+
+    const result =
+      JSON.parse(
+        String(resultJson)
+      );
+
+    try {
+      CacheService
+        .getScriptCache()
+        .put(
+          'REQUEST_' + requestId,
+          JSON.stringify(result),
+          APP.REQUEST_TTL
+        );
+    } catch (err) {}
+
+    return result;
+
+  } catch (err) {
+
+    return null;
+  }
+}
+
+
+function getRequestRow_(
+  requestId
+) {
+
+  const propertyKey =
+    'REQROW_' + requestId;
+
+  const props =
+    PropertiesService
+      .getScriptProperties();
+
+  const saved =
+    props.getProperty(
+      propertyKey
+    );
+
+  if (saved) {
+
+    const row =
+      Number(saved);
+
+    if (
+      isFinite(row) &&
+      row > 1
+    ) {
+      return row;
+    }
+  }
+
+  const ss =
+    getSpreadsheet_();
+
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.REQUESTS
+    );
+
+  if (!sheet) {
+    return null;
+  }
+
+  const lastRow =
+    sheet.getLastRow();
+
+  if (lastRow <= 1) {
+    return null;
+  }
+
+  const firstRow =
+    Math.max(
+      2,
+      lastRow - 4999
+    );
+
+  const count =
+    lastRow - firstRow + 1;
+
+  const ids =
+    sheet
+      .getRange(
+        firstRow,
+        1,
+        count,
+        1
+      )
+      .getValues();
+
+  for (
+    let i = ids.length - 1;
+    i >= 0;
+    i--
+  ) {
+
+    if (
+      String(ids[i][0] || '').trim() ===
+      requestId
+    ) {
+
+      const row =
+        firstRow + i;
+
+      props.setProperty(
+        propertyKey,
+        String(row)
+      );
+
+      return row;
+    }
+  }
+
+  return null;
+}
+
+
+/* =========================================================
+   CREATE REQUEST SHEET
+========================================================= */
+
+function createRequestsSheet_(
+  ss
+) {
+
+  let sheet =
+    ss.getSheetByName(
+      APP.SHEETS.REQUESTS
+    );
+
+  if (sheet) {
+    return sheet;
+  }
+
+  sheet =
+    ss.insertSheet(
+      APP.SHEETS.REQUESTS
+    );
+
+  sheet.appendRow([
+    'Request ID',
+    'State',
+    'Created',
+    'Updated',
+    'Result JSON'
+  ]);
+
+  sheet
+    .getRange(
+      1,
+      1,
+      1,
+      5
+    )
+    .setFontWeight('bold');
+
+  sheet.setFrozenRows(1);
+
+  return sheet;
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function getSetting_(
+  key
+) {
+
+  const ss =
+    getSpreadsheet_();
+
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.SETTINGS
+    );
+
+  if (!sheet) {
+    throw new Error(
+      'Sheet SETTINGS belum tersedia.'
+    );
+  }
+
+  const values =
+    sheet.getDataRange().getValues();
+
+  for (
+    let i = 0;
+    i < values.length;
+    i++
+  ) {
+
+    const row =
+      values[i];
+
+    const settingKey =
+      String(
+        row[0] || ''
+      )
+      .trim()
+      .toUpperCase();
+
+    if (
+      settingKey ===
+      String(key)
+        .trim()
+        .toUpperCase()
+    ) {
+
+      return String(
+        row[1] || ''
+      ).trim();
+    }
+  }
+
+  return '';
+}
+
+
+/* =========================================================
+   SPREADSHEET
+========================================================= */
+
+function getSpreadsheet_() {
+
+  const id =
+    getSpreadsheetId_();
+
+  if (!id) {
+    throw new Error(
+      'SPREADSHEET_ID belum dikonfigurasi.'
+    );
+  }
+
+  return SpreadsheetApp
+    .openById(id);
+}
+
+
+function getSpreadsheetId_() {
+
+  const props =
+    PropertiesService
+      .getScriptProperties();
+
+  const scriptId =
+    props.getProperty(
+      'SPREADSHEET_ID'
+    );
+
+  if (scriptId) {
+    return scriptId;
+  }
+
+  throw new Error(
+    'SPREADSHEET_ID belum dikonfigurasi. ' +
+    'Set Script Property SPREADSHEET_ID.'
+  );
+}
+
+
+function setSpreadsheetId(
+  spreadsheetId
+) {
+
+  spreadsheetId =
+    String(
+      spreadsheetId || ''
+    ).trim();
+
+  if (!spreadsheetId) {
+    throw new Error(
+      'Spreadsheet ID kosong.'
+    );
+  }
+
+  PropertiesService
+    .getScriptProperties()
+    .setProperty(
+      'SPREADSHEET_ID',
+      spreadsheetId
+    );
+
+  return 'SPREADSHEET_ID berhasil disimpan.';
+}
+
+
+function testSpreadsheet() {
+
+  const ss =
+    getSpreadsheet_();
+
+  Logger.log(
+    'Spreadsheet: ' +
+    ss.getName()
+  );
+
+  Logger.log(
+    'ID: ' +
+    ss.getId()
+  );
+}
+
+
+/* =========================================================
+   SETUP SHEETS
+========================================================= */
+
+function setupSheets() {
+
+  const ss =
+    getSpreadsheet_();
+
+
+  /* SETTINGS */
+
+  let settings =
+    ss.getSheetByName(
+      APP.SHEETS.SETTINGS
+    );
+
+  if (!settings) {
+
+    settings =
+      ss.insertSheet(
+        APP.SHEETS.SETTINGS
+      );
+
+    settings.appendRow([
+      'KEY',
+      'VALUE'
+    ]);
+  }
+
+
+  /* USERS */
+
+  let users =
+    ss.getSheetByName(
+      APP.SHEETS.USERS
+    );
+
+  if (!users) {
+
+    users =
+      ss.insertSheet(
+        APP.SHEETS.USERS
+      );
+
+    users.appendRow([
+      'UID',
+      'Email',
+      'Nama',
+      'NIP',
+      'Jabatan',
+      'Role',
+      'Foto',
+      'Status'
+    ]);
+
+  } else {
+
+    ensureUsersHeaders_(users);
+  }
+
+
+  /* ATTENDANCE */
+
+  let attendance =
+    ss.getSheetByName(
+      APP.SHEETS.ATTENDANCE
+    );
+
+  if (!attendance) {
+
+    attendance =
+      ss.insertSheet(
+        APP.SHEETS.ATTENDANCE
+      );
+
+    attendance.appendRow([
+      'Timestamp',
+      'UID',
+      'Email',
+      'Nama',
+      'NIP',
+      'Jabatan',
+      'Role',
+      'Tanggal',
+      'Jam',
+      'Jenis',
+      'Latitude',
+      'Longitude',
+      'Akurasi GPS (m)',
+      'Jarak Kantor (m)',
+      'Kecamatan',
+      'Kabupaten',
+      'Provinsi',
+      'Drive File ID',
+      'Foto URL',
+      'Status'
+    ]);
+
+  } else {
+
+    ensureAttendanceHeaders_(attendance);
+  }
+
+
+  /* REQUESTS */
+
+  createRequestsSheet_(ss);
+
+
+  [
+    settings,
+    users,
+    attendance,
+    ss.getSheetByName(
+      APP.SHEETS.REQUESTS
+    )
+  ].forEach(
+    function(sheet) {
+
+      if (!sheet) return;
+
+      sheet
+        .getRange(
+          1,
+          1,
+          1,
+          sheet.getLastColumn()
+        )
+        .setFontWeight('bold');
+
+      sheet.setFrozenRows(1);
+    }
+  );
+
+  return 'Setup selesai.';
+}
+
+
+/*
+ * Menambahkan UID ke USERS jika sheet lama masih memakai
+ * format Email, Nama, NIP, Jabatan, Role, Foto, Status.
+ * Kolom lama tidak dihapus.
+ */
+function ensureUsersHeaders_(
+  sheet
+) {
+
+  const lastColumn =
+    sheet.getLastColumn();
+
+  if (!lastColumn) return;
+
+  const headers =
+    sheet.getRange(
+      1,
+      1,
+      1,
+      lastColumn
+    )
+    .getValues()[0]
+    .map(
+      function(v) {
+        return String(v || '').trim();
+      }
+    );
+
+  const map =
+    buildColumnMap_(headers);
+
+  if (
+    map['UID'] === undefined
+  ) {
+
+    sheet.insertColumnBefore(1);
+
+    sheet
+      .getRange(1, 1)
+      .setValue('UID');
+  }
+}
+
+
+/*
+ * Menambahkan kolom baru ke ATTENDANCE tanpa menghapus
+ * data lama. Data lama tetap bisa dibaca berdasarkan Email.
+ */
+function ensureAttendanceHeaders_(
+  sheet
+) {
+
+  const desired = [
+    'Timestamp',
+    'UID',
+    'Email',
+    'Nama',
+    'NIP',
+    'Jabatan',
+    'Role',
+    'Tanggal',
+    'Jam',
+    'Jenis',
+    'Latitude',
+    'Longitude',
+    'Akurasi GPS (m)',
+    'Jarak Kantor (m)',
+    'Kecamatan',
+    'Kabupaten',
+    'Provinsi',
+    'Drive File ID',
+    'Foto URL',
+    'Status'
+  ];
+
+  const lastColumn =
+    sheet.getLastColumn();
+
+  if (!lastColumn) {
+    sheet
+      .getRange(
+        1,
+        1,
+        1,
+        desired.length
+      )
+      .setValues([desired]);
+    return;
+  }
+
+  const headers =
+    sheet.getRange(
+      1,
+      1,
+      1,
+      lastColumn
+    )
+    .getValues()[0]
+    .map(
+      function(v) {
+        return String(v || '').trim();
+      }
+    );
+
+  /*
+   * Jika sheet lama, tambahkan kolom yang belum ada
+   * di bagian kanan. Ini menjaga data lama tetap utuh.
+   */
+  desired.forEach(
+    function(header) {
+
+      const exists =
+        headers.some(
+          function(h) {
+            return h === header;
+          }
+        );
+
+      if (!exists) {
+
+        sheet.insertColumnAfter(
+          sheet.getLastColumn()
+        );
+
+        sheet
+          .getRange(
+            1,
+            sheet.getLastColumn()
+          )
+          .setValue(header);
+
+        headers.push(header);
+      }
+    }
+  );
+}
+
+
+/* =========================================================
+   COLUMN HELPERS
+========================================================= */
+
+function buildColumnMap_(
+  headers
+) {
+
+  const map = {};
+
+  headers.forEach(
+    function(header, index) {
+
+      const key =
+        String(header || '').trim();
+
+      if (key) {
+        map[key] = index;
+      }
+    }
+  );
+
+  return map;
+}
+
+
+function getCell_(
+  row,
+  col,
+  header
+) {
+
+  if (
+    col[header] === undefined
+  ) {
+    return '';
+  }
+
+  return row[col[header]];
+}
+
+
+function setCell_(
+  row,
+  col,
+  header,
+  value
+) {
+
+  if (
+    col[header] === undefined
+  ) {
+    return;
+  }
+
+  row[col[header]] =
+    value;
+}
+
+
+/* =========================================================
+   JARAK
+========================================================= */
+
+function calculateDistance_(
+  lat1,
+  lon1,
+  lat2,
+  lon2
+) {
+
+  const R = 6371000;
+
+  const dLat =
+    toRadians_(
+      lat2 - lat1
+    );
+
+  const dLon =
+    toRadians_(
+      lon2 - lon1
+    );
+
+  const a =
+    Math.sin(dLat / 2) *
+    Math.sin(dLat / 2) +
+
+    Math.cos(
+      toRadians_(lat1)
+    ) *
+
+    Math.cos(
+      toRadians_(lat2)
+    ) *
+
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+
+  const c =
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+  return R * c;
+}
+
+
+function toRadians_(
+  degrees
+) {
+
+  return degrees *
+    Math.PI /
+    180;
+}
+
+
+/* =========================================================
+   PHOTO SIZE
+========================================================= */
+
+function base64Bytes_(
+  dataUrl
+) {
+
+  const parts =
+    String(dataUrl || '')
+      .split(',');
+
+  if (parts.length !== 2) {
+    return 0;
+  }
+
+  const base64 =
+    String(parts[1] || '')
+      .replace(/\s/g, '');
+
+  if (!base64) {
+    return 0;
+  }
+
+  const padding =
+    base64.endsWith('==')
+      ? 2
+      : base64.endsWith('=')
+        ? 1
+        : 0;
+
+  return Math.max(
+    0,
+    Math.floor(
+      (base64.length * 3) / 4
+    ) - padding
+  );
+}
+
+
+/* =========================================================
+   FILE ID
+========================================================= */
+
+function extractFileId_(
+  url
+) {
+
+  const match =
+    String(url || '')
+      .match(
+        /[-\w]{25,}/
+      );
+
+  return match
+    ? match[0]
+    : '';
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function formatDateTime_(
+  value
+) {
+
+  if (!value) {
+    return '';
+  }
+
+  try {
+
+    const date =
+      value instanceof Date
+        ? value
+        : new Date(value);
+
+    return Utilities.formatDate(
+      date,
+      APP.TIMEZONE,
+      'yyyy-MM-dd HH:mm:ss'
+    );
+
+  } catch (err) {
+
+    return String(value);
+  }
+}
+
+
+function nowString_() {
+
+  return Utilities.formatDate(
+    new Date(),
+    APP.TIMEZONE,
+    'yyyy-MM-dd HH:mm:ss'
+  );
+}
+
+
+/* =========================================================
+   REQUEST ID
+========================================================= */
+
+function makeId_() {
+
+  return Utilities
+    .getUuid()
+    .replace(
+      /-/g,
+      ''
+    );
+}
+
+
+/* =========================================================
+   JSON RESPONSE
+========================================================= */
+
+function jsonResponse_(
+  data
+) {
+
+  return ContentService
+    .createTextOutput(
+      JSON.stringify(data)
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
+    );
+}
+
+
+/* =========================================================
+   JSONP
+========================================================= */
+
+function jsonp_(
+  data,
+  callback
+) {
+
+  callback =
+    sanitizeCallback_(
+      callback
+    );
+
+  if (!callback) {
+    return jsonResponse_(data);
+  }
+
+  return ContentService
+    .createTextOutput(
+      callback +
+      '(' +
+      JSON.stringify(data) +
+      ');'
+    )
+    .setMimeType(
+      ContentService.MimeType.JAVASCRIPT
+    );
+}
+
+
+function sanitizeCallback_(
+  callback
+) {
+
+  callback =
+    String(
+      callback || ''
+    ).trim();
+
+  if (!callback) {
+    return '';
+  }
+
+  if (
+    !/^[A-Za-z_$][A-Za-z0-9_$]*$/
+      .test(callback)
+  ) {
+    return '';
+  }
+
+  return callback;
+}
+
+
+/* =========================================================
+   TEXT RESPONSE
+========================================================= */
+
+function textResponse_(
+  text
+) {
+
+  return ContentService
+    .createTextOutput(
+      String(text || 'OK')
+    )
+    .setMimeType(
+      ContentService.MimeType.TEXT
+    );
+}
+
+
+/* =========================================================
+   OPTIONAL: SETUP DEFAULT SETTINGS
+========================================================= */
+
+/*
+ * Jalankan sekali setelah mengisi spreadsheet ID:
+ *
+ * 1. setSpreadsheetId('ID_GOOGLE_SHEET')
+ * 2. setupSheets()
+ * 3. Isi SETTINGS:
+ *
+ * FIREBASE_WEB_API_KEY
+ * DRIVE_FOLDER_ID
+ * OFFICE_LAT
+ * OFFICE_LNG
+ * OFFICE_RADIUS
+ *
+ * Catatan:
+ * - FIREBASE_WEB_API_KEY adalah Web API Key Firebase,
+ *   bukan service-account private key.
+ * - Jangan memasukkan Firebase private key/service account
+ *   ke HTML.
+ */
+function setupDefaultSettingsExample() {
+
+  const ss =
+    getSpreadsheet_();
+
+  const sheet =
+    ss.getSheetByName(
+      APP.SHEETS.SETTINGS
+    );
+
+  if (!sheet) {
+    throw new Error(
+      'Jalankan setupSheets() terlebih dahulu.'
+    );
+  }
+
+  const existing =
+    sheet.getDataRange().getValues();
+
+  const keys = {};
+
+  existing.forEach(
+    function(row, index) {
+
+      if (index === 0) return;
+
+      const key =
+        String(row[0] || '')
+          .trim()
+          .toUpperCase();
+
+      if (key) {
+        keys[key] = true;
+      }
+    }
+  );
+
+  const defaults = [
+    ['FIREBASE_WEB_API_KEY', 'PASTE_FIREBASE_WEB_API_KEY'],
+    ['DRIVE_FOLDER_ID', 'PASTE_DRIVE_FOLDER_ID'],
+    ['OFFICE_LAT', 'PASTE_OFFICE_LAT'],
+    ['OFFICE_LNG', 'PASTE_OFFICE_LNG'],
+    ['OFFICE_RADIUS', '100']
+  ];
+
+  defaults.forEach(
+    function(item) {
+
+      if (!keys[item[0]]) {
+        sheet.appendRow(item);
+      }
+    }
+  );
+
+  return 'Template SETTINGS berhasil dibuat.';
+}
