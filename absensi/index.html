@@ -32,7 +32,8 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
   width:100%;
   min-height:100%;
   margin:0;
@@ -53,7 +54,8 @@ body{
   overflow-x:hidden;
 }
 
-button,input{
+button,
+input{
   font:inherit;
 }
 
@@ -63,27 +65,55 @@ button{
   touch-action:manipulation;
 }
 
-/* =========================
+/* =====================================================
    APP
-========================= */
+===================================================== */
 
 .app{
   min-height:100vh;
   min-height:100dvh;
 }
 
-/* =========================
+/* =====================================================
    HEADER
-========================= */
+===================================================== */
 
 .top{
-  background:linear-gradient(145deg,#1b7af0,#1263d7);
-  color:#fff;
+  position:relative;
+  overflow:hidden;
   padding:
-    calc(22px + env(safe-area-inset-top))
-    16px
-    76px;
-  border-radius:0 0 30px 30px;
+    calc(26px + env(safe-area-inset-top))
+    22px
+    78px;
+  border-radius:0 0 34px 34px;
+  background:linear-gradient(145deg,#2184f4,#1262d7);
+  color:#fff;
+}
+
+.top::before,
+.top::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.top::before{
+  width:430px;
+  height:150px;
+  left:-120px;
+  bottom:-100px;
+  background:rgba(255,255,255,.18);
+  transform:rotate(12deg);
+}
+
+.top::after{
+  width:520px;
+  height:180px;
+  right:-180px;
+  bottom:-120px;
+  background:rgba(255,255,255,.10);
+  transform:rotate(-12deg);
 }
 
 .toprow{
@@ -91,8 +121,48 @@ button{
   align-items:center;
   justify-content:space-between;
   width:100%;
-  max-width:620px;
+  max-width:1100px;
   margin:auto;
+}
+
+.dashboard-head{
+  position:relative;
+  z-index:1;
+  align-items:center;
+  gap:18px;
+}
+
+.headline{
+  flex:1;
+  min-width:0;
+}
+
+.date-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:clamp(13px,3.5vw,18px);
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.calendar-icon{
+  font-size:25px;
+}
+
+.clock-head{
+  font-size:clamp(44px,11vw,72px);
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:-2px;
+  margin-top:14px;
+  white-space:nowrap;
+  text-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.clock-head span{
+  font-size:.42em;
+  letter-spacing:0;
 }
 
 .profile{
@@ -100,98 +170,255 @@ button{
   gap:12px;
   align-items:center;
   min-width:0;
+  flex-shrink:0;
 }
 
 .avatar{
-  width:52px;
-  height:52px;
-  flex:0 0 52px;
+  width:62px;
+  height:62px;
+  flex:0 0 62px;
   border-radius:50%;
   object-fit:cover;
   background:#fff8;
-  border:2px solid #ffffff99;
+  border:2px solid rgba(255,255,255,.55);
 }
 
 .hello{
   font-size:12px;
   opacity:.82;
+  color:#fff;
 }
 
 .name{
   font-weight:800;
-  font-size:18px;
+  font-size:clamp(15px,3.8vw,23px);
   margin-top:2px;
-  max-width:230px;
+  max-width:260px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  color:#fff;
 }
 
 .position{
-  font-size:12px;
+  font-size:clamp(10px,2.8vw,14px);
   opacity:.82;
   margin-top:2px;
-  max-width:240px;
+  max-width:280px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-}
-
-.bell{
-  width:42px;
-  height:42px;
-  flex:0 0 42px;
-  border-radius:14px;
-  background:#ffffff1d;
   color:#fff;
-  font-size:20px;
 }
 
-/* =========================
+/* =====================================================
    CONTENT
-========================= */
+===================================================== */
 
 .wrap{
   width:100%;
-  max-width:620px;
-  margin:
-    -52px auto
-    calc(90px + env(safe-area-inset-bottom));
-  padding:0 12px;
+  max-width:1100px;
+  margin:-48px auto calc(90px + env(safe-area-inset-bottom));
+  padding:0 24px;
 }
 
 .card{
+  width:100%;
   background:var(--card);
-  border-radius:var(--radius);
+  border-radius:30px;
   box-shadow:var(--shadow);
-  padding:16px;
-  margin-bottom:14px;
+  padding:26px;
+  margin-bottom:24px;
   overflow:hidden;
 }
 
-/* =========================
-   LOCATION
-========================= */
+/* =====================================================
+   SECTION
+===================================================== */
 
-.location{
+.section-heading{
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:18px;
+  margin-bottom:22px;
 }
 
-.pin{
-  width:44px;
-  height:44px;
-  flex:0 0 44px;
-  border-radius:15px;
-  background:#eaf5ff;
-  color:var(--primary);
+.section-heading h2{
+  font-size:clamp(24px,4vw,38px);
+  line-height:1.15;
+  color:#173b91;
+  margin:0;
+  font-weight:900;
+}
+
+.heading-icon{
+  width:64px;
+  height:64px;
+  flex:0 0 64px;
+  border-radius:50%;
   display:grid;
   place-items:center;
-  font-size:21px;
+  background:#e7f2ff;
+  color:#1674e8;
+  font-size:43px;
 }
 
-.location > div:nth-child(2){
+.history-icon{
+  background:#dff0ff;
+  font-size:36px;
+}
+
+/* =====================================================
+   ATTENDANCE
+===================================================== */
+
+.attendance-card{
+  padding:26px 30px;
+}
+
+.attendance-status{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  padding:30px 34px;
+  border-radius:24px;
+  background:linear-gradient(110deg,#ecfff5,#f2fff9);
+  margin-bottom:28px;
+}
+
+.status-symbol{
+  width:142px;
+  height:142px;
+  flex:0 0 142px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#10bd68;
+  color:#fff;
+  font-size:75px;
+  font-weight:900;
+}
+
+.attendance-time{
+  flex:1;
+  min-width:0;
+}
+
+.small-label{
+  font-size:clamp(16px,3vw,27px);
+  font-weight:800;
+  color:#617395;
+}
+
+.big-time{
+  font-size:clamp(48px,7vw,78px);
+  font-weight:900;
+  color:#08ad5c;
+  line-height:1.05;
+  white-space:nowrap;
+  letter-spacing:-2px;
+  margin-top:8px;
+}
+
+.big-time span{
+  font-size:.48em;
+  letter-spacing:0;
+}
+
+.badge{
+  padding:14px 22px;
+  border-radius:999px;
+  font-size:clamp(12px,2.2vw,20px);
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.badge.warn{
+  background:#fff0f0;
+  color:var(--red);
+}
+
+.badge.ok{
+  background:#eafaf2;
+  color:#0c9c5a;
+}
+
+/* =====================================================
+   ACTION BUTTON
+===================================================== */
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-top:0;
+}
+
+.action{
+  width:100%;
+  min-height:170px;
+  padding:22px 12px;
+  border-radius:27px;
+  color:#fff;
+  font-size:clamp(22px,3.2vw,38px);
+  line-height:1.2;
+  font-weight:800;
+  box-shadow:0 7px 16px rgba(0,0,0,.10);
+  transition:transform .15s ease,opacity .15s ease;
+}
+
+.action:active{
+  transform:scale(.97);
+}
+
+.action.green{
+  background:linear-gradient(145deg,#19c775,#0da961);
+}
+
+.action.red{
+  background:linear-gradient(145deg,#ff554d,#e62d35);
+}
+
+.action:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  filter:grayscale(.2);
+}
+
+.action .icon{
+  font-size:42px;
+  display:block;
+  margin-bottom:5px;
+}
+
+.action small{
+  display:block;
+  opacity:.82;
+  font-weight:600;
+  margin-top:10px;
+  font-size:clamp(12px,2vw,20px);
+}
+
+/* =====================================================
+   LOCATION
+===================================================== */
+
+.location-mini{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:22px;
+  padding:12px 4px 0;
+  color:#55718f;
+}
+
+.location-mini > span{
+  font-size:27px;
+  color:#1976e8;
+}
+
+.location-mini > div{
+  flex:1;
   min-width:0;
 }
 
@@ -218,113 +445,164 @@ button{
   margin-top:3px;
 }
 
-/* =========================
-   CLOCK
-========================= */
-
-.date{
-  text-align:center;
-  color:#55718f;
-  font-weight:700;
-  font-size:13px;
+.refresh-location{
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  border-radius:12px;
+  background:#eef5ff;
+  color:#1976e8;
+  font-size:20px;
 }
 
-.clock{
-  text-align:center;
-  font-size:30px;
-  font-weight:900;
-  color:#1559b9;
-  margin:2px 0 12px;
+/* =====================================================
+   TODAY HISTORY
+===================================================== */
+
+.history-today-card{
+  padding:26px 30px;
 }
 
-/* =========================
-   STATUS
-========================= */
+.today-history-list{
+  width:100%;
+}
 
-.statusbar{
+.today-attendance-card{
+  background:#f8fbff;
+  border:1px solid #e2ebf5;
+  border-radius:22px;
+  padding:17px;
+  margin-bottom:12px;
+}
+
+.today-attendance-card:last-child{
+  margin-bottom:0;
+}
+
+.today-attendance-card.masuk{
+  border-left:5px solid var(--green);
+}
+
+.today-attendance-card.pulang{
+  border-left:5px solid var(--red);
+}
+
+.today-attendance-head{
   display:flex;
+  align-items:center;
   justify-content:space-between;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.today-attendance-type{
+  display:flex;
   align-items:center;
   gap:10px;
-  border:1px solid var(--line);
-  padding:10px 12px;
-  border-radius:14px;
-  font-size:13px;
+  font-size:17px;
+  font-weight:900;
+  color:#173b91;
 }
 
-.badge{
+.today-attendance-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  font-size:21px;
+}
+
+.today-attendance-card.masuk
+.today-attendance-icon{
+  background:#e3faef;
+  color:#0ca35f;
+}
+
+.today-attendance-card.pulang
+.today-attendance-icon{
+  background:#fff0ef;
+  color:#e03a32;
+}
+
+.today-attendance-badge{
   padding:6px 10px;
   border-radius:999px;
-  font-weight:800;
-  white-space:nowrap;
+  font-size:11px;
+  font-weight:900;
+  background:#eaf5ff;
+  color:#1976e8;
 }
 
-.badge.warn{
-  background:#fff0f0;
-  color:var(--red);
-}
-
-.badge.ok{
-  background:#eafaf2;
-  color:#0c9c5a;
-}
-
-/* =========================
-   ACTION BUTTON
-========================= */
-
-.actions{
+.today-attendance-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-  margin-top:12px;
 }
 
-.action{
-  padding:14px 8px;
-  border-radius:17px;
-  color:#fff;
+.today-attendance-info{
+  background:#fff;
+  border:1px solid #e8eef5;
+  border-radius:14px;
+  padding:11px;
+  min-width:0;
+}
+
+.today-attendance-info.full{
+  grid-column:1 / -1;
+}
+
+.today-attendance-label{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.today-attendance-value{
+  font-size:14px;
   font-weight:800;
-  min-height:88px;
-  box-shadow:0 7px 16px rgba(0,0,0,.10);
-  transition:transform .15s ease,opacity .15s ease;
+  color:#17324d;
+  line-height:1.35;
+  overflow-wrap:anywhere;
 }
 
-.action:active{
-  transform:scale(.97);
+.today-attendance-time{
+  color:#08a95a;
+  font-size:19px;
+  font-weight:900;
 }
 
-.action.green{
-  background:linear-gradient(145deg,#19c775,#0da961);
+.today-attendance-location{
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
 }
 
-.action.red{
-  background:linear-gradient(145deg,#ff554d,#e62d35);
+.today-attendance-location-icon{
+  color:#1976e8;
+  flex:0 0 auto;
 }
 
-.action:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-  filter:grayscale(.2);
-}
-
-.action .icon{
-  font-size:25px;
-  display:block;
-  margin-bottom:5px;
-}
-
-.action small{
-  display:block;
-  opacity:.82;
-  font-weight:600;
-  margin-top:4px;
+.today-attendance-distance{
+  margin-top:3px;
+  color:#71839a;
   font-size:11px;
 }
 
-/* =========================
-   SECTION
-========================= */
+.today-empty{
+  text-align:center;
+  color:var(--muted);
+  padding:24px 10px;
+  font-size:14px;
+  background:#f8fbff;
+  border:1px dashed #dbe5f0;
+  border-radius:18px;
+}
+
+/* =====================================================
+   HISTORY PAGE
+===================================================== */
 
 .section-title{
   font-weight:900;
@@ -360,9 +638,44 @@ button{
   font-size:14px;
 }
 
-/* =========================
-   BOTTOM NAV
-========================= */
+/* =====================================================
+   PAGE
+===================================================== */
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.btn{
+  width:100%;
+  padding:13px 15px;
+  border-radius:14px;
+  background:var(--primary);
+  color:#fff;
+  font-weight:800;
+  min-height:48px;
+}
+
+.btn:active{
+  transform:scale(.98);
+}
+
+.btn.secondary{
+  background:#eef5ff;
+  color:var(--primary);
+}
+
+/* =====================================================
+   NAV
+===================================================== */
 
 .nav{
   position:fixed;
@@ -403,40 +716,9 @@ button{
   font-weight:800;
 }
 
-/* =========================
-   PAGE
-========================= */
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-.btn{
-  width:100%;
-  padding:13px 15px;
-  border-radius:14px;
-  background:var(--primary);
-  color:#fff;
-  font-weight:800;
-  min-height:48px;
-}
-
-.btn:active{
-  transform:scale(.98);
-}
-
-.btn.secondary{
-  background:#eef5ff;
-  color:var(--primary);
-}
-
-/* =========================
+/* =====================================================
    MODAL
-========================= */
+===================================================== */
 
 .modal{
   position:fixed;
@@ -482,9 +764,9 @@ button{
   font-size:18px;
 }
 
-/* =========================
+/* =====================================================
    CAMERA
-========================= */
+===================================================== */
 
 .camera{
   width:100%;
@@ -526,9 +808,9 @@ button{
   color:var(--primary);
 }
 
-/* =========================
+/* =====================================================
    RESULT
-========================= */
+===================================================== */
 
 .result{
   text-align:center;
@@ -567,9 +849,9 @@ button{
   display:block;
 }
 
-/* =========================
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 .toast{
   position:fixed;
@@ -593,9 +875,9 @@ button{
   display:block;
 }
 
-/* =========================
+/* =====================================================
    LOADING
-========================= */
+===================================================== */
 
 .loading{
   position:fixed;
@@ -651,9 +933,9 @@ button{
   }
 }
 
-/* =========================
+/* =====================================================
    LOGIN
-========================= */
+===================================================== */
 
 .login{
   min-height:100vh;
@@ -701,23 +983,9 @@ button{
   margin:0 auto;
 }
 
-.google{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  width:100%;
-  margin-top:20px;
-  min-height:44px;
-  overflow:hidden;
-}
-
-.google > div{
-  max-width:100%;
-}
-
-/* =========================
+/* =====================================================
    PROFILE
-========================= */
+===================================================== */
 
 .profilegrid{
   display:grid;
@@ -750,209 +1018,14 @@ button{
   margin-bottom:3px;
 }
 
-/* =========================
-   SMALL PHONE
-========================= */
-
-@media(max-width:380px){
-
-  .login{
-    padding-left:12px;
-    padding-right:12px;
-  }
-
-  .loginbox{
-    padding:24px 16px;
-    border-radius:24px;
-  }
-
-  .login h1{
-    font-size:22px;
-  }
-
-  .login p{
-    font-size:13px;
-  }
-
-  .actions{
-    gap:8px;
-  }
-
-  .action{
-    padding:13px 6px;
-  }
-
-  .action .icon{
-    font-size:23px;
-  }
-
-  .profilegrid{
-    grid-template-columns:75px 1fr;
-  }
-
-  .bigavatar{
-    width:75px;
-    height:75px;
-  }
-}
-
-/* =========================
-   DESKTOP
-========================= */
-
-@media(min-width:700px){
-
-  .top{
-    padding-top:
-      calc(30px + env(safe-area-inset-top));
-  }
-
-  .wrap{
-    padding:0 20px;
-  }
-
-  .nav{
-    left:50%;
-    right:auto;
-    transform:translateX(-50%);
-    width:620px;
-    border-radius:18px 18px 0 0;
-  }
-}
-
-
-/* =========================
-   DASHBOARD MODERN OVERRIDE
-========================= */
-.top{
-  position:relative;
-  overflow:hidden;
-  padding:26px 22px 78px;
-  border-radius:0 0 34px 34px;
-  background:linear-gradient(145deg,#2184f4,#1262d7);
-}
-.top::before,.top::after{
-  content:"";position:absolute;border-radius:50%;pointer-events:none;
-}
-.top::before{
-  width:430px;height:150px;left:-120px;bottom:-100px;
-  background:rgba(255,255,255,.18);transform:rotate(12deg);
-}
-.top::after{
-  width:520px;height:180px;right:-180px;bottom:-120px;
-  background:rgba(255,255,255,.10);transform:rotate(-12deg);
-}
-.dashboard-head{position:relative;z-index:1;align-items:center;gap:18px}
-.headline{flex:1;min-width:0}
-.date-head{display:flex;align-items:center;gap:10px;font-size:clamp(13px,3.5vw,18px);font-weight:800;white-space:nowrap}
-.calendar-icon{font-size:25px}
-.clock-head{font-size:clamp(44px,11vw,72px);line-height:1.05;font-weight:900;letter-spacing:-2px;margin-top:14px;white-space:nowrap;text-shadow:0 3px 15px rgba(0,0,0,.08)}
-.clock-head span{font-size:.42em;letter-spacing:0}
-.profile{flex-shrink:0}
-.avatar{width:62px;height:62px;flex-basis:62px;border:2px solid rgba(255,255,255,.55)}
-.hello,.name,.position{color:#fff}
-.name{font-size:clamp(15px,3.8vw,23px)}
-.position{font-size:clamp(10px,2.8vw,14px)}
-.wrap{max-width:1100px;margin:-48px auto calc(90px + env(safe-area-inset-bottom));padding:0 24px}
-.card{border-radius:30px;padding:26px;margin-bottom:24px;box-shadow:0 12px 35px rgba(20,60,100,.08)}
-.attendance-card{padding:26px 30px}
-.section-heading{display:flex;align-items:center;gap:18px;margin-bottom:22px}
-.section-heading h2{font-size:clamp(24px,4vw,38px);line-height:1.15;color:#173b91;margin:0;font-weight:900}
-.heading-icon{width:64px;height:64px;flex:0 0 64px;border-radius:50%;display:grid;place-items:center;background:#e7f2ff;color:#1674e8;font-size:43px}
-.history-icon{background:#dff0ff;font-size:36px}
-.attendance-status{display:flex;align-items:center;gap:30px;padding:30px 34px;border-radius:24px;background:linear-gradient(110deg,#ecfff5,#f2fff9);margin-bottom:28px}
-.status-symbol{width:142px;height:142px;flex:0 0 142px;border-radius:50%;display:grid;place-items:center;background:#10bd68;color:#fff;font-size:75px;font-weight:900}
-.attendance-time{flex:1;min-width:0}
-.small-label{font-size:clamp(16px,3vw,27px);font-weight:800;color:#617395}
-.big-time{font-size:clamp(48px,7vw,78px);font-weight:900;color:#08ad5c;line-height:1.05;white-space:nowrap;letter-spacing:-2px;margin-top:8px}
-.big-time span{font-size:.48em;letter-spacing:0}
-.badge{font-size:clamp(12px,2.2vw,20px);padding:14px 22px}
-.actions{gap:24px;margin-top:0}
-.action{min-height:170px;border-radius:27px;font-size:clamp(22px,3.2vw,38px);padding:22px 12px}
-.action .icon{font-size:42px}
-.action small{font-size:clamp(12px,2vw,20px);margin-top:10px}
-.location-mini{display:flex;align-items:center;gap:12px;margin-top:22px;padding:12px 4px 0;color:#55718f}
-.location-mini>span{font-size:27px;color:#1976e8}
-.location-mini>div{flex:1;min-width:0}
-.refresh-location{width:38px;height:38px;border-radius:12px;background:#eef5ff;color:#1976e8;font-size:20px}
-.history-today-card{padding:26px 30px}
-.row{font-size:16px}
-@media(max-width:600px){
-  .top{padding:22px 16px 70px}
-  .dashboard-head{gap:8px}
-  .profile{gap:7px}
-  .avatar{width:44px;height:44px;flex-basis:44px}
-  .clock-head{font-size:clamp(35px,10vw,55px);margin-top:10px}
-  .calendar-icon{font-size:20px}
-  .wrap{padding:0 10px;margin-top:-40px}
-  .card,.attendance-card,.history-today-card{padding:18px;border-radius:24px}
-  .section-heading{gap:11px;margin-bottom:17px}
-  .section-heading h2{font-size:24px}
-  .heading-icon{width:48px;height:48px;flex-basis:48px;font-size:31px}
-  .attendance-status{gap:12px;padding:18px 14px;border-radius:20px;flex-wrap:wrap}
-  .status-symbol{width:72px;height:72px;flex-basis:72px;font-size:39px}
-  .attendance-time{flex:1}
-  .small-label{font-size:15px}
-  .big-time{font-size:40px;letter-spacing:-1px}
-  .badge{width:100%;text-align:center;font-size:14px;padding:10px}
-  .actions{gap:10px}
-  .action{min-height:125px;border-radius:19px;font-size:20px;padding:14px 5px}
-  .action .icon{font-size:29px}
-  .action small{font-size:11px}
-}
-
-
-/* FINAL MOBILE + DATA VISIBILITY FIX */
-.toprow.dashboard-head{display:flex;align-items:flex-start;justify-content:space-between}
-.headline{min-width:0}
-.profile{display:flex;align-items:center;max-width:46%}
-#dateText,#clockText{display:block;visibility:visible;opacity:1}
-@media(max-width:600px){
-  .top{padding:18px 14px 82px;border-radius:0 0 28px 28px}
-  .toprow.dashboard-head{display:flex;flex-direction:column;gap:18px;align-items:stretch}
-  .headline{width:100%;text-align:center}
-  .date-head{justify-content:center;font-size:13px;white-space:normal;line-height:1.35}
-  .calendar-icon{font-size:18px}
-  .clock-head{font-size:clamp(42px,13vw,62px);letter-spacing:-1px;margin-top:7px}
-  .profile{width:100%;max-width:none;justify-content:center;gap:10px}
-  .profile .name{font-size:18px}
-  .profile .position{font-size:12px}
-  .wrap{width:100%;padding:0 10px;margin:-42px auto calc(88px + env(safe-area-inset-bottom))}
-  .card,.attendance-card,.history-today-card{padding:16px;border-radius:22px;margin-bottom:14px}
-  .section-heading{align-items:center;gap:10px;margin-bottom:14px}
-  .section-heading h2{font-size:clamp(19px,5.5vw,25px)}
-  .heading-icon{width:44px;height:44px;flex-basis:44px;font-size:28px}
-  .attendance-status{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;padding:14px;border-radius:18px;margin-bottom:14px}
-  .status-symbol{width:64px;height:64px;flex-basis:64px;font-size:34px}
-  .small-label{font-size:14px;line-height:1.25}
-  .big-time{font-size:clamp(32px,9vw,43px);letter-spacing:-1px}
-  .attendance-status .badge{grid-column:1 / -1;width:100%;font-size:12px;padding:9px 10px}
-  .actions{grid-template-columns:1fr 1fr;gap:8px}
-  .action{min-height:112px;padding:12px 4px;border-radius:17px;font-size:17px}
-  .action .icon{font-size:26px;margin-bottom:3px}
-  .action small{font-size:10px;margin-top:5px}
-  .location-mini{margin-top:14px;padding-top:10px}
-  .location-mini>span{font-size:23px}
-  .row{font-size:14px;align-items:center;padding:12px 0}
-  .nav button{font-size:13px}
-}
-@media(max-width:360px){
-  .date-head{font-size:12px}
-  .clock-head{font-size:39px}
-  .action{font-size:15px;min-height:105px}
-  .action small{font-size:9px}
-}
-
-
-
 /* =====================================================
-   FINAL RESPONSIVE PATCH v2
-   - Prevents dashboard card from sliding underneath header
-   - Keeps header content readable on small phones
-   - Makes buttons, status and location scale safely
+   MOBILE
 ===================================================== */
-@media (max-width: 699px){
-  html, body{
+
+@media(max-width:699px){
+
+  html,
+  body{
     width:100%;
     min-width:0;
     overflow-x:hidden;
@@ -992,6 +1065,10 @@ button{
     line-height:1.35;
   }
 
+  .calendar-icon{
+    font-size:18px;
+  }
+
   .clock-head{
     margin-top:8px;
     font-size:clamp(38px,11.5vw,58px);
@@ -1020,7 +1097,10 @@ button{
     text-align:left;
   }
 
-  .hello{font-size:12px;}
+  .hello{
+    font-size:12px;
+  }
+
   .name{
     max-width:100%;
     font-size:clamp(16px,4.8vw,20px);
@@ -1028,6 +1108,7 @@ button{
     overflow:hidden;
     text-overflow:ellipsis;
   }
+
   .position{
     max-width:100%;
     font-size:clamp(11px,3.2vw,14px);
@@ -1035,8 +1116,6 @@ button{
     line-height:1.3;
   }
 
-  /* Important: no negative margin on mobile.
-     This stops the first card from covering the header/title. */
   .wrap{
     width:100%;
     max-width:620px;
@@ -1092,7 +1171,10 @@ button{
     font-size:34px;
   }
 
-  .attendance-time{min-width:0;}
+  .attendance-time{
+    min-width:0;
+  }
+
   .small-label{
     font-size:14px;
     line-height:1.25;
@@ -1102,7 +1184,6 @@ button{
     max-width:100%;
     font-size:clamp(30px,8.8vw,43px);
     letter-spacing:-1px;
-    white-space:nowrap;
   }
 
   .attendance-status .badge{
@@ -1168,21 +1249,60 @@ button{
     overflow-wrap:anywhere;
   }
 
-  .accuracy{font-size:12px;}
-  .refresh-location{flex:0 0 38px;}
-
-  .history-today-card #todayHistory{
-    width:100%;
-    min-height:24px;
+  .accuracy{
+    font-size:12px;
   }
 
-  .row{
-    display:flex;
+  .refresh-location{
+    flex:0 0 38px;
+  }
+
+  /* TODAY HISTORY MOBILE */
+
+  .today-attendance-card{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  .today-attendance-head{
     align-items:flex-start;
-    gap:10px;
-    padding:11px 0;
-    font-size:13px;
-    line-height:1.4;
+  }
+
+  .today-attendance-type{
+    font-size:15px;
+  }
+
+  .today-attendance-icon{
+    width:38px;
+    height:38px;
+    font-size:19px;
+  }
+
+  .today-attendance-grid{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .today-attendance-info{
+    padding:9px;
+    border-radius:12px;
+  }
+
+  .today-attendance-label{
+    font-size:10px;
+  }
+
+  .today-attendance-value{
+    font-size:12px;
+  }
+
+  .today-attendance-time{
+    font-size:17px;
+  }
+
+  .today-attendance-badge{
+    font-size:9px;
+    padding:5px 8px;
   }
 
   .nav{
@@ -1198,19 +1318,121 @@ button{
   }
 }
 
-@media (max-width:360px){
-  .top{padding-left:10px;padding-right:10px;}
-  .wrap{padding-left:8px;padding-right:8px;}
-  .card,.attendance-card,.history-today-card{padding:13px;}
-  .section-heading h2{font-size:18px;}
-  .heading-icon{width:40px;height:40px;flex-basis:40px;font-size:25px;}
-  .attendance-status{grid-template-columns:56px minmax(0,1fr);padding:11px;}
-  .status-symbol{width:56px;height:56px;flex-basis:56px;font-size:30px;}
-  .big-time{font-size:30px;}
-  .action{min-height:104px;font-size:14px;}
-  .action small{font-size:9px;}
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media(max-width:360px){
+
+  .top{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .wrap{
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .card,
+  .attendance-card,
+  .history-today-card{
+    padding:13px;
+  }
+
+  .section-heading h2{
+    font-size:18px;
+  }
+
+  .heading-icon{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+    font-size:25px;
+  }
+
+  .attendance-status{
+    grid-template-columns:56px minmax(0,1fr);
+    padding:11px;
+  }
+
+  .status-symbol{
+    width:56px;
+    height:56px;
+    flex-basis:56px;
+    font-size:30px;
+  }
+
+  .big-time{
+    font-size:30px;
+  }
+
+  .action{
+    min-height:104px;
+    font-size:14px;
+  }
+
+  .action small{
+    font-size:9px;
+  }
+
+  .today-attendance-grid{
+    grid-template-columns:1fr;
+  }
+
+  .today-attendance-info.full{
+    grid-column:auto;
+  }
 }
 
+/* =====================================================
+   LOGIN MOBILE
+===================================================== */
+
+@media(max-width:380px){
+
+  .login{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .loginbox{
+    padding:24px 16px;
+    border-radius:24px;
+  }
+
+  .login h1{
+    font-size:22px;
+  }
+
+  .login p{
+    font-size:13px;
+  }
+
+  .profilegrid{
+    grid-template-columns:75px 1fr;
+  }
+
+  .bigavatar{
+    width:75px;
+    height:75px;
+  }
+}
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+@media(min-width:700px){
+
+  .nav{
+    left:50%;
+    right:auto;
+    transform:translateX(-50%);
+    width:620px;
+    border-radius:18px 18px 0 0;
+  }
+}
 </style>
 </head>
 
@@ -1274,83 +1496,245 @@ button{
 >
 
 <header class="top">
+
   <div class="toprow dashboard-head">
+
     <div class="headline">
-      <div class="date-head"><span class="calendar-icon">▣</span><span id="dateText">-</span></div>
-      <div id="clockText" class="clock-head">--:-- <span>WIB</span></div>
+
+      <div class="date-head">
+        <span class="calendar-icon">▣</span>
+        <span id="dateText">-</span>
+      </div>
+
+      <div
+        id="clockText"
+        class="clock-head"
+      >
+        --:--
+        <span>WIB</span>
+      </div>
+
     </div>
 
+
     <div class="profile">
-      <img id="avatar" class="avatar" alt="Foto profil">
+
+      <img
+        id="avatar"
+        class="avatar"
+        alt="Foto profil"
+      >
+
       <div>
-        <div class="hello">Selamat Pagi</div>
-        <div id="userName" class="name">-</div>
-        <div id="userPosition" class="position">-</div>
+
+        <div class="hello">
+          Selamat Pagi
+        </div>
+
+        <div
+          id="userName"
+          class="name"
+        >
+          -
+        </div>
+
+        <div
+          id="userPosition"
+          class="position"
+        >
+          -
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
 </header>
 
 
 <main class="wrap">
 
-<!-- HOME -->
+<!-- =====================================================
+     HOME
+===================================================== -->
 
 <section
   id="homePage"
   class="page active"
 >
+
+  <!-- STATUS KEHADIRAN -->
+
   <div class="card attendance-card">
+
     <div class="section-heading">
-      <div class="heading-icon">◷</div>
-      <h2>Status Kehadiran Hari Ini</h2>
+
+      <div class="heading-icon">
+        ◷
+      </div>
+
+      <h2>
+        Status Kehadiran Hari Ini
+      </h2>
+
     </div>
+
 
     <div class="attendance-status">
-      <div class="status-symbol">↗</div>
-      <div class="attendance-time">
-        <div class="small-label">Jam Absen Masuk</div>
-        <div id="arrivalTime" class="big-time">--:-- <span>WIB</span></div>
+
+      <div
+        id="statusSymbol"
+        class="status-symbol"
+      >
+        ↗
       </div>
-      <span id="statusBadge" class="badge warn">Belum Absen</span>
+
+      <div class="attendance-time">
+
+        <div class="small-label">
+          Jam Absen Masuk
+        </div>
+
+        <div
+          id="arrivalTime"
+          class="big-time"
+        >
+          --:--
+          <span>WIB</span>
+        </div>
+
+      </div>
+
+      <span
+        id="statusBadge"
+        class="badge warn"
+      >
+        Belum Absen
+      </span>
+
     </div>
+
 
     <div class="actions">
-      <button id="btnMasuk" class="action green" onclick="openCamera('MASUK')">
-        <span class="icon">▣</span>
+
+      <button
+        id="btnMasuk"
+        class="action green"
+        onclick="openCamera('MASUK')"
+      >
+        <span class="icon">
+          ▣
+        </span>
+
         Absen Masuk
-        <small>(Lokasi • Selfie)</small>
+
+        <small>
+          (Lokasi • Selfie)
+        </small>
+
       </button>
-      <button id="btnPulang" class="action red" onclick="openCamera('PULANG')">
-        <span class="icon">⇥</span>
+
+
+      <button
+        id="btnPulang"
+        class="action red"
+        onclick="openCamera('PULANG')"
+      >
+        <span class="icon">
+          ⇥
+        </span>
+
         Absen Pulang
-        <small>(Lokasi • Selfie)</small>
+
+        <small>
+          (Lokasi • Selfie)
+        </small>
+
       </button>
+
     </div>
+
 
     <div class="location-mini">
-      <span>⌖</span>
+
+      <span>
+        ⌖
+      </span>
+
       <div>
-        <div class="small">Area Saat Ini</div>
-        <div id="locationText" class="locline strong">Mengambil lokasi...</div>
-        <div id="accuracyText" class="accuracy">-</div>
+
+        <div class="small">
+          Area Saat Ini
+        </div>
+
+        <div
+          id="locationText"
+          class="locline strong"
+        >
+          Mengambil lokasi...
+        </div>
+
+        <div
+          id="accuracyText"
+          class="accuracy"
+        >
+          -
+        </div>
+
       </div>
-      <button class="refresh-location" onclick="getLocation(true)" title="Perbarui lokasi">↻</button>
+
+
+      <button
+        class="refresh-location"
+        onclick="getLocation(true)"
+        title="Perbarui lokasi"
+      >
+        ↻
+      </button>
+
     </div>
+
   </div>
 
+
+  <!-- RIWAYAT HARI INI -->
+
   <div class="card history-today-card">
+
     <div class="section-heading">
-      <div class="heading-icon history-icon">◔</div>
-      <h2>Riwayat Hari Ini</h2>
+
+      <div class="heading-icon history-icon">
+        ◔
+      </div>
+
+      <h2>
+        Riwayat Hari Ini
+      </h2>
+
     </div>
-    <div id="todayHistory"></div>
+
+
+    <div
+      id="todayHistory"
+      class="today-history-list"
+    >
+
+      <div class="today-empty">
+        Memuat riwayat absensi...
+      </div>
+
+    </div>
+
   </div>
+
 </section>
 
 
-<!-- HISTORY -->
-
+<!-- =====================================================
+     HISTORY
+===================================================== -->
 
 <section
   id="historyPage"
@@ -1376,7 +1760,9 @@ button{
 </section>
 
 
-<!-- PROFILE -->
+<!-- =====================================================
+     PROFILE
+===================================================== -->
 
 <section
   id="profilePage"
@@ -1421,23 +1807,54 @@ button{
     <div style="margin-top:16px">
 
       <div class="kv">
-        <b>NIP</b>
-        <span id="profileNip">-</span>
+
+        <b>
+          NIP
+        </b>
+
+        <span id="profileNip">
+          -
+        </span>
+
       </div>
 
-      <div class="kv">
-        <b>Email</b>
-        <span id="profileEmail">-</span>
-      </div>
 
       <div class="kv">
-        <b>Role</b>
-        <span id="profileRole">-</span>
+
+        <b>
+          Email
+        </b>
+
+        <span id="profileEmail">
+          -
+        </span>
+
       </div>
 
+
       <div class="kv">
-        <b>Status</b>
-        <span id="profileStatus">-</span>
+
+        <b>
+          Role
+        </b>
+
+        <span id="profileRole">
+          -
+        </span>
+
+      </div>
+
+
+      <div class="kv">
+
+        <b>
+          Status
+        </b>
+
+        <span id="profileStatus">
+          -
+        </span>
+
       </div>
 
     </div>
@@ -1458,7 +1875,9 @@ button{
 </main>
 
 
-<!-- NAV -->
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
 
 <nav class="nav">
 
@@ -1471,8 +1890,11 @@ button{
     >
       ⌂
       <br>
-      <small>Home</small>
+      <small>
+        Home
+      </small>
     </button>
+
 
     <button
       id="navHistory"
@@ -1480,8 +1902,11 @@ button{
     >
       ▣
       <br>
-      <small>Riwayat</small>
+      <small>
+        Riwayat
+      </small>
     </button>
+
 
     <button
       id="navProfile"
@@ -1489,7 +1914,9 @@ button{
     >
       ♙
       <br>
-      <small>Profil</small>
+      <small>
+        Profil
+      </small>
     </button>
 
   </div>
@@ -1500,7 +1927,7 @@ button{
 
 
 <!-- =====================================================
-     CAMERA
+     CAMERA MODAL
 ===================================================== -->
 
 <div
@@ -1591,7 +2018,7 @@ button{
 
 
 <!-- =====================================================
-     RESULT
+     RESULT MODAL
 ===================================================== -->
 
 <div
@@ -1713,12 +2140,25 @@ const CONFIG = {
     'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
 
   FIREBASE_CONFIG: {
-    apiKey: 'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
-    authDomain: 'absensiamil.firebaseapp.com',
-    projectId: 'absensiamil',
-    storageBucket: 'absensiamil.firebasestorage.app',
-    messagingSenderId: '962926272481',
-    appId: '1:962926272481:web:d6d5bae6d890ebecc2bca0'
+
+    apiKey:
+      'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
+
+    authDomain:
+      'absensiamil.firebaseapp.com',
+
+    projectId:
+      'absensiamil',
+
+    storageBucket:
+      'absensiamil.firebasestorage.app',
+
+    messagingSenderId:
+      '962926272481',
+
+    appId:
+      '1:962926272481:web:d6d5bae6d890ebecc2bca0'
+
   }
 
 };
@@ -1732,17 +2172,26 @@ let sessionToken =
   localStorage.getItem('absen_session') || '';
 
 let currentUser = null;
-let currentLocation = null;
-let cameraStream = null;
-let facingMode = 'user';
-let attendanceType = 'MASUK';
-let capturedDataUrl = '';
-let loginProcessing = false;
-let firebaseApp = null;
-let firebaseAuth = null;
-let firebaseGoogleProvider = null;
-let firebaseReady = false;
 
+let currentLocation = null;
+
+let cameraStream = null;
+
+let facingMode = 'user';
+
+let attendanceType = 'MASUK';
+
+let capturedDataUrl = '';
+
+let loginProcessing = false;
+
+let firebaseApp = null;
+
+let firebaseAuth = null;
+
+let firebaseGoogleProvider = null;
+
+let firebaseReady = false;
 
 
 /* =====================================================
@@ -1759,16 +2208,45 @@ const $ = id =>
 
 async function validConfig(){
 
-  const f = CONFIG.FIREBASE_CONFIG || {};
+  const f =
+    CONFIG.FIREBASE_CONFIG || {};
 
   return (
-    CONFIG.WEB_APP_URL.startsWith('https://') &&
-    f.apiKey &&
-    !f.apiKey.startsWith('PASTE_') &&
-    f.projectId &&
-    !f.projectId.startsWith('PASTE_') &&
-    f.appId &&
-    !f.appId.startsWith('PASTE_')
+
+    CONFIG.WEB_APP_URL.startsWith(
+      'https://'
+    )
+
+    &&
+
+    f.apiKey
+
+    &&
+
+    !f.apiKey.startsWith(
+      'PASTE_'
+    )
+
+    &&
+
+    f.projectId
+
+    &&
+
+    !f.projectId.startsWith(
+      'PASTE_'
+    )
+
+    &&
+
+    f.appId
+
+    &&
+
+    !f.appId.startsWith(
+      'PASTE_'
+    )
+
   );
 
 }
@@ -1783,9 +2261,8 @@ function showToast(msg){
   $('toast').textContent =
     msg;
 
-  $('toast').classList.add(
-    'show'
-  );
+  $('toast')
+    .classList.add('show');
 
   clearTimeout(
     window.toastTimer
@@ -1835,7 +2312,7 @@ function loading(
 
 
 /* =====================================================
-   FIREBASE AUTH
+   FIREBASE
 ===================================================== */
 
 async function initFirebase(){
@@ -1846,12 +2323,14 @@ async function initFirebase(){
     'Menghubungkan autentikasi Firebase...'
   );
 
-  if(!await validConfig()){
+  if(
+    !await validConfig()
+  ){
 
     loading(false);
 
     showToast(
-      'Firebase belum dikonfigurasi. Isi FIREBASE_CONFIG pada HTML.'
+      'Firebase belum dikonfigurasi.'
     );
 
     return false;
@@ -1863,44 +2342,66 @@ async function initFirebase(){
     const {
       initializeApp,
       getApps
-    } = await import(
-      'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
-    );
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
+      );
+
 
     const {
       getAuth,
       GoogleAuthProvider,
       onAuthStateChanged,
       getRedirectResult
-    } = await import(
-      'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-    );
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
 
     firebaseApp =
       getApps().length
         ? getApps()[0]
-        : initializeApp(CONFIG.FIREBASE_CONFIG);
+        : initializeApp(
+            CONFIG.FIREBASE_CONFIG
+          );
+
 
     firebaseAuth =
-      getAuth(firebaseApp);
+      getAuth(
+        firebaseApp
+      );
+
 
     firebaseGoogleProvider =
       new GoogleAuthProvider();
 
-    firebaseGoogleProvider.setCustomParameters({
-      prompt:'select_account'
-    });
 
-    firebaseReady = true;
+    firebaseGoogleProvider
+      .setCustomParameters({
+        prompt:'select_account'
+      });
+
+
+    firebaseReady =
+      true;
+
 
     try{
-      await getRedirectResult(firebaseAuth);
+
+      await getRedirectResult(
+        firebaseAuth
+      );
+
     }catch(redirectError){
+
       console.warn(
         'Firebase redirect result:',
         redirectError
       );
+
     }
+
 
     onAuthStateChanged(
       firebaseAuth,
@@ -1910,16 +2411,26 @@ async function initFirebase(){
           !user ||
           loginProcessing
         ){
+
           return;
+
         }
 
-        if(sessionToken){
+
+        if(
+          sessionToken
+        ){
+
           return;
+
         }
+
 
         try{
 
-          await completeFirebaseLogin_(user);
+          await completeFirebaseLogin_(
+            user
+          );
 
         }catch(error){
 
@@ -1940,6 +2451,7 @@ async function initFirebase(){
       }
     );
 
+
     loading(false);
 
     return true;
@@ -1954,7 +2466,7 @@ async function initFirebase(){
     loading(false);
 
     showToast(
-      'Firebase gagal dimuat. Periksa konfigurasi dan Authorized Domains.'
+      'Firebase gagal dimuat. Periksa Authorized Domains.'
     );
 
     return false;
@@ -1964,41 +2476,61 @@ async function initFirebase(){
 }
 
 
+/* =====================================================
+   LOGIN
+===================================================== */
+
 async function loginWithFirebase(){
 
-  if(loginProcessing){
+  if(
+    loginProcessing
+  ){
+
     return;
+
   }
 
-  if(!firebaseReady){
+
+  if(
+    !firebaseReady
+  ){
 
     const ready =
       await initFirebase();
 
     if(!ready){
+
       return;
+
     }
 
   }
 
-  loginProcessing = true;
+
+  loginProcessing =
+    true;
+
 
   loading(
     true,
     'Memverifikasi Akun',
-    'Menghubungkan akun Google dengan Firebase dan data pegawai...'
+    'Menghubungkan akun Google dengan data pegawai...'
   );
+
 
   try{
 
     const {
       signInWithPopup,
       signInWithRedirect
-    } = await import(
-      'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-    );
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
 
     let credentialResult;
+
 
     try{
 
@@ -2015,17 +2547,22 @@ async function loginWithFirebase(){
         popupError
       );
 
-      /*
-       * Pada browser/mobile yang memblokir popup,
-       * gunakan redirect.
-       */
+
       if(
+
         popupError?.code ===
-          'auth/popup-blocked' ||
+          'auth/popup-blocked'
+
+        ||
+
         popupError?.code ===
-          'auth/popup-closed-by-user' ||
+          'auth/popup-closed-by-user'
+
+        ||
+
         popupError?.code ===
           'auth/cancelled-popup-request'
+
       ){
 
         await signInWithRedirect(
@@ -2037,9 +2574,11 @@ async function loginWithFirebase(){
 
       }
 
+
       throw popupError;
 
     }
+
 
     if(
       credentialResult?.user
@@ -2053,7 +2592,8 @@ async function loginWithFirebase(){
 
   }catch(error){
 
-    loginProcessing = false;
+    loginProcessing =
+      false;
 
     loading(false);
 
@@ -2071,24 +2611,34 @@ async function loginWithFirebase(){
 }
 
 
+/* =====================================================
+   COMPLETE LOGIN
+===================================================== */
+
 async function completeFirebaseLogin_(user){
 
   if(!user){
+
     throw new Error(
       'Akun Firebase tidak ditemukan.'
     );
+
   }
+
 
   const requestId =
     makeId();
 
+
   const firebaseIdToken =
     await user.getIdToken(true);
+
 
   const sent =
     await postForm({
 
-      action:'firebaseLogin',
+      action:
+        'firebaseLogin',
 
       requestId:
         requestId,
@@ -2098,6 +2648,7 @@ async function completeFirebaseLogin_(user){
 
     });
 
+
   if(!sent){
 
     throw new Error(
@@ -2106,11 +2657,14 @@ async function completeFirebaseLogin_(user){
 
   }
 
+
   poll(
     requestId,
     result => {
 
-      loginProcessing = false;
+      loginProcessing =
+        false;
+
 
       if(
         !result ||
@@ -2128,20 +2682,26 @@ async function completeFirebaseLogin_(user){
 
       }
 
+
       sessionToken =
         result.sessionToken || '';
+
 
       localStorage.setItem(
         'absen_session',
         sessionToken
       );
 
+
       currentUser =
         result.user || null;
 
+
       showApp();
 
+
       refreshAll();
+
 
       loading(false);
 
@@ -2151,6 +2711,10 @@ async function completeFirebaseLogin_(user){
 }
 
 
+/* =====================================================
+   FIREBASE ERROR
+===================================================== */
+
 function firebaseErrorMessage_(error){
 
   const code =
@@ -2158,18 +2722,26 @@ function firebaseErrorMessage_(error){
       error?.code || ''
     );
 
+
   const messages = {
+
     'auth/popup-blocked':
-      'Popup login diblokir browser. Silakan izinkan popup lalu coba lagi.',
+      'Popup login diblokir browser. Izinkan popup lalu coba lagi.',
+
     'auth/popup-closed-by-user':
       'Jendela login ditutup sebelum selesai.',
+
     'auth/cancelled-popup-request':
       'Proses login sedang berjalan.',
+
     'auth/unauthorized-domain':
       'Domain aplikasi belum ditambahkan ke Authorized Domains Firebase.',
+
     'auth/operation-not-allowed':
       'Login Google belum diaktifkan di Firebase Authentication.'
+
   };
+
 
   return (
     messages[code] ||
@@ -2211,7 +2783,7 @@ function makeId(){
 
 
 /* =====================================================
-   POST TO APPS SCRIPT
+   POST
 ===================================================== */
 
 async function postForm(fields){
@@ -2272,12 +2844,6 @@ async function postForm(fields){
     );
 
 
-    /*
-     * FALLBACK
-     * Untuk browser yang gagal
-     * menggunakan fetch.
-     */
-
     try{
 
       const form =
@@ -2311,14 +2877,18 @@ async function postForm(fields){
                 'input'
               );
 
+
             input.type =
               'hidden';
+
 
             input.name =
               key;
 
+
             input.value =
               value ?? '';
+
 
             form.appendChild(
               input
@@ -2365,7 +2935,7 @@ async function postForm(fields){
 
 
 /* =====================================================
-   POLL STATUS
+   POLL
 ===================================================== */
 
 function poll(
@@ -2390,7 +2960,9 @@ function poll(
     function(data){
 
       if(finished){
+
         return;
+
       }
 
 
@@ -2432,13 +3004,9 @@ function poll(
         data.state === 'NOT_FOUND'
       ){
 
-        /*
-         * Race-condition protection:
-         * POST Apps Script bisa belum selesai membuat
-         * record REQUESTS ketika polling pertama datang.
-         * Jangan langsung menganggap request gagal.
-         */
-        if(tries >= MAX_TRIES){
+        if(
+          tries >= MAX_TRIES
+        ){
 
           onDone({
 
@@ -2446,13 +3014,14 @@ function poll(
 
             error:
               data.error ||
-              'Request tidak ditemukan setelah beberapa kali percobaan.'
+              'Request tidak ditemukan.'
 
           });
 
           return;
 
         }
+
 
         setTimeout(
           () => {
@@ -2476,20 +3045,23 @@ function poll(
         false;
 
 
-      if(tries >= MAX_TRIES){
+      if(
+        tries >= MAX_TRIES
+      ){
 
         onDone({
 
           ok:false,
 
           error:
-            'Waktu menunggu respons server habis. Silakan periksa riwayat absensi sebelum mencoba lagi.'
+            'Waktu menunggu respons server habis.'
 
         });
 
         return;
 
       }
+
 
       setTimeout(
         () => {
@@ -2549,7 +3121,7 @@ function poll(
           ok:false,
 
           error:
-            'Server tidak merespons. Periksa koneksi internet atau Apps Script.'
+            'Server tidak merespons.'
 
         });
 
@@ -2579,10 +3151,6 @@ function poll(
   );
 
 
-  /*
-   * Timeout tambahan
-   */
-
   if(
     tries >= MAX_TRIES
   ){
@@ -2597,10 +3165,12 @@ function poll(
 
           delete window[cb];
 
+
           const oldScript =
             document.getElementById(
               'jsonp_' + cb
             );
+
 
           if(oldScript){
 
@@ -2614,7 +3184,7 @@ function poll(
             ok:false,
 
             error:
-              'Waktu verifikasi habis. Silakan coba login kembali.'
+              'Waktu verifikasi habis.'
 
           });
 
@@ -2731,7 +3301,9 @@ function renderUser(u){
 function avatarData(name){
 
   return (
+
     'data:image/svg+xml;charset=UTF-8,' +
+
     encodeURIComponent(
 
       '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">' +
@@ -2749,19 +3321,24 @@ function avatarData(name){
       '</svg>'
 
     )
+
   );
 
 }
 
 
 /* =====================================================
-   REFRESH
+   REFRESH ALL
 ===================================================== */
 
 function refreshAll(){
 
-  if(!sessionToken){
+  if(
+    !sessionToken
+  ){
+
     return;
+
   }
 
 
@@ -2773,7 +3350,10 @@ function refreshAll(){
     {},
     r => {
 
-      if(r.ok){
+      if(
+        r &&
+        r.ok
+      ){
 
         currentUser =
           r.user;
@@ -2793,7 +3373,10 @@ function refreshAll(){
     {limit:60},
     r => {
 
-      if(r.ok){
+      if(
+        r &&
+        r.ok
+      ){
 
         renderHistory(
           r.items || []
@@ -2820,10 +3403,12 @@ function request(
   const requestId =
     makeId();
 
+
   const payload =
     Object.assign(
 
       {
+
         action:
           action,
 
@@ -2839,13 +3424,11 @@ function request(
 
     );
 
-  /*
-   * Beri Apps Script sedikit waktu untuk membuat
-   * record REQUESTS sebelum polling pertama.
-   * Polling berikutnya tetap akan melakukan retry
-   * jika request belum terlihat.
-   */
-  postForm(payload);
+
+  postForm(
+    payload
+  );
+
 
   setTimeout(
     () => {
@@ -2881,13 +3464,16 @@ function getLocation(force){
 
   }
 
+
   $('locationText')
     .textContent =
     'Mengambil kecamatan...';
 
+
   $('accuracyText')
     .textContent =
     'Mohon izinkan lokasi pada browser.';
+
 
   navigator.geolocation.getCurrentPosition(
 
@@ -2906,6 +3492,7 @@ function getLocation(force){
 
       };
 
+
       $('accuracyText')
         .textContent =
         'Akurasi GPS: ' +
@@ -2914,20 +3501,17 @@ function getLocation(force){
         ) +
         ' meter';
 
-      /*
-       * Koordinat hanya dipakai internal untuk
-       * validasi radius kantor dan reverse geocoding.
-       * Yang ditampilkan kepada pengguna hanya
-       * Kecamatan/Kabupaten.
-       */
+
       request(
         'location',
         {
+
           latitude:
             currentLocation.latitude,
 
           longitude:
             currentLocation.longitude
+
         },
         r => {
 
@@ -2945,6 +3529,7 @@ function getLocation(force){
             currentLocation.province =
               r.province || '';
 
+
             const area =
               [
                 r.district,
@@ -2952,6 +3537,7 @@ function getLocation(force){
               ]
               .filter(Boolean)
               .join(', ');
+
 
             $('locationText')
               .textContent =
@@ -2973,11 +3559,14 @@ function getLocation(force){
 
     err => {
 
-      currentLocation = null;
+      currentLocation =
+        null;
+
 
       $('locationText')
         .textContent =
         'Lokasi belum tersedia';
+
 
       $('accuracyText')
         .textContent =
@@ -3004,26 +3593,74 @@ function getLocation(force){
 }
 
 
-
-
 /* =====================================================
    CLOCK
 ===================================================== */
 
 function updateClock(){
-  const d = new Date();
-  const dateEl = $('dateText');
-  const clockEl = $('clockText');
-  if(!dateEl || !clockEl) return;
 
-  dateEl.textContent = new Intl.DateTimeFormat('id-ID',{
-    weekday:'long',day:'2-digit',month:'long',year:'numeric',timeZone:'Asia/Jakarta'
-  }).format(d);
+  const d =
+    new Date();
 
-  const time = new Intl.DateTimeFormat('id-ID',{
-    hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Jakarta'
-  }).format(d);
-  clockEl.innerHTML = escapeHtml(time) + ' <span>WIB</span>';
+  const dateEl =
+    $('dateText');
+
+  const clockEl =
+    $('clockText');
+
+
+  if(
+    !dateEl ||
+    !clockEl
+  ){
+
+    return;
+
+  }
+
+
+  dateEl.textContent =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        weekday:'long',
+
+        day:'2-digit',
+
+        month:'long',
+
+        year:'numeric',
+
+        timeZone:'Asia/Jakarta'
+
+      }
+    ).format(d);
+
+
+  const time =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        hour:'2-digit',
+
+        minute:'2-digit',
+
+        second:'2-digit',
+
+        hour12:false,
+
+        timeZone:'Asia/Jakarta'
+
+      }
+    ).format(d);
+
+
+  clockEl.innerHTML =
+    escapeHtml(time) +
+    ' <span>WIB</span>';
+
 }
 
 
@@ -3037,51 +3674,833 @@ updateClock();
 
 
 /* =====================================================
-   HISTORY
+   DATE NORMALIZER
 ===================================================== */
 
 function normalizeDate_(value){
-  if(!value) return '';
-  const raw = String(value).trim();
-  const iso = raw.match(/(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-  if(iso) return `${iso[1]}-${String(iso[2]).padStart(2,'0')}-${String(iso[3]).padStart(2,'0')}`;
-  const dmy = raw.match(/(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
-  if(dmy) return `${dmy[3]}-${String(dmy[2]).padStart(2,'0')}-${String(dmy[1]).padStart(2,'0')}`;
-  return raw.slice(0,10);
+
+  if(
+    !value
+  ){
+
+    return '';
+
+  }
+
+
+  const raw =
+    String(value)
+      .trim();
+
+
+  /*
+   * YYYY-MM-DD
+   * YYYY/MM/DD
+   * termasuk ISO timestamp
+   */
+  const iso =
+    raw.match(
+      /(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
+    );
+
+
+  if(iso){
+
+    return (
+      iso[1] +
+      '-' +
+      String(
+        iso[2]
+      ).padStart(2,'0') +
+      '-' +
+      String(
+        iso[3]
+      ).padStart(2,'0')
+    );
+
+  }
+
+
+  /*
+   * DD-MM-YYYY
+   * DD/MM/YYYY
+   */
+  const dmy =
+    raw.match(
+      /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
+    );
+
+
+  if(dmy){
+
+    return (
+      dmy[3] +
+      '-' +
+      String(
+        dmy[2]
+      ).padStart(2,'0') +
+      '-' +
+      String(
+        dmy[1]
+      ).padStart(2,'0')
+    );
+
+  }
+
+
+  /*
+   * Jika value berupa Date string
+   */
+  const parsed =
+    new Date(raw);
+
+
+  if(
+    !isNaN(
+      parsed.getTime()
+    )
+  ){
+
+    const parts =
+      new Intl.DateTimeFormat(
+        'en-GB',
+        {
+
+          timeZone:'Asia/Jakarta',
+
+          year:'numeric',
+
+          month:'2-digit',
+
+          day:'2-digit'
+
+        }
+      ).formatToParts(parsed);
+
+
+    const get =
+      type =>
+        parts.find(
+          x =>
+            x.type === type
+        )?.value || '';
+
+
+    const year =
+      get('year');
+
+    const month =
+      get('month');
+
+    const day =
+      get('day');
+
+
+    if(
+      year &&
+      month &&
+      day
+    ){
+
+      return (
+        year +
+        '-' +
+        month +
+        '-' +
+        day
+      );
+
+    }
+
+  }
+
+
+  return raw.slice(
+    0,
+    10
+  );
+
 }
+
+
+/* =====================================================
+   TODAY
+===================================================== */
 
 function jakartaToday_(){
-  const parts = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
-  const get = t => parts.find(x=>x.type===t)?.value || '';
-  return `${get('year')}-${get('month')}-${get('day')}`;
+
+  const parts =
+    new Intl.DateTimeFormat(
+      'en-GB',
+      {
+
+        timeZone:'Asia/Jakarta',
+
+        year:'numeric',
+
+        month:'2-digit',
+
+        day:'2-digit'
+
+      }
+    ).formatToParts(
+      new Date()
+    );
+
+
+  const get =
+    type =>
+      parts.find(
+        x =>
+          x.type === type
+      )?.value || '';
+
+
+  return (
+    get('year') +
+    '-' +
+    get('month') +
+    '-' +
+    get('day')
+  );
+
 }
 
-function renderHistory(items){
-  items = Array.isArray(items) ? items : [];
-  const today = jakartaToday_();
-  const todayItems = items.filter(x => normalizeDate_(x.date) === today);
-  const masuk = todayItems.find(x => String(x.type || '').toUpperCase() === 'MASUK');
-  const pulang = todayItems.find(x => String(x.type || '').toUpperCase() === 'PULANG');
 
-  $('btnMasuk').disabled = !!masuk;
-  $('btnPulang').disabled = !masuk || !!pulang;
-  $('arrivalTime').textContent = masuk?.time ? `${masuk.time} WIB` : '--:-- WIB';
+/* =====================================================
+   DISPLAY DATE
+===================================================== */
 
-  const badge = $('statusBadge');
-  if(masuk && pulang){ badge.textContent='Lengkap'; badge.className='badge ok'; }
-  else if(masuk){ badge.textContent='Sudah Absen Masuk'; badge.className='badge ok'; }
-  else { badge.textContent='Belum Absen'; badge.className='badge warn'; }
+function getDisplayDate_(value){
 
-  $('todayHistory').innerHTML = todayItems.length ? todayItems.map(x => `
-    <div class="row"><span><span class="dot"></span>${escapeHtml(x.type || '-')}</span><b>${escapeHtml(x.time || '-')}</b></div>
-  `).join('') : '<div class="empty">Belum ada absensi hari ini.</div>';
+  const normalized =
+    normalizeDate_(value);
 
-  $('historyList').innerHTML = items.length ? items.map(x => `
-    <div class="row">
-      <div><b>${escapeHtml(x.date || '-')}</b><div class="small">${escapeHtml(x.type || '-')} • ${escapeHtml(x.district || 'Lokasi tercatat')}</div></div>
-      <div style="text-align:right"><b>${escapeHtml(x.time || '-')}</b><div class="small">${x.distance ? Math.round(x.distance)+' m' : ''}</div></div>
+
+  if(
+    !normalized
+  ){
+
+    return {
+      day:'-',
+      date:'-'
+    };
+
+  }
+
+
+  const match =
+    normalized.match(
+      /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+
+  if(
+    !match
+  ){
+
+    return {
+      day:'-',
+      date:String(value || '-')
+    };
+
+  }
+
+
+  const year =
+    Number(
+      match[1]
+    );
+
+  const month =
+    Number(
+      match[2]
+    );
+
+  const day =
+    Number(
+      match[3]
+    );
+
+
+  const d =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        day,
+        0,
+        0,
+        0
+      )
+    );
+
+
+  const dayName =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        weekday:'long',
+
+        timeZone:'UTC'
+
+      }
+    ).format(d);
+
+
+  const longDate =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        day:'2-digit',
+
+        month:'long',
+
+        year:'numeric',
+
+        timeZone:'UTC'
+
+      }
+    ).format(d);
+
+
+  return {
+
+    day:
+      dayName,
+
+    date:
+      longDate
+
+  };
+
+}
+
+
+/* =====================================================
+   GET TYPE
+===================================================== */
+
+function attendanceTypeLabel_(type){
+
+  const t =
+    String(
+      type || ''
+    )
+    .trim()
+    .toUpperCase();
+
+
+  if(
+    t === 'MASUK'
+  ){
+
+    return {
+      label:'Absen Masuk',
+      icon:'↗',
+      className:'masuk'
+    };
+
+  }
+
+
+  if(
+    t === 'PULANG'
+  ){
+
+    return {
+      label:'Absen Pulang',
+      icon:'⇥',
+      className:'pulang'
+    };
+
+  }
+
+
+  return {
+    label:
+      type || 'Absensi',
+    icon:'✓',
+    className:'masuk'
+  };
+
+}
+
+
+/* =====================================================
+   TODAY HISTORY CARD
+===================================================== */
+
+function renderTodayAttendanceCard_(item){
+
+  const typeInfo =
+    attendanceTypeLabel_(
+      item.type
+    );
+
+
+  const dateInfo =
+    getDisplayDate_(
+      item.date
+    );
+
+
+  const location =
+    [
+      item.district,
+      item.regency
+    ]
+    .filter(Boolean)
+    .join(', ');
+
+
+  const distance =
+    item.distance !== undefined &&
+    item.distance !== null &&
+    item.distance !== '' &&
+    isFinite(
+      Number(
+        item.distance
+      )
+    )
+      ? Math.round(
+          Number(
+            item.distance
+          )
+        ) + ' meter dari titik kantor'
+      : 'Jarak tidak tersedia';
+
+
+  return `
+
+    <div class="today-attendance-card ${typeInfo.className}">
+
+      <div class="today-attendance-head">
+
+        <div class="today-attendance-type">
+
+          <div class="today-attendance-icon">
+            ${typeInfo.icon}
+          </div>
+
+          <span>
+            ${escapeHtml(typeInfo.label)}
+          </span>
+
+        </div>
+
+
+        <span class="today-attendance-badge">
+          Tercatat
+        </span>
+
+      </div>
+
+
+      <div class="today-attendance-grid">
+
+        <div class="today-attendance-info">
+
+          <div class="today-attendance-label">
+            Hari
+          </div>
+
+          <div class="today-attendance-value">
+            ${escapeHtml(dateInfo.day)}
+          </div>
+
+        </div>
+
+
+        <div class="today-attendance-info">
+
+          <div class="today-attendance-label">
+            Tanggal
+          </div>
+
+          <div class="today-attendance-value">
+            ${escapeHtml(dateInfo.date)}
+          </div>
+
+        </div>
+
+
+        <div class="today-attendance-info">
+
+          <div class="today-attendance-label">
+            Jam Absensi
+          </div>
+
+          <div class="today-attendance-value today-attendance-time">
+            ${escapeHtml(item.time || '--:--')} WIB
+          </div>
+
+        </div>
+
+
+        <div class="today-attendance-info">
+
+          <div class="today-attendance-label">
+            Status
+          </div>
+
+          <div class="today-attendance-value">
+            ${escapeHtml(
+              typeInfo.label
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="today-attendance-info full">
+
+          <div class="today-attendance-label">
+            Lokasi
+          </div>
+
+          <div class="today-attendance-value today-attendance-location">
+
+            <span class="today-attendance-location-icon">
+              ⌖
+            </span>
+
+            <span>
+              ${
+                escapeHtml(
+                  location ||
+                  'Lokasi tercatat'
+                )
+              }
+
+              <div class="today-attendance-distance">
+                ${escapeHtml(distance)}
+              </div>
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-  `).join('') : '<div class="empty">Belum ada riwayat.</div>';
+
+  `;
+
+}
+
+
+/* =====================================================
+   RENDER HISTORY
+===================================================== */
+
+function renderHistory(items){
+
+  items =
+    Array.isArray(items)
+      ? items
+      : [];
+
+
+  const today =
+    jakartaToday_();
+
+
+  /*
+   * Ambil hanya data hari ini.
+   */
+  const todayItems =
+    items
+      .filter(
+        x =>
+          normalizeDate_(
+            x.date
+          ) === today
+      )
+      .sort(
+        (a,b) =>
+          String(
+            a.time || ''
+          ).localeCompare(
+            String(
+              b.time || ''
+            )
+          )
+      );
+
+
+  const masuk =
+    todayItems.find(
+      x =>
+        String(
+          x.type || ''
+        ).toUpperCase() ===
+        'MASUK'
+    );
+
+
+  const pulang =
+    todayItems.find(
+      x =>
+        String(
+          x.type || ''
+        ).toUpperCase() ===
+        'PULANG'
+    );
+
+
+  /*
+   * Tombol Absen Masuk
+   */
+  $('btnMasuk').disabled =
+    !!masuk;
+
+
+  /*
+   * Tombol Pulang hanya aktif
+   * jika sudah masuk dan belum pulang.
+   */
+  $('btnPulang').disabled =
+    !masuk ||
+    !!pulang;
+
+
+  /*
+   * Jam absen masuk.
+   *
+   * PENTING:
+   * gunakan innerHTML karena ada <span> WIB.
+   */
+  if(
+    masuk &&
+    masuk.time
+  ){
+
+    $('arrivalTime').innerHTML =
+      escapeHtml(
+        String(
+          masuk.time
+        )
+      ) +
+      ' <span>WIB</span>';
+
+  }else{
+
+    $('arrivalTime').innerHTML =
+      '--:-- <span>WIB</span>';
+
+  }
+
+
+  /*
+   * Status badge.
+   */
+  const badge =
+    $('statusBadge');
+
+
+  if(
+    masuk &&
+    pulang
+  ){
+
+    badge.textContent =
+      'Lengkap';
+
+    badge.className =
+      'badge ok';
+
+    $('statusSymbol')
+      .textContent =
+      '✓';
+
+  }
+
+  else if(
+    masuk
+  ){
+
+    badge.textContent =
+      'Sudah Absen Masuk';
+
+    badge.className =
+      'badge ok';
+
+    $('statusSymbol')
+      .textContent =
+      '✓';
+
+  }
+
+  else{
+
+    badge.textContent =
+      'Belum Absen';
+
+    badge.className =
+      'badge warn';
+
+    $('statusSymbol')
+      .textContent =
+      '↗';
+
+  }
+
+
+  /*
+   * RIWAYAT HARI INI
+   */
+  if(
+    todayItems.length
+  ){
+
+    $('todayHistory').innerHTML =
+      todayItems
+        .map(
+          item =>
+            renderTodayAttendanceCard_(
+              item
+            )
+        )
+        .join('');
+
+  }else{
+
+    $('todayHistory').innerHTML = `
+
+      <div class="today-empty">
+
+        Belum ada absensi hari ini.
+
+        <br>
+
+        Silakan lakukan Absen Masuk.
+
+      </div>
+
+    `;
+
+  }
+
+
+  /*
+   * RIWAYAT LENGKAP
+   */
+  if(
+    items.length
+  ){
+
+    $('historyList').innerHTML =
+      items
+        .map(
+          x => {
+
+            const dateInfo =
+              getDisplayDate_(
+                x.date
+              );
+
+
+            const location =
+              [
+                x.district,
+                x.regency
+              ]
+              .filter(Boolean)
+              .join(', ');
+
+
+            const distance =
+              x.distance !== undefined &&
+              x.distance !== null &&
+              x.distance !== '' &&
+              isFinite(
+                Number(
+                  x.distance
+                )
+              )
+                ? Math.round(
+                    Number(
+                      x.distance
+                    )
+                  ) + ' m'
+                : '';
+
+
+            return `
+
+              <div class="row">
+
+                <div style="min-width:0">
+
+                  <b>
+                    ${escapeHtml(
+                      dateInfo.date
+                    )}
+                  </b>
+
+                  <div class="small">
+
+                    ${escapeHtml(
+                      dateInfo.day
+                    )}
+
+                    •
+
+                    ${escapeHtml(
+                      x.type || '-'
+                    )}
+
+                    ${
+                      location
+                        ? ' • ' +
+                          escapeHtml(
+                            location
+                          )
+                        : ''
+                    }
+
+                  </div>
+
+                </div>
+
+
+                <div
+                  style="text-align:right;flex:0 0 auto"
+                >
+
+                  <b>
+                    ${escapeHtml(
+                      x.time || '-'
+                    )}
+                  </b>
+
+                  <div class="small">
+                    ${escapeHtml(
+                      distance
+                    )}
+                  </div>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join('');
+
+  }else{
+
+    $('historyList').innerHTML =
+      '<div class="empty">Belum ada riwayat.</div>';
+
+  }
+
 }
 
 
@@ -3096,11 +4515,13 @@ function escapeHtml(s){
   ).replace(
     /[&<>"']/g,
     m => ({
+
       '&':'&amp;',
       '<':'&lt;',
       '>':'&gt;',
       '"':'&quot;',
       "'":'&#039;'
+
     }[m])
   );
 
@@ -3113,7 +4534,12 @@ function escapeHtml(s){
 
 async function openCamera(type){
 
-  if(!currentLocation){
+  /*
+   * Pastikan lokasi tersedia.
+   */
+  if(
+    !currentLocation
+  ){
 
     getLocation(true);
 
@@ -3130,6 +4556,9 @@ async function openCamera(type){
     type;
 
 
+  /*
+   * Reset foto sebelumnya.
+   */
   capturedDataUrl =
     '';
 
@@ -3149,6 +4578,10 @@ async function openCamera(type){
     'none';
 
 
+  $('preview').src =
+    '';
+
+
   $('video')
     .style.display =
     'block';
@@ -3158,7 +4591,9 @@ async function openCamera(type){
     .style.display =
     'none';
 
-  $('captureBtn').textContent =
+
+  $('captureBtn')
+    .textContent =
     '📸 Ambil Foto';
 
 
@@ -3207,28 +4642,29 @@ async function startCamera(){
 
 
   cameraStream =
-    await navigator.mediaDevices.getUserMedia({
+    await navigator.mediaDevices
+      .getUserMedia({
 
-      video:{
+        video:{
 
-        facingMode:{
-          ideal:
-            facingMode
+          facingMode:{
+            ideal:
+              facingMode
+          },
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:1280
+          }
+
         },
 
-        width:{
-          ideal:1280
-        },
+        audio:false
 
-        height:{
-          ideal:1280
-        }
-
-      },
-
-      audio:false
-
-    });
+      });
 
 
   $('video').srcObject =
@@ -3257,7 +4693,9 @@ async function startCamera(){
 
 function stopCamera(){
 
-  if(cameraStream){
+  if(
+    cameraStream
+  ){
 
     cameraStream
       .getTracks()
@@ -3265,6 +4703,7 @@ function stopCamera(){
         track =>
           track.stop()
       );
+
 
     cameraStream =
       null;
@@ -3292,6 +4731,8 @@ async function switchCamera(){
 
   }catch(e){
 
+    console.error(e);
+
     showToast(
       'Kamera tidak tersedia.'
     );
@@ -3302,7 +4743,7 @@ async function switchCamera(){
 
 
 /* =====================================================
-   CAPTURE
+   CAPTURE PHOTO
 ===================================================== */
 
 function capturePhoto(){
@@ -3310,8 +4751,23 @@ function capturePhoto(){
   const video =
     $('video');
 
+
   const canvas =
     $('canvas');
+
+
+  if(
+    !video ||
+    !canvas
+  ){
+
+    showToast(
+      'Komponen kamera belum siap.'
+    );
+
+    return;
+
+  }
 
 
   if(
@@ -3328,17 +4784,21 @@ function capturePhoto(){
   }
 
 
-  const maxWidth = 800;
+  const maxWidth =
+    800;
+
 
   const ratio =
     video.videoHeight /
     video.videoWidth;
+
 
   const w =
     Math.min(
       maxWidth,
       video.videoWidth
     );
+
 
   const h =
     Math.round(
@@ -3349,6 +4809,7 @@ function capturePhoto(){
   canvas.width =
     w;
 
+
   canvas.height =
     h;
 
@@ -3356,8 +4817,21 @@ function capturePhoto(){
   const ctx =
     canvas.getContext(
       '2d',
-      {alpha:false}
+      {
+        alpha:false
+      }
     );
+
+
+  if(!ctx){
+
+    showToast(
+      'Canvas kamera tidak tersedia.'
+    );
+
+    return;
+
+  }
 
 
   ctx.drawImage(
@@ -3370,18 +4844,25 @@ function capturePhoto(){
 
 
   /*
-   * Kompres adaptif.
-   * Target sekitar <= 600 KB agar aman
-   * dikirim ke Apps Script.
+   * Kompres foto.
    */
   const MAX_CLIENT_BYTES =
     600 * 1024;
 
-  let quality = 0.78;
-  let dataUrl = '';
+
+  let quality =
+    0.78;
 
 
-  for(let i = 0; i < 6; i++){
+  let dataUrl =
+    '';
+
+
+  for(
+    let i = 0;
+    i < 6;
+    i++
+  ){
 
     dataUrl =
       canvas.toDataURL(
@@ -3389,31 +4870,46 @@ function capturePhoto(){
         quality
       );
 
+
     const estimatedBytes =
       Math.floor(
-        dataUrl.length * 0.75
+        dataUrl.length *
+        0.75
       );
+
 
     if(
       estimatedBytes <=
       MAX_CLIENT_BYTES
     ){
+
       break;
+
     }
 
-    quality -= 0.08;
 
-    if(quality < 0.38){
-      quality = 0.38;
+    quality -=
+      0.08;
+
+
+    if(
+      quality < 0.38
+    ){
+
+      quality =
+        0.38;
+
     }
 
   }
 
 
+  /*
+   * Validasi Base64.
+   */
   if(
-    !dataUrl ||
-    !dataUrl.startsWith(
-      'data:image/jpeg;base64,'
+    !/^data:image\/[^;]+;base64,/i.test(
+      dataUrl
     )
   ){
 
@@ -3426,29 +4922,70 @@ function capturePhoto(){
   }
 
 
+  /*
+   * SIMPAN foto.
+   *
+   * Jangan gunakan video/canvas lagi
+   * setelah bagian ini.
+   */
   capturedDataUrl =
-    dataUrl;
+    String(
+      dataUrl
+    ).trim();
 
 
+  /*
+   * Pastikan benar-benar tersimpan.
+   */
+  if(
+    !capturedDataUrl ||
+    !/^data:image\/[^;]+;base64,/i.test(
+      capturedDataUrl
+    )
+  ){
+
+    capturedDataUrl =
+      '';
+
+    showToast(
+      'Foto belum tersimpan. Silakan ambil foto lagi.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * Tampilkan preview.
+   */
   $('preview').src =
     capturedDataUrl;
 
 
-  $('video').style.display =
+  $('video')
+    .style.display =
     'none';
 
 
-  $('preview').style.display =
+  $('preview')
+    .style.display =
     'block';
 
 
-  $('captureBtn').textContent =
+  $('captureBtn')
+    .textContent =
     '📸 Ambil Ulang';
 
 
   $('submitPhotoBtn')
     .style.display =
     'block';
+
+
+  showToast(
+    'Foto berhasil diambil. Silakan klik Gunakan Foto & Absen.'
+  );
 
 }
 
@@ -3460,6 +4997,7 @@ function capturePhoto(){
 function closeCamera(){
 
   stopCamera();
+
 
   $('cameraModal')
     .classList.remove(
@@ -3475,35 +5013,30 @@ function closeCamera(){
 
 function submitAttendance(){
 
+  /*
+   * Salin foto SEBELUM melakukan apa pun.
+   */
   const photoToSend =
     String(
       capturedDataUrl || ''
     ).trim();
 
-  const locationToSend =
-    currentLocation
-      ? {
-          latitude:
-            Number(
-              currentLocation.latitude
-            ),
-          longitude:
-            Number(
-              currentLocation.longitude
-            ),
-          accuracy:
-            Number(
-              currentLocation.accuracy
-            )
-        }
-      : null;
+
+  /*
+   * Validasi foto.
+   *
+   * Regex:
+   * data:image/....;base64,
+   */
+  const validPhoto =
+    /^data:image\/[^;]+;base64,/i.test(
+      photoToSend
+    );
 
 
   if(
     !photoToSend ||
-    !photoToSend.startsWith(
-      'data:image/'
-    )
+    !validPhoto
   ){
 
     showToast(
@@ -3513,6 +5046,32 @@ function submitAttendance(){
     return;
 
   }
+
+
+  /*
+   * Salin lokasi.
+   */
+  const locationToSend =
+    currentLocation
+      ? {
+
+          latitude:
+            Number(
+              currentLocation.latitude
+            ),
+
+          longitude:
+            Number(
+              currentLocation.longitude
+            ),
+
+          accuracy:
+            Number(
+              currentLocation.accuracy
+            )
+
+        }
+      : null;
 
 
   if(
@@ -3551,8 +5110,16 @@ function submitAttendance(){
 
 
   /*
-   * Tutup kamera setelah semua data sudah
-   * disalin ke variabel lokal.
+   * Simpan type sebelum request.
+   */
+  const typeToSend =
+    attendanceType;
+
+
+  /*
+   * Tutup kamera.
+   *
+   * Tidak menghapus capturedDataUrl.
    */
   closeCamera();
 
@@ -3571,7 +5138,7 @@ function submitAttendance(){
     {
 
       type:
-        attendanceType,
+        typeToSend,
 
       latitude:
         locationToSend.latitude,
@@ -3582,11 +5149,6 @@ function submitAttendance(){
       accuracy:
         locationToSend.accuracy,
 
-      /*
-       * Backend versi baru menerima "photo".
-       * Ini sengaja TIDAK menggunakan photoData
-       * agar nama parameter konsisten.
-       */
       photo:
         photoToSend
 
@@ -3602,6 +5164,14 @@ function submitAttendance(){
         !r.ok
       ){
 
+        /*
+         * Jangan hapus foto kalau gagal.
+         * User masih bisa mencoba lagi.
+         */
+        capturedDataUrl =
+          photoToSend;
+
+
         showToast(
           r?.error ||
           'Absen gagal. Silakan coba lagi.'
@@ -3612,31 +5182,36 @@ function submitAttendance(){
       }
 
 
+      /*
+       * Hasil absensi.
+       */
       $('resultTime')
         .textContent =
-        r.time || '-';
+        r.time ||
+        '-';
 
 
       $('resultDate')
         .textContent =
-        r.date || '-';
+        r.date ||
+        '-';
 
 
       $('resultLoc')
         .textContent =
         [
+
           r.district,
+
           r.regency
+
         ]
         .filter(Boolean)
         .join(', ') ||
+
         'Lokasi tercatat';
 
 
-      /*
-       * Gunakan salinan foto yang benar-benar
-       * dikirim ke server.
-       */
       $('resultPhoto')
         .src =
         photoToSend;
@@ -3649,12 +5224,15 @@ function submitAttendance(){
 
 
       /*
-       * Bersihkan foto setelah server
-       * mengonfirmasi absensi berhasil.
+       * Baru hapus setelah berhasil.
        */
-      capturedDataUrl = '';
+      capturedDataUrl =
+        '';
 
 
+      /*
+       * Refresh history.
+       */
       refreshAll();
 
     }
@@ -3675,6 +5253,13 @@ function closeResult(){
       'show'
     );
 
+
+  /*
+   * Setelah melihat hasil,
+   * kembali ke Home.
+   */
+  showPage('home');
+
 }
 
 
@@ -3685,9 +5270,11 @@ function closeResult(){
 function showPage(page){
 
   [
+
     'home',
     'history',
     'profile'
+
   ].forEach(
     p => {
 
@@ -3702,22 +5289,29 @@ function showPage(page){
 
 
   [
+
     'Home',
     'History',
     'Profile'
+
   ].forEach(
     p => {
 
       $('nav' + p)
         .classList.toggle(
           'active',
-          p.toLowerCase() === page
+          p.toLowerCase() ===
+          page
         );
 
     }
   );
 
 
+  /*
+   * Refresh history ketika halaman
+   * Riwayat dibuka.
+   */
   if(
     page === 'history'
   ){
@@ -3727,7 +5321,10 @@ function showPage(page){
       {limit:60},
       r => {
 
-        if(r.ok){
+        if(
+          r &&
+          r.ok
+        ){
 
           renderHistory(
             r.items || []
@@ -3751,13 +5348,17 @@ async function logout(){
 
   try{
 
-    if(firebaseAuth){
+    if(
+      firebaseAuth
+    ){
 
       const {
         signOut
-      } = await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-      );
+      } =
+        await import(
+          'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+        );
+
 
       await signOut(
         firebaseAuth
@@ -3774,15 +5375,19 @@ async function logout(){
 
   }
 
+
   localStorage.removeItem(
     'absen_session'
   );
 
+
   sessionToken =
     '';
 
+
   currentUser =
     null;
+
 
   location.reload();
 
@@ -3798,12 +5403,15 @@ window.addEventListener(
   async () => {
 
     /*
-     * Firebase Auth harus diinisialisasi walaupun
-     * session Apps Script masih tersimpan.
+     * Firebase tetap diinisialisasi
+     * walaupun session masih tersimpan.
      */
     await initFirebase();
 
-    if(sessionToken){
+
+    if(
+      sessionToken
+    ){
 
       loading(
         true,
@@ -3811,7 +5419,9 @@ window.addEventListener(
         'Memeriksa sesi login Anda...'
       );
 
+
       showApp();
+
 
       setTimeout(
         () => {
