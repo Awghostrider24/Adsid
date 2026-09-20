@@ -901,6 +901,48 @@ button{
   .action small{font-size:11px}
 }
 
+
+/* FINAL MOBILE + DATA VISIBILITY FIX */
+.toprow.dashboard-head{display:flex;align-items:flex-start;justify-content:space-between}
+.headline{min-width:0}
+.profile{display:flex;align-items:center;max-width:46%}
+#dateText,#clockText{display:block;visibility:visible;opacity:1}
+@media(max-width:600px){
+  .top{padding:18px 14px 82px;border-radius:0 0 28px 28px}
+  .toprow.dashboard-head{display:flex;flex-direction:column;gap:18px;align-items:stretch}
+  .headline{width:100%;text-align:center}
+  .date-head{justify-content:center;font-size:13px;white-space:normal;line-height:1.35}
+  .calendar-icon{font-size:18px}
+  .clock-head{font-size:clamp(42px,13vw,62px);letter-spacing:-1px;margin-top:7px}
+  .profile{width:100%;max-width:none;justify-content:center;gap:10px}
+  .profile .name{font-size:18px}
+  .profile .position{font-size:12px}
+  .wrap{width:100%;padding:0 10px;margin:-42px auto calc(88px + env(safe-area-inset-bottom))}
+  .card,.attendance-card,.history-today-card{padding:16px;border-radius:22px;margin-bottom:14px}
+  .section-heading{align-items:center;gap:10px;margin-bottom:14px}
+  .section-heading h2{font-size:clamp(19px,5.5vw,25px)}
+  .heading-icon{width:44px;height:44px;flex-basis:44px;font-size:28px}
+  .attendance-status{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;padding:14px;border-radius:18px;margin-bottom:14px}
+  .status-symbol{width:64px;height:64px;flex-basis:64px;font-size:34px}
+  .small-label{font-size:14px;line-height:1.25}
+  .big-time{font-size:clamp(32px,9vw,43px);letter-spacing:-1px}
+  .attendance-status .badge{grid-column:1 / -1;width:100%;font-size:12px;padding:9px 10px}
+  .actions{grid-template-columns:1fr 1fr;gap:8px}
+  .action{min-height:112px;padding:12px 4px;border-radius:17px;font-size:17px}
+  .action .icon{font-size:26px;margin-bottom:3px}
+  .action small{font-size:10px;margin-top:5px}
+  .location-mini{margin-top:14px;padding-top:10px}
+  .location-mini>span{font-size:23px}
+  .row{font-size:14px;align-items:center;padding:12px 0}
+  .nav button{font-size:13px}
+}
+@media(max-width:360px){
+  .date-head{font-size:12px}
+  .clock-head{font-size:39px}
+  .action{font-size:15px;min-height:105px}
+  .action small{font-size:9px}
+}
+
 </style>
 </head>
 
@@ -2701,41 +2743,19 @@ function getLocation(force){
 ===================================================== */
 
 function updateClock(){
+  const d = new Date();
+  const dateEl = $('dateText');
+  const clockEl = $('clockText');
+  if(!dateEl || !clockEl) return;
 
-  const d =
-    new Date();
+  dateEl.textContent = new Intl.DateTimeFormat('id-ID',{
+    weekday:'long',day:'2-digit',month:'long',year:'numeric',timeZone:'Asia/Jakarta'
+  }).format(d);
 
-
-  $('dateText')
-    .textContent =
-
-    new Intl.DateTimeFormat(
-      'id-ID',
-      {
-        weekday:'long',
-        day:'2-digit',
-        month:'long',
-        year:'numeric',
-        timeZone:'Asia/Jakarta'
-      }
-    ).format(d);
-
-
-  $('clockText')
-    .textContent =
-
-    new Intl.DateTimeFormat(
-      'id-ID',
-      {
-        hour:'2-digit',
-        minute:'2-digit',
-        hour12:false,
-        timeZone:'Asia/Jakarta'
-      }
-    ).format(d) +
-
-    ' WIB';
-
+  const time = new Intl.DateTimeFormat('id-ID',{
+    hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Jakarta'
+  }).format(d);
+  clockEl.innerHTML = escapeHtml(time) + ' <span>WIB</span>';
 }
 
 
@@ -2752,205 +2772,48 @@ updateClock();
    HISTORY
 ===================================================== */
 
+function normalizeDate_(value){
+  if(!value) return '';
+  const raw = String(value).trim();
+  const iso = raw.match(/(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+  if(iso) return `${iso[1]}-${String(iso[2]).padStart(2,'0')}-${String(iso[3]).padStart(2,'0')}`;
+  const dmy = raw.match(/(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
+  if(dmy) return `${dmy[3]}-${String(dmy[2]).padStart(2,'0')}-${String(dmy[1]).padStart(2,'0')}`;
+  return raw.slice(0,10);
+}
+
+function jakartaToday_(){
+  const parts = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const get = t => parts.find(x=>x.type===t)?.value || '';
+  return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
 function renderHistory(items){
-
-  const today =
-    new Intl.DateTimeFormat(
-      'en-CA',
-      {
-        timeZone:'Asia/Jakarta',
-        year:'numeric',
-        month:'2-digit',
-        day:'2-digit'
-      }
-    ).format(
-      new Date()
-    );
-
-
-  const todayItems =
-    items.filter(
-      x =>
-        x.date === today
-    );
-
-
-  const masuk =
-    todayItems.find(
-      x =>
-        x.type === 'MASUK'
-    );
-
-
-  const pulang =
-    todayItems.find(
-      x =>
-        x.type === 'PULANG'
-    );
-
-
-  $('btnMasuk')
-    .disabled =
-    !!masuk;
-
-  $('arrivalTime').textContent =
-    masuk && masuk.time
-      ? masuk.time + ' WIB'
-      : '--:-- WIB';
-
-
-  $('btnPulang')
-    .disabled =
-    !masuk ||
-    !!pulang;
-
-
-  if(
-    masuk &&
-    pulang
-  ){
-
-    $('statusBadge')
-      .textContent =
-      'Lengkap';
-
-    $('statusBadge')
-      .className =
-      'badge ok';
-
-  }
-
-  else if(masuk){
-
-    $('statusBadge')
-      .textContent =
-      'Sudah Absen Masuk';
-
-    $('statusBadge')
-      .className =
-      'badge ok';
-
-  }
-
-  else{
-
-    $('statusBadge')
-      .textContent =
-      'Belum Absen';
-
-    $('statusBadge')
-      .className =
-      'badge warn';
-
-  }
-
-
-  $('todayHistory')
-    .innerHTML =
-
-    todayItems.length
-
-      ?
-
-      todayItems.map(
-        x => `
-
-        <div class="row">
-
-          <span>
-
-            <span class="dot"></span>
-
-            ${escapeHtml(
-              x.type
-            )}
-
-          </span>
-
-          <b>
-            ${escapeHtml(
-              x.time
-            )}
-          </b>
-
-        </div>
-
-      `
-      ).join('')
-
-      :
-
-      '<div class="empty">Belum ada absensi hari ini.</div>';
-
-
-  $('historyList')
-    .innerHTML =
-
-    items.length
-
-      ?
-
-      items.map(
-        x => `
-
-        <div class="row">
-
-          <div>
-
-            <b>
-              ${escapeHtml(
-                x.date
-              )}
-            </b>
-
-            <div class="small">
-
-              ${escapeHtml(
-                x.type
-              )}
-
-              •
-
-              ${escapeHtml(
-                x.district ||
-                'Lokasi tercatat'
-              )}
-
-            </div>
-
-          </div>
-
-          <div style="text-align:right">
-
-            <b>
-              ${escapeHtml(
-                x.time
-              )}
-            </b>
-
-            <div class="small">
-
-              ${
-                x.distance
-                  ? Math.round(
-                      x.distance
-                    ) + ' m'
-                  : ''
-              }
-
-            </div>
-
-          </div>
-
-        </div>
-
-      `
-      ).join('')
-
-      :
-
-      '<div class="empty">Belum ada riwayat.</div>';
-
+  items = Array.isArray(items) ? items : [];
+  const today = jakartaToday_();
+  const todayItems = items.filter(x => normalizeDate_(x.date) === today);
+  const masuk = todayItems.find(x => String(x.type || '').toUpperCase() === 'MASUK');
+  const pulang = todayItems.find(x => String(x.type || '').toUpperCase() === 'PULANG');
+
+  $('btnMasuk').disabled = !!masuk;
+  $('btnPulang').disabled = !masuk || !!pulang;
+  $('arrivalTime').textContent = masuk?.time ? `${masuk.time} WIB` : '--:-- WIB';
+
+  const badge = $('statusBadge');
+  if(masuk && pulang){ badge.textContent='Lengkap'; badge.className='badge ok'; }
+  else if(masuk){ badge.textContent='Sudah Absen Masuk'; badge.className='badge ok'; }
+  else { badge.textContent='Belum Absen'; badge.className='badge warn'; }
+
+  $('todayHistory').innerHTML = todayItems.length ? todayItems.map(x => `
+    <div class="row"><span><span class="dot"></span>${escapeHtml(x.type || '-')}</span><b>${escapeHtml(x.time || '-')}</b></div>
+  `).join('') : '<div class="empty">Belum ada absensi hari ini.</div>';
+
+  $('historyList').innerHTML = items.length ? items.map(x => `
+    <div class="row">
+      <div><b>${escapeHtml(x.date || '-')}</b><div class="small">${escapeHtml(x.type || '-')} • ${escapeHtml(x.district || 'Lokasi tercatat')}</div></div>
+      <div style="text-align:right"><b>${escapeHtml(x.time || '-')}</b><div class="small">${x.distance ? Math.round(x.distance)+' m' : ''}</div></div>
+    </div>
+  `).join('') : '<div class="empty">Belum ada riwayat.</div>';
 }
 
 
