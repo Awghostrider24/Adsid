@@ -943,6 +943,274 @@ button{
   .action small{font-size:9px}
 }
 
+
+
+/* =====================================================
+   FINAL RESPONSIVE PATCH v2
+   - Prevents dashboard card from sliding underneath header
+   - Keeps header content readable on small phones
+   - Makes buttons, status and location scale safely
+===================================================== */
+@media (max-width: 699px){
+  html, body{
+    width:100%;
+    min-width:0;
+    overflow-x:hidden;
+  }
+
+  .top{
+    width:100%;
+    padding:
+      calc(18px + env(safe-area-inset-top))
+      14px
+      28px;
+    border-radius:0 0 30px 30px;
+    overflow:hidden;
+  }
+
+  .toprow.dashboard-head{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+
+  .headline{
+    width:100%;
+    min-width:0;
+    text-align:center;
+  }
+
+  .date-head{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    white-space:normal;
+    font-size:clamp(12px,3.5vw,16px);
+    line-height:1.35;
+  }
+
+  .clock-head{
+    margin-top:8px;
+    font-size:clamp(38px,11.5vw,58px);
+    line-height:1.08;
+    letter-spacing:-1.5px;
+    white-space:nowrap;
+  }
+
+  .profile{
+    width:100%;
+    max-width:100%;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+  }
+
+  .avatar{
+    width:52px;
+    height:52px;
+    flex:0 0 52px;
+  }
+
+  .profile > div{
+    min-width:0;
+    max-width:calc(100% - 64px);
+    text-align:left;
+  }
+
+  .hello{font-size:12px;}
+  .name{
+    max-width:100%;
+    font-size:clamp(16px,4.8vw,20px);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .position{
+    max-width:100%;
+    font-size:clamp(11px,3.2vw,14px);
+    white-space:normal;
+    line-height:1.3;
+  }
+
+  /* Important: no negative margin on mobile.
+     This stops the first card from covering the header/title. */
+  .wrap{
+    width:100%;
+    max-width:620px;
+    margin:12px auto calc(96px + env(safe-area-inset-bottom));
+    padding:0 10px;
+  }
+
+  .card,
+  .attendance-card,
+  .history-today-card{
+    width:100%;
+    padding:16px;
+    margin-bottom:14px;
+    border-radius:22px;
+    overflow:visible;
+  }
+
+  .section-heading{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+
+  .section-heading h2{
+    min-width:0;
+    font-size:clamp(18px,5.5vw,25px);
+    line-height:1.2;
+    overflow-wrap:anywhere;
+  }
+
+  .heading-icon{
+    width:44px;
+    height:44px;
+    flex:0 0 44px;
+    font-size:28px;
+  }
+
+  .attendance-status{
+    display:grid;
+    grid-template-columns:64px minmax(0,1fr);
+    align-items:center;
+    gap:10px;
+    padding:14px;
+    margin-bottom:14px;
+    border-radius:18px;
+  }
+
+  .status-symbol{
+    width:64px;
+    height:64px;
+    flex:0 0 64px;
+    font-size:34px;
+  }
+
+  .attendance-time{min-width:0;}
+  .small-label{
+    font-size:14px;
+    line-height:1.25;
+  }
+
+  .big-time{
+    max-width:100%;
+    font-size:clamp(30px,8.8vw,43px);
+    letter-spacing:-1px;
+    white-space:nowrap;
+  }
+
+  .attendance-status .badge{
+    grid-column:1 / -1;
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    padding:9px 10px;
+  }
+
+  .actions{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:8px;
+    width:100%;
+  }
+
+  .action{
+    width:100%;
+    min-width:0;
+    min-height:112px;
+    padding:12px 4px;
+    border-radius:17px;
+    font-size:clamp(15px,4.5vw,19px);
+    line-height:1.2;
+    overflow-wrap:anywhere;
+  }
+
+  .action .icon{
+    font-size:26px;
+    margin-bottom:5px;
+  }
+
+  .action small{
+    font-size:10px;
+    line-height:1.3;
+    margin-top:5px;
+  }
+
+  .location-mini{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:14px;
+    padding:10px 0 0;
+  }
+
+  .location-mini > span{
+    flex:0 0 24px;
+    font-size:23px;
+  }
+
+  .location-mini > div{
+    min-width:0;
+    flex:1 1 auto;
+  }
+
+  .locline{
+    max-width:100%;
+    font-size:13px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+
+  .accuracy{font-size:12px;}
+  .refresh-location{flex:0 0 38px;}
+
+  .history-today-card #todayHistory{
+    width:100%;
+    min-height:24px;
+  }
+
+  .row{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:11px 0;
+    font-size:13px;
+    line-height:1.4;
+  }
+
+  .nav{
+    padding:
+      7px 10px
+      calc(7px + env(safe-area-inset-bottom));
+  }
+
+  .nav button{
+    min-height:54px;
+    padding:8px 4px;
+    font-size:12px;
+  }
+}
+
+@media (max-width:360px){
+  .top{padding-left:10px;padding-right:10px;}
+  .wrap{padding-left:8px;padding-right:8px;}
+  .card,.attendance-card,.history-today-card{padding:13px;}
+  .section-heading h2{font-size:18px;}
+  .heading-icon{width:40px;height:40px;flex-basis:40px;font-size:25px;}
+  .attendance-status{grid-template-columns:56px minmax(0,1fr);padding:11px;}
+  .status-symbol{width:56px;height:56px;flex-basis:56px;font-size:30px;}
+  .big-time{font-size:30px;}
+  .action{min-height:104px;font-size:14px;}
+  .action small{font-size:9px;}
+}
+
 </style>
 </head>
 
