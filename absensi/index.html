@@ -22,7 +22,6 @@
 ></script>
 
 <style>
-
 :root{
   --primary:#1976e8;
   --primary2:#0d5fd1;
@@ -37,26 +36,18 @@
   --radius:22px;
 }
 
-/* =========================
-   RESET
-========================= */
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-html{
+html,body{
   width:100%;
   min-height:100%;
-  background:var(--bg);
+  margin:0;
 }
 
 body{
-  margin:0;
-  width:100%;
-  min-height:100vh;
-  min-height:100dvh;
   font-family:
     Inter,
     system-ui,
@@ -71,8 +62,7 @@ body{
   overflow-x:hidden;
 }
 
-button,
-input{
+button,input{
   font:inherit;
 }
 
@@ -96,31 +86,19 @@ button{
 ========================= */
 
 .top{
-  background:
-    linear-gradient(
-      145deg,
-      #1b7af0,
-      #1263d7
-    );
+  background:linear-gradient(145deg,#1b7af0,#1263d7);
   color:#fff;
-
   padding:
     calc(22px + env(safe-area-inset-top))
     16px
     76px;
-
-  border-radius:
-    0
-    0
-    30px
-    30px;
+  border-radius:0 0 30px 30px;
 }
 
 .toprow{
   display:flex;
   align-items:center;
   justify-content:space-between;
-
   width:100%;
   max-width:620px;
   margin:auto;
@@ -137,10 +115,8 @@ button{
   width:52px;
   height:52px;
   flex:0 0 52px;
-
   border-radius:50%;
   object-fit:cover;
-
   background:#fff8;
   border:2px solid #ffffff99;
 }
@@ -154,7 +130,6 @@ button{
   font-weight:800;
   font-size:18px;
   margin-top:2px;
-
   max-width:230px;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -165,7 +140,6 @@ button{
   font-size:12px;
   opacity:.82;
   margin-top:2px;
-
   max-width:240px;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -176,12 +150,9 @@ button{
   width:42px;
   height:42px;
   flex:0 0 42px;
-
   border-radius:14px;
-
   background:#ffffff1d;
   color:#fff;
-
   font-size:20px;
 }
 
@@ -192,11 +163,9 @@ button{
 .wrap{
   width:100%;
   max-width:620px;
-
   margin:
     -52px auto
     calc(90px + env(safe-area-inset-bottom));
-
   padding:0 12px;
 }
 
@@ -204,10 +173,8 @@ button{
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-
   padding:16px;
   margin-bottom:14px;
-
   overflow:hidden;
 }
 
@@ -225,15 +192,11 @@ button{
   width:44px;
   height:44px;
   flex:0 0 44px;
-
   border-radius:15px;
-
   background:#eaf5ff;
   color:var(--primary);
-
   display:grid;
   place-items:center;
-
   font-size:21px;
 }
 
@@ -253,7 +216,6 @@ button{
 .locline{
   margin-top:3px;
   font-size:14px;
-
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -280,12 +242,8 @@ button{
   text-align:center;
   font-size:30px;
   font-weight:900;
-
   color:#1559b9;
-
-  margin:
-    2px 0
-    12px;
+  margin:2px 0 12px;
 }
 
 /* =========================
@@ -296,15 +254,10 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   gap:10px;
-
   border:1px solid var(--line);
-
   padding:10px 12px;
-
   border-radius:14px;
-
   font-size:13px;
 }
 
@@ -332,29 +285,18 @@ button{
 .actions{
   display:grid;
   grid-template-columns:1fr 1fr;
-
   gap:10px;
-
   margin-top:12px;
 }
 
 .action{
   padding:14px 8px;
-
   border-radius:17px;
-
   color:#fff;
-
   font-weight:800;
-
   min-height:88px;
-
-  box-shadow:
-    0 7px 16px rgba(0,0,0,.10);
-
-  transition:
-    transform .15s ease,
-    opacity .15s ease;
+  box-shadow:0 7px 16px rgba(0,0,0,.10);
+  transition:transform .15s ease,opacity .15s ease;
 }
 
 .action:active{
@@ -362,21 +304,11 @@ button{
 }
 
 .action.green{
-  background:
-    linear-gradient(
-      145deg,
-      #19c775,
-      #0da961
-    );
+  background:linear-gradient(145deg,#19c775,#0da961);
 }
 
 .action.red{
-  background:
-    linear-gradient(
-      145deg,
-      #ff554d,
-      #e62d35
-    );
+  background:linear-gradient(145deg,#ff554d,#e62d35);
 }
 
 .action:disabled{
@@ -412,11 +344,8 @@ button{
 .row{
   display:flex;
   justify-content:space-between;
-
   gap:12px;
-
   padding:13px 0;
-
   border-bottom:1px solid var(--line);
 }
 
@@ -426,23 +355,17 @@ button{
 
 .dot{
   display:inline-block;
-
   width:10px;
   height:10px;
-
   border-radius:50%;
-
   background:var(--green);
-
   margin-right:8px;
 }
 
 .empty{
   text-align:center;
   color:var(--muted);
-
   padding:22px 5px;
-
   font-size:14px;
 }
 
@@ -452,58 +375,40 @@ button{
 
 .nav{
   position:fixed;
-
   bottom:0;
   left:0;
   right:0;
-
   background:#fff;
-
   border-top:1px solid var(--line);
-
   display:flex;
   justify-content:center;
-
   z-index:20;
-
   padding:
     7px
     10px
     calc(7px + env(safe-area-inset-bottom));
-
-  box-shadow:
-    0 -5px 20px rgba(20,60,100,.05);
+  box-shadow:0 -5px 20px rgba(20,60,100,.05);
 }
 
 .navin{
   width:100%;
   max-width:620px;
-
   display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
+  grid-template-columns:repeat(3,1fr);
   gap:5px;
 }
 
 .nav button{
   background:none;
-
   color:#71839a;
-
   padding:8px;
-
   border-radius:13px;
-
   min-height:52px;
 }
 
 .nav button.active{
   color:var(--primary);
-
   background:#eef6ff;
-
   font-weight:800;
 }
 
@@ -521,17 +426,11 @@ button{
 
 .btn{
   width:100%;
-
   padding:13px 15px;
-
   border-radius:14px;
-
   background:var(--primary);
-
   color:#fff;
-
   font-weight:800;
-
   min-height:48px;
 }
 
@@ -550,16 +449,11 @@ button{
 
 .modal{
   position:fixed;
-
   inset:0;
-
   background:#071525b8;
-
   display:none;
-
   align-items:flex-end;
   justify-content:center;
-
   z-index:50;
 }
 
@@ -569,25 +463,15 @@ button{
 
 .sheet{
   background:#fff;
-
   width:100%;
-
   max-width:620px;
-
-  border-radius:
-    28px
-    28px
-    0
-    0;
-
+  border-radius:28px 28px 0 0;
   padding:
     18px
     16px
     calc(18px + env(safe-area-inset-bottom));
-
   max-height:92vh;
   max-height:92dvh;
-
   overflow:auto;
 }
 
@@ -595,20 +479,15 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   margin-bottom:10px;
 }
 
 .close{
   background:#eef3f8;
-
   border-radius:50%;
-
   width:38px;
   height:38px;
-
   flex:0 0 38px;
-
   font-size:18px;
 }
 
@@ -618,46 +497,31 @@ button{
 
 .camera{
   width:100%;
-
   aspect-ratio:3/4;
-
   object-fit:cover;
-
   background:#111;
-
   border-radius:20px;
 }
 
 .preview{
   display:none;
-
   width:100%;
-
   aspect-ratio:3/4;
-
   object-fit:cover;
-
   border-radius:20px;
 }
 
 .camera-actions{
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:10px;
-
   margin-top:12px;
 }
 
 .camera-actions button{
   padding:13px;
-
   border-radius:14px;
-
   font-weight:800;
-
   min-height:48px;
 }
 
@@ -683,20 +547,13 @@ button{
 .check{
   width:90px;
   height:90px;
-
   border-radius:50%;
-
   background:#dff8eb;
   color:#0aa75e;
-
   display:grid;
   place-items:center;
-
   font-size:52px;
-
-  margin:
-    4px auto
-    14px;
+  margin:4px auto 14px;
 }
 
 .result h2{
@@ -713,13 +570,9 @@ button{
 .photo{
   width:150px;
   height:150px;
-
   object-fit:cover;
-
   border-radius:18px;
-
   margin:12px auto;
-
   display:block;
 }
 
@@ -729,34 +582,19 @@ button{
 
 .toast{
   position:fixed;
-
   left:50%;
-
-  bottom:
-    calc(82px + env(safe-area-inset-bottom));
-
+  bottom:calc(82px + env(safe-area-inset-bottom));
   transform:translateX(-50%);
-
   background:#142437;
-
   color:#fff;
-
   padding:12px 16px;
-
   border-radius:14px;
-
   box-shadow:var(--shadow);
-
   display:none;
-
   z-index:100;
-
   width:max-content;
-
   max-width:90%;
-
   text-align:center;
-
   font-size:13px;
 }
 
@@ -765,25 +603,17 @@ button{
 }
 
 /* =========================
-   LOADING OVERLAY
+   LOADING
 ========================= */
 
 .loading{
   position:fixed;
-
   inset:0;
-
-  background:
-    rgba(255,255,255,.96);
-
+  background:rgba(255,255,255,.96);
   display:none;
-
   place-items:center;
-
   z-index:9999;
-
-  padding:25px;
-
+  padding:20px;
   backdrop-filter:blur(5px);
 }
 
@@ -792,55 +622,35 @@ button{
 }
 
 .loadingbox{
-  width:min(330px,90vw);
-
+  width:min(340px,90vw);
   background:#fff;
-
   border-radius:24px;
-
   padding:28px 22px;
-
   text-align:center;
-
-  box-shadow:
-    0 15px 50px rgba(20,60,100,.15);
+  box-shadow:0 15px 50px rgba(20,60,100,.15);
 }
 
 .spinner{
   width:48px;
   height:48px;
-
   margin:auto;
-
-  border:
-    4px solid #dbe8f7;
-
-  border-top-color:
-    var(--primary);
-
+  border:4px solid #dbe8f7;
+  border-top-color:var(--primary);
   border-radius:50%;
-
-  animation:
-    spin .8s linear infinite;
+  animation:spin .8s linear infinite;
 }
 
 .loading-title{
   margin-top:16px;
-
   font-weight:900;
-
   color:#1559b9;
-
   font-size:16px;
 }
 
 .loading-text{
   margin-top:5px;
-
   color:var(--muted);
-
   font-size:13px;
-
   line-height:1.5;
 }
 
@@ -857,92 +667,56 @@ button{
 .login{
   min-height:100vh;
   min-height:100dvh;
-
   display:flex;
-
   align-items:center;
   justify-content:center;
-
   padding:
     calc(18px + env(safe-area-inset-top))
     16px
     calc(18px + env(safe-area-inset-bottom));
-
-  background:
-    linear-gradient(
-      145deg,
-      #eaf4ff,
-      #f7fbff
-    );
+  background:linear-gradient(145deg,#eaf4ff,#f7fbff);
 }
 
 .loginbox{
   width:100%;
-
   max-width:420px;
-
   background:#fff;
-
   border-radius:28px;
-
-  padding:
-    28px
-    22px;
-
-  box-shadow:
-    0 15px 45px rgba(20,60,100,.12);
-
+  padding:28px 22px;
+  box-shadow:0 15px 45px rgba(20,60,100,.12);
   text-align:center;
 }
 
 .logo{
   width:72px;
   height:72px;
-
   border-radius:22px;
-
   background:#eaf4ff;
-
   display:grid;
   place-items:center;
-
-  margin:
-    0 auto
-    14px;
-
+  margin:0 auto 14px;
   font-size:34px;
 }
 
 .login h1{
-  margin:
-    0 0 7px;
-
+  margin:0 0 7px;
   font-size:25px;
 }
 
 .login p{
   color:var(--muted);
-
   font-size:14px;
-
   line-height:1.55;
-
-  margin:
-    0 auto;
+  margin:0 auto;
 }
 
 .google{
   display:flex;
-
   justify-content:center;
   align-items:center;
-
   width:100%;
-
   margin-top:20px;
-
   min-height:44px;
-
   overflow:hidden;
 }
 
@@ -956,29 +730,21 @@ button{
 
 .profilegrid{
   display:grid;
-
-  grid-template-columns:
-    90px 1fr;
-
+  grid-template-columns:90px 1fr;
   gap:14px;
-
   align-items:center;
 }
 
 .bigavatar{
   width:90px;
   height:90px;
-
   border-radius:24px;
-
   object-fit:cover;
-
   background:#edf4fb;
 }
 
 .kv{
   padding:11px 0;
-
   border-bottom:1px solid var(--line);
 }
 
@@ -988,11 +754,8 @@ button{
 
 .kv b{
   display:block;
-
   font-size:12px;
-
   color:var(--muted);
-
   margin-bottom:3px;
 }
 
@@ -1008,10 +771,7 @@ button{
   }
 
   .loginbox{
-    padding:
-      24px
-      16px;
-
+    padding:24px 16px;
     border-radius:24px;
   }
 
@@ -1036,19 +796,17 @@ button{
   }
 
   .profilegrid{
-    grid-template-columns:
-      75px 1fr;
+    grid-template-columns:75px 1fr;
   }
 
   .bigavatar{
     width:75px;
     height:75px;
   }
-
 }
 
 /* =========================
-   TABLET / DESKTOP
+   DESKTOP
 ========================= */
 
 @media(min-width:700px){
@@ -1065,19 +823,10 @@ button{
   .nav{
     left:50%;
     right:auto;
-
-    transform:
-      translateX(-50%);
-
+    transform:translateX(-50%);
     width:620px;
-
-    border-radius:
-      18px
-      18px
-      0
-      0;
+    border-radius:18px 18px 0 0;
   }
-
 }
 
 </style>
@@ -1085,9 +834,9 @@ button{
 
 <body>
 
-<!-- =========================================================
-     LOGIN VIEW
-========================================================= -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <div id="loginView" class="login">
 
@@ -1112,7 +861,10 @@ button{
       class="google"
     ></div>
 
-    <p class="small" style="margin-top:15px">
+    <p
+      class="small"
+      style="margin-top:15px"
+    >
       Akun harus berstatus
       <b>AKTIF</b>
       di data pengguna.
@@ -1123,9 +875,9 @@ button{
 </div>
 
 
-<!-- =========================================================
-     APP VIEW
-========================================================= -->
+<!-- =====================================================
+     APP
+===================================================== -->
 
 <div
   id="appView"
@@ -1184,9 +936,7 @@ button{
 
 <main class="wrap">
 
-<!-- =========================================================
-     HOME
-========================================================= -->
+<!-- HOME -->
 
 <section
   id="homePage"
@@ -1277,15 +1027,11 @@ button{
         <span class="icon">
           📷
         </span>
-
         Absen Masuk
-
         <small>
           (GPS • Selfie)
         </small>
-
       </button>
-
 
       <button
         id="btnPulang"
@@ -1295,13 +1041,10 @@ button{
         <span class="icon">
           🚪
         </span>
-
         Absen Pulang
-
         <small>
           (GPS • Selfie)
         </small>
-
       </button>
 
     </div>
@@ -1322,9 +1065,7 @@ button{
 </section>
 
 
-<!-- =========================================================
-     HISTORY
-========================================================= -->
+<!-- HISTORY -->
 
 <section
   id="historyPage"
@@ -1350,9 +1091,7 @@ button{
 </section>
 
 
-<!-- =========================================================
-     PROFILE
-========================================================= -->
+<!-- PROFILE -->
 
 <section
   id="profilePage"
@@ -1434,9 +1173,7 @@ button{
 </main>
 
 
-<!-- =========================================================
-     NAVIGATION
-========================================================= -->
+<!-- NAV -->
 
 <nav class="nav">
 
@@ -1477,9 +1214,9 @@ button{
 </div>
 
 
-<!-- =========================================================
-     CAMERA MODAL
-========================================================= -->
+<!-- =====================================================
+     CAMERA
+===================================================== -->
 
 <div
   id="cameraModal"
@@ -1568,9 +1305,9 @@ button{
 </div>
 
 
-<!-- =========================================================
-     RESULT MODAL
-========================================================= -->
+<!-- =====================================================
+     RESULT
+===================================================== -->
 
 <div
   id="resultModal"
@@ -1634,9 +1371,9 @@ button{
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      LOADING
-========================================================= -->
+===================================================== -->
 
 <div
   id="loading"
@@ -1681,9 +1418,9 @@ button{
 
 <script>
 
-/* =========================================================
+/* =====================================================
    CONFIG
-========================================================= */
+===================================================== */
 
 const CONFIG = {
 
@@ -1696,9 +1433,9 @@ const CONFIG = {
 };
 
 
-/* =========================================================
-   GLOBAL VARIABLES
-========================================================= */
+/* =====================================================
+   GLOBAL
+===================================================== */
 
 let sessionToken =
   localStorage.getItem('absen_session') || '';
@@ -1706,27 +1443,23 @@ let sessionToken =
 let currentUser = null;
 let currentLocation = null;
 let cameraStream = null;
-
 let facingMode = 'user';
-
 let attendanceType = 'MASUK';
-
 let capturedDataUrl = '';
-
 let loginProcessing = false;
 
 
-/* =========================================================
+/* =====================================================
    HELPER
-========================================================= */
+===================================================== */
 
 const $ = id =>
   document.getElementById(id);
 
 
-/* =========================================================
-   CONFIG VALIDATION
-========================================================= */
+/* =====================================================
+   CONFIG CHECK
+===================================================== */
 
 function validConfig(){
 
@@ -1740,31 +1473,42 @@ function validConfig(){
 }
 
 
-/* =========================================================
+/* =====================================================
    TOAST
-========================================================= */
+===================================================== */
 
 function showToast(msg){
 
-  $('toast').textContent = msg;
+  $('toast').textContent =
+    msg;
 
-  $('toast').classList.add('show');
+  $('toast').classList.add(
+    'show'
+  );
 
-  clearTimeout(window.toastTimer);
+  clearTimeout(
+    window.toastTimer
+  );
 
   window.toastTimer =
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      $('toast').classList.remove('show');
+        $('toast')
+          .classList.remove(
+            'show'
+          );
 
-    },3500);
+      },
+      3500
+    );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    LOADING
-========================================================= */
+===================================================== */
 
 function loading(
   on,
@@ -1772,21 +1516,26 @@ function loading(
   text='Mohon tunggu sebentar.'
 ){
 
-  $('loadingTitle').textContent = title;
+  $('loadingTitle')
+    .textContent =
+    title;
 
-  $('loadingText').textContent = text;
+  $('loadingText')
+    .textContent =
+    text;
 
-  $('loading').classList.toggle(
-    'show',
-    on
-  );
+  $('loading')
+    .classList.toggle(
+      'show',
+      on
+    );
 
 }
 
 
-/* =========================================================
-   GOOGLE LOGIN INIT
-========================================================= */
+/* =====================================================
+   GOOGLE INIT
+===================================================== */
 
 function initGoogle(){
 
@@ -1847,7 +1596,8 @@ function initGoogle(){
       $('googleButton');
 
 
-    googleButton.innerHTML='';
+    googleButton.innerHTML =
+      '';
 
 
     const width =
@@ -1861,7 +1611,9 @@ function initGoogle(){
 
 
     google.accounts.id.renderButton(
+
       googleButton,
+
       {
 
         theme:'outline',
@@ -1875,20 +1627,20 @@ function initGoogle(){
         width:width
 
       }
+
     );
 
 
     loading(false);
 
-
   }catch(error){
-
-    loading(false);
 
     console.error(
       'Google Login Error:',
       error
     );
+
+    loading(false);
 
     showToast(
       'Google Login gagal dimuat. Silakan refresh halaman.'
@@ -1899,18 +1651,14 @@ function initGoogle(){
 }
 
 
-/* =========================================================
-   GOOGLE CREDENTIAL
-========================================================= */
+/* =====================================================
+   GOOGLE CALLBACK
+===================================================== */
 
-function onGoogleCredential(response){
+async function onGoogleCredential(response){
 
-  if(
-    loginProcessing
-  ){
-
+  if(loginProcessing){
     return;
-
   }
 
 
@@ -1928,35 +1676,71 @@ function onGoogleCredential(response){
     makeId();
 
 
-  postForm({
+  console.log(
+    'LOGIN REQUEST ID:',
+    requestId
+  );
 
-    action:'login',
 
-    requestId:
+  const sent =
+    await postForm({
 
-      requestId,
+      action:'login',
 
-    idToken:
-      response.credential
+      requestId:
+        requestId,
 
-  });
+      idToken:
+        response.credential
+
+    });
+
+
+  if(!sent){
+
+    loginProcessing = false;
+
+    loading(false);
+
+    showToast(
+      'Tidak dapat mengirim data login ke server.'
+    );
+
+    return;
+
+  }
+
+
+  console.log(
+    'LOGIN DATA TERKIRIM'
+  );
 
 
   poll(
+
     requestId,
 
     result => {
 
+      console.log(
+        'LOGIN RESULT:',
+        result
+      );
+
+
       loginProcessing = false;
 
 
-      if(!result.ok){
+      if(
+        !result ||
+        !result.ok
+      ){
 
         loading(false);
 
         showToast(
-          result.error ||
-          'Login gagal.'
+          result?.error ||
+          'Login gagal. Akun mungkin belum terdaftar.'
         );
 
         return;
@@ -1995,7 +1779,7 @@ function onGoogleCredential(response){
           loading(false);
 
         },
-        400
+        500
       );
 
     }
@@ -2005,9 +1789,9 @@ function onGoogleCredential(response){
 }
 
 
-/* =========================================================
-   REQUEST ID
-========================================================= */
+/* =====================================================
+   ID
+===================================================== */
 
 function makeId(){
 
@@ -2018,7 +1802,10 @@ function makeId(){
 
     return crypto
       .randomUUID()
-      .replaceAll('-','');
+      .replaceAll(
+        '-',
+        ''
+      );
 
   }
 
@@ -2032,72 +1819,163 @@ function makeId(){
 }
 
 
-/* =========================================================
-   POST FORM
-========================================================= */
+/* =====================================================
+   POST TO APPS SCRIPT
+===================================================== */
 
-function postForm(fields){
+async function postForm(fields){
 
-  const form =
-    document.createElement('form');
-
-
-  form.method =
-    'POST';
-
-
-  form.action =
-    CONFIG.WEB_APP_URL;
-
-
-  form.target =
-    'postFrame';
-
-
-  form.style.display =
-    'none';
+  const body =
+    new URLSearchParams();
 
 
   Object.entries(fields)
-    .forEach(([k,v]) => {
+    .forEach(
+      ([key,value]) => {
 
-      const input =
-        document.createElement(
-          'input'
+        body.append(
+          key,
+          value ?? ''
         );
 
-      input.type =
-        'hidden';
+      }
+    );
 
-      input.name =
-        k;
 
-      input.value =
-        v;
+  try{
 
-      form.appendChild(
-        input
+    await fetch(
+
+      CONFIG.WEB_APP_URL,
+
+      {
+
+        method:'POST',
+
+        mode:'no-cors',
+
+        headers:{
+          'Content-Type':
+            'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        body:
+          body.toString(),
+
+        redirect:'follow',
+
+        keepalive:true
+
+      }
+
+    );
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      'POST Apps Script gagal:',
+      error
+    );
+
+
+    /*
+     * FALLBACK
+     * Untuk browser yang gagal
+     * menggunakan fetch.
+     */
+
+    try{
+
+      const form =
+        document.createElement(
+          'form'
+        );
+
+
+      form.method =
+        'POST';
+
+
+      form.action =
+        CONFIG.WEB_APP_URL;
+
+
+      form.target =
+        'postFrame';
+
+
+      form.style.display =
+        'none';
+
+
+      Object.entries(fields)
+        .forEach(
+          ([key,value]) => {
+
+            const input =
+              document.createElement(
+                'input'
+              );
+
+            input.type =
+              'hidden';
+
+            input.name =
+              key;
+
+            input.value =
+              value ?? '';
+
+            form.appendChild(
+              input
+            );
+
+          }
+        );
+
+
+      document.body.appendChild(
+        form
       );
 
-    });
+
+      form.submit();
 
 
-  document.body.appendChild(
-    form
-  );
+      setTimeout(
+        () => {
+
+          form.remove();
+
+        },
+        1000
+      );
 
 
-  form.submit();
+      return true;
 
+    }catch(fallbackError){
 
-  form.remove();
+      console.error(
+        'Fallback POST gagal:',
+        fallbackError
+      );
+
+      return false;
+
+    }
+
+  }
 
 }
 
 
-/* =========================================================
-   POLLING
-========================================================= */
+/* =====================================================
+   POLL STATUS
+===================================================== */
 
 function poll(
   requestId,
@@ -2105,25 +1983,42 @@ function poll(
   tries=0
 ){
 
+  const MAX_TRIES =
+    30;
+
+
   const cb =
     'cb_' + makeId();
 
 
+  let finished =
+    false;
+
+
   window[cb] =
-    data => {
+    function(data){
+
+      if(finished){
+        return;
+      }
+
+
+      finished =
+        true;
+
 
       delete window[cb];
 
 
-      const script =
+      const oldScript =
         document.getElementById(
           'jsonp_' + cb
         );
 
 
-      if(script){
+      if(oldScript){
 
-        script.remove();
+        oldScript.remove();
 
       }
 
@@ -2143,8 +2038,7 @@ function poll(
 
 
       if(
-        data.state === 'NOT_FOUND' ||
-        tries > 40
+        data.state === 'NOT_FOUND'
       ){
 
         onDone({
@@ -2153,13 +2047,17 @@ function poll(
 
           error:
             data.error ||
-            'Waktu proses habis.'
+            'Data login tidak ditemukan di server.'
 
         });
 
         return;
 
       }
+
+
+      finished =
+        false;
 
 
       setTimeout(
@@ -2196,13 +2094,15 @@ function poll(
       requestId
     ) +
     '&callback=' +
-    cb +
+    encodeURIComponent(
+      cb
+    ) +
     '&_=' +
     Date.now();
 
 
   script.onerror =
-    () => {
+    function(){
 
       delete window[cb];
 
@@ -2210,7 +2110,7 @@ function poll(
 
 
       if(
-        tries > 40
+        tries >= MAX_TRIES
       ){
 
         onDone({
@@ -2218,26 +2118,27 @@ function poll(
           ok:false,
 
           error:
-            'Tidak dapat menghubungi server.'
+            'Server tidak merespons. Periksa koneksi internet atau Apps Script.'
 
         });
 
-      }else{
-
-        setTimeout(
-          () => {
-
-            poll(
-              requestId,
-              onDone,
-              tries + 1
-            );
-
-          },
-          600
-        );
+        return;
 
       }
+
+
+      setTimeout(
+        () => {
+
+          poll(
+            requestId,
+            onDone,
+            tries + 1
+          );
+
+        },
+        800
+      );
 
     };
 
@@ -2246,12 +2147,60 @@ function poll(
     script
   );
 
+
+  /*
+   * Timeout tambahan
+   */
+
+  if(
+    tries >= MAX_TRIES
+  ){
+
+    setTimeout(
+      () => {
+
+        if(!finished){
+
+          finished =
+            true;
+
+          delete window[cb];
+
+          const oldScript =
+            document.getElementById(
+              'jsonp_' + cb
+            );
+
+          if(oldScript){
+
+            oldScript.remove();
+
+          }
+
+
+          onDone({
+
+            ok:false,
+
+            error:
+              'Waktu verifikasi habis. Silakan coba login kembali.'
+
+          });
+
+        }
+
+      },
+      25000
+    );
+
+  }
+
 }
 
 
-/* =========================================================
+/* =====================================================
    SHOW APP
-========================================================= */
+===================================================== */
 
 function showApp(){
 
@@ -2276,43 +2225,51 @@ function showApp(){
 }
 
 
-/* =========================================================
+/* =====================================================
    RENDER USER
-========================================================= */
+===================================================== */
 
 function renderUser(u){
 
-  $('userName').textContent =
+  $('userName')
+    .textContent =
     u.name || '-';
 
 
-  $('userPosition').textContent =
+  $('userPosition')
+    .textContent =
     (u.position || '-') +
     ' • ' +
     (u.role || '-');
 
 
-  $('profileName').textContent =
+  $('profileName')
+    .textContent =
     u.name || '-';
 
 
-  $('profilePosition').textContent =
+  $('profilePosition')
+    .textContent =
     u.position || '-';
 
 
-  $('profileNip').textContent =
+  $('profileNip')
+    .textContent =
     u.nip || '-';
 
 
-  $('profileEmail').textContent =
+  $('profileEmail')
+    .textContent =
     u.email || '-';
 
 
-  $('profileRole').textContent =
+  $('profileRole')
+    .textContent =
     u.role || '-';
 
 
-  $('profileStatus').textContent =
+  $('profileStatus')
+    .textContent =
     u.status || '-';
 
 
@@ -2336,9 +2293,9 @@ function renderUser(u){
 }
 
 
-/* =========================================================
+/* =====================================================
    AVATAR
-========================================================= */
+===================================================== */
 
 function avatarData(name){
 
@@ -2366,16 +2323,14 @@ function avatarData(name){
 }
 
 
-/* =========================================================
-   REFRESH ALL
-========================================================= */
+/* =====================================================
+   REFRESH
+===================================================== */
 
 function refreshAll(){
 
   if(!sessionToken){
-
     return;
-
   }
 
 
@@ -2421,9 +2376,9 @@ function refreshAll(){
 }
 
 
-/* =========================================================
+/* =====================================================
    REQUEST
-========================================================= */
+===================================================== */
 
 function request(
   action,
@@ -2440,9 +2395,15 @@ function request(
     Object.assign(
 
       {
-        action,
-        requestId,
-        sessionToken
+        action:
+          action,
+
+        requestId:
+          requestId,
+
+        sessionToken:
+          sessionToken
+
       },
 
       extra
@@ -2460,9 +2421,9 @@ function request(
 }
 
 
-/* =========================================================
-   GEOLOCATION
-========================================================= */
+/* =====================================================
+   LOCATION
+===================================================== */
 
 function getLocation(force){
 
@@ -2562,9 +2523,9 @@ function getLocation(force){
 }
 
 
-/* =========================================================
+/* =====================================================
    CLOCK
-========================================================= */
+===================================================== */
 
 function updateClock(){
 
@@ -2572,27 +2533,18 @@ function updateClock(){
     new Date();
 
 
-  const opts = {
-
-    weekday:'long',
-
-    day:'2-digit',
-
-    month:'long',
-
-    year:'numeric',
-
-    timeZone:'Asia/Jakarta'
-
-  };
-
-
   $('dateText')
     .textContent =
 
     new Intl.DateTimeFormat(
       'id-ID',
-      opts
+      {
+        weekday:'long',
+        day:'2-digit',
+        month:'long',
+        year:'numeric',
+        timeZone:'Asia/Jakarta'
+      }
     ).format(d);
 
 
@@ -2600,22 +2552,13 @@ function updateClock(){
     .textContent =
 
     new Intl.DateTimeFormat(
-
       'id-ID',
-
       {
-
         hour:'2-digit',
-
         minute:'2-digit',
-
         hour12:false,
-
-        timeZone:
-          'Asia/Jakarta'
-
+        timeZone:'Asia/Jakarta'
       }
-
     ).format(d) +
 
     ' WIB';
@@ -2632,9 +2575,9 @@ setInterval(
 updateClock();
 
 
-/* =========================================================
+/* =====================================================
    HISTORY
-========================================================= */
+===================================================== */
 
 function renderHistory(items){
 
@@ -2659,14 +2602,14 @@ function renderHistory(items){
     );
 
 
-  let masuk =
+  const masuk =
     todayItems.find(
       x =>
         x.type === 'MASUK'
     );
 
 
-  let pulang =
+  const pulang =
     todayItems.find(
       x =>
         x.type === 'PULANG'
@@ -2699,9 +2642,7 @@ function renderHistory(items){
 
   }
 
-  else if(
-    masuk
-  ){
+  else if(masuk){
 
     $('statusBadge')
       .textContent =
@@ -2835,40 +2776,31 @@ function renderHistory(items){
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+/* =====================================================
+   ESCAPE
+===================================================== */
 
 function escapeHtml(s){
 
   return String(
     s ?? ''
   ).replace(
-
     /[&<>"']/g,
-
     m => ({
-
       '&':'&amp;',
-
       '<':'&lt;',
-
       '>':'&gt;',
-
       '"':'&quot;',
-
       "'":'&#039;'
-
     }[m])
-
   );
 
 }
 
 
-/* =========================================================
-   OPEN CAMERA
-========================================================= */
+/* =====================================================
+   CAMERA
+===================================================== */
 
 async function openCamera(type){
 
@@ -2895,7 +2827,6 @@ async function openCamera(type){
 
   $('cameraTitle')
     .textContent =
-
     'Absen ' +
     (
       type === 'MASUK'
@@ -2942,9 +2873,9 @@ async function openCamera(type){
 }
 
 
-/* =========================================================
+/* =====================================================
    START CAMERA
-========================================================= */
+===================================================== */
 
 async function startCamera(){
 
@@ -3008,21 +2939,19 @@ async function startCamera(){
 }
 
 
-/* =========================================================
+/* =====================================================
    STOP CAMERA
-========================================================= */
+===================================================== */
 
 function stopCamera(){
 
-  if(
-    cameraStream
-  ){
+  if(cameraStream){
 
     cameraStream
       .getTracks()
       .forEach(
-        t =>
-          t.stop()
+        track =>
+          track.stop()
       );
 
     cameraStream =
@@ -3033,9 +2962,9 @@ function stopCamera(){
 }
 
 
-/* =========================================================
+/* =====================================================
    SWITCH CAMERA
-========================================================= */
+===================================================== */
 
 async function switchCamera(){
 
@@ -3060,15 +2989,14 @@ async function switchCamera(){
 }
 
 
-/* =========================================================
-   CAPTURE PHOTO
-========================================================= */
+/* =====================================================
+   CAPTURE
+===================================================== */
 
 function capturePhoto(){
 
   const video =
     $('video');
-
 
   const canvas =
     $('canvas');
@@ -3155,9 +3083,9 @@ function capturePhoto(){
 }
 
 
-/* =========================================================
+/* =====================================================
    CLOSE CAMERA
-========================================================= */
+===================================================== */
 
 function closeCamera(){
 
@@ -3171,9 +3099,9 @@ function closeCamera(){
 }
 
 
-/* =========================================================
+/* =====================================================
    SUBMIT ATTENDANCE
-========================================================= */
+===================================================== */
 
 function submitAttendance(){
 
@@ -3195,13 +3123,9 @@ function submitAttendance(){
 
 
   loading(
-
     true,
-
     'Menyimpan Absensi',
-
     'Mengirim foto, lokasi, dan data absensi...'
-
   );
 
 
@@ -3291,9 +3215,9 @@ function submitAttendance(){
 }
 
 
-/* =========================================================
+/* =====================================================
    CLOSE RESULT
-========================================================= */
+===================================================== */
 
 function closeResult(){
 
@@ -3305,9 +3229,9 @@ function closeResult(){
 }
 
 
-/* =========================================================
+/* =====================================================
    NAVIGATION
-========================================================= */
+===================================================== */
 
 function showPage(page){
 
@@ -3316,15 +3240,15 @@ function showPage(page){
     'history',
     'profile'
   ].forEach(
-
-    p =>
+    p => {
 
       $(p + 'Page')
         .classList.toggle(
           'active',
           p === page
-        )
+        );
 
+    }
   );
 
 
@@ -3333,15 +3257,15 @@ function showPage(page){
     'History',
     'Profile'
   ].forEach(
-
-    p =>
+    p => {
 
       $('nav' + p)
         .classList.toggle(
           'active',
           p.toLowerCase() === page
-        )
+        );
 
+    }
   );
 
 
@@ -3370,9 +3294,9 @@ function showPage(page){
 }
 
 
-/* =========================================================
+/* =====================================================
    LOGOUT
-========================================================= */
+===================================================== */
 
 function logout(){
 
@@ -3393,18 +3317,13 @@ function logout(){
 }
 
 
-/* =========================================================
+/* =====================================================
    INITIALIZATION
-========================================================= */
+===================================================== */
 
 window.addEventListener(
   'load',
   () => {
-
-    /*
-      Jika sudah memiliki session,
-      jangan tampilkan login.
-    */
 
     if(sessionToken){
 
@@ -3418,11 +3337,6 @@ window.addEventListener(
       showApp();
 
 
-      /*
-        Tunggu sebentar agar
-        interface sudah siap.
-      */
-
       setTimeout(
         () => {
 
@@ -3431,17 +3345,10 @@ window.addEventListener(
           loading(false);
 
         },
-        300
+        500
       );
 
-
     }else{
-
-      /*
-        Belum login:
-        tampilkan loading terlebih dahulu,
-        kemudian siapkan Google Login.
-      */
 
       initGoogle();
 
@@ -3451,80 +3358,99 @@ window.addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    RESIZE GOOGLE BUTTON
-========================================================= */
+===================================================== */
+
+let resizeTimer = null;
 
 window.addEventListener(
   'resize',
   () => {
 
-    /*
-      Jangan render ulang ketika
-      sedang proses login.
-    */
-
-    if(
-      loginProcessing
-    ){
-
-      return;
-
-    }
+    clearTimeout(
+      resizeTimer
+    );
 
 
-    if(
-      window.google?.accounts?.id &&
-      !$('appView').style.display ||
-      $('appView').style.display === 'none'
-    ){
+    resizeTimer =
+      setTimeout(
+        () => {
 
-      try{
+          if(
+            loginProcessing
+          ){
 
-        const width =
-          Math.min(
-            360,
-            Math.max(
-              220,
-              window.innerWidth - 70
-            )
-          );
-
-
-        $('googleButton')
-          .innerHTML = '';
-
-
-        google.accounts.id.renderButton(
-
-          $('googleButton'),
-
-          {
-
-            theme:'outline',
-
-            size:'large',
-
-            shape:'pill',
-
-            text:'signin_with',
-
-            width:width
+            return;
 
           }
 
-        );
 
-      }catch(e){
+          if(
+            $('appView').style.display !==
+            'none'
+          ){
 
-        console.log(
-          'Resize Google button:',
-          e
-        );
+            return;
 
-      }
+          }
 
-    }
+
+          if(
+            window.google?.accounts?.id
+          ){
+
+            try{
+
+              const width =
+                Math.min(
+                  360,
+                  Math.max(
+                    220,
+                    window.innerWidth - 70
+                  )
+                );
+
+
+              $('googleButton')
+                .innerHTML =
+                '';
+
+
+              google.accounts.id.renderButton(
+
+                $('googleButton'),
+
+                {
+
+                  theme:'outline',
+
+                  size:'large',
+
+                  shape:'pill',
+
+                  text:'signin_with',
+
+                  width:width
+
+                }
+
+              );
+
+            }catch(e){
+
+              console.log(
+                'Resize Google button:',
+                e
+              );
+
+            }
+
+          }
+
+        },
+        250
+      );
 
   }
 );
