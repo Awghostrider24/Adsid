@@ -3088,37 +3088,6 @@ body{
 .status-card .section-subtitle{font-size:10px;}
 .status-card .status-label{font-weight:800;}
 
-
-/* STATUS LOKASI: loading dan peringatan */
-.location-status{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:11px;font-weight:600;line-height:1.4}
-.location-status .material-symbols-rounded{font-size:15px}
-.location-status.loading{color:#b7791f}
-.location-status.warning{color:#c53030}
-.location-status.success{color:#2f855a}
-.location-loading-dot{display:inline-block;width:7px;height:7px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:locationSpin .8s linear infinite;margin-right:5px}
-@keyframes locationSpin{to{transform:rotate(360deg)}}
-/* Penyempurnaan status lokasi: ringkas, profesional, dan mudah dibaca */
-.location-status{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  margin-top:8px;
-  padding:7px 10px;
-  border:1px solid currentColor;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:700;
-  line-height:1.3;
-  letter-spacing:.1px;
-  background:rgba(255,255,255,.55);
-}
-.location-status .material-symbols-rounded{font-size:16px}
-.location-status.loading{color:#946200;background:rgba(245,158,11,.09)}
-.location-status.warning{color:#b42318;background:rgba(239,68,68,.08)}
-.location-status.success{color:#16734a;background:rgba(34,197,94,.08)}
-@media(max-width:380px){
-  .location-status{font-size:10px;padding:6px 8px;gap:5px}
-}
 </style>
 </head>
 
@@ -3448,13 +3417,7 @@ body{
         id="locationText"
         class="location-text"
       >
-        <span class="location-loading-dot"></span>
-        Menghubungkan ke layanan lokasi...
-      </div>
-
-      <div id="locationStatus" class="location-status loading">
-        <span class="material-symbols-rounded">progress_activity</span>
-        Menyiapkan lokasi perangkat...
+        Mengambil lokasi...
       </div>
 
       <div
@@ -5593,13 +5556,6 @@ function refreshAll(){
    LOCATION
 ========================================================= */
 
-function setLocationStatus_(type, icon, message){
-  const el = $('locationStatus');
-  if(!el) return;
-  el.className = 'location-status ' + type;
-  el.innerHTML = '<span class="material-symbols-rounded">' + icon + '</span> ' + message;
-}
-
 function getLocation(force){
 
   if(
@@ -5608,13 +5564,11 @@ function getLocation(force){
 
     $('locationText')
       .textContent =
-      'GPS tidak didukung';
+      'Browser tidak mendukung GPS';
 
     $('accuracyText')
       .textContent =
       'Gunakan browser yang mendukung lokasi.';
-
-    setLocationStatus_('warning','location_off','Perangkat atau browser tidak mendukung layanan lokasi.');
 
     return;
 
@@ -5622,15 +5576,13 @@ function getLocation(force){
 
 
   $('locationText')
-    .innerHTML =
-    '<span class="location-loading-dot"></span>Menghubungkan ke layanan lokasi...';
-
-  setLocationStatus_('loading','progress_activity','Menyiapkan lokasi perangkat...');
+    .textContent =
+    'Mengambil lokasi...';
 
 
   $('accuracyText')
     .textContent =
-    'Pastikan izin lokasi aktif agar posisi dapat dibaca.';
+    'Mohon izinkan lokasi pada browser.';
 
 
   navigator.geolocation.getCurrentPosition(
@@ -5656,8 +5608,6 @@ function getLocation(force){
 
       };
 
-
-      setLocationStatus_('success','location_on','Lokasi perangkat berhasil terdeteksi.');
 
       $('accuracyText')
         .textContent =
@@ -5734,9 +5684,7 @@ function getLocation(force){
 
       $('locationText')
         .textContent =
-        'Lokasi belum terdeteksi';
-
-      setLocationStatus_('warning','location_off', getLocationErrorMessage_(err));
+        'Lokasi belum tersedia';
 
 
       $('accuracyText')
@@ -5749,16 +5697,14 @@ function getLocation(force){
 
     {
 
-      // Mode normal diprioritaskan untuk kecepatan.
-      // Browser boleh menggunakan lokasi tersimpan agar respons lebih cepat.
       enableHighAccuracy: !!force,
 
-      timeout: force ? 6000 : 3500,
+      timeout: force ? 8000 : 5000,
 
       maximumAge:
         force
           ? 0
-          : 300000
+          : 120000
 
     }
 
@@ -5809,7 +5755,7 @@ function getLocationErrorMessage_(err){
 
   return (
     err.message ||
-    'Lokasi belum terdeteksi.'
+    'Lokasi belum tersedia.'
   );
 
 }
