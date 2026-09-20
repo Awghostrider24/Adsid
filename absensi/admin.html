@@ -100,7 +100,9 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 const CONFIG = {
@@ -277,6 +279,11 @@ async function initFirebase() {
       : initializeApp(CONFIG.FIREBASE_CONFIG);
 
     auth = getAuth(app);
+
+    // Simpan status login Firebase di browser agar reload tidak
+    // mengharuskan pengguna membuka popup Google lagi.
+    await setPersistence(auth, browserLocalPersistence);
+
     provider = new GoogleAuthProvider();
 
     provider.setCustomParameters({
@@ -674,36 +681,13 @@ function renderPayroll(rows) {
       "salary"
     );
 
-    const overtime = getValue(
-      row,
-      "overtime",
-      "lembur"
-    );
-
-    const deduction = getValue(
-      row,
-      "deduction",
-      "potongan"
-    );
-
-    const attendance = getValue(
-      row,
-      "hadir",
-      "present"
-    );
-
     return `
       <div class="mini">
         <div class="mini-main">
           <b>${esc(name || "-")}</b>
-          <span>
-            ${esc(
-              getValue(row, "status", "Status") || "Payroll"
-            )}
-            · Hadir ${esc(attendance || 0)}
-            · Lembur ${esc(overtime || 0)}
-            · Potongan ${money(deduction || 0)}
-          </span>
+          <span>${esc(
+            getValue(row, "status", "Status") || "Payroll"
+          )}</span>
         </div>
         <div class="money">${money(amount)}</div>
       </div>
@@ -908,47 +892,140 @@ $("monthFilter")?.addEventListener(
  * If an existing session is present, show the app.
  * The backend remains the authority for ADMIN authorization.
  */
-async function restoreSession() {
-  if (!sessionToken) return;
+function waitForFirebaseUser(timeoutMs = 8000) {
+  return new Promise(resolve => {
+    let settled = false;
+    let unsubscribe = null;
+    const timer = setTimeout(() => finish(null), timeoutMs);
 
-  try {
-    const response = await request("profile");
+    const finish = firebaseUser => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      unsubscribe?.();
+      resolve(firebaseUser || null);
+    };
 
-    if (!response?.ok) {
-      throw new Error(
-        response?.error ||
-        response?.message ||
-        "Session tidak valid."
-      );
-    }
+    unsubscribe = onAuthStateChanged(auth, finish);
+  });
+}
 
-    const profile =
-      response.user ||
-      response.data?.user ||
-      null;
+async function issueSessionFromFirebase() {
+  if (!(await initFirebase())) return false;
 
-    const role = String(
-      profile?.role ||
-      profile?.Role ||
-      ""
-    ).trim().toUpperCase();
+  const firebaseUser =
+    auth.currentUser || await waitForFirebaseUser();
 
-    if (role !== "ADMIN") {
-      throw new Error("Session bukan milik admin.");
-    }
+  if (!firebaseUser) return false;
 
-    user = profile;
-    showApp();
+  const firebaseIdToken =
+    await firebaseUser.getIdToken(false);
 
-  } catch (error) {
-    console.warn("RESTORE SESSION:", error);
+  // Session Apps Script boleh kedaluwarsa. Kita terbitkan session baru
+  // dari login Firebase yang masih tersimpan tanpa popup Google.
+  const previousToken = sessionToken;
+  sessionToken = "";
 
-    localStorage.removeItem(
-      "absen_admin_session"
-    );
+  const response = await request("firebaseLogin", {
+    firebaseIdToken
+  });
 
+  if (!response?.ok) {
+    sessionToken = previousToken;
+    return false;
+  }
+
+  const token =
+    response.sessionToken ||
+    response.session?.token ||
+    response.session?.sessionToken ||
+    response.data?.sessionToken ||
+    response.data?.session?.token ||
+    response.data?.session?.sessionToken ||
+    "";
+
+  if (!token) {
+    sessionToken = previousToken;
+    return false;
+  }
+
+  sessionToken = token;
+  localStorage.setItem("absen_admin_session", sessionToken);
+
+  user =
+    response.user ||
+    response.data?.user ||
+    null;
+
+  const role = String(
+    user?.role || user?.Role || ""
+  ).trim().toUpperCase();
+
+  if (role !== "ADMIN") {
+    localStorage.removeItem("absen_admin_session");
     sessionToken = "";
     user = null;
+    return false;
+  }
+
+  return true;
+}
+
+async function restoreSession() {
+  loading(true);
+
+  try {
+    // 1. Coba session Apps Script yang tersimpan terlebih dahulu.
+    if (sessionToken) {
+      try {
+        const response = await request("profile");
+
+        if (response?.ok) {
+          const profile =
+            response.user ||
+            response.data?.user ||
+            null;
+
+          const role = String(
+            profile?.role ||
+            profile?.Role ||
+            ""
+          ).trim().toUpperCase();
+
+          if (role === "ADMIN") {
+            user = profile;
+            showApp();
+            await loadAll();
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn("SESSION CHECK:", error);
+      }
+    }
+
+    // 2. Jika session Apps Script kedaluwarsa, pulihkan lewat
+    //    Firebase Auth yang tersimpan di browser. Tidak ada popup.
+    const restored = await issueSessionFromFirebase();
+
+    if (restored) {
+      showApp();
+      await loadAll();
+      return;
+    }
+
+    // Tidak ada session yang dapat dipulihkan.
+    localStorage.removeItem("absen_admin_session");
+    sessionToken = "";
+    user = null;
+
+  } catch (error) {
+    console.warn("RESTORE SESSION ERROR:", error);
+    localStorage.removeItem("absen_admin_session");
+    sessionToken = "";
+    user = null;
+  } finally {
+    loading(false);
   }
 }
 
