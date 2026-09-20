@@ -5,7 +5,7 @@
 
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"
+  content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
 >
 
 <meta name="theme-color" content="#1976e8">
@@ -32,14 +32,21 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html{
   width:100%;
   min-height:100%;
   margin:0;
+  padding:0;
+  overflow-x:hidden;
+  background:var(--bg);
 }
 
 body{
+  width:100%;
+  min-width:0;
+  min-height:100%;
+  margin:0;
+  padding:0;
   font-family:
     Inter,
     system-ui,
@@ -52,10 +59,13 @@ body{
   background:var(--bg);
   color:var(--ink);
   overflow-x:hidden;
+  overscroll-behavior-x:none;
 }
 
 button,
-input{
+input,
+select,
+textarea{
   font:inherit;
 }
 
@@ -63,13 +73,22 @@ button{
   cursor:pointer;
   border:0;
   touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
 }
 
-/* =====================================================
-   APP
-===================================================== */
+img,
+video,
+canvas{
+  max-width:100%;
+}
+
+img{
+  display:block;
+}
 
 .app{
+  width:100%;
   min-height:100vh;
   min-height:100dvh;
 }
@@ -81,10 +100,11 @@ button{
 .top{
   position:relative;
   overflow:hidden;
+  width:100%;
   padding:
-    calc(26px + env(safe-area-inset-top))
+    calc(24px + env(safe-area-inset-top))
     22px
-    78px;
+    76px;
   border-radius:0 0 34px 34px;
   background:linear-gradient(145deg,#2184f4,#1262d7);
   color:#fff;
@@ -129,7 +149,7 @@ button{
   position:relative;
   z-index:1;
   align-items:center;
-  gap:18px;
+  gap:22px;
 }
 
 .headline{
@@ -143,11 +163,12 @@ button{
   gap:10px;
   font-size:clamp(13px,3.5vw,18px);
   font-weight:800;
-  white-space:nowrap;
+  line-height:1.35;
 }
 
 .calendar-icon{
-  font-size:25px;
+  flex:0 0 auto;
+  font-size:24px;
 }
 
 .clock-head{
@@ -155,7 +176,7 @@ button{
   line-height:1.05;
   font-weight:900;
   letter-spacing:-2px;
-  margin-top:14px;
+  margin-top:12px;
   white-space:nowrap;
   text-shadow:0 3px 15px rgba(0,0,0,.08);
 }
@@ -181,6 +202,10 @@ button{
   object-fit:cover;
   background:#fff8;
   border:2px solid rgba(255,255,255,.55);
+}
+
+.profile > div{
+  min-width:0;
 }
 
 .hello{
@@ -218,7 +243,7 @@ button{
 .wrap{
   width:100%;
   max-width:1100px;
-  margin:-48px auto calc(90px + env(safe-area-inset-bottom));
+  margin:-48px auto calc(94px + env(safe-area-inset-bottom));
   padding:0 24px;
 }
 
@@ -244,11 +269,13 @@ button{
 }
 
 .section-heading h2{
+  min-width:0;
   font-size:clamp(24px,4vw,38px);
   line-height:1.15;
   color:#173b91;
   margin:0;
   font-weight:900;
+  overflow-wrap:anywhere;
 }
 
 .heading-icon{
@@ -344,18 +371,18 @@ button{
 }
 
 /* =====================================================
-   ACTION BUTTON
+   ACTION
 ===================================================== */
 
 .actions{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:24px;
-  margin-top:0;
 }
 
 .action{
   width:100%;
+  min-width:0;
   min-height:170px;
   padding:22px 12px;
   border-radius:27px;
@@ -364,7 +391,9 @@ button{
   line-height:1.2;
   font-weight:800;
   box-shadow:0 7px 16px rgba(0,0,0,.10);
-  transition:transform .15s ease,opacity .15s ease;
+  transition:
+    transform .15s ease,
+    opacity .15s ease;
 }
 
 .action:active{
@@ -413,6 +442,7 @@ button{
 }
 
 .location-mini > span{
+  flex:0 0 auto;
   font-size:27px;
   color:#1976e8;
 }
@@ -434,21 +464,20 @@ button{
 .locline{
   margin-top:3px;
   font-size:14px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  overflow-wrap:anywhere;
 }
 
 .accuracy{
   font-size:12px;
   color:var(--green);
   margin-top:3px;
+  overflow-wrap:anywhere;
 }
 
 .refresh-location{
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
   border-radius:12px;
   background:#eef5ff;
   color:#1976e8;
@@ -468,6 +497,7 @@ button{
 }
 
 .today-attendance-card{
+  width:100%;
   background:#f8fbff;
   border:1px solid #e2ebf5;
   border-radius:22px;
@@ -499,14 +529,20 @@ button{
   display:flex;
   align-items:center;
   gap:10px;
+  min-width:0;
   font-size:17px;
   font-weight:900;
   color:#173b91;
 }
 
+.today-attendance-type span{
+  overflow-wrap:anywhere;
+}
+
 .today-attendance-icon{
   width:42px;
   height:42px;
+  flex:0 0 42px;
   border-radius:13px;
   display:grid;
   place-items:center;
@@ -526,6 +562,7 @@ button{
 }
 
 .today-attendance-badge{
+  flex:0 0 auto;
   padding:6px 10px;
   border-radius:999px;
   font-size:11px;
@@ -541,11 +578,11 @@ button{
 }
 
 .today-attendance-info{
+  min-width:0;
   background:#fff;
   border:1px solid #e8eef5;
   border-radius:14px;
   padding:11px;
-  min-width:0;
 }
 
 .today-attendance-info.full{
@@ -591,17 +628,19 @@ button{
 }
 
 .today-empty{
+  width:100%;
   text-align:center;
   color:var(--muted);
   padding:24px 10px;
   font-size:14px;
+  line-height:1.5;
   background:#f8fbff;
   border:1px dashed #dbe5f0;
   border-radius:18px;
 }
 
 /* =====================================================
-   HISTORY PAGE
+   HISTORY
 ===================================================== */
 
 .section-title{
@@ -656,12 +695,12 @@ button{
 
 .btn{
   width:100%;
+  min-height:50px;
   padding:13px 15px;
   border-radius:14px;
   background:var(--primary);
   color:#fff;
   font-weight:800;
-  min-height:48px;
 }
 
 .btn:active{
@@ -674,7 +713,7 @@ button{
 }
 
 /* =====================================================
-   NAV
+   NAVIGATION
 ===================================================== */
 
 .nav{
@@ -682,14 +721,14 @@ button{
   bottom:0;
   left:0;
   right:0;
+  width:100%;
   background:#fff;
   border-top:1px solid var(--line);
   display:flex;
   justify-content:center;
-  z-index:20;
+  z-index:100;
   padding:
-    7px
-    10px
+    7px 10px
     calc(7px + env(safe-area-inset-bottom));
   box-shadow:0 -5px 20px rgba(20,60,100,.05);
 }
@@ -705,7 +744,7 @@ button{
 .nav button{
   background:none;
   color:#71839a;
-  padding:8px;
+  padding:8px 4px;
   border-radius:13px;
   min-height:52px;
 }
@@ -723,11 +762,15 @@ button{
 .modal{
   position:fixed;
   inset:0;
-  background:#071525b8;
+  width:100%;
+  height:100%;
+  height:100dvh;
+  background:#071525d9;
   display:none;
   align-items:flex-end;
   justify-content:center;
-  z-index:50;
+  z-index:500;
+  overscroll-behavior:none;
 }
 
 .modal.show{
@@ -735,53 +778,87 @@ button{
 }
 
 .sheet{
-  background:#fff;
+  position:relative;
   width:100%;
   max-width:620px;
+  max-height:94vh;
+  max-height:94dvh;
+  background:#fff;
   border-radius:28px 28px 0 0;
   padding:
     18px
     16px
     calc(18px + env(safe-area-inset-bottom));
-  max-height:92vh;
-  max-height:92dvh;
-  overflow:auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
 }
 
 .sheethead{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:12px;
   margin-bottom:10px;
+}
+
+.sheethead > div{
+  min-width:0;
+}
+
+.sheethead b{
+  display:block;
+  font-size:18px;
+  overflow-wrap:anywhere;
 }
 
 .close{
   background:#eef3f8;
   border-radius:50%;
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-  font-size:18px;
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  font-size:20px;
 }
 
 /* =====================================================
    CAMERA
 ===================================================== */
 
-.camera{
+.camera-wrap{
   width:100%;
-  aspect-ratio:3/4;
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  background:#111;
+}
+
+.camera,
+.preview{
+  width:100%;
+  max-width:100%;
+  aspect-ratio:3 / 4;
+  max-height:60vh;
+  max-height:60dvh;
   object-fit:cover;
   background:#111;
   border-radius:20px;
 }
 
+.camera{
+  display:block;
+}
+
 .preview{
   display:none;
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  border-radius:20px;
+}
+
+.camera-status{
+  margin-top:8px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
 }
 
 .camera-actions{
@@ -792,10 +869,11 @@ button{
 }
 
 .camera-actions button{
-  padding:13px;
+  width:100%;
+  min-height:50px;
+  padding:13px 8px;
   border-radius:14px;
   font-weight:800;
-  min-height:48px;
 }
 
 .capture{
@@ -806,6 +884,10 @@ button{
 .switch{
   background:#eef5ff;
   color:var(--primary);
+}
+
+#submitPhotoBtn{
+  min-height:52px;
 }
 
 /* =====================================================
@@ -832,21 +914,27 @@ button{
 .result h2{
   color:#0a9b59;
   margin:5px 0;
+  font-size:clamp(22px,6vw,30px);
+}
+
+.result p{
+  line-height:1.5;
 }
 
 .result .time{
   font-size:34px;
   font-weight:900;
   color:#087d4b;
+  margin-top:8px;
 }
 
 .photo{
   width:150px;
   height:150px;
+  max-width:60vw;
   object-fit:cover;
   border-radius:18px;
   margin:12px auto;
-  display:block;
 }
 
 /* =====================================================
@@ -864,11 +952,12 @@ button{
   border-radius:14px;
   box-shadow:var(--shadow);
   display:none;
-  z-index:100;
+  z-index:1000;
   width:max-content;
-  max-width:90%;
+  max-width:calc(100% - 28px);
   text-align:center;
   font-size:13px;
+  line-height:1.4;
 }
 
 .toast.show{
@@ -882,12 +971,18 @@ button{
 .loading{
   position:fixed;
   inset:0;
-  background:rgba(255,255,255,.96);
+  width:100%;
+  height:100%;
+  height:100dvh;
+  background:rgba(255,255,255,.97);
   display:none;
   place-items:center;
   z-index:9999;
-  padding:20px;
-  backdrop-filter:blur(5px);
+  padding:
+    20px
+    20px
+    calc(20px + env(safe-area-inset-bottom));
+  backdrop-filter:blur(6px);
 }
 
 .loading.show{
@@ -895,7 +990,7 @@ button{
 }
 
 .loadingbox{
-  width:min(340px,90vw);
+  width:min(340px,calc(100vw - 40px));
   background:#fff;
   border-radius:24px;
   padding:28px 22px;
@@ -938,6 +1033,7 @@ button{
 ===================================================== */
 
 .login{
+  width:100%;
   min-height:100vh;
   min-height:100dvh;
   display:flex;
@@ -983,13 +1079,17 @@ button{
   margin:0 auto;
 }
 
+#firebaseLoginButton{
+  margin-top:20px;
+}
+
 /* =====================================================
    PROFILE
 ===================================================== */
 
 .profilegrid{
   display:grid;
-  grid-template-columns:90px 1fr;
+  grid-template-columns:90px minmax(0,1fr);
   gap:14px;
   align-items:center;
 }
@@ -1005,6 +1105,7 @@ button{
 .kv{
   padding:11px 0;
   border-bottom:1px solid var(--line);
+  overflow-wrap:anywhere;
 }
 
 .kv:last-child{
@@ -1024,21 +1125,12 @@ button{
 
 @media(max-width:699px){
 
-  html,
-  body{
-    width:100%;
-    min-width:0;
-    overflow-x:hidden;
-  }
-
   .top{
-    width:100%;
     padding:
       calc(18px + env(safe-area-inset-top))
       14px
-      28px;
+      30px;
     border-radius:0 0 30px 30px;
-    overflow:hidden;
   }
 
   .toprow.dashboard-head{
@@ -1046,7 +1138,7 @@ button{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:18px;
+    gap:17px;
   }
 
   .headline{
@@ -1056,13 +1148,11 @@ button{
   }
 
   .date-head{
-    display:flex;
     justify-content:center;
-    align-items:center;
     gap:8px;
-    white-space:normal;
     font-size:clamp(12px,3.5vw,16px);
     line-height:1.35;
+    text-align:center;
   }
 
   .calendar-icon{
@@ -1074,7 +1164,6 @@ button{
     font-size:clamp(38px,11.5vw,58px);
     line-height:1.08;
     letter-spacing:-1.5px;
-    white-space:nowrap;
   }
 
   .profile{
@@ -1092,7 +1181,6 @@ button{
   }
 
   .profile > div{
-    min-width:0;
     max-width:calc(100% - 64px);
     text-align:left;
   }
@@ -1104,9 +1192,6 @@ button{
   .name{
     max-width:100%;
     font-size:clamp(16px,4.8vw,20px);
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
   }
 
   .position{
@@ -1119,7 +1204,7 @@ button{
   .wrap{
     width:100%;
     max-width:620px;
-    margin:12px auto calc(96px + env(safe-area-inset-bottom));
+    margin:12px auto calc(100px + env(safe-area-inset-bottom));
     padding:0 10px;
   }
 
@@ -1130,21 +1215,15 @@ button{
     padding:16px;
     margin-bottom:14px;
     border-radius:22px;
-    overflow:visible;
   }
 
   .section-heading{
-    display:flex;
-    align-items:center;
     gap:10px;
     margin-bottom:14px;
   }
 
   .section-heading h2{
-    min-width:0;
     font-size:clamp(18px,5.5vw,25px);
-    line-height:1.2;
-    overflow-wrap:anywhere;
   }
 
   .heading-icon{
@@ -1195,21 +1274,15 @@ button{
   }
 
   .actions{
-    display:grid;
     grid-template-columns:minmax(0,1fr) minmax(0,1fr);
     gap:8px;
-    width:100%;
   }
 
   .action{
-    width:100%;
-    min-width:0;
     min-height:112px;
     padding:12px 4px;
     border-radius:17px;
     font-size:clamp(15px,4.5vw,19px);
-    line-height:1.2;
-    overflow-wrap:anywhere;
   }
 
   .action .icon{
@@ -1224,9 +1297,6 @@ button{
   }
 
   .location-mini{
-    width:100%;
-    display:flex;
-    align-items:center;
     gap:10px;
     margin-top:14px;
     padding:10px 0 0;
@@ -1237,27 +1307,16 @@ button{
     font-size:23px;
   }
 
-  .location-mini > div{
-    min-width:0;
-    flex:1 1 auto;
-  }
-
   .locline{
-    max-width:100%;
     font-size:13px;
-    white-space:normal;
-    overflow-wrap:anywhere;
-  }
-
-  .accuracy{
-    font-size:12px;
+    line-height:1.35;
   }
 
   .refresh-location{
-    flex:0 0 38px;
+    width:38px;
+    height:38px;
+    flex-basis:38px;
   }
-
-  /* TODAY HISTORY MOBILE */
 
   .today-attendance-card{
     padding:14px;
@@ -1275,6 +1334,7 @@ button{
   .today-attendance-icon{
     width:38px;
     height:38px;
+    flex-basis:38px;
     font-size:19px;
   }
 
@@ -1305,6 +1365,10 @@ button{
     padding:5px 8px;
   }
 
+  .row{
+    align-items:flex-start;
+  }
+
   .nav{
     padding:
       7px 10px
@@ -1316,13 +1380,62 @@ button{
     padding:8px 4px;
     font-size:12px;
   }
+
+  .sheet{
+    max-height:96vh;
+    max-height:96dvh;
+    border-radius:24px 24px 0 0;
+    padding:
+      15px
+      12px
+      calc(14px + env(safe-area-inset-bottom));
+  }
+
+  .camera,
+  .preview{
+    max-height:54dvh;
+    border-radius:18px;
+  }
+
+  .camera-actions{
+    gap:8px;
+  }
+
+  .camera-actions button{
+    min-height:50px;
+    font-size:13px;
+  }
+
+  #submitPhotoBtn{
+    min-height:52px;
+    margin-top:8px !important;
+  }
+
+  .result{
+    padding:12px 2px;
+  }
+
+  .check{
+    width:78px;
+    height:78px;
+    font-size:44px;
+  }
+
+  .result .time{
+    font-size:30px;
+  }
+
+  .photo{
+    width:130px;
+    height:130px;
+  }
 }
 
 /* =====================================================
    SMALL PHONE
 ===================================================== */
 
-@media(max-width:360px){
+@media(max-width:380px){
 
   .top{
     padding-left:10px;
@@ -1383,17 +1496,22 @@ button{
   .today-attendance-info.full{
     grid-column:auto;
   }
-}
 
-/* =====================================================
-   LOGIN MOBILE
-===================================================== */
+  .today-attendance-badge{
+    font-size:8px;
+  }
 
-@media(max-width:380px){
+  .camera-actions{
+    grid-template-columns:1fr;
+  }
 
-  .login{
-    padding-left:12px;
-    padding-right:12px;
+  .profilegrid{
+    grid-template-columns:75px minmax(0,1fr);
+  }
+
+  .bigavatar{
+    width:75px;
+    height:75px;
   }
 
   .loginbox{
@@ -1408,14 +1526,83 @@ button{
   .login p{
     font-size:13px;
   }
+}
 
-  .profilegrid{
-    grid-template-columns:75px 1fr;
+/* =====================================================
+   EXTRA SMALL
+===================================================== */
+
+@media(max-width:320px){
+
+  .clock-head{
+    font-size:34px;
   }
 
-  .bigavatar{
-    width:75px;
-    height:75px;
+  .action{
+    min-height:100px;
+    font-size:13px;
+  }
+
+  .action .icon{
+    font-size:23px;
+  }
+
+  .action small{
+    font-size:8px;
+  }
+
+  .attendance-status{
+    grid-template-columns:50px minmax(0,1fr);
+  }
+
+  .status-symbol{
+    width:50px;
+    height:50px;
+    flex-basis:50px;
+    font-size:26px;
+  }
+
+  .big-time{
+    font-size:27px;
+  }
+}
+
+/* =====================================================
+   LANDSCAPE PHONE
+===================================================== */
+
+@media(max-width:699px) and (orientation:landscape){
+
+  .top{
+    padding-top:calc(12px + env(safe-area-inset-top));
+    padding-bottom:22px;
+  }
+
+  .toprow.dashboard-head{
+    flex-direction:row;
+    align-items:center;
+  }
+
+  .headline{
+    text-align:left;
+  }
+
+  .date-head{
+    justify-content:flex-start;
+  }
+
+  .profile{
+    width:auto;
+    justify-content:flex-end;
+  }
+
+  .wrap{
+    margin-top:12px;
+  }
+
+  .camera,
+  .preview{
+    max-height:48dvh;
   }
 }
 
@@ -1465,7 +1652,6 @@ button{
       class="btn"
       type="button"
       onclick="loginWithFirebase()"
-      style="display:flex;align-items:center;justify-content:center;gap:10px"
     >
       <span style="font-size:20px">G</span>
       Masuk dengan Google
@@ -1516,7 +1702,6 @@ button{
 
     </div>
 
-
     <div class="profile">
 
       <img
@@ -1565,8 +1750,6 @@ button{
   class="page active"
 >
 
-  <!-- STATUS KEHADIRAN -->
-
   <div class="card attendance-card">
 
     <div class="section-heading">
@@ -1580,7 +1763,6 @@ button{
       </h2>
 
     </div>
-
 
     <div class="attendance-status">
 
@@ -1616,13 +1798,13 @@ button{
 
     </div>
 
-
     <div class="actions">
 
       <button
         id="btnMasuk"
         class="action green"
         onclick="openCamera('MASUK')"
+        type="button"
       >
         <span class="icon">
           ▣
@@ -1631,16 +1813,16 @@ button{
         Absen Masuk
 
         <small>
-          (Lokasi • Selfie)
+          Lokasi • Selfie
         </small>
 
       </button>
-
 
       <button
         id="btnPulang"
         class="action red"
         onclick="openCamera('PULANG')"
+        type="button"
       >
         <span class="icon">
           ⇥
@@ -1649,13 +1831,12 @@ button{
         Absen Pulang
 
         <small>
-          (Lokasi • Selfie)
+          Lokasi • Selfie
         </small>
 
       </button>
 
     </div>
-
 
     <div class="location-mini">
 
@@ -1685,11 +1866,11 @@ button{
 
       </div>
 
-
       <button
         class="refresh-location"
         onclick="getLocation(true)"
         title="Perbarui lokasi"
+        type="button"
       >
         ↻
       </button>
@@ -1714,7 +1895,6 @@ button{
       </h2>
 
     </div>
-
 
     <div
       id="todayHistory"
@@ -1803,67 +1983,35 @@ button{
 
     </div>
 
-
     <div style="margin-top:16px">
 
       <div class="kv">
-
-        <b>
-          NIP
-        </b>
-
-        <span id="profileNip">
-          -
-        </span>
-
+        <b>NIP</b>
+        <span id="profileNip">-</span>
       </div>
 
-
       <div class="kv">
-
-        <b>
-          Email
-        </b>
-
-        <span id="profileEmail">
-          -
-        </span>
-
+        <b>Email</b>
+        <span id="profileEmail">-</span>
       </div>
 
-
       <div class="kv">
-
-        <b>
-          Role
-        </b>
-
-        <span id="profileRole">
-          -
-        </span>
-
+        <b>Role</b>
+        <span id="profileRole">-</span>
       </div>
 
-
       <div class="kv">
-
-        <b>
-          Status
-        </b>
-
-        <span id="profileStatus">
-          -
-        </span>
-
+        <b>Status</b>
+        <span id="profileStatus">-</span>
       </div>
 
     </div>
-
 
     <button
       class="btn secondary"
       style="margin-top:15px"
       onclick="logout()"
+      type="button"
     >
       Keluar
     </button>
@@ -1887,36 +2035,31 @@ button{
       id="navHome"
       class="active"
       onclick="showPage('home')"
+      type="button"
     >
       ⌂
       <br>
-      <small>
-        Home
-      </small>
+      <small>Home</small>
     </button>
-
 
     <button
       id="navHistory"
       onclick="showPage('history')"
+      type="button"
     >
       ▣
       <br>
-      <small>
-        Riwayat
-      </small>
+      <small>Riwayat</small>
     </button>
-
 
     <button
       id="navProfile"
       onclick="showPage('profile')"
+      type="button"
     >
       ♙
       <br>
-      <small>
-        Profil
-      </small>
+      <small>Profil</small>
     </button>
 
   </div>
@@ -1954,34 +2097,41 @@ button{
       <button
         class="close"
         onclick="closeCamera()"
+        type="button"
       >
         ×
       </button>
 
     </div>
 
+    <div class="camera-wrap">
 
-    <video
-      id="video"
-      class="camera"
-      autoplay
-      playsinline
-      muted
-    ></video>
+      <video
+        id="video"
+        class="camera"
+        autoplay
+        playsinline
+        muted
+      ></video>
 
+      <img
+        id="preview"
+        class="preview"
+        alt="Preview foto"
+      >
 
-    <img
-      id="preview"
-      class="preview"
-      alt="Preview foto"
-    >
+    </div>
 
+    <div class="camera-status">
+      Gunakan kamera depan untuk mengambil selfie.
+    </div>
 
     <div class="camera-actions">
 
       <button
         class="switch"
         onclick="switchCamera()"
+        type="button"
       >
         🔄 Ganti Kamera
       </button>
@@ -1990,22 +2140,22 @@ button{
         id="captureBtn"
         class="capture"
         onclick="capturePhoto()"
+        type="button"
       >
         📸 Ambil Foto
       </button>
 
     </div>
 
-
     <button
       id="submitPhotoBtn"
       class="btn"
       style="margin-top:10px;display:none"
       onclick="submitAttendance()"
+      type="button"
     >
       Gunakan Foto & Absen
     </button>
-
 
     <canvas
       id="canvas"
@@ -2072,6 +2222,7 @@ button{
       <button
         class="btn"
         onclick="closeResult()"
+        type="button"
       >
         Selesai
       </button>
@@ -2185,6 +2336,8 @@ let capturedDataUrl = '';
 
 let loginProcessing = false;
 
+let attendanceProcessing = false;
+
 let firebaseApp = null;
 
 let firebaseAuth = null;
@@ -2213,9 +2366,7 @@ async function validConfig(){
 
   return (
 
-    CONFIG.WEB_APP_URL.startsWith(
-      'https://'
-    )
+    CONFIG.WEB_APP_URL.startsWith('https://')
 
     &&
 
@@ -2223,9 +2374,7 @@ async function validConfig(){
 
     &&
 
-    !f.apiKey.startsWith(
-      'PASTE_'
-    )
+    !f.apiKey.startsWith('PASTE_')
 
     &&
 
@@ -2233,9 +2382,7 @@ async function validConfig(){
 
     &&
 
-    !f.projectId.startsWith(
-      'PASTE_'
-    )
+    !f.projectId.startsWith('PASTE_')
 
     &&
 
@@ -2243,9 +2390,7 @@ async function validConfig(){
 
     &&
 
-    !f.appId.startsWith(
-      'PASTE_'
-    )
+    !f.appId.startsWith('PASTE_')
 
   );
 
@@ -2261,8 +2406,7 @@ function showToast(msg){
   $('toast').textContent =
     msg;
 
-  $('toast')
-    .classList.add('show');
+  $('toast').classList.add('show');
 
   clearTimeout(
     window.toastTimer
@@ -2273,9 +2417,7 @@ function showToast(msg){
       () => {
 
         $('toast')
-          .classList.remove(
-            'show'
-          );
+          .classList.remove('show');
 
       },
       3500
@@ -2294,19 +2436,16 @@ function loading(
   text='Mohon tunggu sebentar.'
 ){
 
-  $('loadingTitle')
-    .textContent =
+  $('loadingTitle').textContent =
     title;
 
-  $('loadingText')
-    .textContent =
+  $('loadingText').textContent =
     text;
 
-  $('loading')
-    .classList.toggle(
-      'show',
-      on
-    );
+  $('loading').classList.toggle(
+    'show',
+    !!on
+  );
 
 }
 
@@ -2347,7 +2486,6 @@ async function initFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
       );
 
-
     const {
       getAuth,
       GoogleAuthProvider,
@@ -2358,7 +2496,6 @@ async function initFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
       );
 
-
     firebaseApp =
       getApps().length
         ? getApps()[0]
@@ -2366,26 +2503,21 @@ async function initFirebase(){
             CONFIG.FIREBASE_CONFIG
           );
 
-
     firebaseAuth =
       getAuth(
         firebaseApp
       );
 
-
     firebaseGoogleProvider =
       new GoogleAuthProvider();
-
 
     firebaseGoogleProvider
       .setCustomParameters({
         prompt:'select_account'
       });
 
-
     firebaseReady =
       true;
-
 
     try{
 
@@ -2402,22 +2534,13 @@ async function initFirebase(){
 
     }
 
-
     onAuthStateChanged(
       firebaseAuth,
       async user => {
 
         if(
           !user ||
-          loginProcessing
-        ){
-
-          return;
-
-        }
-
-
-        if(
+          loginProcessing ||
           sessionToken
         ){
 
@@ -2425,8 +2548,16 @@ async function initFirebase(){
 
         }
 
-
         try{
+
+          loginProcessing =
+            true;
+
+          loading(
+            true,
+            'Memverifikasi Akun',
+            'Menghubungkan akun Google dengan data pegawai...'
+          );
 
           await completeFirebaseLogin_(
             user
@@ -2439,6 +2570,9 @@ async function initFirebase(){
             error
           );
 
+          loginProcessing =
+            false;
+
           loading(false);
 
           showToast(
@@ -2450,7 +2584,6 @@ async function initFirebase(){
 
       }
     );
-
 
     loading(false);
 
@@ -2490,7 +2623,6 @@ async function loginWithFirebase(){
 
   }
 
-
   if(
     !firebaseReady
   ){
@@ -2506,17 +2638,27 @@ async function loginWithFirebase(){
 
   }
 
-
   loginProcessing =
     true;
 
+  const loginButton =
+    $('firebaseLoginButton');
+
+  if(loginButton){
+
+    loginButton.disabled =
+      true;
+
+    loginButton.style.opacity =
+      '.65';
+
+  }
 
   loading(
     true,
     'Memverifikasi Akun',
     'Menghubungkan akun Google dengan data pegawai...'
   );
-
 
   try{
 
@@ -2528,9 +2670,7 @@ async function loginWithFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
       );
 
-
     let credentialResult;
-
 
     try{
 
@@ -2546,7 +2686,6 @@ async function loginWithFirebase(){
         'Firebase popup gagal:',
         popupError
       );
-
 
       if(
 
@@ -2565,6 +2704,12 @@ async function loginWithFirebase(){
 
       ){
 
+        loading(
+          true,
+          'Membuka Login Google',
+          'Silakan pilih akun Google Anda...'
+        );
+
         await signInWithRedirect(
           firebaseAuth,
           firebaseGoogleProvider
@@ -2574,11 +2719,9 @@ async function loginWithFirebase(){
 
       }
 
-
       throw popupError;
 
     }
-
 
     if(
       credentialResult?.user
@@ -2594,6 +2737,16 @@ async function loginWithFirebase(){
 
     loginProcessing =
       false;
+
+    if(loginButton){
+
+      loginButton.disabled =
+        false;
+
+      loginButton.style.opacity =
+        '1';
+
+    }
 
     loading(false);
 
@@ -2625,14 +2778,17 @@ async function completeFirebaseLogin_(user){
 
   }
 
-
   const requestId =
     makeId();
 
+  loading(
+    true,
+    'Memverifikasi Akun',
+    'Menghubungkan akun Google dengan data pegawai...'
+  );
 
   const firebaseIdToken =
     await user.getIdToken(true);
-
 
   const sent =
     await postForm({
@@ -2648,7 +2804,6 @@ async function completeFirebaseLogin_(user){
 
     });
 
-
   if(!sent){
 
     throw new Error(
@@ -2657,7 +2812,6 @@ async function completeFirebaseLogin_(user){
 
   }
 
-
   poll(
     requestId,
     result => {
@@ -2665,6 +2819,18 @@ async function completeFirebaseLogin_(user){
       loginProcessing =
         false;
 
+      const loginButton =
+        $('firebaseLoginButton');
+
+      if(loginButton){
+
+        loginButton.disabled =
+          false;
+
+        loginButton.style.opacity =
+          '1';
+
+      }
 
       if(
         !result ||
@@ -2682,28 +2848,43 @@ async function completeFirebaseLogin_(user){
 
       }
 
-
       sessionToken =
         result.sessionToken || '';
 
+      if(!sessionToken){
+
+        loading(false);
+
+        showToast(
+          'Server tidak memberikan sesi login.'
+        );
+
+        return;
+
+      }
 
       localStorage.setItem(
         'absen_session',
         sessionToken
       );
 
-
       currentUser =
         result.user || null;
 
-
       showApp();
 
+      loading(
+        true,
+        'Memuat Absensi',
+        'Menyiapkan data pegawai dan lokasi...'
+      );
 
       refreshAll();
 
-
-      loading(false);
+      setTimeout(
+        () => loading(false),
+        700
+      );
 
     }
   );
@@ -2721,7 +2902,6 @@ function firebaseErrorMessage_(error){
     String(
       error?.code || ''
     );
-
 
   const messages = {
 
@@ -2741,7 +2921,6 @@ function firebaseErrorMessage_(error){
       'Login Google belum diaktifkan di Firebase Authentication.'
 
   };
-
 
   return (
     messages[code] ||
@@ -2765,13 +2944,9 @@ function makeId(){
 
     return crypto
       .randomUUID()
-      .replaceAll(
-        '-',
-        ''
-      );
+      .replaceAll('-','');
 
   }
-
 
   return (
     Date.now().toString(36) +
@@ -2791,7 +2966,6 @@ async function postForm(fields){
   const body =
     new URLSearchParams();
 
-
   Object.entries(fields)
     .forEach(
       ([key,value]) => {
@@ -2803,7 +2977,6 @@ async function postForm(fields){
 
       }
     );
-
 
   try{
 
@@ -2833,7 +3006,6 @@ async function postForm(fields){
 
     );
 
-
     return true;
 
   }catch(error){
@@ -2843,52 +3015,38 @@ async function postForm(fields){
       error
     );
 
-
     try{
 
       const form =
-        document.createElement(
-          'form'
-        );
-
+        document.createElement('form');
 
       form.method =
         'POST';
 
-
       form.action =
         CONFIG.WEB_APP_URL;
-
 
       form.target =
         'postFrame';
 
-
       form.style.display =
         'none';
-
 
       Object.entries(fields)
         .forEach(
           ([key,value]) => {
 
             const input =
-              document.createElement(
-                'input'
-              );
-
+              document.createElement('input');
 
             input.type =
               'hidden';
 
-
             input.name =
               key;
 
-
             input.value =
               value ?? '';
-
 
             form.appendChild(
               input
@@ -2897,24 +3055,16 @@ async function postForm(fields){
           }
         );
 
-
       document.body.appendChild(
         form
       );
 
-
       form.submit();
 
-
       setTimeout(
-        () => {
-
-          form.remove();
-
-        },
+        () => form.remove(),
         1000
       );
-
 
       return true;
 
@@ -2947,14 +3097,11 @@ function poll(
   const MAX_TRIES =
     45;
 
-
   const cb =
     'cb_' + makeId();
 
-
   let finished =
     false;
-
 
   window[cb] =
     function(data){
@@ -2965,26 +3112,21 @@ function poll(
 
       }
 
-
       finished =
         true;
 
-
       delete window[cb];
-
 
       const oldScript =
         document.getElementById(
           'jsonp_' + cb
         );
 
-
       if(oldScript){
 
         oldScript.remove();
 
       }
-
 
       if(
         data.state === 'DONE'
@@ -2998,7 +3140,6 @@ function poll(
         return;
 
       }
-
 
       if(
         data.state === 'NOT_FOUND'
@@ -3022,7 +3163,6 @@ function poll(
 
         }
 
-
         setTimeout(
           () => {
 
@@ -3040,10 +3180,8 @@ function poll(
 
       }
 
-
       finished =
         false;
-
 
       if(
         tries >= MAX_TRIES
@@ -3062,7 +3200,6 @@ function poll(
 
       }
 
-
       setTimeout(
         () => {
 
@@ -3078,31 +3215,21 @@ function poll(
 
     };
 
-
   const script =
-    document.createElement(
-      'script'
-    );
-
+    document.createElement('script');
 
   script.id =
     'jsonp_' + cb;
-
 
   script.src =
     CONFIG.WEB_APP_URL +
     '?action=status' +
     '&requestId=' +
-    encodeURIComponent(
-      requestId
-    ) +
+    encodeURIComponent(requestId) +
     '&callback=' +
-    encodeURIComponent(
-      cb
-    ) +
+    encodeURIComponent(cb) +
     '&_=' +
     Date.now();
-
 
   script.onerror =
     function(){
@@ -3110,7 +3237,6 @@ function poll(
       delete window[cb];
 
       script.remove();
-
 
       if(
         tries >= MAX_TRIES
@@ -3129,7 +3255,6 @@ function poll(
 
       }
 
-
       setTimeout(
         () => {
 
@@ -3145,56 +3270,9 @@ function poll(
 
     };
 
-
   document.body.appendChild(
     script
   );
-
-
-  if(
-    tries >= MAX_TRIES
-  ){
-
-    setTimeout(
-      () => {
-
-        if(!finished){
-
-          finished =
-            true;
-
-          delete window[cb];
-
-
-          const oldScript =
-            document.getElementById(
-              'jsonp_' + cb
-            );
-
-
-          if(oldScript){
-
-            oldScript.remove();
-
-          }
-
-
-          onDone({
-
-            ok:false,
-
-            error:
-              'Waktu verifikasi habis.'
-
-          });
-
-        }
-
-      },
-      25000
-    );
-
-  }
 
 }
 
@@ -3209,11 +3287,9 @@ function showApp(){
     .style.display =
     'none';
 
-
   $('appView')
     .style.display =
     'block';
-
 
   if(currentUser){
 
@@ -3232,10 +3308,15 @@ function showApp(){
 
 function renderUser(u){
 
+  if(!u){
+
+    return;
+
+  }
+
   $('userName')
     .textContent =
     u.name || '-';
-
 
   $('userPosition')
     .textContent =
@@ -3243,47 +3324,38 @@ function renderUser(u){
     ' • ' +
     (u.role || '-');
 
-
   $('profileName')
     .textContent =
     u.name || '-';
-
 
   $('profilePosition')
     .textContent =
     u.position || '-';
 
-
   $('profileNip')
     .textContent =
     u.nip || '-';
-
 
   $('profileEmail')
     .textContent =
     u.email || '-';
 
-
   $('profileRole')
     .textContent =
     u.role || '-';
-
 
   $('profileStatus')
     .textContent =
     u.status || '-';
 
-
   const photo =
     u.photo || '';
-
 
   $('avatar').src =
     photo ||
     avatarData(
       u.name
     );
-
 
   $('profilePhoto').src =
     photo ||
@@ -3333,17 +3405,13 @@ function avatarData(name){
 
 function refreshAll(){
 
-  if(
-    !sessionToken
-  ){
+  if(!sessionToken){
 
     return;
 
   }
 
-
   getLocation(false);
-
 
   request(
     'profile',
@@ -3352,7 +3420,8 @@ function refreshAll(){
 
       if(
         r &&
-        r.ok
+        r.ok &&
+        r.user
       ){
 
         currentUser =
@@ -3366,7 +3435,6 @@ function refreshAll(){
 
     }
   );
-
 
   request(
     'history',
@@ -3403,7 +3471,6 @@ function request(
   const requestId =
     makeId();
 
-
   const payload =
     Object.assign(
 
@@ -3424,11 +3491,9 @@ function request(
 
     );
 
-
   postForm(
     payload
   );
-
 
   setTimeout(
     () => {
@@ -3464,16 +3529,13 @@ function getLocation(force){
 
   }
 
-
   $('locationText')
     .textContent =
-    'Mengambil kecamatan...';
-
+    'Mengambil lokasi...';
 
   $('accuracyText')
     .textContent =
     'Mohon izinkan lokasi pada browser.';
-
 
   navigator.geolocation.getCurrentPosition(
 
@@ -3492,7 +3554,6 @@ function getLocation(force){
 
       };
 
-
       $('accuracyText')
         .textContent =
         'Akurasi GPS: ' +
@@ -3500,7 +3561,6 @@ function getLocation(force){
           currentLocation.accuracy
         ) +
         ' meter';
-
 
       request(
         'location',
@@ -3529,7 +3589,6 @@ function getLocation(force){
             currentLocation.province =
               r.province || '';
 
-
             const area =
               [
                 r.district,
@@ -3537,7 +3596,6 @@ function getLocation(force){
               ]
               .filter(Boolean)
               .join(', ');
-
 
             $('locationText')
               .textContent =
@@ -3562,16 +3620,13 @@ function getLocation(force){
       currentLocation =
         null;
 
-
       $('locationText')
         .textContent =
         'Lokasi belum tersedia';
 
-
       $('accuracyText')
         .textContent =
-        err.message ||
-        'Aktifkan izin lokasi.';
+        getLocationErrorMessage_(err);
 
     },
 
@@ -3594,6 +3649,50 @@ function getLocation(force){
 
 
 /* =====================================================
+   LOCATION ERROR
+===================================================== */
+
+function getLocationErrorMessage_(err){
+
+  if(!err){
+
+    return 'Aktifkan izin lokasi.';
+
+  }
+
+  if(
+    err.code === 1
+  ){
+
+    return 'Izin lokasi ditolak. Aktifkan lokasi browser.';
+
+  }
+
+  if(
+    err.code === 2
+  ){
+
+    return 'Lokasi tidak tersedia. Pastikan GPS aktif.';
+
+  }
+
+  if(
+    err.code === 3
+  ){
+
+    return 'Pengambilan lokasi terlalu lama. Coba lagi.';
+
+  }
+
+  return (
+    err.message ||
+    'Lokasi belum tersedia.'
+  );
+
+}
+
+
+/* =====================================================
    CLOCK
 ===================================================== */
 
@@ -3608,7 +3707,6 @@ function updateClock(){
   const clockEl =
     $('clockText');
 
-
   if(
     !dateEl ||
     !clockEl
@@ -3617,7 +3715,6 @@ function updateClock(){
     return;
 
   }
-
 
   dateEl.textContent =
     new Intl.DateTimeFormat(
@@ -3637,7 +3734,6 @@ function updateClock(){
       }
     ).format(d);
 
-
   const time =
     new Intl.DateTimeFormat(
       'id-ID',
@@ -3656,7 +3752,6 @@ function updateClock(){
       }
     ).format(d);
 
-
   clockEl.innerHTML =
     escapeHtml(time) +
     ' <span>WIB</span>';
@@ -3669,7 +3764,6 @@ setInterval(
   1000
 );
 
-
 updateClock();
 
 
@@ -3679,81 +3773,51 @@ updateClock();
 
 function normalizeDate_(value){
 
-  if(
-    !value
-  ){
+  if(!value){
 
     return '';
 
   }
 
-
   const raw =
-    String(value)
-      .trim();
+    String(value).trim();
 
-
-  /*
-   * YYYY-MM-DD
-   * YYYY/MM/DD
-   * termasuk ISO timestamp
-   */
   const iso =
     raw.match(
       /(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
     );
-
 
   if(iso){
 
     return (
       iso[1] +
       '-' +
-      String(
-        iso[2]
-      ).padStart(2,'0') +
+      String(iso[2]).padStart(2,'0') +
       '-' +
-      String(
-        iso[3]
-      ).padStart(2,'0')
+      String(iso[3]).padStart(2,'0')
     );
 
   }
 
-
-  /*
-   * DD-MM-YYYY
-   * DD/MM/YYYY
-   */
   const dmy =
     raw.match(
       /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
     );
-
 
   if(dmy){
 
     return (
       dmy[3] +
       '-' +
-      String(
-        dmy[2]
-      ).padStart(2,'0') +
+      String(dmy[2]).padStart(2,'0') +
       '-' +
-      String(
-        dmy[1]
-      ).padStart(2,'0')
+      String(dmy[1]).padStart(2,'0')
     );
 
   }
 
-
-  /*
-   * Jika value berupa Date string
-   */
   const parsed =
     new Date(raw);
-
 
   if(
     !isNaN(
@@ -3777,14 +3841,11 @@ function normalizeDate_(value){
         }
       ).formatToParts(parsed);
 
-
     const get =
       type =>
         parts.find(
-          x =>
-            x.type === type
+          x => x.type === type
         )?.value || '';
-
 
     const year =
       get('year');
@@ -3794,7 +3855,6 @@ function normalizeDate_(value){
 
     const day =
       get('day');
-
 
     if(
       year &&
@@ -3813,7 +3873,6 @@ function normalizeDate_(value){
     }
 
   }
-
 
   return raw.slice(
     0,
@@ -3847,14 +3906,11 @@ function jakartaToday_(){
       new Date()
     );
 
-
   const get =
     type =>
       parts.find(
-        x =>
-          x.type === type
+        x => x.type === type
       )?.value || '';
-
 
   return (
     get('year') +
@@ -3876,10 +3932,7 @@ function getDisplayDate_(value){
   const normalized =
     normalizeDate_(value);
 
-
-  if(
-    !normalized
-  ){
+  if(!normalized){
 
     return {
       day:'-',
@@ -3888,16 +3941,12 @@ function getDisplayDate_(value){
 
   }
 
-
   const match =
     normalized.match(
       /^(\d{4})-(\d{2})-(\d{2})$/
     );
 
-
-  if(
-    !match
-  ){
+  if(!match){
 
     return {
       day:'-',
@@ -3906,22 +3955,14 @@ function getDisplayDate_(value){
 
   }
 
-
   const year =
-    Number(
-      match[1]
-    );
+    Number(match[1]);
 
   const month =
-    Number(
-      match[2]
-    );
+    Number(match[2]);
 
   const day =
-    Number(
-      match[3]
-    );
-
+    Number(match[3]);
 
   const d =
     new Date(
@@ -3935,7 +3976,6 @@ function getDisplayDate_(value){
       )
     );
 
-
   const dayName =
     new Intl.DateTimeFormat(
       'id-ID',
@@ -3947,7 +3987,6 @@ function getDisplayDate_(value){
 
       }
     ).format(d);
-
 
   const longDate =
     new Intl.DateTimeFormat(
@@ -3965,7 +4004,6 @@ function getDisplayDate_(value){
       }
     ).format(d);
 
-
   return {
 
     day:
@@ -3980,7 +4018,7 @@ function getDisplayDate_(value){
 
 
 /* =====================================================
-   GET TYPE
+   TYPE
 ===================================================== */
 
 function attendanceTypeLabel_(type){
@@ -3991,7 +4029,6 @@ function attendanceTypeLabel_(type){
     )
     .trim()
     .toUpperCase();
-
 
   if(
     t === 'MASUK'
@@ -4005,7 +4042,6 @@ function attendanceTypeLabel_(type){
 
   }
 
-
   if(
     t === 'PULANG'
   ){
@@ -4017,7 +4053,6 @@ function attendanceTypeLabel_(type){
     };
 
   }
-
 
   return {
     label:
@@ -4040,12 +4075,10 @@ function renderTodayAttendanceCard_(item){
       item.type
     );
 
-
   const dateInfo =
     getDisplayDate_(
       item.date
     );
-
 
   const location =
     [
@@ -4055,23 +4088,18 @@ function renderTodayAttendanceCard_(item){
     .filter(Boolean)
     .join(', ');
 
-
   const distance =
     item.distance !== undefined &&
     item.distance !== null &&
     item.distance !== '' &&
     isFinite(
-      Number(
-        item.distance
-      )
+      Number(item.distance)
     )
       ? Math.round(
-          Number(
-            item.distance
-          )
-        ) + ' meter dari titik kantor'
+          Number(item.distance)
+        ) +
+        ' meter dari titik kantor'
       : 'Jarak tidak tersedia';
-
 
   return `
 
@@ -4082,7 +4110,7 @@ function renderTodayAttendanceCard_(item){
         <div class="today-attendance-type">
 
           <div class="today-attendance-icon">
-            ${typeInfo.icon}
+            ${escapeHtml(typeInfo.icon)}
           </div>
 
           <span>
@@ -4091,13 +4119,11 @@ function renderTodayAttendanceCard_(item){
 
         </div>
 
-
         <span class="today-attendance-badge">
           Tercatat
         </span>
 
       </div>
-
 
       <div class="today-attendance-grid">
 
@@ -4113,7 +4139,6 @@ function renderTodayAttendanceCard_(item){
 
         </div>
 
-
         <div class="today-attendance-info">
 
           <div class="today-attendance-label">
@@ -4125,7 +4150,6 @@ function renderTodayAttendanceCard_(item){
           </div>
 
         </div>
-
 
         <div class="today-attendance-info">
 
@@ -4139,7 +4163,6 @@ function renderTodayAttendanceCard_(item){
 
         </div>
 
-
         <div class="today-attendance-info">
 
           <div class="today-attendance-label">
@@ -4147,13 +4170,10 @@ function renderTodayAttendanceCard_(item){
           </div>
 
           <div class="today-attendance-value">
-            ${escapeHtml(
-              typeInfo.label
-            )}
+            ${escapeHtml(typeInfo.label)}
           </div>
 
         </div>
-
 
         <div class="today-attendance-info full">
 
@@ -4168,6 +4188,7 @@ function renderTodayAttendanceCard_(item){
             </span>
 
             <span>
+
               ${
                 escapeHtml(
                   location ||
@@ -4178,6 +4199,7 @@ function renderTodayAttendanceCard_(item){
               <div class="today-attendance-distance">
                 ${escapeHtml(distance)}
               </div>
+
             </span>
 
           </div>
@@ -4204,14 +4226,9 @@ function renderHistory(items){
       ? items
       : [];
 
-
   const today =
     jakartaToday_();
 
-
-  /*
-   * Ambil hanya data hari ini.
-   */
   const todayItems =
     items
       .filter(
@@ -4222,15 +4239,11 @@ function renderHistory(items){
       )
       .sort(
         (a,b) =>
-          String(
-            a.time || ''
-          ).localeCompare(
-            String(
-              b.time || ''
+          String(a.time || '')
+            .localeCompare(
+              String(b.time || '')
             )
-          )
       );
-
 
   const masuk =
     todayItems.find(
@@ -4241,7 +4254,6 @@ function renderHistory(items){
         'MASUK'
     );
 
-
   const pulang =
     todayItems.find(
       x =>
@@ -4251,29 +4263,13 @@ function renderHistory(items){
         'PULANG'
     );
 
-
-  /*
-   * Tombol Absen Masuk
-   */
   $('btnMasuk').disabled =
     !!masuk;
 
-
-  /*
-   * Tombol Pulang hanya aktif
-   * jika sudah masuk dan belum pulang.
-   */
   $('btnPulang').disabled =
     !masuk ||
     !!pulang;
 
-
-  /*
-   * Jam absen masuk.
-   *
-   * PENTING:
-   * gunakan innerHTML karena ada <span> WIB.
-   */
   if(
     masuk &&
     masuk.time
@@ -4281,9 +4277,7 @@ function renderHistory(items){
 
     $('arrivalTime').innerHTML =
       escapeHtml(
-        String(
-          masuk.time
-        )
+        String(masuk.time)
       ) +
       ' <span>WIB</span>';
 
@@ -4294,13 +4288,8 @@ function renderHistory(items){
 
   }
 
-
-  /*
-   * Status badge.
-   */
   const badge =
     $('statusBadge');
-
 
   if(
     masuk &&
@@ -4317,11 +4306,7 @@ function renderHistory(items){
       .textContent =
       '✓';
 
-  }
-
-  else if(
-    masuk
-  ){
+  }else if(masuk){
 
     badge.textContent =
       'Sudah Absen Masuk';
@@ -4333,9 +4318,7 @@ function renderHistory(items){
       .textContent =
       '✓';
 
-  }
-
-  else{
+  }else{
 
     badge.textContent =
       'Belum Absen';
@@ -4349,10 +4332,6 @@ function renderHistory(items){
 
   }
 
-
-  /*
-   * RIWAYAT HARI INI
-   */
   if(
     todayItems.length
   ){
@@ -4385,10 +4364,6 @@ function renderHistory(items){
 
   }
 
-
-  /*
-   * RIWAYAT LENGKAP
-   */
   if(
     items.length
   ){
@@ -4403,7 +4378,6 @@ function renderHistory(items){
                 x.date
               );
 
-
             const location =
               [
                 x.district,
@@ -4412,29 +4386,24 @@ function renderHistory(items){
               .filter(Boolean)
               .join(', ');
 
-
             const distance =
               x.distance !== undefined &&
               x.distance !== null &&
               x.distance !== '' &&
               isFinite(
-                Number(
-                  x.distance
-                )
+                Number(x.distance)
               )
                 ? Math.round(
-                    Number(
-                      x.distance
-                    )
-                  ) + ' m'
+                    Number(x.distance)
+                  ) +
+                  ' m'
                 : '';
-
 
             return `
 
               <div class="row">
 
-                <div style="min-width:0">
+                <div style="min-width:0;flex:1">
 
                   <b>
                     ${escapeHtml(
@@ -4457,16 +4426,13 @@ function renderHistory(items){
                     ${
                       location
                         ? ' • ' +
-                          escapeHtml(
-                            location
-                          )
+                          escapeHtml(location)
                         : ''
                     }
 
                   </div>
 
                 </div>
-
 
                 <div
                   style="text-align:right;flex:0 0 auto"
@@ -4479,9 +4445,7 @@ function renderHistory(items){
                   </b>
 
                   <div class="small">
-                    ${escapeHtml(
-                      distance
-                    )}
+                    ${escapeHtml(distance)}
                   </div>
 
                 </div>
@@ -4534,9 +4498,14 @@ function escapeHtml(s){
 
 async function openCamera(type){
 
-  /*
-   * Pastikan lokasi tersedia.
-   */
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
   if(
     !currentLocation
   ){
@@ -4551,17 +4520,11 @@ async function openCamera(type){
 
   }
 
-
   attendanceType =
     type;
 
-
-  /*
-   * Reset foto sebelumnya.
-   */
   capturedDataUrl =
     '';
-
 
   $('cameraTitle')
     .textContent =
@@ -4572,36 +4535,26 @@ async function openCamera(type){
         : 'Pulang'
     );
 
-
-  $('preview')
-    .style.display =
-    'none';
-
-
   $('preview').src =
     '';
 
-
-  $('video')
-    .style.display =
-    'block';
-
-
-  $('submitPhotoBtn')
-    .style.display =
+  $('preview').style.display =
     'none';
 
+  $('video').style.display =
+    'block';
 
-  $('captureBtn')
-    .textContent =
+  $('submitPhotoBtn').style.display =
+    'none';
+
+  $('captureBtn').disabled =
+    false;
+
+  $('captureBtn').textContent =
     '📸 Ambil Foto';
 
-
   $('cameraModal')
-    .classList.add(
-      'show'
-    );
-
+    .classList.add('show');
 
   try{
 
@@ -4610,6 +4563,8 @@ async function openCamera(type){
   }catch(e){
 
     console.error(e);
+
+    closeCamera();
 
     showToast(
       'Kamera tidak dapat dibuka. Pastikan izin kamera diberikan.'
@@ -4637,39 +4592,65 @@ async function startCamera(){
 
   }
 
-
   stopCamera();
 
+  const constraints = {
 
-  cameraStream =
-    await navigator.mediaDevices
-      .getUserMedia({
+    video:{
 
-        video:{
+      facingMode:{
+        ideal:facingMode
+      },
 
-          facingMode:{
-            ideal:
-              facingMode
-          },
+      width:{
+        ideal:1280
+      },
 
-          width:{
-            ideal:1280
-          },
+      height:{
+        ideal:1280
+      }
 
-          height:{
-            ideal:1280
-          }
+    },
 
-        },
+    audio:false
 
-        audio:false
+  };
 
-      });
+  try{
 
+    cameraStream =
+      await navigator.mediaDevices
+        .getUserMedia(
+          constraints
+        );
+
+  }catch(firstError){
+
+    console.warn(
+      'Kamera dengan constraint utama gagal:',
+      firstError
+    );
+
+    cameraStream =
+      await navigator.mediaDevices
+        .getUserMedia({
+
+          video:true,
+
+          audio:false
+
+        });
+
+  }
 
   $('video').srcObject =
     cameraStream;
 
+  $('video').muted =
+    true;
+
+  $('video').playsInline =
+    true;
 
   try{
 
@@ -4700,12 +4681,34 @@ function stopCamera(){
     cameraStream
       .getTracks()
       .forEach(
-        track =>
-          track.stop()
+        track => {
+
+          try{
+
+            track.stop();
+
+          }catch(e){}
+
+        }
       );
 
-
     cameraStream =
+      null;
+
+  }
+
+  const video =
+    $('video');
+
+  if(video){
+
+    try{
+
+      video.pause();
+
+    }catch(e){}
+
+    video.srcObject =
       null;
 
   }
@@ -4719,11 +4722,33 @@ function stopCamera(){
 
 async function switchCamera(){
 
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
   facingMode =
     facingMode === 'user'
       ? 'environment'
       : 'user';
 
+  const button =
+    document.querySelector(
+      '.switch'
+    );
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      '⏳ Membuka Kamera...';
+
+  }
 
   try{
 
@@ -4733,9 +4758,26 @@ async function switchCamera(){
 
     console.error(e);
 
+    facingMode =
+      facingMode === 'user'
+        ? 'environment'
+        : 'user';
+
     showToast(
       'Kamera tidak tersedia.'
     );
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        '🔄 Ganti Kamera';
+
+    }
 
   }
 
@@ -4748,13 +4790,19 @@ async function switchCamera(){
 
 function capturePhoto(){
 
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
   const video =
     $('video');
 
-
   const canvas =
     $('canvas');
-
 
   if(
     !video ||
@@ -4769,7 +4817,6 @@ function capturePhoto(){
 
   }
 
-
   if(
     !video.videoWidth ||
     !video.videoHeight
@@ -4783,15 +4830,12 @@ function capturePhoto(){
 
   }
 
-
   const maxWidth =
     800;
-
 
   const ratio =
     video.videoHeight /
     video.videoWidth;
-
 
   const w =
     Math.min(
@@ -4799,20 +4843,16 @@ function capturePhoto(){
       video.videoWidth
     );
 
-
   const h =
     Math.round(
       w * ratio
     );
 
-
   canvas.width =
     w;
 
-
   canvas.height =
     h;
-
 
   const ctx =
     canvas.getContext(
@@ -4821,7 +4861,6 @@ function capturePhoto(){
         alpha:false
       }
     );
-
 
   if(!ctx){
 
@@ -4833,6 +4872,11 @@ function capturePhoto(){
 
   }
 
+  ctx.imageSmoothingEnabled =
+    true;
+
+  ctx.imageSmoothingQuality =
+    'high';
 
   ctx.drawImage(
     video,
@@ -4842,25 +4886,18 @@ function capturePhoto(){
     h
   );
 
-
-  /*
-   * Kompres foto.
-   */
   const MAX_CLIENT_BYTES =
     600 * 1024;
-
 
   let quality =
     0.78;
 
-
   let dataUrl =
     '';
 
-
   for(
-    let i = 0;
-    i < 6;
+    let i=0;
+    i<8;
     i++
   ){
 
@@ -4870,13 +4907,10 @@ function capturePhoto(){
         quality
       );
 
-
     const estimatedBytes =
       Math.floor(
-        dataUrl.length *
-        0.75
+        dataUrl.length * 0.75
       );
-
 
     if(
       estimatedBytes <=
@@ -4887,26 +4921,20 @@ function capturePhoto(){
 
     }
 
-
     quality -=
-      0.08;
-
+      0.07;
 
     if(
-      quality < 0.38
+      quality < 0.35
     ){
 
       quality =
-        0.38;
+        0.35;
 
     }
 
   }
 
-
-  /*
-   * Validasi Base64.
-   */
   if(
     !/^data:image\/[^;]+;base64,/i.test(
       dataUrl
@@ -4921,70 +4949,44 @@ function capturePhoto(){
 
   }
 
-
-  /*
-   * SIMPAN foto.
-   *
-   * Jangan gunakan video/canvas lagi
-   * setelah bagian ini.
-   */
-  capturedDataUrl =
+  const finalPhoto =
     String(
       dataUrl
     ).trim();
 
-
-  /*
-   * Pastikan benar-benar tersimpan.
-   */
   if(
-    !capturedDataUrl ||
-    !/^data:image\/[^;]+;base64,/i.test(
-      capturedDataUrl
-    )
+    !finalPhoto ||
+    finalPhoto.length < 100
   ){
 
-    capturedDataUrl =
-      '';
-
     showToast(
-      'Foto belum tersimpan. Silakan ambil foto lagi.'
+      'Foto belum berhasil disimpan.'
     );
 
     return;
 
   }
 
+  capturedDataUrl =
+    finalPhoto;
 
-  /*
-   * Tampilkan preview.
-   */
   $('preview').src =
     capturedDataUrl;
 
-
-  $('video')
-    .style.display =
+  $('video').style.display =
     'none';
 
-
-  $('preview')
-    .style.display =
+  $('preview').style.display =
     'block';
 
-
-  $('captureBtn')
-    .textContent =
+  $('captureBtn').textContent =
     '📸 Ambil Ulang';
 
-
-  $('submitPhotoBtn')
-    .style.display =
+  $('submitPhotoBtn').style.display =
     'block';
 
-
   showToast(
-    'Foto berhasil diambil. Silakan klik Gunakan Foto & Absen.'
+    'Foto berhasil diambil.'
   );
 
 }
@@ -4997,7 +4999,6 @@ function capturePhoto(){
 function closeCamera(){
 
   stopCamera();
-
 
   $('cameraModal')
     .classList.remove(
@@ -5013,26 +5014,29 @@ function closeCamera(){
 
 function submitAttendance(){
 
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
   /*
-   * Salin foto SEBELUM melakukan apa pun.
+   * FOTO DISALIN TERLEBIH DAHULU.
    */
   const photoToSend =
     String(
       capturedDataUrl || ''
     ).trim();
 
-
   /*
-   * Validasi foto.
-   *
-   * Regex:
-   * data:image/....;base64,
+   * Validasi Base64.
    */
   const validPhoto =
     /^data:image\/[^;]+;base64,/i.test(
       photoToSend
     );
-
 
   if(
     !photoToSend ||
@@ -5047,9 +5051,8 @@ function submitAttendance(){
 
   }
 
-
   /*
-   * Salin lokasi.
+   * Lokasi.
    */
   const locationToSend =
     currentLocation
@@ -5073,7 +5076,6 @@ function submitAttendance(){
         }
       : null;
 
-
   if(
     !locationToSend ||
     !isFinite(
@@ -5095,7 +5097,6 @@ function submitAttendance(){
 
   }
 
-
   if(
     locationToSend.accuracy <= 0
   ){
@@ -5108,28 +5109,61 @@ function submitAttendance(){
 
   }
 
-
-  /*
-   * Simpan type sebelum request.
-   */
   const typeToSend =
     attendanceType;
 
+  attendanceProcessing =
+    true;
+
+  const submitButton =
+    $('submitPhotoBtn');
+
+  const captureButton =
+    $('captureBtn');
+
+  const switchButton =
+    document.querySelector(
+      '.switch'
+    );
+
+  if(submitButton){
+
+    submitButton.disabled =
+      true;
+
+    submitButton.textContent =
+      '⏳ Menyimpan Absensi...';
+
+    submitButton.style.opacity =
+      '.7';
+
+  }
+
+  if(captureButton){
+
+    captureButton.disabled =
+      true;
+
+  }
+
+  if(switchButton){
+
+    switchButton.disabled =
+      true;
+
+  }
 
   /*
-   * Tutup kamera.
-   *
-   * Tidak menghapus capturedDataUrl.
+   * Tutup kamera tetapi
+   * JANGAN menghapus capturedDataUrl.
    */
   closeCamera();
-
 
   loading(
     true,
     'Menyimpan Absensi',
     'Mengirim foto, lokasi, dan data absensi...'
   );
-
 
   request(
 
@@ -5158,6 +5192,8 @@ function submitAttendance(){
 
       loading(false);
 
+      attendanceProcessing =
+        false;
 
       if(
         !r ||
@@ -5165,74 +5201,106 @@ function submitAttendance(){
       ){
 
         /*
-         * Jangan hapus foto kalau gagal.
-         * User masih bisa mencoba lagi.
+         * Foto tetap disimpan
+         * agar user dapat mencoba lagi.
          */
         capturedDataUrl =
           photoToSend;
 
+        if(submitButton){
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            'Gunakan Foto & Absen';
+
+          submitButton.style.opacity =
+            '1';
+
+        }
+
+        if(captureButton){
+
+          captureButton.disabled =
+            false;
+
+        }
+
+        if(switchButton){
+
+          switchButton.disabled =
+            false;
+
+        }
 
         showToast(
           r?.error ||
           'Absen gagal. Silakan coba lagi.'
         );
 
+        /*
+         * Buka kembali kamera modal
+         * dalam mode preview foto.
+         */
+        $('preview').src =
+          capturedDataUrl;
+
+        $('preview').style.display =
+          'block';
+
+        $('video').style.display =
+          'none';
+
+        $('submitPhotoBtn').style.display =
+          'block';
+
+        $('cameraModal')
+          .classList.add('show');
+
         return;
 
       }
 
-
       /*
-       * Hasil absensi.
+       * HASIL ABSENSI BERHASIL.
        */
       $('resultTime')
         .textContent =
-        r.time ||
-        '-';
-
+        (r.time || '-') +
+        ' WIB';
 
       $('resultDate')
         .textContent =
         r.date ||
         '-';
 
-
       $('resultLoc')
         .textContent =
         [
-
           r.district,
-
           r.regency
-
         ]
         .filter(Boolean)
         .join(', ') ||
-
         'Lokasi tercatat';
-
 
       $('resultPhoto')
         .src =
         photoToSend;
-
 
       $('resultModal')
         .classList.add(
           'show'
         );
 
-
       /*
-       * Baru hapus setelah berhasil.
+       * Foto baru dihapus setelah
+       * server menyatakan berhasil.
        */
       capturedDataUrl =
         '';
 
-
-      /*
-       * Refresh history.
-       */
       refreshAll();
 
     }
@@ -5253,11 +5321,6 @@ function closeResult(){
       'show'
     );
 
-
-  /*
-   * Setelah melihat hasil,
-   * kembali ke Home.
-   */
   showPage('home');
 
 }
@@ -5270,11 +5333,9 @@ function closeResult(){
 function showPage(page){
 
   [
-
     'home',
     'history',
     'profile'
-
   ].forEach(
     p => {
 
@@ -5287,31 +5348,27 @@ function showPage(page){
     }
   );
 
-
   [
-
     'Home',
     'History',
     'Profile'
-
   ].forEach(
     p => {
 
       $('nav' + p)
         .classList.toggle(
           'active',
-          p.toLowerCase() ===
-          page
+          p.toLowerCase() === page
         );
 
     }
   );
 
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
 
-  /*
-   * Refresh history ketika halaman
-   * Riwayat dibuka.
-   */
   if(
     page === 'history'
   ){
@@ -5346,6 +5403,24 @@ function showPage(page){
 
 async function logout(){
 
+  if(
+    attendanceProcessing
+  ){
+
+    showToast(
+      'Tunggu proses absensi selesai.'
+    );
+
+    return;
+
+  }
+
+  loading(
+    true,
+    'Keluar dari Aplikasi',
+    'Mengakhiri sesi login...'
+  );
+
   try{
 
     if(
@@ -5358,7 +5433,6 @@ async function logout(){
         await import(
           'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
         );
-
 
       await signOut(
         firebaseAuth
@@ -5375,19 +5449,17 @@ async function logout(){
 
   }
 
-
   localStorage.removeItem(
     'absen_session'
   );
 
-
   sessionToken =
     '';
-
 
   currentUser =
     null;
 
+  stopCamera();
 
   location.reload();
 
@@ -5403,15 +5475,28 @@ window.addEventListener(
   async () => {
 
     /*
-     * Firebase tetap diinisialisasi
-     * walaupun session masih tersimpan.
+     * Tampilkan loading sejak awal
+     * agar HP tidak terlihat seperti hang.
+     */
+    loading(
+      true,
+      'Menyiapkan Aplikasi',
+      'Memuat sistem absensi...'
+    );
+
+    /*
+     * Firebase.
      */
     await initFirebase();
 
-
+    /*
+     * Jika masih memiliki session.
+     */
     if(
       sessionToken
     ){
+
+      showApp();
 
       loading(
         true,
@@ -5419,20 +5504,27 @@ window.addEventListener(
         'Memeriksa sesi login Anda...'
       );
 
-
-      showApp();
-
-
       setTimeout(
         () => {
 
           refreshAll();
 
-          loading(false);
+          setTimeout(
+            () => {
+
+              loading(false);
+
+            },
+            500
+          );
 
         },
-        500
+        200
       );
+
+    }else{
+
+      loading(false);
 
     }
 
@@ -5441,12 +5533,76 @@ window.addEventListener(
 
 
 /* =====================================================
-   RESIZE
+   MODAL BACKDROP
 ===================================================== */
 
-window.addEventListener(
-  'resize',
-  () => {}
+$('cameraModal')
+  .addEventListener(
+    'click',
+    e => {
+
+      if(
+        e.target ===
+        $('cameraModal')
+      ){
+
+        closeCamera();
+
+      }
+
+    }
+  );
+
+
+$('resultModal')
+  .addEventListener(
+    'click',
+    e => {
+
+      if(
+        e.target ===
+        $('resultModal')
+      ){
+
+        closeResult();
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   PAGE VISIBILITY
+===================================================== */
+
+document.addEventListener(
+  'visibilitychange',
+  () => {
+
+    if(
+      document.visibilityState ===
+      'visible'
+    ){
+
+      updateClock();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   PREVENT DOUBLE TOUCH
+===================================================== */
+
+document.addEventListener(
+  'touchstart',
+  () => {},
+  {
+    passive:true
+  }
 );
 
 </script>
