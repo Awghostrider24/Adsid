@@ -315,42 +315,160 @@ function postForm(fields){const body=new URLSearchParams();Object.entries(fields
 function poll(id,onDone,tries=0){const cb='admincb_'+makeId();let finished=false;window[cb]=data=>{if(finished)return;finished=true;delete window[cb];document.getElementById('jsonp_'+cb)?.remove();if(data?.state==='DONE'){onDone(data.result||data);return}if(tries>=45){onDone({ok:false,error:data?.error||'Waktu menunggu server habis.'});return}setTimeout(()=>poll(id,onDone,tries+1),650)};const s=document.createElement('script');s.id='jsonp_'+cb;s.src=CONFIG.WEB_APP_URL+'?action=status&requestId='+encodeURIComponent(id)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();s.onerror=()=>{delete window[cb];s.remove();if(tries>=45)onDone({ok:false,error:'Server tidak merespons.'});else setTimeout(()=>poll(id,onDone,tries+1),800)};document.body.appendChild(s)}
 function request(action,extra={}){return new Promise(resolve=>{const id=makeId();postForm({action,requestId:id,sessionToken,...extra}).then(ok=>{if(!ok){resolve({ok:false,error:'Gagal mengirim permintaan.'});return}setTimeout(()=>poll(id,resolve),300)})})}
 
-async function loginAdmin(){
-  try{
-    $('loginBtn').disabled=true;
-    if(!auth){app=initializeApp(CONFIG.FIREBASE_CONFIG);auth=getAuth(app);provider=new GoogleAuthProvider()}
-    const cred=await signInWithPopup(auth,provider);
-    const token=await cred.user.getIdToken(true);
-    loading(true);
-    const r=await request('firebaseLogin',{firebaseIdToken:token});
-    loading(false);
-    if(!r?.ok)throw new Error(r?.error||'Login gagal');
-    if(String(r.user?.role||'').toUpperCase()!=='ADMIN')throw new Error('Akun berhasil login, tetapi role bukan ADMIN.');
-    sessionToken=r.sessionToken;localStorage.setItem('absen_admin_session',sessionToken);user=r.user;showApp();
-  }catch(e){loading(false);toast(e.message||'Login gagal.');try{await signOut(auth)}catch(_){}}
-  $('loginBtn').disabled=false;
-}
-async function logout(){try{if(auth)await signOut(auth)}catch(_){}localStorage.removeItem('absen_admin_session');sessionToken='';location.reload()}
-function showApp(){ $('login').classList.add('hidden');$('app').classList.remove('hidden'); $('welcome').textContent=`Selamat datang, ${user?.name||'Admin'}`; $('avatar').src=user?.photo||avatar(user?.name); $('dateFilter').value=todayISO(); fillMonths(); loadAll() }
-function avatar(name){const i=esc(String(name||'A').charAt(0).toUpperCase());return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100%" height="100%" rx="50" fill="#edf5ff"/><text x="50%" y="58%" text-anchor="middle" font-family="Arial" font-size="45" font-weight="700" fill="#1769e0">${i}</text></svg>`)}
-function fillMonths(){const d=new Date();const el=$('monthFilter');el.innerHTML='';for(let i=0;i<12;i++){const x=new Date(d.getFullYear(),d.getMonth()-i,1);const v=x.toISOString().slice(0,7);const o=document.createElement('option');o.value=v;o.textContent=x.toLocaleDateString('id-ID',{month:'long',year:'numeric'});el.appendChild(o)}}
-function setAttendanceFilter(v){attendanceFilter=v;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));$('tab'+(v==='ALL'?'All':'Belum')).classList.add('active');renderAttendance(window.attendanceData||[])}
-async function loadAll(){loading(true);const date=$('dateFilter').value||todayISO(),month=$('monthFilter').value||todayISO().slice(0,7);const [d,a,m,p,e]=await Promise.all([request('adminDashboard',{date,month}),request('adminAttendance',{date}),request('adminMonthly',{month}),request('adminPayroll',{month}),request('adminEmployees')]);loading(false);if(!d.ok){toast(d.error||'Gagal memuat dashboard');if(/sesi|session|izin|admin/i.test(d.error||'')){localStorage.removeItem('absen_admin_session');location.reload()}return}renderDashboard(d);renderAttendance(a.ok?a.items:[]);renderMonthly(m.ok?m.items:[]);renderPayroll(p.ok?p.items:[]);renderEmployees(e.ok?e.items:[])}
-function renderDashboard(d){const s=d.summary||{};$('sTotal').textContent=s.totalEmployees||0;$('sMasuk').textContent=s.masuk||0;$('sBelum').textContent=s.belum||0;$('sLate').textContent=s.terlambat||0;$('sPulang').textContent=s.pulang||0;$('attendanceInfo').textContent=`${d.date||'-'} • ${s.masuk||0} dari ${s.totalEmployees||0} sudah masuk`;$('todayText').textContent=d.date||todayISO()}
-function renderAttendance(items){window.attendanceData=items;const rows=attendanceFilter==='BELUM'?items.filter(x=>!x.masuk):items;const body=$('attendanceBody');if(!rows.length){body.innerHTML='<tr><td colspan="6"><div class="empty">Tidak ada data.</div></td></tr>';return}body.innerHTML=rows.map(x=>`<tr><td><span class="name">${esc(x.name)}</span><span class="sub">${esc(x.nip||'-')}</span></td><td>${esc(x.position||'-')}</td><td><b>${esc(x.masuk||'—')}</b></td><td><b>${esc(x.pulang||'—')}</b></td><td>${esc(x.duration||'—')}</td><td><span class="badge ${x.statusClass||'belum'}">${esc(x.status||'Belum')}</span></td></tr>`).join('')}
-function renderMonthly(items){$('monthlyBody').innerHTML=items.length?items.map(x=>`<tr><td><span class="name">${esc(x.name)}</span><span class="sub">${esc(x.nip||'-')}</span></td><td>${x.workDays||0}</td><td>${x.hadir||0}</td><td>${x.terlambat||0}</td><td>${x.izin||0}</td><td>${x.sakit||0}</td><td>${x.tidakHadir||0}</td><td>${esc(x.workHours||'0j 0m')}</td></tr>`).join(''):'<tr><td colspan="8"><div class="empty">Belum ada rekap.</div></td></tr>'}
-function renderPayroll(items){$('payrollInfo').textContent=$('monthFilter').selectedOptions[0]?.textContent||'';$('payrollList').innerHTML=items.length?items.slice(0,12).map(x=>`<div class="mini"><div class="mini-main"><b>${esc(x.name)}</b><span>${esc(x.nip||'-')} • ${x.hadir||0} hadir</span></div><div class="money">${money(x.total)}</div></div>`).join(''):'<div class="empty">Belum ada data payroll.</div>'}
-function renderEmployees(items){$('employeeBody').innerHTML=items.length?items.map(x=>`<tr><td><span class="name">${esc(x.name)}</span><span class="sub">${esc(x.email||'-')}</span></td><td>${esc(x.nip||'-')}</td><td>${esc(x.position||'-')}</td><td>${esc(x.role||'-')}</td><td><span class="badge ${String(x.status).toUpperCase()==='AKTIF'?'hadir':'belum'}">${esc(x.status||'-')}</span></td><td>${money(x.basicSalary)}</td><td>${money(x.allowance)}</td></tr>`).join(''):'<tr><td colspan="7"><div class="empty">Belum ada data pegawai.</div></td></tr>'}
-$('dateFilter').addEventListener('change',loadAll);$('monthFilter').addEventListener('change',loadAll);
+  async function loginAdmin(){
+  const btn = $('loginBtn');
 
-(async()=>{
-  app=initializeApp(CONFIG.FIREBASE_CONFIG);auth=getAuth(app);provider=new GoogleAuthProvider();
-  if(sessionToken){
-    const r=await request('profile',{}); // validates session
-    if(r.ok && String(r.user?.role||'').toUpperCase()==='ADMIN'){user=r.user;showApp();return}
-    localStorage.removeItem('absen_admin_session');sessionToken='';
+  try {
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="material-symbols-rounded">progress_activity</span>
+      Menghubungkan...
+    `;
+
+    loading(true);
+
+    // Pastikan Firebase sudah tersedia
+    if (!auth) {
+      app = initializeApp(CONFIG.FIREBASE_CONFIG);
+      auth = getAuth(app);
+      provider = new GoogleAuthProvider();
+    }
+
+    // Login Google
+    const cred = await signInWithPopup(auth, provider);
+
+    if (!cred || !cred.user) {
+      throw new Error('Akun Google tidak ditemukan.');
+    }
+
+    // Ambil Firebase ID Token
+    const token = await cred.user.getIdToken(true);
+
+    // Kirim ke Apps Script
+    const r = await request('firebaseLogin', {
+      firebaseIdToken: token
+    });
+
+    if (!r || !r.ok) {
+      throw new Error(
+        r?.error ||
+        r?.message ||
+        'Login gagal.'
+      );
+    }
+
+    /*
+     * Backend bisa mengembalikan session dalam:
+     * r.session
+     * atau langsung r.sessionToken
+     */
+    const session =
+      r.session ||
+      r.data?.session ||
+      null;
+
+    const newSessionToken =
+      session?.token ||
+      session?.sessionToken ||
+      r.sessionToken ||
+      r.data?.sessionToken ||
+      '';
+
+    if (!newSessionToken) {
+      console.error('Response login:', r);
+      throw new Error('Token session tidak diterima server.');
+    }
+
+    /*
+     * Ambil user dari response backend.
+     * Jika backend belum mengembalikan user,
+     * validasi lewat endpoint profile.
+     */
+    let adminUser =
+      r.user ||
+      r.data?.user ||
+      session?.user ||
+      null;
+
+    sessionToken = newSessionToken;
+
+    localStorage.setItem(
+      'absen_admin_session',
+      sessionToken
+    );
+
+    // Jika user belum tersedia, ambil dari profile
+    if (!adminUser) {
+      const profile = await request('profile');
+
+      if (!profile?.ok) {
+        throw new Error(
+          profile?.error ||
+          profile?.message ||
+          'Gagal membaca profil admin.'
+        );
+      }
+
+      adminUser =
+        profile.user ||
+        profile.data?.user ||
+        null;
+    }
+
+    if (!adminUser) {
+      throw new Error('Profil pengguna tidak ditemukan.');
+    }
+
+    // Pastikan role ADMIN
+    const role =
+      String(
+        adminUser.role ||
+        adminUser.Role ||
+        ''
+      ).trim().toUpperCase();
+
+    if (role !== 'ADMIN') {
+      localStorage.removeItem('absen_admin_session');
+      sessionToken = '';
+
+      throw new Error(
+        'Akun berhasil login, tetapi tidak memiliki akses ADMIN.'
+      );
+    }
+
+    user = adminUser;
+
+    loading(false);
+
+    showApp();
+
+  } catch (error) {
+
+    console.error('LOGIN ADMIN ERROR:', error);
+
+    loading(false);
+
+    try {
+      if (auth) {
+        await signOut(auth);
+      }
+    } catch (_) {}
+
+    localStorage.removeItem('absen_admin_session');
+    sessionToken = '';
+
+    toast(
+      error?.message ||
+      'Login admin gagal.'
+    );
+
+    btn.disabled = false;
+    btn.innerHTML = `
+      <span class="material-symbols-rounded">login</span>
+      Login dengan Google
+    `;
   }
-})();
+}
 </script>
 </body>
 </html>
