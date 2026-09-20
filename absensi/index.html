@@ -3044,6 +3044,117 @@ body{
   background:#16a36a;
 }
 
+
+/* =========================================================
+   REFINEMENT — JAM & STATUS KEHADIRAN
+========================================================= */
+
+/* Jam header lebih proporsional dan profesional */
+.clock{
+  font-size:clamp(34px, 8.5vw, 48px) !important;
+  letter-spacing:-1.6px !important;
+  line-height:1 !important;
+}
+
+.clock span{
+  font-size:.34em !important;
+  letter-spacing:0 !important;
+}
+
+/* Status Kehadiran dibuat lebih compact */
+.status-card{
+  padding:15px !important;
+  margin-bottom:12px !important;
+}
+
+.status-card .section-header{
+  gap:9px !important;
+  margin-bottom:11px !important;
+}
+
+.status-card .section-icon{
+  width:38px !important;
+  height:38px !important;
+  flex-basis:38px !important;
+  border-radius:12px !important;
+}
+
+.status-card .section-icon .material-symbols-rounded{
+  font-size:21px !important;
+}
+
+.status-card .section-title{
+  font-size:16px !important;
+  letter-spacing:-.15px !important;
+}
+
+.status-card .section-subtitle{
+  font-size:10px !important;
+  margin-top:2px !important;
+}
+
+/* Isi card status lebih kecil */
+.status-box{
+  grid-template-columns:48px minmax(0,1fr) !important;
+  gap:10px !important;
+  padding:10px !important;
+  border-radius:16px !important;
+}
+
+.status-circle{
+  width:48px !important;
+  height:48px !important;
+}
+
+.status-circle .material-symbols-rounded{
+  font-size:25px !important;
+}
+
+.status-label{
+  font-size:9px !important;
+}
+
+.status-time{
+  margin-top:2px !important;
+  font-size:28px !important;
+  letter-spacing:-.7px !important;
+}
+
+.status-time span{
+  font-size:.38em !important;
+}
+
+.status-badge{
+  padding:7px 9px !important;
+  font-size:9px !important;
+}
+
+/* Mobile: tetap nyaman tanpa membuat jam terlalu dominan */
+@media(max-width:430px){
+  .clock{
+    font-size:clamp(32px, 9vw, 42px) !important;
+  }
+
+  .status-card{
+    padding:14px !important;
+  }
+
+  .status-time{
+    font-size:26px !important;
+  }
+}
+
+/* Desktop: sedikit lebih besar, tetapi tetap restrained */
+@media(min-width:700px){
+  .clock{
+    font-size:48px !important;
+  }
+
+  .status-time{
+    font-size:30px !important;
+  }
+}
+
 </style>
 </head>
 
@@ -3221,11 +3332,7 @@ body{
   id="homePage"
   class="page active"
 >
-
-<!-- MODERN DASHBOARD WELCOME -->
-<div class="dashboard-welcome">
-  <div class="dashboard-welcome-label">DASHBOARD KEHADIRAN</div>
-  <h2 class="dashboard-welcome-title">Pantau kehadiran Anda hari ini</h2>
+<h2 class="dashboard-welcome-title">Pantau kehadiran Anda hari ini</h2>
   <p class="dashboard-welcome-copy">
     Lakukan absensi dengan selfie, GPS, dan waktu yang tercatat otomatis.
     Pastikan lokasi sudah terverifikasi sebelum mengambil foto.
