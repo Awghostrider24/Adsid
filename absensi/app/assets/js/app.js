@@ -39,6 +39,30 @@ let firebaseGoogleProvider =
 let firebaseReady =
   false;
 
+// Firebase SDK dipanaskan sejak awal secara asynchronous.
+// Jadi saat tombol login HP ditekan, browser tidak baru mulai download SDK.
+let firebaseModulesPromise = null;
+let firebaseInitPromise = null;
+
+function loadFirebaseModules_(){
+  if(firebaseModulesPromise){
+    return firebaseModulesPromise;
+  }
+
+  firebaseModulesPromise = Promise.all([
+    import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js')
+  ]).then(([appModule, authModule]) => ({
+    ...appModule,
+    ...authModule
+  })).catch(error => {
+    firebaseModulesPromise = null;
+    throw error;
+  });
+
+  return firebaseModulesPromise;
+}
+
 // ============================================================
 // CLIENT PERFORMANCE CACHE
 // Mengurangi request berulang ke Google Apps Script.
@@ -195,157 +219,97 @@ function loading(
 
 }
 
-async function initFirebase(){
+async function initFirebase(showLoading = false){
 
-  loading(
-    true,
-    'Menyiapkan Login',
-    'Menghubungkan sistem autentikasi...'
-  );
-
-  if(
-    !await validConfig()
-  ){
-
-    loading(false);
-
-    showToast(
-      'Konfigurasi Firebase belum lengkap.'
-    );
-
-    return false;
-
+  if(firebaseReady){
+    return true;
   }
 
-  try{
+  if(firebaseInitPromise){
+    return firebaseInitPromise;
+  }
 
-    const {
-      initializeApp,
-      getApps
-    } =
-      await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
+  firebaseInitPromise = (async () => {
+
+    if(showLoading){
+      loading(
+        true,
+        'Menyiapkan Login',
+        'Menghubungkan sistem autentikasi...'
       );
+    }
 
-    const {
-      getAuth,
-      GoogleAuthProvider,
-      onAuthStateChanged,
-      getRedirectResult
-    } =
-      await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-      );
-
-    firebaseApp =
-      getApps().length
-        ? getApps()[0]
-        : initializeApp(
-            CONFIG.FIREBASE_CONFIG
-          );
-
-    firebaseAuth =
-      getAuth(
-        firebaseApp
-      );
-
-    firebaseGoogleProvider =
-      new GoogleAuthProvider();
-
-    firebaseGoogleProvider
-      .setCustomParameters({
-        prompt:'select_account'
-      });
-
-    firebaseReady =
-      true;
+    if(!await validConfig()){
+      if(showLoading) loading(false);
+      showToast('Konfigurasi Firebase belum lengkap.');
+      return false;
+    }
 
     try{
 
-      await getRedirectResult(
-        firebaseAuth
-      );
+      const {
+        initializeApp,
+        getApps,
+        getAuth,
+        GoogleAuthProvider,
+        onAuthStateChanged
+      } = await loadFirebaseModules_();
 
-    }catch(error){
+      firebaseApp =
+        getApps().length
+          ? getApps()[0]
+          : initializeApp(CONFIG.FIREBASE_CONFIG);
 
-      console.warn(
-        'Redirect result:',
-        error
-      );
+      firebaseAuth = getAuth(firebaseApp);
 
-    }
+      firebaseGoogleProvider = new GoogleAuthProvider();
+      firebaseGoogleProvider.setCustomParameters({
+        prompt:'select_account'
+      });
 
-    onAuthStateChanged(
-      firebaseAuth,
-      async user => {
+      firebaseReady = true;
 
-        if(
-          !user ||
-          loginProcessing ||
-          sessionToken
-        ){
+      // Tidak menunggu getRedirectResult().
+      // onAuthStateChanged akan menangani user hasil redirect tanpa
+      // menambah satu round-trip blocking saat halaman dibuka.
+      onAuthStateChanged(firebaseAuth, async user => {
 
+        if(!user || loginProcessing || sessionToken){
           return;
-
         }
 
         try{
-
-          loginProcessing =
-            true;
-
+          loginProcessing = true;
           loading(
             true,
             'Memverifikasi Akun',
             'Menghubungkan akun Google dengan data pegawai...'
           );
-
-          await completeFirebaseLogin_(
-            user
-          );
-
+          await completeFirebaseLogin_(user);
         }catch(error){
-
-          console.error(
-            error
-          );
-
-          loginProcessing =
-            false;
-
+          console.error(error);
+          loginProcessing = false;
           loading(false);
-
-          showToast(
-            error.message ||
-            'Login Firebase gagal.'
-          );
-
+          restoreLoginButton_();
+          showToast(error.message || 'Login Firebase gagal.');
         }
+      });
 
-      }
-    );
+      if(showLoading) loading(false);
+      return true;
 
-    loading(false);
+    }catch(error){
+      console.error('Firebase Init Error:', error);
+      firebaseReady = false;
+      firebaseInitPromise = null;
+      if(showLoading) loading(false);
+      showToast('Firebase gagal dimuat. Periksa Authorized Domains.');
+      return false;
+    }
 
-    return true;
+  })();
 
-  }catch(error){
-
-    console.error(
-      'Firebase Init Error:',
-      error
-    );
-
-    loading(false);
-
-    showToast(
-      'Firebase gagal dimuat. Periksa Authorized Domains.'
-    );
-
-    return false;
-
-  }
-
+  return firebaseInitPromise;
 }
 
 async function loginWithFirebase(){
@@ -361,7 +325,7 @@ async function loginWithFirebase(){
   ){
 
     const ready =
-      await initFirebase();
+      await initFirebase(true);
 
     if(!ready){
       return;
@@ -400,10 +364,7 @@ async function loginWithFirebase(){
     const {
       signInWithPopup,
       signInWithRedirect
-    } =
-      await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-      );
+    } = await loadFirebaseModules_();
 
     let credentialResult;
 
@@ -534,9 +495,7 @@ async function completeFirebaseLogin_(user){
   );
 
   const firebaseIdToken =
-    await user.getIdToken(
-      true
-    );
+    await user.getIdToken();
 
   const sent =
     await postForm({
@@ -3460,48 +3419,15 @@ document.addEventListener(
   'DOMContentLoaded',
   async () => {
 
-    loading(
-      true,
-      'Menyiapkan Aplikasi',
-      'Memuat sistem absensi...'
-    );
+    // Jangan blokir tampilan login hanya karena Firebase / Apps Script.
+    // SDK Firebase dipanaskan di background sehingga tombol Google siap lebih cepat.
+    loading(false);
+    initFirebase(false);
 
-    await initFirebase();
-
-    if(
-      sessionToken
-    ){
-
+    if(sessionToken){
       showApp();
-
-      loading(
-        true,
-        'Memuat Absensi',
-        'Memeriksa sesi login Anda...'
-      );
-
-      setTimeout(
-        () => {
-
-          refreshAll();
-
-          setTimeout(
-            () => {
-
-              loading(false);
-
-            },
-            700
-          );
-
-        },
-        200
-      );
-
-    }else{
-
-      loading(false);
-
+      // Data Home tetap dimuat asynchronous; tidak perlu menahan UI.
+      refreshAll({ initial:true });
     }
 
   }
