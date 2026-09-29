@@ -7,10 +7,19 @@
 <title>Admin Absensi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0" rel="stylesheet">
+<link rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0"
+      onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0">
+</noscript>
 <style>
 :root{--p:#1769e0;--p2:#0f55bf;--soft:#edf5ff;--ink:#10233f;--muted:#6d7d91;--line:#e5ebf2;--bg:#f5f8fc;--white:#fff;--green:#12a36b;--greenSoft:#e9f9f2;--red:#e25555;--redSoft:#fff0f0;--orange:#e79a28;--orangeSoft:#fff7e8;--shadow:0 12px 35px rgba(25,65,120,.08)}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+.material-symbols-rounded{font-display:swap}button,input,select{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
 .login{min-height:100dvh;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#eef6ff,#f8fbff)}
 .login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow);text-align:center}
 .logo{width:72px;height:72px;border-radius:22px;margin:0 auto 18px;display:grid;place-items:center;background:var(--soft);color:var(--p);font-size:34px}
@@ -107,16 +116,18 @@
 <div id="loading" class="loading hidden"><div class="loading-card"><div class="spin"></div><b>Memuat dashboard...</b></div></div>
 
 <script type="module">
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  setPersistence,
-  browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+// Firebase dimuat secara lazy hanya saat benar-benar diperlukan.
+// Ini membuat halaman login/dashboard awal tidak menunggu Firebase.
+let initializeApp = null;
+let getApps = null;
+let getAuth = null;
+let GoogleAuthProvider = null;
+let signInWithPopup = null;
+let signOut = null;
+let onAuthStateChanged = null;
+let setPersistence = null;
+let browserLocalPersistence = null;
+let firebaseLoadingPromise = null;
 
 const CONFIG = {
   WEB_APP_URL: "https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec",
@@ -138,22 +149,37 @@ let user = null;
 let attendanceFilter = "ALL";
 let loginProcessing = false;
 
+// Formatter dibuat sekali agar render tabel tidak membuat Intl formatter berulang.
+const moneyFormatter = new Intl.NumberFormat("id-ID", {
+  style: "currency",
+  currency: "IDR",
+  maximumFractionDigits: 0
+});
+
+const dateFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Jakarta"
+});
+
+const fullDateFormatter = new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "full",
+  timeZone: "Asia/Jakarta"
+});
+
+const monthLabelFormatter = new Intl.DateTimeFormat("id-ID", {
+  month: "long",
+  year: "numeric"
+});
+
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
 }[char]));
 
 const money = value =>
-  new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0
-  }).format(Number(value) || 0);
+  moneyFormatter.format(Number(value) || 0);
 
 const todayISO = () =>
-  new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Jakarta"
-  }).format(new Date());
+  dateFormatter.format(new Date());
 
 function makeId() {
   return crypto.randomUUID().replaceAll("-", "");
@@ -228,7 +254,7 @@ function poll(requestId, onDone, tries = 0) {
 
     setTimeout(
       () => poll(requestId, onDone, tries + 1),
-      650
+      500
     );
   };
 
@@ -253,7 +279,7 @@ function poll(requestId, onDone, tries = 0) {
     } else {
       setTimeout(
         () => poll(requestId, onDone, tries + 1),
-        800
+        650
       );
     }
   };
@@ -279,35 +305,65 @@ async function request(action, extra = {}) {
   }
 
   return new Promise(resolve => {
-    setTimeout(() => poll(requestId, resolve), 300);
+    // Apps Script membutuhkan sedikit waktu untuk menyelesaikan job.
+    // Mulai polling lebih cepat tanpa menunggu terlalu lama.
+    setTimeout(() => poll(requestId, resolve), 180);
   });
 }
 
 async function initFirebase() {
   if (auth) return true;
 
-  try {
-    app = getApps().length
-      ? getApps()[0]
-      : initializeApp(CONFIG.FIREBASE_CONFIG);
+  if (!firebaseLoadingPromise) {
+    firebaseLoadingPromise = (async () => {
+      try {
+        const appModule = await import(
+          "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"
+        );
 
-    auth = getAuth(app);
+        const authModule = await import(
+          "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"
+        );
 
-    // Simpan status login Firebase di browser agar reload tidak
-    // mengharuskan pengguna membuka popup Google lagi.
-    await setPersistence(auth, browserLocalPersistence);
+        ({
+          initializeApp,
+          getApps
+        } = appModule);
 
-    provider = new GoogleAuthProvider();
+        ({
+          getAuth,
+          GoogleAuthProvider,
+          signInWithPopup,
+          signOut,
+          onAuthStateChanged,
+          setPersistence,
+          browserLocalPersistence
+        } = authModule);
 
-    provider.setCustomParameters({
-      prompt: "select_account"
-    });
+        app = getApps().length
+          ? getApps()[0]
+          : initializeApp(CONFIG.FIREBASE_CONFIG);
 
-    return true;
-  } catch (error) {
-    console.error("FIREBASE INIT ERROR:", error);
-    return false;
+        auth = getAuth(app);
+
+        // Persistence dijalankan hanya setelah Firebase benar-benar dibutuhkan.
+        await setPersistence(auth, browserLocalPersistence);
+
+        provider = new GoogleAuthProvider();
+        provider.setCustomParameters({
+          prompt: "select_account"
+        });
+
+        return true;
+      } catch (error) {
+        console.error("FIREBASE INIT ERROR:", error);
+        firebaseLoadingPromise = null;
+        return false;
+      }
+    })();
   }
+
+  return firebaseLoadingPromise;
 }
 
 async function loginAdmin() {
@@ -421,6 +477,9 @@ async function loginAdmin() {
     loading(false);
     showApp();
 
+    // Render aplikasi terlebih dahulu, baru ambil data dashboard.
+    requestAnimationFrame(() => loadAll());
+
   } catch (error) {
     console.error("LOGIN ADMIN ERROR:", error);
 
@@ -495,14 +554,10 @@ function showApp() {
 
   if ($("todayText")) {
     $("todayText").textContent =
-      new Intl.DateTimeFormat("id-ID", {
-        dateStyle: "full",
-        timeZone: "Asia/Jakarta"
-      }).format(new Date());
+      fullDateFormatter.format(new Date());
   }
 
   initializeFilters();
-  loadAll();
 }
 
 function initializeFilters() {
@@ -647,7 +702,6 @@ function renderAttendance(rows) {
       badgeClass = "hadir";
     }
 
-    body.insertAdjacentHTML("beforeend", "");
     return `
       <tr>
         <td>
@@ -849,8 +903,14 @@ function updateStats(data) {
   set("sPulang", "pulang", "sudahPulang", "checkedOut");
 }
 
+let dashboardLoading = false;
+let dashboardRequestVersion = 0;
+
 async function loadAll() {
-  if (!sessionToken) return;
+  if (!sessionToken || dashboardLoading) return;
+
+  const requestVersion = ++dashboardRequestVersion;
+  dashboardLoading = true;
 
   const date =
     $("dateFilter")?.value || todayISO();
@@ -941,6 +1001,7 @@ async function loadAll() {
     );
   } finally {
     loading(false);
+    dashboardLoading = false;
   }
 }
 
@@ -1105,7 +1166,10 @@ window.applyPayrollFilter = applyPayrollFilter;
 window.openSalarySlip = openSalarySlip;
 
 initializeFilters();
-restoreSession();
+
+// Beri browser kesempatan menampilkan UI terlebih dahulu sebelum
+// melakukan pengecekan session/network.
+requestAnimationFrame(() => restoreSession());
 </script>
 </body>
 </html>
