@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#1769e0">
 <title>Admin Absensi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0"
@@ -383,6 +384,15 @@ function poll(requestId, onDone, tries = 0) {
   const callbackName = "admincb_" + makeId();
   let finished = false;
 
+  // Poll cepat pada percobaan awal, lalu mundur perlahan agar tidak
+  // membebani Apps Script ketika job memang membutuhkan waktu.
+  const nextDelay = attempt => {
+    if (attempt < 2) return 120;
+    if (attempt < 5) return 220;
+    if (attempt < 10) return 350;
+    return 500;
+  };
+
   const finish = result => {
     if (finished) return;
     finished = true;
@@ -397,7 +407,7 @@ function poll(requestId, onDone, tries = 0) {
       return;
     }
 
-    if (tries >= 45) {
+    if (tries >= 30) {
       finish({
         ok: false,
         error: data?.error || "Waktu menunggu server habis."
@@ -407,12 +417,13 @@ function poll(requestId, onDone, tries = 0) {
 
     setTimeout(
       () => poll(requestId, onDone, tries + 1),
-      500
+      nextDelay(tries)
     );
   };
 
   const script = document.createElement("script");
   script.id = "jsonp_" + callbackName;
+  script.async = true;
   script.src =
     CONFIG.WEB_APP_URL +
     "?action=status" +
@@ -424,7 +435,7 @@ function poll(requestId, onDone, tries = 0) {
     delete window[callbackName];
     script.remove();
 
-    if (tries >= 45) {
+    if (tries >= 30) {
       finish({
         ok: false,
         error: "Server tidak merespons."
@@ -432,7 +443,7 @@ function poll(requestId, onDone, tries = 0) {
     } else {
       setTimeout(
         () => poll(requestId, onDone, tries + 1),
-        650
+        Math.max(250, nextDelay(tries))
       );
     }
   };
@@ -440,10 +451,26 @@ function poll(requestId, onDone, tries = 0) {
   document.body.appendChild(script);
 }
 
-async function request(action, extra = {}) {
-  const requestId = makeId();
+const pendingRequests = new Map();
 
-  const ok = await postForm({
+async function request(action, extra = {}) {
+  // GET-like requests can be safely shared while still pending.
+  // Mutating requests keep their unique request ID.
+  const readOnlyActions = new Set([
+    "profile", "dashboard", "assignments", "adminRequests"
+  ]);
+  const requestKey = readOnlyActions.has(action)
+    ? action + "::" + JSON.stringify(extra || {})
+    : "";
+
+  if (requestKey && pendingRequests.has(requestKey)) {
+    return pendingRequests.get(requestKey);
+  }
+
+  const execute = (async () => {
+    const requestId = makeId();
+
+    const ok = await postForm({
     action,
     requestId,
     sessionToken,
@@ -457,11 +484,23 @@ async function request(action, extra = {}) {
     };
   }
 
-  return new Promise(resolve => {
-    // Apps Script membutuhkan sedikit waktu untuk menyelesaikan job.
-    // Mulai polling lebih cepat tanpa menunggu terlalu lama.
-    setTimeout(() => poll(requestId, resolve), 180);
-  });
+    return new Promise(resolve => {
+      // Mulai pengecekan status lebih cepat; polling berikutnya memakai
+      // adaptive backoff sehingga tetap ringan saat server sibuk.
+      setTimeout(() => poll(requestId, resolve), 80);
+    });
+  })();
+
+  if (requestKey) {
+    pendingRequests.set(requestKey, execute);
+    try {
+      return await execute;
+    } finally {
+      pendingRequests.delete(requestKey);
+    }
+  }
+
+  return execute;
 }
 
 async function initFirebase() {
@@ -1057,6 +1096,7 @@ let adminEmployeesCache = [];
 let adminRequestsCache = [];
 let adminAssignmentsCache = [];
 let businessLoading = false;
+let adminModulesLoaded = false;
 
 
 
@@ -1275,8 +1315,8 @@ async function createAssignment(){
   }
 }
 
-async function loadAdminModules(){
-  if(!sessionToken || businessLoading) return;
+async function loadAdminModules(force=false){
+  if(!sessionToken || (businessLoading && !force)) return;
   businessLoading=true;
   try{
     // Pegawai sudah tersedia dari dashboard, jadi pilihan penugasan
@@ -1416,9 +1456,13 @@ async function loadAll() {
     dashboardLoading = false;
 
     // Modul tambahan tetap dimuat setelah dashboard utama siap.
-    loadAdminModules().catch(error => {
-      console.error("LOAD ADMIN MODULES ERROR:", error);
-    });
+    if (!adminModulesLoaded) {
+      adminModulesLoaded = true;
+      loadAdminModules().catch(error => {
+        adminModulesLoaded = false;
+        console.error("LOAD ADMIN MODULES ERROR:", error);
+      });
+    }
 
   } catch (error) {
     console.error("LOAD DASHBOARD ERROR:", error);
