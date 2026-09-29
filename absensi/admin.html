@@ -7,15 +7,16 @@
 <title>Admin Absensi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-      as="style"
+<link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0"
-      onload="this.onload=null;this.rel='stylesheet'">
+      media="print"
+      onload="this.media='all'">
 <noscript>
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,600,0,0">
 </noscript>
 <style>
+/* Performance: dashboard uses sessionStorage cache and background refresh. */
 :root{--p:#1769e0;--p2:#0f55bf;--soft:#edf5ff;--ink:#10233f;--muted:#6d7d91;--line:#e5ebf2;--bg:#f5f8fc;--white:#fff;--green:#12a36b;--greenSoft:#e9f9f2;--red:#e25555;--redSoft:#fff0f0;--orange:#e79a28;--orangeSoft:#fff7e8;--shadow:0 12px 35px rgba(25,65,120,.08)}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
@@ -735,12 +736,7 @@ function initializeFilters() {
         "-" +
         String(d.getMonth() + 1).padStart(2, "0");
 
-      const label =
-        new Intl.DateTimeFormat("id-ID", {
-          month: "long",
-          year: "numeric"
-        }).format(d);
-
+      const label = monthLabelFormatter.format(d);
       month.add(new Option(label, value));
     }
   }
@@ -1298,30 +1294,109 @@ async function loadAdminModules(){
 }
 
 
+const DASHBOARD_CACHE_TTL = 5 * 60 * 1000;
+
+function dashboardCacheKey(date, month) {
+  return `admin_dashboard_cache_${date}_${month}`;
+}
+
+function renderDashboardData(data) {
+  const attendance = normalizeArray(
+    data?.attendance ||
+    data?.absensi ||
+    data?.attendanceToday
+  );
+
+  const payroll = normalizeArray(data?.payroll);
+
+  const monthly = normalizeArray(
+    data?.monthly ||
+    data?.rekapBulanan ||
+    data?.monthlyRecap
+  );
+
+  const employees = normalizeArray(
+    data?.employees ||
+    data?.pegawai ||
+    data?.employee
+  );
+
+  adminEmployeesCache = employees;
+  populateAssignmentEmployees(employees);
+
+  payrollRowsRaw = payroll;
+  fillPayrollFilters(employees, payroll);
+  applyPayrollFilter();
+
+  window.__attendanceData = attendance;
+
+  updateStats(data || {});
+  renderAttendance(attendance);
+  renderMonthly(monthly);
+  renderEmployees(employees);
+
+  if ($("attendanceInfo")) {
+    $("attendanceInfo").textContent = `${attendance.length} data`;
+  }
+
+  if ($("payrollInfo")) {
+    $("payrollInfo").textContent =
+      $("monthFilter")?.selectedOptions?.[0]?.text ||
+      "Bulan terpilih";
+  }
+}
+
+function readDashboardCache(date, month) {
+  try {
+    const raw = sessionStorage.getItem(dashboardCacheKey(date, month));
+    if (!raw) return null;
+
+    const cached = JSON.parse(raw);
+    if (!cached?.data || Date.now() - Number(cached.time || 0) > DASHBOARD_CACHE_TTL) {
+      sessionStorage.removeItem(dashboardCacheKey(date, month));
+      return null;
+    }
+
+    return cached.data;
+  } catch (_) {
+    return null;
+  }
+}
+
+function writeDashboardCache(date, month, data) {
+  try {
+    sessionStorage.setItem(
+      dashboardCacheKey(date, month),
+      JSON.stringify({
+        time: Date.now(),
+        data
+      })
+    );
+  } catch (_) {
+    // Cache hanya optimasi. Jika storage penuh, dashboard tetap berjalan.
+  }
+}
+
 async function loadAll() {
   if (!sessionToken || dashboardLoading) return;
 
   dashboardLoading = true;
 
-  const date =
-    $("dateFilter")?.value || todayISO();
+  const date = $("dateFilter")?.value || todayISO();
+  const month = $("monthFilter")?.value || todayISO().slice(0, 7);
 
-  const month =
-    $("monthFilter")?.value ||
-    todayISO().slice(0, 7);
+  // Tampilkan cache terlebih dahulu agar dashboard terasa instan.
+  const cached = readDashboardCache(date, month);
 
-  loading(true);
+  if (cached) {
+    renderDashboardData(cached);
+    loading(false);
+  } else {
+    loading(true);
+  }
 
   try {
-    /*
-     * The action name "dashboard" is used as the single dashboard
-     * request. If your Apps Script uses another action name, change
-     * only this line; the rendering layer stays intact.
-     */
-    const response = await request("dashboard", {
-      date,
-      month
-    });
+    const response = await request("dashboard", { date, month });
 
     if (!response?.ok) {
       throw new Error(
@@ -1331,90 +1406,32 @@ async function loadAll() {
       );
     }
 
-    const data =
-      response.data ||
-      response.dashboard ||
-      response;
+    const data = response.data || response.dashboard || response;
 
-    const attendance =
-      normalizeArray(
-        data.attendance ||
-        data.absensi ||
-        data.attendanceToday
-      );
+    // Render sekali setelah data terbaru diterima dan simpan untuk reload berikutnya.
+    renderDashboardData(data);
+    writeDashboardCache(date, month, data);
 
-    const payroll =
-      normalizeArray(
-        data.payroll
-      );
-
-    const monthly =
-      normalizeArray(
-        data.monthly ||
-        data.rekapBulanan ||
-        data.monthlyRecap
-      );
-
-    const employees =
-      normalizeArray(
-        data.employees ||
-        data.pegawai ||
-        data.employee
-      );
-
-    adminEmployeesCache = employees;
-    populateAssignmentEmployees(employees);
-
-    payrollRowsRaw = payroll;
-    fillPayrollFilters(employees, payroll);
-    applyPayrollFilter();
-
-    window.__attendanceData = attendance;
-
-    updateStats(data);
-    renderAttendance(attendance);
-    renderMonthly(monthly);
-    renderEmployees(employees);
-
-    if ($("attendanceInfo")) {
-      $("attendanceInfo").textContent =
-        `${attendance.length} data`;
-    }
-
-    if ($("payrollInfo")) {
-      $("payrollInfo").textContent =
-        $("monthFilter")?.selectedOptions?.[0]?.text ||
-        "Bulan terpilih";
-    }
-
-    /*
-     * PENTING:
-     * Dashboard utama sudah siap ditampilkan di titik ini.
-     * Jangan menunggu Pengajuan/Penugasan selesai karena keduanya
-     * adalah modul tambahan dan berjalan lewat request terpisah.
-     */
     loading(false);
     dashboardLoading = false;
 
-    // Muat modul tambahan di background tanpa menahan tampilan dashboard.
-    // Jika Apps Script lambat, dashboard utama tetap bisa langsung dipakai.
+    // Modul tambahan tetap dimuat setelah dashboard utama siap.
     loadAdminModules().catch(error => {
       console.error("LOAD ADMIN MODULES ERROR:", error);
     });
 
-    return;
-
   } catch (error) {
     console.error("LOAD DASHBOARD ERROR:", error);
-    toast(
-      error?.message ||
-      "Gagal memuat dashboard."
-    );
-  } finally {
-    if (dashboardLoading) {
-      loading(false);
-      dashboardLoading = false;
+
+    // Bila ada cache, jangan mengganggu dashboard yang sudah tampil.
+    if (!cached) {
+      toast(error?.message || "Gagal memuat dashboard.");
+    } else {
+      toast("Data terbaru gagal dimuat. Menampilkan data terakhir.");
     }
+  } finally {
+    loading(false);
+    dashboardLoading = false;
   }
 }
 
@@ -1538,7 +1555,10 @@ async function restoreSession() {
           if (role === "ADMIN") {
             user = profile;
             showApp();
-            await loadAll();
+
+            // Jangan tahan UI sampai request dashboard selesai.
+            // Dashboard tampil langsung, lalu datanya diperbarui di background.
+            requestAnimationFrame(() => loadAll());
             return;
           }
         }
@@ -1553,7 +1573,10 @@ async function restoreSession() {
 
     if (restored) {
       showApp();
-      await loadAll();
+
+      // Firebase session berhasil dipulihkan tanpa popup.
+      // Tampilkan dashboard lebih dulu, kemudian ambil data.
+      requestAnimationFrame(() => loadAll());
       return;
     }
 
