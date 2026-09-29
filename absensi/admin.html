@@ -254,7 +254,7 @@ button{cursor:pointer}
 
     <!-- ASSIGNMENT -->
     <section id="page-assignment" class="page">
-      <div class="module-hero"><div class="module-left"><div class="module-icon"><span class="material-symbols-rounded">assignment</span></div><div><h2>Penugasan Pegawai</h2><p>Buat tugas baru dan pantau seluruh penugasan secara terpisah.</p></div></div><button class="btn gray" onclick="loadAdminAssignments(true)"><span class="material-symbols-rounded" style="font-size:15px">refresh</span> Refresh</button></div>
+      <div class="module-hero"><div class="module-left"><div class="module-icon"><span class="material-symbols-rounded">assignment</span></div><div><h2>Penugasan Pegawai</h2><p>Buat tugas baru dan lihat karyawan yang menerima setiap penugasan.</p></div></div><button class="btn gray" onclick="loadAdminAssignments(true)"><span class="material-symbols-rounded" style="font-size:15px">refresh</span> Refresh</button></div>
       <section class="panel"><div class="module-body"><div class="business-grid">
         <div>
           <div class="hint" style="margin-bottom:12px">Isi formulir di bawah untuk memberikan penugasan kepada pegawai tertentu.</div>
@@ -272,7 +272,7 @@ button{cursor:pointer}
         </div>
         <div>
           <div class="toolbar" style="margin-bottom:10px"><span id="assignmentInfo" class="hint">Memuat...</span><label style="margin-left:auto;font-size:9px;font-weight:800;color:#69788c;display:flex;gap:5px;align-items:center"><input id="includeCompleted" type="checkbox" onchange="loadAdminAssignments(true)"> Tampilkan selesai</label></div>
-          <div class="table-wrap"><table class="table business-table"><thead><tr><th>Pegawai</th><th>Penugasan</th><th>Tanggal</th><th>Lokasi</th><th>Prioritas</th><th>Status</th></tr></thead><tbody id="assignmentBody"></tbody></table></div>
+          <div class="table-wrap"><table class="table business-table"><thead><tr><th>Karyawan Penerima</th><th>Penugasan</th><th>Tanggal</th><th>Lokasi</th><th>Prioritas</th><th>Status</th></tr></thead><tbody id="assignmentBody"></tbody></table></div>
         </div>
       </div></div></section>
     </section>
@@ -314,8 +314,27 @@ const CONFIG={
   appId:"1:962926272481:web:d6d5bae6d890ebecc2bca0"
  }
 };
-let sessionToken=localStorage.getItem("absen_admin_session")||"",currentUser=null,loginBusy=false,currentPage="dashboard",attendanceFilter="ALL",dashboardBusy=false;
+let sessionToken=localStorage.getItem(SESSION_KEY)||"",currentUser=null,loginBusy=false,currentPage="dashboard",attendanceFilter="ALL",dashboardBusy=false;
 let employeeCache=[],assignmentCache=[],requestCache=[],payrollRows=[];
+const SESSION_KEY="absen_admin_session";
+const USER_KEY="absen_admin_user";
+function saveSession(token,user){
+  sessionToken=token||sessionToken;
+  if(sessionToken)localStorage.setItem(SESSION_KEY,sessionToken);
+  if(user)localStorage.setItem(USER_KEY,JSON.stringify(user));
+}
+function clearSession(){
+  sessionToken="";currentUser=null;
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+function getSavedUser(){
+  try{return JSON.parse(localStorage.getItem(USER_KEY)||"null")}catch(_){return null}
+}
+function normalizeUser(u){
+  if(!u)return null;
+  return u.user||u.data?.user||u.profile||u.data||u;
+}
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const val=(r,...keys)=>{for(const k of keys)if(r&&r[k]!==undefined&&r[k]!==null&&r[k]!=="")return r[k];return""};
@@ -357,12 +376,12 @@ async function loginAdmin(){
   const cred=await signInWithPopup(auth,provider),token=await cred.user.getIdToken(false),res=await request("firebaseLogin",{firebaseIdToken:token});
   if(!res?.ok)throw Error(res?.error||"Login gagal.");
   sessionToken=res.sessionToken||res.session?.token||res.session?.sessionToken||res.data?.sessionToken||"";if(!sessionToken)throw Error("Session tidak diterima.");
-  localStorage.setItem("absen_admin_session",sessionToken);currentUser=res.user||res.data?.user;
+  saveSession(sessionToken,res.user||res.data?.user);currentUser=res.user||res.data?.user;
   if(String(currentUser?.role||"").toUpperCase()!=="ADMIN")throw Error("Akun tidak memiliki akses ADMIN.");
   showApp();loadAll();
- }catch(e){console.error(e);localStorage.removeItem("absen_admin_session");sessionToken="";toast(e.message||"Login gagal.");try{await signOut(auth)}catch(_){}}finally{loading(false);loginBusy=false;b.disabled=false;b.innerHTML='<span class="material-symbols-rounded">login</span> Masuk dengan Google'}
+ }catch(e){console.error(e);clearSession();toast(e.message||"Login gagal.");try{await signOut(auth)}catch(_){}}finally{loading(false);loginBusy=false;b.disabled=false;b.innerHTML='<span class="material-symbols-rounded">login</span> Masuk dengan Google'}
 }
-async function logout(){try{await request("logout")}catch(_){}try{if(auth)await signOut(auth)}catch(_){}localStorage.removeItem("absen_admin_session");sessionToken="";currentUser=null;$("app").classList.add("hidden");$("login").classList.remove("hidden")}
+async function logout(){try{await request("logout")}catch(_){}try{if(auth)await signOut(auth)}catch(_){}clearSession();$("app").classList.add("hidden");$("login").classList.remove("hidden")}
 function showApp(){
  $("login").classList.add("hidden");$("app").classList.remove("hidden");
  const name=val(currentUser,"name","nama","displayName","email")||"Admin",photo=val(currentUser,"photoURL","photo","foto")||"";
@@ -414,8 +433,45 @@ function syncPayroll(){if($("payrollMonthFilter2"))$("payrollMonthFilter2").valu
 function openSlip(s){try{const r=JSON.parse(decodeURIComponent(s)),name=val(r,"nama","name","pegawai")||"-";const w=open("","_blank","width=800,height=850");w.document.write(`<html><head><title>Slip Gaji - ${esc(name)}</title><style>body{font-family:Arial;padding:40px;color:#172033}.head{text-align:center;border-bottom:2px solid #172033;padding-bottom:15px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:9px 0}.total{font-size:20px;font-weight:bold;border-top:2px solid #172033;margin-top:10px;padding-top:13px}</style></head><body><div class="head"><h1>SLIP GAJI</h1><p>${esc(monthOf(r))}</p></div><p><b>Nama:</b> ${esc(name)}</p><p><b>NIP:</b> ${esc(val(r,"nip","NIP")||"-")}</p><p><b>Jabatan:</b> ${esc(val(r,"jabatan","position")||"-")}</p><h3>PENGHASILAN</h3>${[["Gaji Pokok",val(r,"gajiPokok","basicSalary")],["Tunjangan",val(r,"tunjangan","allowance")],["Insentif",val(r,"insentif")],["Lembur",val(r,"lembur","overtime")],["Bonus",val(r,"bonus")],["Potongan",-Number(val(r,"potongan","deduction")||0)]].map(x=>`<div class="row"><span>${x[0]}</span><b>${money(x[1])}</b></div>`).join("")}<div class="row total"><span>GAJI BERSIH</span><b>${money(val(r,"total","totalGaji","gajiBersih","netSalary","salary"))}</b></div><script>onload=()=>print()<\/script></body></html>`);w.document.close()}catch(e){toast("Slip gagal dibuka.")}}
 
 function populateAssignmentEmployees(rows){const e=$("assignmentUid"),old=e.value;e.innerHTML='<option value="">Pilih pegawai</option>'+rows.filter(r=>val(r,"uid","UID")).map(r=>`<option value="${esc(val(r,"uid","UID"))}">${esc(val(r,"nama","name","pegawai")||"-")}${val(r,"nip","NIP")?" — "+esc(val(r,"nip","NIP")):""}</option>`).join("");if(old)e.value=old}
-function renderAssignments(rows){$("assignmentBody").innerHTML=rows.length?rows.map(r=>`<tr><td><span class="name">${esc(val(r,"name","nama","pegawai")||"-")}</span><span class="sub">${esc(val(r,"nip","NIP")||"")}</span></td><td class="detail"><b>${esc(val(r,"title","judul")||"-")}</b><div class="sub" style="white-space:normal">${esc(val(r,"description","deskripsi")||"")}</div></td><td>${esc(val(r,"startDate","tanggalMulai")||"-")}${val(r,"endDate","tanggalSelesai")&&val(r,"endDate","tanggalSelesai")!==val(r,"startDate","tanggalMulai")?" s/d "+esc(val(r,"endDate","tanggalSelesai")):""}</td><td class="detail">${esc(val(r,"location","lokasi")||"-")}</td><td><span class="status blue">${esc(val(r,"priority","prioritas")||"NORMAL")}</span></td><td><span class="status ${String(val(r,"status","Status")).toUpperCase()==="SELESAI"?"ok":"blue"}">${esc(val(r,"status","Status")||"Diberikan")}</span></td></tr>`).join(""):'<tr><td colspan="6"><div class="empty">Belum ada penugasan.</div></td></tr>';$("assignmentInfo").textContent=`${rows.length} penugasan`;$("assignmentBadge").textContent=rows.filter(r=>String(val(r,"status","Status")).toUpperCase()!=="SELESAI").length}
-async function loadAdminAssignments(){if(!sessionToken)return;try{const r=await request("assignments",{limit:"100",includeCompleted:$("includeCompleted").checked?"true":"false"});if(!r?.ok)throw Error(r?.error||"Gagal memuat penugasan.");assignmentCache=arr(r.items||r.data);renderAssignments(assignmentCache)}catch(e){toast(e.message)}}
+function assignmentEmployee(r){
+  const directName=val(r,"employeeName","nama","name","pegawai","assignedToName","assigneeName");
+  const directUid=val(r,"uid","UID","employeeUid","employeeUID","assignedUid","assigneeUid");
+  if(directName)return directName;
+  if(directUid){
+    const emp=employeeCache.find(e=>String(val(e,"uid","UID","id","employeeUid")).toLowerCase()===String(directUid).toLowerCase());
+    if(emp)return val(emp,"nama","name","pegawai","displayName")||directUid;
+  }
+  return directUid||"-";
+}
+function renderAssignments(rows){
+  $("assignmentBody").innerHTML=rows.length?rows.map(r=>{
+    const st=String(val(r,"status","Status")||"DIBERIKAN").toUpperCase();
+    const empName=assignmentEmployee(r);
+    const emp=employeeCache.find(e=>String(val(e,"uid","UID","id","employeeUid")).toLowerCase()===String(val(r,"uid","UID","employeeUid","employeeUID","assignedUid","assigneeUid")).toLowerCase());
+    const nip=val(r,"nip","NIP")||val(emp,"nip","NIP");
+    const jab=val(r,"jabatan","position")||val(emp,"jabatan","position");
+    return `<tr>
+      <td><span class="name">${esc(empName)}</span><span class="sub">${esc(nip||jab||"Karyawan penerima tugas")}</span></td>
+      <td class="detail"><b>${esc(val(r,"title","judul","assignmentTitle")||"-")}</b><div class="sub" style="white-space:normal">${esc(val(r,"description","deskripsi")||"")}</div></td>
+      <td>${esc(val(r,"startDate","tanggalMulai","start")||"-")}${val(r,"endDate","tanggalSelesai","end")&&val(r,"endDate","tanggalSelesai","end")!==val(r,"startDate","tanggalMulai","start")?" s/d "+esc(val(r,"endDate","tanggalSelesai","end")):""}</td>
+      <td class="detail">${esc(val(r,"location","lokasi")||"-")}</td>
+      <td><span class="status blue">${esc(val(r,"priority","prioritas")||"NORMAL")}</span></td>
+      <td><span class="status ${st==="SELESAI"?"ok":"blue"}">${esc(val(r,"status","Status")||"Diberikan")}</span></td>
+    </tr>`;
+  }).join(""):'<tr><td colspan="6"><div class="empty">Belum ada penugasan. Setelah admin memberikan tugas, karyawan penerima akan tampil di sini.</div></td></tr>';
+  $("assignmentInfo").textContent=`${rows.length} penugasan`;
+  $("assignmentBadge").textContent=rows.filter(r=>String(val(r,"status","Status")).toUpperCase()!=="SELESAI").length;
+}
+async function loadAdminAssignments(){
+  if(!sessionToken)return;
+  try{
+    const r=await request("assignments",{limit:"100",includeCompleted:$("includeCompleted").checked?"true":"false"});
+    if(!r?.ok)throw Error(r?.error||"Gagal memuat penugasan.");
+    const raw=r.items||r.assignments||r.data?.items||r.data?.assignments||r.data||[];
+    assignmentCache=arr(raw);
+    renderAssignments(assignmentCache);
+  }catch(e){console.error(e);toast(e.message)}
+}
 function renderRequests(rows){$("requestBody").innerHTML=rows.length?rows.map(r=>{const st=String(val(r,"status","Status")||"MENUNGGU").toUpperCase(),id=String(val(r,"requestId","Request ID")||"");const pending=st==="MENUNGGU"&&id;return`<tr><td><span class="name">${esc(val(r,"name","nama","pegawai")||"-")}</span><span class="sub">${esc(val(r,"nip","NIP")||"")}</span></td><td>${esc(val(r,"type","Jenis")||"-")}</td><td>${esc(val(r,"startDate","tanggalMulai")||"-")}${val(r,"endDate","tanggalSelesai")&&val(r,"endDate","tanggalSelesai")!==val(r,"startDate","tanggalMulai")?" s/d "+esc(val(r,"endDate","tanggalSelesai")):""}</td><td>${esc(val(r,"days","jumlahHari")||0)}</td><td class="detail">${esc(val(r,"reason","alasan")||"-")}</td><td><span class="status ${st==="DISETUJUI"?"ok":st==="DITOLAK"?"no":"wait"}">${esc(st)}</span></td><td>${pending?`<div style="display:flex;gap:5px"><button class="btn success" onclick='reviewRequest(${JSON.stringify(id)},"DISETUJUI")'>Setujui</button><button class="btn danger" onclick='reviewRequest(${JSON.stringify(id)},"DITOLAK")'>Tolak</button></div>`:`<span class="hint">${esc(val(r,"reviewNote","catatanReview")||"-")}</span>`}</td></tr>`}).join(""):'<tr><td colspan="7"><div class="empty">Tidak ada pengajuan.</div></td></tr>';$("requestInfo").textContent=`${rows.length} pengajuan`;$("requestBadge").textContent=rows.filter(r=>String(val(r,"status","Status")).toUpperCase()==="MENUNGGU").length}
 async function loadAdminRequests(){if(!sessionToken)return;try{const r=await request("adminRequests",{status:$("requestStatusFilter").value,type:$("requestTypeFilter").value});if(!r?.ok)throw Error(r?.error||"Gagal memuat pengajuan.");requestCache=arr(r.items||r.data);renderRequests(requestCache)}catch(e){toast(e.message)}}
 async function reviewRequest(requestId,decision){const note=prompt("Catatan review (opsional):","");if(note===null)return;loading(true);try{const r=await request("adminReviewRequest",{requestId,decision,note:note.trim()});if(!r?.ok)throw Error(r?.error||"Gagal memproses.");toast(r.message||"Pengajuan berhasil diproses.");await loadAdminRequests()}catch(e){toast(e.message)}finally{loading(false)}}
@@ -437,16 +493,63 @@ $("dateFilter").addEventListener("change",loadAll);$("monthFilter").addEventList
 window.loginAdmin=loginAdmin;window.logout=logout;window.openPage=openPage;window.toggleSidebar=toggleSidebar;window.closeSidebar=closeSidebar;window.loadAll=loadAll;window.setAttendanceFilter=setAttendanceFilter;window.applyPayrollFilter=applyPayrollFilter;window.applyPayrollFilter2=applyPayrollFilter2;window.openSlip=openSlip;window.loadAdminAssignments=loadAdminAssignments;window.loadAdminRequests=loadAdminRequests;window.reviewRequest=reviewRequest;window.createAssignment=createAssignment;window.resetAssignmentForm=resetAssignmentForm;
 
 initFilters();
-(async()=>{
- if(!sessionToken)return;
- try{
-  const r=await request("profile");
-  if(r?.ok){
-   const u=r.user||r.data?.user;if(String(u?.role||"").toUpperCase()==="ADMIN"){currentUser=u;showApp();loadAll();return}
+
+async function restoreAdminSession(){
+  const savedUser=getSavedUser();
+  // Tampilkan aplikasi lebih dulu bila session lokal masih ada, lalu validasi di background.
+  // Ini mencegah pengguna harus login ulang hanya karena reload.
+  if(sessionToken && savedUser && String(savedUser.role||"").toUpperCase()==="ADMIN"){
+    currentUser=savedUser;
+    showApp();
   }
- }catch(_){}
- localStorage.removeItem("absen_admin_session");sessionToken="";
-})();
+
+  // Validasi session Apps Script yang tersimpan.
+  if(sessionToken){
+    try{
+      const r=await request("profile");
+      const u=normalizeUser(r);
+      if(r?.ok && String(u?.role||"").toUpperCase()==="ADMIN"){
+        currentUser=u;
+        saveSession(sessionToken,u);
+        showApp();
+        loadAll();
+        return true;
+      }
+    }catch(e){console.warn("Validasi session:",e)}
+  }
+
+  // Jika session Apps Script kadaluarsa, gunakan Firebase persistence
+  // untuk mendapatkan token baru tanpa meminta user login lagi.
+  try{
+    if(await initFirebase()){
+      const firebaseUser=await new Promise(resolve=>{
+        let done=false;
+        const finish=u=>{if(done)return;done=true;resolve(u)};
+        const unsub=onAuthStateChanged(auth,u=>{unsub();finish(u)},()=>finish(null));
+        setTimeout(()=>finish(auth?.currentUser||null),3500);
+      });
+      if(firebaseUser){
+        const token=await firebaseUser.getIdToken(true);
+        const r=await request("firebaseLogin",{firebaseIdToken:token});
+        const u=normalizeUser(r);
+        const newToken=r?.sessionToken||r?.data?.sessionToken||r?.session?.token||"";
+        if(r?.ok && newToken && String(u?.role||"").toUpperCase()==="ADMIN"){
+          saveSession(newToken,u);
+          currentUser=u;
+          showApp();
+          loadAll();
+          return true;
+        }
+      }
+    }
+  }catch(e){console.warn("Restore Firebase:",e)}
+
+  clearSession();
+  $("app").classList.add("hidden");
+  $("login").classList.remove("hidden");
+  return false;
+}
+restoreAdminSession();
 </script>
 </body>
 </html>
