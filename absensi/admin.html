@@ -135,7 +135,7 @@ button{cursor:pointer}
     <div class="login-logo"><span class="material-symbols-rounded">admin_panel_settings</span></div>
     <h1>Admin Absensi</h1>
     <p>Kelola absensi, pegawai, penugasan, pengajuan, dan payroll melalui satu dashboard yang praktis.</p>
-    <button id="loginBtn" class="google-btn" onclick="loginAdmin()">
+    <button id="loginBtn" class="google-btn" type="button">
       <span class="material-symbols-rounded">login</span> Masuk dengan Google
     </button>
   </div>
@@ -314,10 +314,10 @@ const CONFIG={
   appId:"1:962926272481:web:d6d5bae6d890ebecc2bca0"
  }
 };
-let sessionToken=localStorage.getItem(SESSION_KEY)||"",currentUser=null,loginBusy=false,currentPage="dashboard",attendanceFilter="ALL",dashboardBusy=false;
-let employeeCache=[],assignmentCache=[],requestCache=[],payrollRows=[];
 const SESSION_KEY="absen_admin_session";
 const USER_KEY="absen_admin_user";
+let sessionToken=localStorage.getItem(SESSION_KEY)||"",currentUser=null,loginBusy=false,currentPage="dashboard",attendanceFilter="ALL",dashboardBusy=false;
+let employeeCache=[],assignmentCache=[],requestCache=[],payrollRows=[];
 function saveSession(token,user){
   sessionToken=token||sessionToken;
   if(sessionToken)localStorage.setItem(SESSION_KEY,sessionToken);
@@ -490,9 +490,13 @@ async function loadAll(){
 }
 
 $("dateFilter").addEventListener("change",loadAll);$("monthFilter").addEventListener("change",loadAll);$("requestStatusFilter").addEventListener("change",loadAdminRequests);$("requestTypeFilter").addEventListener("change",loadAdminRequests);
+$("loginBtn").addEventListener("click",loginAdmin);
 window.loginAdmin=loginAdmin;window.logout=logout;window.openPage=openPage;window.toggleSidebar=toggleSidebar;window.closeSidebar=closeSidebar;window.loadAll=loadAll;window.setAttendanceFilter=setAttendanceFilter;window.applyPayrollFilter=applyPayrollFilter;window.applyPayrollFilter2=applyPayrollFilter2;window.openSlip=openSlip;window.loadAdminAssignments=loadAdminAssignments;window.loadAdminRequests=loadAdminRequests;window.reviewRequest=reviewRequest;window.createAssignment=createAssignment;window.resetAssignmentForm=resetAssignmentForm;
 
 initFilters();
+
+// Tombol login menggunakan event listener karena script ini bertipe ES module.
+console.log("[Admin] script berhasil dimuat.");
 
 async function restoreAdminSession(){
   const savedUser=getSavedUser();
