@@ -39,6 +39,50 @@ let firebaseGoogleProvider =
 let firebaseReady =
   false;
 
+// ============================================================
+// CLIENT PERFORMANCE CACHE
+// Mengurangi request berulang ke Google Apps Script.
+// ============================================================
+const CLIENT_CACHE = Object.create(null);
+const CLIENT_INFLIGHT = Object.create(null);
+const CACHE_TTL = {
+  profile: 5 * 60 * 1000,
+  history: 20 * 1000,
+  requests: 30 * 1000,
+  assignments: 30 * 1000,
+  location: 5 * 60 * 1000
+};
+let locationInFlight = false;
+let lastLocationAt = 0;
+let locationLookupKey = '';
+
+function cacheGet_(key, ttl) {
+  const item = CLIENT_CACHE[key];
+  if (!item) return null;
+  if (Date.now() - item.at > ttl) {
+    delete CLIENT_CACHE[key];
+    return null;
+  }
+  return item.value;
+}
+
+function cacheSet_(key, value) {
+  CLIENT_CACHE[key] = { at: Date.now(), value: value };
+  return value;
+}
+
+function cacheClear_(key) {
+  if (key) delete CLIENT_CACHE[key];
+}
+
+function cacheClearAll_() {
+  Object.keys(CLIENT_CACHE).forEach(k => delete CLIENT_CACHE[k]);
+}
+
+function requestPromise_(action, extra = {}) {
+  return new Promise(resolve => request(action, extra, resolve));
+}
+
 const $ =
   id =>
     document.getElementById(id);
@@ -566,24 +610,13 @@ async function completeFirebaseLogin_(user){
         result.user ||
         null;
 
+      if (currentUser) cacheSet_('profile', currentUser);
+
       showApp();
 
-      loading(
-        true,
-        'Memuat Absensi',
-        'Menyiapkan data pegawai dan lokasi...'
-      );
-
-      refreshAll();
-
-      setTimeout(
-        () => {
-
-          loading(false);
-
-        },
-        900
-      );
+      // Tampilkan aplikasi segera. Data utama dimuat bertahap di background.
+      loading(false);
+      refreshAll({ initial: true });
 
     }
   );
@@ -785,191 +818,74 @@ async function postForm(fields){
 function poll(
   requestId,
   onDone,
-  tries=0
+  tries = 0
 ){
+  const MAX_TRIES = 28;
+  const delays = [120, 180, 250, 350, 450, 600];
+  const cb = 'cb_' + makeId();
+  let finished = false;
+  let timer = null;
 
-  const MAX_TRIES =
-    45;
+  function cleanup(){
+    if (timer) clearTimeout(timer);
+    try { delete window[cb]; } catch(e) {}
+    const oldScript = document.getElementById('jsonp_' + cb);
+    if (oldScript) oldScript.remove();
+  }
 
-  const cb =
-    'cb_' +
-    makeId();
+  function finish(result){
+    if (finished) return;
+    finished = true;
+    cleanup();
+    onDone(result);
+  }
 
-  let finished =
-    false;
+  function retry(nextTry, delay){
+    if (finished) return;
+    if (nextTry >= MAX_TRIES) {
+      finish({ ok:false, error:'Waktu menunggu respons server habis.' });
+      return;
+    }
+    try { delete window[cb]; } catch(e) {}
+    const currentScript = document.getElementById('jsonp_' + cb);
+    if (currentScript) currentScript.remove();
+    timer = setTimeout(() => poll(requestId, onDone, nextTry), delay);
+  }
 
-  window[cb] =
-    function(data){
+  window[cb] = function(data){
+    if (finished) return;
 
-      if(finished){
-        return;
-      }
+    if (data && data.state === 'DONE') {
+      finish(data.result || data);
+      return;
+    }
 
-      finished =
-        true;
+    if (data && data.state === 'NOT_FOUND' && tries >= MAX_TRIES) {
+      finish({ ok:false, error:data.error || 'Request tidak ditemukan.' });
+      return;
+    }
 
-      delete window[cb];
+    // Backend Apps Script memakai CacheService untuk status.
+    // Poll cepat di awal, lalu melambat agar tidak membebani endpoint.
+    retry(tries + 1, delays[Math.min(tries, delays.length - 1)]);
+  };
 
-      const oldScript =
-        document.getElementById(
-          'jsonp_' + cb
-        );
-
-      if(oldScript){
-        oldScript.remove();
-      }
-
-      if(
-        data &&
-        data.state === 'DONE'
-      ){
-
-        onDone(
-          data.result ||
-          data
-        );
-
-        return;
-
-      }
-
-      if(
-        data &&
-        data.state === 'NOT_FOUND'
-      ){
-
-        if(
-          tries >= MAX_TRIES
-        ){
-
-          onDone({
-
-            ok:false,
-
-            error:
-              data.error ||
-              'Request tidak ditemukan.'
-
-          });
-
-          return;
-
-        }
-
-        setTimeout(
-          () => {
-
-            poll(
-              requestId,
-              onDone,
-              tries + 1
-            );
-
-          },
-          700
-        );
-
-        return;
-
-      }
-
-      if(
-        tries >= MAX_TRIES
-      ){
-
-        onDone({
-
-          ok:false,
-
-          error:
-            'Waktu menunggu respons server habis.'
-
-        });
-
-        return;
-
-      }
-
-      setTimeout(
-        () => {
-
-          poll(
-            requestId,
-            onDone,
-            tries + 1
-          );
-
-        },
-        600
-      );
-
-    };
-
-  const script =
-    document.createElement(
-      'script'
-    );
-
-  script.id =
-    'jsonp_' + cb;
-
-  script.src =
-    CONFIG.WEB_APP_URL +
+  const script = document.createElement('script');
+  script.id = 'jsonp_' + cb;
+  script.src = CONFIG.WEB_APP_URL +
     '?action=status' +
-    '&requestId=' +
-    encodeURIComponent(
-      requestId
-    ) +
-    '&callback=' +
-    encodeURIComponent(
-      cb
-    ) +
-    '&_=' +
-    Date.now();
+    '&requestId=' + encodeURIComponent(requestId) +
+    '&callback=' + encodeURIComponent(cb) +
+    '&_=' + Date.now();
 
-  script.onerror =
-    function(){
+  script.onerror = function(){
+    if (finished) return;
+    try { delete window[cb]; } catch(e) {}
+    script.remove();
+    retry(tries + 1, Math.min(900, 250 + tries * 75));
+  };
 
-      delete window[cb];
-
-      script.remove();
-
-      if(
-        tries >= MAX_TRIES
-      ){
-
-        onDone({
-
-          ok:false,
-
-          error:
-            'Server tidak merespons.'
-
-        });
-
-        return;
-
-      }
-
-      setTimeout(
-        () => {
-
-          poll(
-            requestId,
-            onDone,
-            tries + 1
-          );
-
-        },
-        800
-      );
-
-    };
-
-  document.body.appendChild(
-    script
-  );
-
+  document.body.appendChild(script);
 }
 
 function request(
@@ -977,69 +893,56 @@ function request(
   extra,
   onDone
 ){
+  const callback = typeof onDone === 'function' ? onDone : function(){};
+  const payloadExtra = extra || {};
+  const requestId = makeId();
+  const payload = Object.assign({
+    action: action,
+    requestId: requestId,
+    sessionToken: sessionToken
+  }, payloadExtra);
 
-  const requestId =
-    makeId();
+  // Read-only requests dapat dideduplikasi ketika halaman sedang memuat.
+  const dedupeActions = {
+    profile: true,
+    history: true,
+    requests: true,
+    assignments: true,
+    location: true
+  };
+  const dedupeKey = dedupeActions[action]
+    ? action + ':' + JSON.stringify(payloadExtra)
+    : '';
 
-  const payload =
-    Object.assign(
-      {
+  if (dedupeKey && CLIENT_INFLIGHT[dedupeKey]) {
+    CLIENT_INFLIGHT[dedupeKey].then(callback);
+    return CLIENT_INFLIGHT[dedupeKey];
+  }
 
-        action:
-          action,
-
-        requestId:
-          requestId,
-
-        sessionToken:
-          sessionToken
-
-      },
-
-      extra || {}
-
-    );
-
-  const sent =
-    postForm(
-      payload
-    );
-
-  Promise.resolve(sent)
-    .then(
-      result => {
-
-        if(result === false){
-
-          onDone({
-
-            ok:false,
-
-            error:
-              'Gagal mengirim permintaan ke server.'
-
-          });
-
-          return;
-
-        }
-
-        setTimeout(
-          () => {
-
-            poll(
-              requestId,
-              onDone,
-              0
-            );
-
-          },
-          300
-        );
-
+  const promise = Promise.resolve()
+    .then(() => postForm(payload))
+    .then(sent => {
+      if (sent === false) {
+        return { ok:false, error:'Gagal mengirim permintaan ke server.' };
       }
-    );
+      return new Promise(resolve => poll(requestId, resolve, 0));
+    })
+    .catch(error => ({
+      ok:false,
+      error:error?.message || 'Terjadi kesalahan komunikasi dengan server.'
+    }));
 
+  if (dedupeKey) {
+    CLIENT_INFLIGHT[dedupeKey] = promise;
+    promise.finally(() => {
+      setTimeout(() => {
+        if (CLIENT_INFLIGHT[dedupeKey] === promise) delete CLIENT_INFLIGHT[dedupeKey];
+      }, 0);
+    });
+  }
+
+  promise.then(callback);
+  return promise;
 }
 
 function showApp(){
@@ -1249,206 +1152,127 @@ function avatarData(name){
 
 }
 
-function refreshAll(){
+async function refreshAll(options = {}){
+  if (!sessionToken) return;
 
-  if(!sessionToken){
-    return;
+  const initial = !!options.initial;
+
+  // User hasil login sudah dikembalikan backend, jadi profile tidak perlu
+  // diminta lagi pada startup. Profile hanya disegarkan bila belum ada.
+  if (!currentUser || !cacheGet_('profile', CACHE_TTL.profile)) {
+    request('profile', {}, r => {
+      if (r?.ok && r.user) {
+        currentUser = r.user;
+        cacheSet_('profile', r.user);
+        renderUser(currentUser);
+      }
+    });
+  } else {
+    renderUser(currentUser);
   }
 
+  // GPS tidak menghalangi render Home.
   getLocation(false);
 
-  request(
-    'profile',
-    {},
-    r => {
-
-      if(
-        r &&
-        r.ok &&
-        r.user
-      ){
-
-        currentUser =
-          r.user;
-
-        renderUser(
-          currentUser
-        );
-
+  const cachedHistory = cacheGet_('history', CACHE_TTL.history);
+  if (cachedHistory) {
+    renderHistory(cachedHistory);
+  } else {
+    request('history', { limit:60 }, r => {
+      if (r?.ok) {
+        const items = r.items || [];
+        cacheSet_('history', items);
+        renderHistory(items);
       }
-
-    }
-  );
-
-  request(
-    'history',
-    {
-      limit:60
-    },
-    r => {
-
-      if(
-        r &&
-        r.ok
-      ){
-
-        renderHistory(
-          r.items ||
-          []
-        );
-
-      }
-
-    }
-  );
-
+    });
+  }
 }
 
 function getLocation(force){
-
-  if(
-    !navigator.geolocation
-  ){
-
-    $('locationText')
-      .textContent =
-      'Browser tidak mendukung GPS';
-
-    $('accuracyText')
-      .textContent =
-      'Gunakan browser yang mendukung lokasi.';
-
-    return;
-
+  if (!navigator.geolocation) {
+    $('locationText').textContent = 'Browser tidak mendukung GPS';
+    $('accuracyText').textContent = 'Gunakan browser yang mendukung lokasi.';
+    return Promise.resolve(null);
   }
 
-  $('locationText')
-    .textContent =
-    'Mengambil lokasi...';
+  if (!force && currentLocation && Date.now() - lastLocationAt < CACHE_TTL.location) {
+    return Promise.resolve(currentLocation);
+  }
 
-  $('accuracyText')
-    .textContent =
-    'Mohon izinkan lokasi pada browser.';
+  if (locationInFlight) return Promise.resolve(currentLocation);
+  locationInFlight = true;
 
-  navigator.geolocation.getCurrentPosition(
+  $('locationText').textContent = 'Mengambil lokasi...';
+  $('accuracyText').textContent = 'Mohon izinkan lokasi pada browser.';
 
-    pos => {
+  return new Promise(resolve => {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        currentLocation = {
+          latitude: Number(pos.coords.latitude),
+          longitude: Number(pos.coords.longitude),
+          accuracy: Number(pos.coords.accuracy)
+        };
+        lastLocationAt = Date.now();
 
-      currentLocation = {
+        $('accuracyText').textContent =
+          'Akurasi GPS: ' + Math.round(currentLocation.accuracy) + ' meter';
 
-        latitude:
-          Number(
-            pos.coords.latitude
-          ),
-
-        longitude:
-          Number(
-            pos.coords.longitude
-          ),
-
-        accuracy:
-          Number(
-            pos.coords.accuracy
-          )
-
-      };
-
-      $('accuracyText')
-        .textContent =
-        'Akurasi GPS: ' +
-        Math.round(
-          currentLocation.accuracy
-        ) +
-        ' meter';
-
-      request(
-        'location',
-        {
-
-          latitude:
-            currentLocation.latitude,
-
-          longitude:
-            currentLocation.longitude
-
-        },
-        r => {
-
-          if(
-            r &&
-            r.ok
-          ){
-
-            currentLocation.district =
-              r.district ||
-              '';
-
-            currentLocation.regency =
-              r.regency ||
-              '';
-
-            currentLocation.province =
-              r.province ||
-              '';
-
-            const area =
-              [
-                r.district,
-                r.regency
-              ]
-              .filter(Boolean)
-              .join(', ');
-
-            $('locationText')
-              .textContent =
-              area ||
-              'Area lokasi belum terdeteksi.';
-
-          }else{
-
-            $('locationText')
-              .textContent =
-              'Area lokasi belum terdeteksi.';
-
-          }
-
+        // Jangan reverse-geocode berulang untuk titik yang sama.
+        const key = currentLocation.latitude.toFixed(4) + ',' + currentLocation.longitude.toFixed(4);
+        if (key === locationLookupKey) {
+          locationInFlight = false;
+          resolve(currentLocation);
+          return;
         }
-      );
+        locationLookupKey = key;
 
-    },
+        const cached = cacheGet_('location:' + key, CACHE_TTL.location);
+        if (cached) {
+          Object.assign(currentLocation, cached);
+          const area = [cached.district, cached.regency].filter(Boolean).join(', ');
+          $('locationText').textContent = area || 'Area lokasi belum terdeteksi.';
+          locationInFlight = false;
+          resolve(currentLocation);
+          return;
+        }
 
-    err => {
-
-      currentLocation =
-        null;
-
-      $('locationText')
-        .textContent =
-        'Lokasi belum tersedia';
-
-      $('accuracyText')
-        .textContent =
-        getLocationErrorMessage_(
-          err
-        );
-
-    },
-
-    {
-
-      enableHighAccuracy: !!force,
-
-      timeout: force ? 8000 : 5000,
-
-      maximumAge:
-        force
-          ? 0
-          : 120000
-
-    }
-
-  );
-
+        request('location', {
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude
+        }, r => {
+          if (r?.ok) {
+            const data = {
+              district: r.district || '',
+              regency: r.regency || '',
+              province: r.province || ''
+            };
+            Object.assign(currentLocation, data);
+            cacheSet_('location:' + key, data);
+            $('locationText').textContent =
+              [data.district, data.regency].filter(Boolean).join(', ') ||
+              'Area lokasi belum terdeteksi.';
+          } else {
+            $('locationText').textContent = 'Area lokasi belum terdeteksi.';
+          }
+          locationInFlight = false;
+          resolve(currentLocation);
+        });
+      },
+      err => {
+        currentLocation = null;
+        locationInFlight = false;
+        $('locationText').textContent = 'Lokasi belum tersedia';
+        $('accuracyText').textContent = getLocationErrorMessage_(err);
+        resolve(null);
+      },
+      {
+        enableHighAccuracy: !!force,
+        timeout: force ? 8000 : 5000,
+        maximumAge: force ? 0 : 120000
+      }
+    );
+  });
 }
 
 function getLocationErrorMessage_(err){
@@ -3417,7 +3241,15 @@ function submitAttendance(){
       capturedDataUrl =
         '';
 
-      refreshAll();
+      // Jangan memuat ulang profile + GPS setelah absensi. Cukup segarkan history.
+      cacheClear_('history');
+      request('history', {limit:60}, historyResult => {
+        if (historyResult?.ok) {
+          const items = historyResult.items || [];
+          cacheSet_('history', items);
+          renderHistory(items);
+        }
+      });
 
     }
   );
@@ -3486,102 +3318,40 @@ function closeResult(){
     'home'
   );
 
-  refreshAll();
-
 }
 
 function showPage(page){
-
   [
-    'home',
-    'history',
-    'request',
-    'assignment',
-    'profile'
-  ]
-  .forEach(
-    p => {
-
-      const pageEl =
-        $(p + 'Page');
-
-      if(pageEl){
-
-        pageEl.classList.toggle(
-          'active',
-          p === page
-        );
-
-      }
-
-    }
-  );
-
-  [
-    'Home',
-    'History',
-    'Request',
-    'Assignment',
-    'Profile'
-  ]
-  .forEach(
-    p => {
-
-      const navEl =
-        $('nav' + p);
-
-      if(navEl){
-
-        navEl.classList.toggle(
-          'active',
-          p.toLowerCase() === page
-        );
-
-      }
-
-    }
-  );
-
-  window.scrollTo({
-
-    top:0,
-
-    behavior:
-      'smooth'
-
+    'home','history','request','assignment','profile'
+  ].forEach(p => {
+    const pageEl = $(p + 'Page');
+    if (pageEl) pageEl.classList.toggle('active', p === page);
   });
 
-  if(
-    page === 'history'
-  ){
+  ['Home','History','Request','Assignment','Profile'].forEach(p => {
+    const navEl = $('nav' + p);
+    if (navEl) navEl.classList.toggle('active', p.toLowerCase() === page);
+  });
 
-    request(
-      'history',
-      {
-        limit:60
-      },
-      r => {
+  window.scrollTo({ top:0, behavior:'auto' });
 
-        if(
-          r &&
-          r.ok
-        ){
-
-          renderHistory(
-            r.items ||
-            []
-          );
-
+  if (page === 'history') {
+    const cached = cacheGet_('history', CACHE_TTL.history);
+    if (cached) {
+      renderHistory(cached);
+    } else {
+      request('history', {limit:60}, r => {
+        if (r?.ok) {
+          const items = r.items || [];
+          cacheSet_('history', items);
+          renderHistory(items);
         }
-
-      }
-    );
-
+      });
+    }
   }
 
-  if(page === 'request') loadRequests();
-  if(page === 'assignment') loadAssignments();
-
+  if (page === 'request') loadRequests();
+  if (page === 'assignment') loadAssignments();
 }
 
 async function logout(){
@@ -3636,6 +3406,11 @@ async function logout(){
     'absen_session'
   );
 
+  cacheClearAll_();
+  currentLocation = null;
+  lastLocationAt = 0;
+  locationLookupKey = '';
+
   sessionToken =
     '';
 
@@ -3658,10 +3433,28 @@ function setRequestType(type){const t=String(type||'IZIN').toUpperCase();$('requ
 function formatRequestDate(v){if(!v)return '-';const d=new Date(v+(String(v).length===10?'T00:00:00':''));return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat('id-ID',{day:'2-digit',month:'short',year:'numeric'}).format(d);}
 function requestStatusClass(s){s=String(s||'').toLowerCase();if(s.includes('setuju')||s.includes('approve')||s.includes('disetujui'))return'approved';if(s.includes('tolak')||s.includes('reject')||s.includes('ditolak'))return'rejected';return'pending';}
 function renderRequests(items){const el=$('requestList');if(!el)return;if(!Array.isArray(items)||!items.length){el.innerHTML='<div class="empty-today">Belum ada pengajuan.</div>';return;}el.innerHTML=items.map(i=>{const type=String(i.type||i.jenis||'PENGAJUAN').toUpperCase(),status=i.status||i.Status||'Menunggu',start=i.startDate||i.tanggalMulai||i.date||'',end=i.endDate||i.tanggalSelesai||'',reason=i.reason||i.alasan||i.keperluan||'-';return `<div class="request-item"><div class="request-item-head"><div><div class="request-item-title">${esc_(type)}</div><div class="request-item-meta">${esc_(formatRequestDate(start))}${end&&end!==start?' — '+esc_(formatRequestDate(end)):''}</div></div><span class="request-status ${requestStatusClass(status)}">${esc_(status)}</span></div><div class="request-item-meta">${esc_(reason)}</div></div>`}).join('');}
-async function loadRequests(){if(!sessionToken)return;const el=$('requestList');if(el)el.innerHTML='<div class="empty-today">Memuat pengajuan...</div>';const r=await new Promise(resolve=>request('requests',{limit:50},resolve));if(r?.ok)renderRequests(r.items||r.data?.items||r.requests||[]);else if(el)el.innerHTML=`<div class="empty-today">${esc_(r?.error||'Belum dapat memuat pengajuan.')}</div>`;}
-async function submitRequestForm(e){e?.preventDefault();if(!sessionToken)return showToast('Sesi login tidak tersedia.');const type=$('requestType')?.value||'IZIN',startDate=$('requestStartDate')?.value||'',endDate=type==='IZIN'?startDate:($('requestEndDate')?.value||''),reason=$('requestReason')?.value.trim()||'';if(!startDate||!reason||(type==='CUTI'&&!endDate))return showToast('Lengkapi data pengajuan terlebih dahulu.');if(type==='CUTI'&&endDate<startDate)return showToast('Tanggal selesai tidak boleh sebelum tanggal mulai.');const b=$('submitRequestBtn');if(b){b.disabled=true;b.innerHTML='<span class="material-symbols-rounded">progress_activity</span>Mengirim...';}loading(true,'Mengirim Pengajuan','Menyimpan pengajuan Anda...');try{const r=await new Promise(resolve=>request('submitRequest',{type,startDate,endDate,reason},resolve));if(!r?.ok)throw new Error(r?.error||'Pengajuan gagal dikirim.');$('requestReason').value='';$('requestStartDate').value='';$('requestEndDate').value='';showToast('Pengajuan berhasil dikirim.');await loadRequests();}catch(err){console.error('SUBMIT REQUEST ERROR:',err);showToast(err?.message||'Pengajuan gagal dikirim.');}finally{loading(false);if(b){b.disabled=false;b.innerHTML='<span class="material-symbols-rounded">send</span>Kirim Pengajuan';}}}
+async function loadRequests(){
+  if(!sessionToken)return;
+  const el=$('requestList');
+  const cached=cacheGet_('requests',CACHE_TTL.requests);
+  if(cached){renderRequests(cached);return;}
+  if(el)el.innerHTML='<div class="empty-today">Memuat pengajuan...</div>';
+  const r=await requestPromise_('requests',{limit:50});
+  if(r?.ok){const items=r.items||r.data?.items||r.requests||[];cacheSet_('requests',items);renderRequests(items);}
+  else if(el)el.innerHTML=`<div class="empty-today">${esc_(r?.error||'Belum dapat memuat pengajuan.')}</div>`;
+}
+async function submitRequestForm(e){e?.preventDefault();if(!sessionToken)return showToast('Sesi login tidak tersedia.');const type=$('requestType')?.value||'IZIN',startDate=$('requestStartDate')?.value||'',endDate=type==='IZIN'?startDate:($('requestEndDate')?.value||''),reason=$('requestReason')?.value.trim()||'';if(!startDate||!reason||(type==='CUTI'&&!endDate))return showToast('Lengkapi data pengajuan terlebih dahulu.');if(type==='CUTI'&&endDate<startDate)return showToast('Tanggal selesai tidak boleh sebelum tanggal mulai.');const b=$('submitRequestBtn');if(b){b.disabled=true;b.innerHTML='<span class="material-symbols-rounded">progress_activity</span>Mengirim...';}loading(true,'Mengirim Pengajuan','Menyimpan pengajuan Anda...');try{const r=await new Promise(resolve=>request('submitRequest',{type,startDate,endDate,reason},resolve));if(!r?.ok)throw new Error(r?.error||'Pengajuan gagal dikirim.');$('requestReason').value='';$('requestStartDate').value='';$('requestEndDate').value='';showToast('Pengajuan berhasil dikirim.');cacheClear_('requests');await loadRequests();}catch(err){console.error('SUBMIT REQUEST ERROR:',err);showToast(err?.message||'Pengajuan gagal dikirim.');}finally{loading(false);if(b){b.disabled=false;b.innerHTML='<span class="material-symbols-rounded">send</span>Kirim Pengajuan';}}}
 function renderAssignments(items){const el=$('assignmentList');if(!el)return;if(!Array.isArray(items)||!items.length){el.innerHTML='<div class="empty-today">Belum ada penugasan.</div>';return;}el.innerHTML=items.map(i=>{const title=i.title||i.judul||i.assignment||i.penugasan||'Penugasan',desc=i.description||i.deskripsi||i.detail||'',date=i.date||i.tanggal||i.startDate||'',status=i.status||'';return `<div class="assignment-item"><div class="assignment-item-head"><div class="assignment-item-title">${esc_(title)}</div>${status?`<span class="request-status ${requestStatusClass(status)}">${esc_(status)}</span>`:''}</div>${desc?`<div class="assignment-item-desc">${esc_(desc)}</div>`:''}${date?`<div class="assignment-item-date"><span class="material-symbols-rounded">event</span>${esc_(formatRequestDate(date))}</div>`:''}</div>`}).join('');}
-async function loadAssignments(){if(!sessionToken)return;const el=$('assignmentList');if(el)el.innerHTML='<div class="empty-today">Memuat penugasan...</div>';const r=await new Promise(resolve=>request('assignments',{limit:50},resolve));if(r?.ok)renderAssignments(r.items||r.data?.items||r.assignments||[]);else if(el)el.innerHTML=`<div class="empty-today">${esc_(r?.error||'Belum dapat memuat penugasan.')}</div>`;}
+async function loadAssignments(){
+  if(!sessionToken)return;
+  const el=$('assignmentList');
+  const cached=cacheGet_('assignments',CACHE_TTL.assignments);
+  if(cached){renderAssignments(cached);return;}
+  if(el)el.innerHTML='<div class="empty-today">Memuat penugasan...</div>';
+  const r=await requestPromise_('assignments',{limit:50});
+  if(r?.ok){const items=r.items||r.data?.items||r.assignments||[];cacheSet_('assignments',items);renderAssignments(items);}
+  else if(el)el.innerHTML=`<div class="empty-today">${esc_(r?.error||'Belum dapat memuat penugasan.')}</div>`;
+}
 
 document.addEventListener(
   'DOMContentLoaded',
