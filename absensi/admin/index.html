@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Pengajuan & Penugasan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="assets/css/admin.css">
+<script type="module" src="assets/js/admin.js"></script>
+</head>
+<body>
+<section id="login" class="login"><div class="login-card"><div class="logo">✓</div><h1>Admin Pengajuan</h1><p>Kelola izin, cuti, dan penugasan pegawai.</p><button id="loginBtn">Login dengan Google</button></div></section>
+<section id="app" class="hidden">
+<header class="top"><div><b>Absensi Admin</b><small>Pengajuan & Penugasan</small></div><div class="user"><img id="avatar" alt=""><span id="adminName">Admin</span><button id="logoutBtn">Keluar</button></div></header>
+<main>
+<div class="toolbar"><div><h1>Pengajuan & Penugasan</h1><p id="welcome">Kelola permintaan pegawai dari satu tempat.</p></div><button id="refreshBtn" class="primary">Refresh</button></div>
+<nav class="tabs"><button class="tab active" data-tab="requests">Pengajuan</button><button class="tab" data-tab="assignment">Buat Penugasan</button></nav>
+<section id="requests" class="panel">
+<div class="filters"><select id="statusFilter"><option value="ALL">Semua status</option><option value="MENUNGGU">Menunggu</option><option value="DISETUJUI">Disetujui</option><option value="DITOLAK">Ditolak</option></select><select id="typeFilter"><option value="ALL">Semua jenis</option><option value="IZIN">Izin</option><option value="CUTI">Cuti</option></select></div>
+<div id="requestList" class="list"></div>
+</section>
+<section id="assignment" class="panel hidden"><form id="assignmentForm" class="form-grid">
+<label>Pegawai<select id="employeeSelect" required><option value="">Memuat pegawai...</option></select></label>
+<label>Judul<input id="title" required maxlength="150"></label>
+<label class="wide">Deskripsi<textarea id="description" maxlength="1000"></textarea></label>
+<label>Tanggal mulai<input id="startDate" type="date"></label><label>Tanggal selesai<input id="endDate" type="date"></label>
+<label>Lokasi<input id="location" maxlength="200"></label><label>Prioritas<select id="priority"><option>NORMAL</option><option>TINGGI</option><option>URGENT</option></select></label>
+<label class="wide">Catatan<textarea id="notes" maxlength="500"></textarea></label>
+<div class="wide"><button class="primary" type="submit">Berikan Penugasan</button></div>
+</form></section>
+</main></section>
+<div id="toast" class="toast"></div>
+<div id="modal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="close">×</button><h2 id="modalTitle">Detail Pengajuan</h2><div id="modalBody"></div><div class="modal-actions"><button id="rejectBtn" class="danger">Tolak</button><button id="approveBtn" class="primary">Setujui</button></div></div></div>
+</body></html>
