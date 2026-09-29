@@ -779,72 +779,97 @@ function poll(
   onDone,
   tries = 0
 ){
-  const MAX_TRIES = 28;
-  const delays = [120, 180, 250, 350, 450, 600];
+
+  const MAX_TRIES = 45;
+
+  const delays = [
+    100,150,200,250,300,400,500,650,800,1000,
+    1200,1400,1600,1800,2000
+  ];
+
   const cb = 'cb_' + makeId();
   let finished = false;
   let timer = null;
+  let statusScript = null;
 
   function cleanup(){
-    if (timer) clearTimeout(timer);
-    try { delete window[cb]; } catch(e) {}
+    if(timer){ clearTimeout(timer); timer = null; }
+    try{ delete window[cb]; }catch(e){}
+    if(statusScript){
+      try{ statusScript.onload = null; statusScript.onerror = null; statusScript.remove(); }catch(e){}
+      statusScript = null;
+    }
     const oldScript = document.getElementById('jsonp_' + cb);
-    if (oldScript) oldScript.remove();
+    if(oldScript){ try{ oldScript.remove(); }catch(e){} }
   }
 
   function finish(result){
-    if (finished) return;
+    if(finished) return;
     finished = true;
     cleanup();
     onDone(result);
   }
 
   function retry(nextTry, delay){
-    if (finished) return;
-    if (nextTry >= MAX_TRIES) {
-      finish({ ok:false, error:'Waktu menunggu respons server habis.' });
+    if(finished) return;
+    if(nextTry >= MAX_TRIES){
+      finish({
+        ok:false,
+        error:'Server belum memberikan respons. Coba login kembali. Jika terjadi terus di Chrome HP, periksa koneksi internet dan server Apps Script.'
+      });
       return;
     }
-    try { delete window[cb]; } catch(e) {}
-    const currentScript = document.getElementById('jsonp_' + cb);
-    if (currentScript) currentScript.remove();
-    timer = setTimeout(() => poll(requestId, onDone, nextTry), delay);
+
+    try{ delete window[cb]; }catch(e){}
+    if(statusScript){
+      try{ statusScript.remove(); }catch(e){}
+      statusScript = null;
+    }
+
+    timer = setTimeout(() => {
+      poll(requestId, onDone, nextTry);
+    }, delay);
   }
 
   window[cb] = function(data){
-    if (finished) return;
+    if(finished) return;
 
-    if (data && data.state === 'DONE') {
+    if(data && data.state === 'DONE'){
       finish(data.result || data);
       return;
     }
 
-    if (data && data.state === 'NOT_FOUND' && tries >= MAX_TRIES) {
-      finish({ ok:false, error:data.error || 'Request tidak ditemukan.' });
-      return;
-    }
-
-    // Backend Apps Script memakai CacheService untuk status.
-    // Poll cepat di awal, lalu melambat agar tidak membebani endpoint.
-    retry(tries + 1, delays[Math.min(tries, delays.length - 1)]);
+    // NOT_FOUND belum berarti login gagal. Apps Script/CacheService
+    // pada Chrome HP dapat membutuhkan waktu lebih lama.
+    retry(
+      tries + 1,
+      delays[Math.min(tries, delays.length - 1)]
+    );
   };
 
-  const script = document.createElement('script');
-  script.id = 'jsonp_' + cb;
-  script.src = CONFIG.WEB_APP_URL +
+  statusScript = document.createElement('script');
+  statusScript.id = 'jsonp_' + cb;
+  statusScript.async = true;
+  statusScript.src = CONFIG.WEB_APP_URL +
     '?action=status' +
     '&requestId=' + encodeURIComponent(requestId) +
     '&callback=' + encodeURIComponent(cb) +
     '&_=' + Date.now();
 
-  script.onerror = function(){
-    if (finished) return;
-    try { delete window[cb]; } catch(e) {}
-    script.remove();
-    retry(tries + 1, Math.min(900, 250 + tries * 75));
+  statusScript.onerror = function(){
+    if(finished) return;
+    try{ delete window[cb]; }catch(e){}
+    if(statusScript){
+      try{ statusScript.remove(); }catch(e){}
+    }
+    statusScript = null;
+    retry(
+      tries + 1,
+      Math.min(2000, 250 + tries * 100)
+    );
   };
 
-  document.body.appendChild(script);
+  document.body.appendChild(statusScript);
 }
 
 function request(
