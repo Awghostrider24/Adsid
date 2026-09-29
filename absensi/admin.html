@@ -702,6 +702,19 @@ async function loginAdmin() {
 }
 
 async function logout() {
+  const tokenBeforeLogout = sessionToken;
+
+  try {
+    if (tokenBeforeLogout) {
+      const response = await request("logout");
+      if (!response?.ok) {
+        console.warn("SERVER LOGOUT WARNING:", response?.error);
+      }
+    }
+  } catch (error) {
+    console.warn("SERVER LOGOUT WARNING:", error);
+  }
+
   try {
     if (auth) await signOut(auth);
   } catch (error) {
