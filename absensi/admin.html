@@ -43,6 +43,35 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,syste
 .slip-actions{display:flex;gap:8px;margin-top:12px}.btn-slip{border:0;border-radius:9px;padding:8px 12px;cursor:pointer;background:#1769e0;color:#fff}
 @media print{body>*:not(#salarySlipPrint){display:none!important}#salarySlipPrint{display:block!important}}
 #salarySlipPrint{display:none}
+
+/* =========================================================
+   ADMIN PENGAJUAN & PENUGASAN
+========================================================= */
+.business-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid .full{grid-column:1/-1}
+.input,.textarea,.select{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #d9e2ef;border-radius:10px;background:#fff;color:var(--ink);font:inherit;outline:0}
+.textarea{min-height:86px;resize:vertical}
+.form-label{display:block;font-size:10px;font-weight:800;color:#66778c;margin:0 0 5px}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.btn-success{border:0;border-radius:10px;padding:9px 12px;cursor:pointer;background:#0f9d6e;color:#fff;font-weight:800;font-size:11px}
+.btn-danger{border:0;border-radius:10px;padding:8px 11px;cursor:pointer;background:#ef4444;color:#fff;font-weight:800;font-size:10px}
+.btn-muted{border:0;border-radius:10px;padding:8px 11px;cursor:pointer;background:#eef2f6;color:#53657a;font-weight:800;font-size:10px}
+.btn-success:disabled,.btn-danger:disabled,.btn-muted:disabled{opacity:.55;cursor:not-allowed}
+.module-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.module-toolbar .input,.module-toolbar .select{height:38px;width:auto;min-width:135px}
+.business-table{min-width:900px}
+.status-pill{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800;white-space:nowrap}
+.status-wait{background:#fff4d8;color:#9a6700}
+.status-ok{background:#e7f8ef;color:#087d50}
+.status-no{background:#fdecec;color:#b42318}
+.status-assignment{background:#eaf2ff;color:#1769e0}
+.status-done{background:#e7f8ef;color:#087d50}
+.detail-text{white-space:normal;min-width:180px;max-width:360px;line-height:1.45}
+.muted-note{font-size:10px;color:var(--muted);line-height:1.5}
+@media(max-width:900px){.business-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.module-toolbar .input,.module-toolbar .select{width:100%;min-width:0}.business-table{min-width:780px}}
+
 </style>
 </head>
 <body>
@@ -109,6 +138,129 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,syste
       <div class="panel-head"><div><h2>Data Pegawai</h2><small>Master pegawai yang terdaftar</small></div></div>
       <div class="table-wrap"><table class="table"><thead><tr><th>Pegawai</th><th>NIP</th><th>Jabatan</th><th>Role</th><th>Status</th><th>Gaji Pokok</th><th>Tunjangan</th></tr></thead><tbody id="employeeBody"></tbody></table></div>
     </section>
+
+    <section class="panel section">
+      <div class="panel-head">
+        <div>
+          <h2>Penugasan Pegawai</h2>
+          <small>Buat dan pantau penugasan untuk pegawai</small>
+        </div>
+        <button class="btn-muted" type="button" onclick="loadAdminAssignments()">Refresh</button>
+      </div>
+
+      <div style="padding:16px">
+        <div class="business-grid">
+          <div>
+            <div class="muted-note" style="margin-bottom:10px">
+              Penugasan akan tersimpan ke sheet <b>PENUGASAN</b> dan langsung dapat dilihat oleh pegawai terkait.
+            </div>
+            <div class="form-grid">
+              <div class="full">
+                <label class="form-label">Pegawai</label>
+                <select id="assignmentUid" class="select">
+                  <option value="">Pilih pegawai</option>
+                </select>
+              </div>
+              <div class="full">
+                <label class="form-label">Judul Penugasan</label>
+                <input id="assignmentTitle" class="input" type="text" maxlength="150" placeholder="Contoh: Kunjungan lapangan">
+              </div>
+              <div>
+                <label class="form-label">Tanggal Mulai</label>
+                <input id="assignmentStart" class="input" type="date">
+              </div>
+              <div>
+                <label class="form-label">Tanggal Selesai</label>
+                <input id="assignmentEnd" class="input" type="date">
+              </div>
+              <div>
+                <label class="form-label">Prioritas</label>
+                <select id="assignmentPriority" class="select">
+                  <option value="NORMAL">Normal</option>
+                  <option value="TINGGI">Tinggi</option>
+                  <option value="RENDAH">Rendah</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Lokasi</label>
+                <input id="assignmentLocation" class="input" type="text" maxlength="200" placeholder="Lokasi penugasan">
+              </div>
+              <div class="full">
+                <label class="form-label">Deskripsi</label>
+                <textarea id="assignmentDescription" class="textarea" maxlength="1000" placeholder="Detail pekerjaan atau instruksi..."></textarea>
+              </div>
+              <div class="full">
+                <label class="form-label">Catatan</label>
+                <textarea id="assignmentNotes" class="textarea" maxlength="500" placeholder="Catatan tambahan untuk pegawai..."></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn-muted" type="button" onclick="resetAssignmentForm()">Bersihkan</button>
+              <button id="createAssignmentBtn" class="btn-success" type="button" onclick="createAssignment()">Buat Penugasan</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="module-toolbar" style="margin-bottom:10px">
+              <span class="muted-note" id="assignmentInfo">Memuat penugasan...</span>
+              <label style="display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#66778c">
+                <input id="includeCompleted" type="checkbox" onchange="loadAdminAssignments()">
+                Tampilkan selesai
+              </label>
+            </div>
+            <div class="table-wrap">
+              <table class="table business-table">
+                <thead>
+                  <tr>
+                    <th>Pegawai</th><th>Penugasan</th><th>Tanggal</th><th>Lokasi</th><th>Prioritas</th><th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="assignmentBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="panel-head">
+        <div>
+          <h2>Pengajuan Izin / Cuti</h2>
+          <small>Review pengajuan pegawai</small>
+        </div>
+        <button class="btn-muted" type="button" onclick="loadAdminRequests()">Refresh</button>
+      </div>
+
+      <div style="padding:14px 16px 0">
+        <div class="module-toolbar">
+          <select id="requestStatusFilter" class="select">
+            <option value="ALL">Semua Status</option>
+            <option value="MENUNGGU">Menunggu</option>
+            <option value="DISETUJUI">Disetujui</option>
+            <option value="DITOLAK">Ditolak</option>
+          </select>
+          <select id="requestTypeFilter" class="select">
+            <option value="ALL">Semua Jenis</option>
+            <option value="IZIN">Izin</option>
+            <option value="CUTI">Cuti</option>
+          </select>
+          <span class="muted-note" id="requestInfo">Memuat pengajuan...</span>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:10px">
+        <table class="table business-table">
+          <thead>
+            <tr>
+              <th>Pegawai</th><th>Jenis</th><th>Tanggal</th><th>Hari</th><th>Alasan</th><th>Status</th><th>Review</th>
+            </tr>
+          </thead>
+          <tbody id="requestBody"></tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 </section>
 
@@ -395,7 +547,7 @@ async function loginAdmin() {
     }
 
     const firebaseIdToken =
-      await credential.user.getIdToken(true);
+      await credential.user.getIdToken(false);
 
     const response = await request("firebaseLogin", {
       firebaseIdToken
@@ -904,12 +1056,251 @@ function updateStats(data) {
 }
 
 let dashboardLoading = false;
-let dashboardRequestVersion = 0;
+
+let adminEmployeesCache = [];
+let adminRequestsCache = [];
+let adminAssignmentsCache = [];
+let businessLoading = false;
+
+
+
+function employeeUid(row){
+  return String(getValue(row,"uid","UID","firebaseUid","userUid") || "").trim();
+}
+
+function populateAssignmentEmployees(rows){
+  const select=$("assignmentUid");
+  if(!select) return;
+
+  const current=select.value;
+  const activeRows=rows.filter(row=>{
+    const status=String(getValue(row,"status","Status")||"AKTIF").toUpperCase();
+    return employeeUid(row) && status !== "NONAKTIF";
+  });
+
+  select.innerHTML='<option value="">Pilih pegawai</option>'+activeRows.map(row=>{
+    const uid=employeeUid(row);
+    const name=getValue(row,"nama","name","pegawai")||"-";
+    const nip=getValue(row,"nip","NIP")||"";
+    return `<option value="${esc(uid)}">${esc(name)}${nip ? " — "+esc(nip) : ""}</option>`;
+  }).join("");
+
+  if(current && activeRows.some(row=>employeeUid(row)===current)) select.value=current;
+}
+
+function assignmentStatusHtml(status){
+  const s=String(status||"Diberikan").trim();
+  const u=s.toUpperCase();
+  let cls="status-assignment";
+  if(u==="SELESAI") cls="status-done";
+  return `<span class="status-pill ${cls}">${esc(s)}</span>`;
+}
+
+function renderAdminAssignments(rows){
+  const body=$("assignmentBody");
+  if(!body) return;
+
+  if(!rows.length){
+    body.innerHTML='<tr><td colspan="6"><div class="empty">Belum ada penugasan.</div></td></tr>';
+    return;
+  }
+
+  body.innerHTML=rows.map(row=>{
+    const name=getValue(row,"name","nama","pegawai")||"-";
+    const title=getValue(row,"title","judul")||"-";
+    const desc=getValue(row,"description","deskripsi")||"";
+    const start=getValue(row,"startDate","tanggalMulai")||"";
+    const end=getValue(row,"endDate","tanggalSelesai")||"";
+    const date=start && end && start!==end ? `${start} s/d ${end}` : (start||end||"-");
+    const location=getValue(row,"location","lokasi")||"-";
+    const priority=String(getValue(row,"priority","prioritas")||"NORMAL").toUpperCase();
+    return `<tr>
+      <td><span class="name">${esc(name)}</span><span class="sub">${esc(getValue(row,"nip","NIP")||"")}</span></td>
+      <td class="detail-text"><b>${esc(title)}</b>${desc?`<div class="sub" style="white-space:normal">${esc(desc)}</div>`:""}</td>
+      <td>${esc(date)}</td>
+      <td class="detail-text">${esc(location)}</td>
+      <td><span class="status-pill">${esc(priority)}</span></td>
+      <td>${assignmentStatusHtml(getValue(row,"status","Status"))}</td>
+    </tr>`;
+  }).join("");
+
+  if($("assignmentInfo")) $("assignmentInfo").textContent=`${rows.length} penugasan`;
+}
+
+async function loadAdminAssignments(force=false){
+  if(!sessionToken || (businessLoading && !force)) return;
+  const includeCompleted=$("includeCompleted")?.checked ? "true" : "false";
+  try{
+    const response=await request("assignments",{limit:"100",includeCompleted});
+    if(!response?.ok) throw new Error(response?.error||"Gagal memuat penugasan.");
+    adminAssignmentsCache=normalizeArray(response.items||response.data);
+    renderAdminAssignments(adminAssignmentsCache);
+  }catch(error){
+    console.error("ADMIN ASSIGNMENTS:",error);
+    toast(error?.message||"Gagal memuat penugasan.");
+    if($("assignmentInfo")) $("assignmentInfo").textContent="Gagal memuat";
+  }
+}
+
+function requestStatusHtml(status){
+  const u=String(status||"MENUNGGU").toUpperCase();
+  if(u==="DISETUJUI") return `<span class="status-pill status-ok">DISETUJUI</span>`;
+  if(u==="DITOLAK") return `<span class="status-pill status-no">DITOLAK</span>`;
+  return `<span class="status-pill status-wait">MENUNGGU</span>`;
+}
+
+function renderAdminRequests(rows){
+  const body=$("requestBody");
+  if(!body) return;
+
+  if(!rows.length){
+    body.innerHTML='<tr><td colspan="7"><div class="empty">Tidak ada pengajuan sesuai filter.</div></td></tr>';
+    if($("requestInfo")) $("requestInfo").textContent="0 pengajuan";
+    return;
+  }
+
+  body.innerHTML=rows.map(row=>{
+    const status=String(getValue(row,"status","Status")||"Menunggu");
+    const requestId=String(getValue(row,"requestId","Request ID")||"");
+    const name=getValue(row,"name","nama","pegawai")||"-";
+    const type=getValue(row,"type","Jenis")||"-";
+    const start=getValue(row,"startDate","tanggalMulai")||"";
+    const end=getValue(row,"endDate","tanggalSelesai")||"";
+    const date=start && end && start!==end ? `${start} s/d ${end}` : (start||end||"-");
+    const reason=getValue(row,"reason","alasan")||"-";
+    const days=getValue(row,"days","jumlahHari")||0;
+    const pending=status.toUpperCase()==="MENUNGGU" && requestId;
+    const actions=pending
+      ? `<div style="display:flex;gap:5px;flex-wrap:wrap">
+           <button class="btn-success" type="button" onclick='reviewRequest(${JSON.stringify(requestId)},"DISETUJUI")'>Setujui</button>
+           <button class="btn-danger" type="button" onclick='reviewRequest(${JSON.stringify(requestId)},"DITOLAK")'>Tolak</button>
+         </div>`
+      : `<span class="muted-note">${esc(getValue(row,"reviewNote","catatanReview")||getValue(row,"reviewedBy","reviewedBy")||"-")}</span>`;
+    return `<tr>
+      <td><span class="name">${esc(name)}</span><span class="sub">${esc(getValue(row,"nip","NIP")||"")}</span></td>
+      <td>${esc(type)}</td>
+      <td>${esc(date)}</td>
+      <td>${esc(days)}</td>
+      <td class="detail-text">${esc(reason)}</td>
+      <td>${requestStatusHtml(status)}</td>
+      <td>${actions}</td>
+    </tr>`;
+  }).join("");
+
+  if($("requestInfo")) $("requestInfo").textContent=`${rows.length} pengajuan`;
+}
+
+async function loadAdminRequests(force=false){
+  if(!sessionToken || (businessLoading && !force)) return;
+  const status=$("requestStatusFilter")?.value||"ALL";
+  const type=$("requestTypeFilter")?.value||"ALL";
+  try{
+    const response=await request("adminRequests",{status,type});
+    if(!response?.ok) throw new Error(response?.error||"Gagal memuat pengajuan.");
+    adminRequestsCache=normalizeArray(response.items||response.data);
+    renderAdminRequests(adminRequestsCache);
+  }catch(error){
+    console.error("ADMIN REQUESTS:",error);
+    toast(error?.message||"Gagal memuat pengajuan.");
+    if($("requestInfo")) $("requestInfo").textContent="Gagal memuat";
+  }
+}
+
+async function reviewRequest(requestId,decision){
+  const label=decision==="DISETUJUI"?"menyetujui":"menolak";
+  let note=prompt(`Catatan review (opsional) untuk ${label} pengajuan ini:`, "");
+  if(note===null) return;
+  note=String(note).trim();
+  if(note.length>500){
+    toast("Catatan maksimal 500 karakter.");
+    return;
+  }
+
+  loading(true);
+  try{
+    const response=await request("adminReviewRequest",{requestId,decision,note});
+    if(!response?.ok) throw new Error(response?.error||"Gagal memproses pengajuan.");
+    toast(response.message||"Pengajuan berhasil diproses.");
+    await loadAdminRequests();
+  }catch(error){
+    console.error("REVIEW REQUEST:",error);
+    toast(error?.message||"Gagal memproses pengajuan.");
+  }finally{
+    loading(false);
+  }
+}
+
+function resetAssignmentForm(){
+  ["assignmentTitle","assignmentLocation","assignmentDescription","assignmentNotes"].forEach(id=>{
+    const el=$(id); if(el) el.value="";
+  });
+  if($("assignmentUid")) $("assignmentUid").value="";
+  if($("assignmentPriority")) $("assignmentPriority").value="NORMAL";
+  const today=todayISO();
+  if($("assignmentStart")) $("assignmentStart").value=today;
+  if($("assignmentEnd")) $("assignmentEnd").value=today;
+}
+
+async function createAssignment(){
+  if(!sessionToken) return;
+
+  const uid=$("assignmentUid")?.value||"";
+  const title=$("assignmentTitle")?.value.trim()||"";
+  const startDate=$("assignmentStart")?.value||"";
+  const endDate=$("assignmentEnd")?.value||startDate;
+  const priority=$("assignmentPriority")?.value||"NORMAL";
+  const location=$("assignmentLocation")?.value.trim()||"";
+  const description=$("assignmentDescription")?.value.trim()||"";
+  const notes=$("assignmentNotes")?.value.trim()||"";
+
+  if(!uid){toast("Pilih pegawai terlebih dahulu.");return;}
+  if(!title){toast("Judul penugasan wajib diisi.");return;}
+  if(!startDate){toast("Tanggal mulai wajib diisi.");return;}
+  if(endDate && endDate<startDate){toast("Tanggal selesai tidak boleh sebelum tanggal mulai.");return;}
+
+  const btn=$("createAssignmentBtn");
+  if(btn){btn.disabled=true;btn.textContent="Menyimpan...";}
+  loading(true);
+
+  try{
+    const response=await request("adminCreateAssignment",{
+      uid,title,description,startDate,endDate,location,priority,notes
+    });
+    if(!response?.ok) throw new Error(response?.error||"Gagal membuat penugasan.");
+    toast(response.message||"Penugasan berhasil dibuat.");
+    resetAssignmentForm();
+    await loadAdminAssignments();
+  }catch(error){
+    console.error("CREATE ASSIGNMENT:",error);
+    toast(error?.message||"Gagal membuat penugasan.");
+  }finally{
+    loading(false);
+    if(btn){btn.disabled=false;btn.textContent="Buat Penugasan";}
+  }
+}
+
+async function loadAdminModules(){
+  if(!sessionToken || businessLoading) return;
+  businessLoading=true;
+  try{
+    // Pegawai sudah tersedia dari dashboard, jadi pilihan penugasan
+    // tidak memerlukan request tambahan ke Apps Script.
+    populateAssignmentEmployees(adminEmployeesCache);
+    resetAssignmentForm();
+
+    await Promise.all([
+      loadAdminAssignments(true),
+      loadAdminRequests(true)
+    ]);
+  }finally{
+    businessLoading=false;
+  }
+}
+
 
 async function loadAll() {
   if (!sessionToken || dashboardLoading) return;
 
-  const requestVersion = ++dashboardRequestVersion;
   dashboardLoading = true;
 
   const date =
@@ -971,6 +1362,9 @@ async function loadAll() {
         data.employee
       );
 
+    adminEmployeesCache = employees;
+    populateAssignmentEmployees(employees);
+
     payrollRowsRaw = payroll;
     fillPayrollFilters(employees, payroll);
     applyPayrollFilter();
@@ -993,6 +1387,23 @@ async function loadAll() {
         "Bulan terpilih";
     }
 
+    /*
+     * PENTING:
+     * Dashboard utama sudah siap ditampilkan di titik ini.
+     * Jangan menunggu Pengajuan/Penugasan selesai karena keduanya
+     * adalah modul tambahan dan berjalan lewat request terpisah.
+     */
+    loading(false);
+    dashboardLoading = false;
+
+    // Muat modul tambahan di background tanpa menahan tampilan dashboard.
+    // Jika Apps Script lambat, dashboard utama tetap bisa langsung dipakai.
+    loadAdminModules().catch(error => {
+      console.error("LOAD ADMIN MODULES ERROR:", error);
+    });
+
+    return;
+
   } catch (error) {
     console.error("LOAD DASHBOARD ERROR:", error);
     toast(
@@ -1000,12 +1411,16 @@ async function loadAll() {
       "Gagal memuat dashboard."
     );
   } finally {
-    loading(false);
-    dashboardLoading = false;
+    if (dashboardLoading) {
+      loading(false);
+      dashboardLoading = false;
+    }
   }
 }
 
 /* Event listeners */
+$("requestStatusFilter")?.addEventListener("change", loadAdminRequests);
+$("requestTypeFilter")?.addEventListener("change", loadAdminRequests);
 $("dateFilter")?.addEventListener(
   "change",
   loadAll
@@ -1164,6 +1579,11 @@ window.loadAll = loadAll;
 window.setAttendanceFilter = setAttendanceFilter;
 window.applyPayrollFilter = applyPayrollFilter;
 window.openSalarySlip = openSalarySlip;
+window.loadAdminRequests = loadAdminRequests;
+window.loadAdminAssignments = loadAdminAssignments;
+window.reviewRequest = reviewRequest;
+window.createAssignment = createAssignment;
+window.resetAssignmentForm = resetAssignmentForm;
 
 initializeFilters();
 
