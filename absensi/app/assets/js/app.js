@@ -46,6 +46,7 @@ let firebaseModulesPromise = null;
 let firebaseInitPromise = null;
 
 let locationInFlight = false;
+let locationInFlightPromise = null;
 let lastLocationAt = 0;
 let locationLookupKey = '';
 
@@ -682,8 +683,7 @@ async function postForm(fields) {
             'application/x-www-form-urlencoded;charset=UTF-8'
         },
         body: body.toString(),
-        redirect: 'follow',
-        keepalive: true
+        redirect: 'follow'
       }
     );
 
@@ -1370,10 +1370,8 @@ function getLocation(force = false) {
     );
   }
 
-  if (locationInFlight) {
-    return Promise.resolve(
-      currentLocation
-    );
+  if (locationInFlight && locationInFlightPromise) {
+    return locationInFlightPromise;
   }
 
   locationInFlight = true;
@@ -1388,7 +1386,7 @@ function getLocation(force = false) {
     'Mohon izinkan lokasi pada browser.'
   );
 
-  return new Promise(resolve => {
+  locationInFlightPromise = new Promise(resolve => {
     navigator.geolocation.getCurrentPosition(
       position => {
         currentLocation = {
@@ -1431,6 +1429,8 @@ function getLocation(force = false) {
         ) {
           locationInFlight =
             false;
+          locationInFlightPromise =
+            null;
 
           resolve(
             currentLocation
@@ -1467,6 +1467,8 @@ function getLocation(force = false) {
 
           locationInFlight =
             false;
+          locationInFlightPromise =
+            null;
 
           resolve(
             currentLocation
@@ -1527,6 +1529,8 @@ function getLocation(force = false) {
 
             locationInFlight =
               false;
+            locationInFlightPromise =
+              null;
 
             resolve(
               currentLocation
@@ -1540,6 +1544,8 @@ function getLocation(force = false) {
 
         locationInFlight =
           false;
+        locationInFlightPromise =
+          null;
 
         safeText_(
           'locationText',
@@ -3079,7 +3085,13 @@ function capturePhoto() {
   if (submitButton) {
     submitButton.style.display =
       'flex';
+    submitButton.disabled =
+      false;
   }
+
+  // The frame is now stored in capturedDataUrl.
+  // Stop the camera to release the device, but keep the captured image.
+  stopCamera();
 
   showToast(
     'Foto berhasil diambil. Periksa foto lalu tekan Gunakan Foto & Absen.'
@@ -3287,6 +3299,8 @@ function submitAttendance() {
         document.body.style.overflow =
           'hidden';
 
+        // Keep the captured preview visible. Camera is intentionally not
+        // restarted here; user can press Ambil Ulang or submit the saved photo.
         return;
       }
 
@@ -3604,6 +3618,12 @@ async function logout() {
   cacheClearAll_();
 
   currentLocation =
+    null;
+
+  locationInFlight =
+    false;
+
+  locationInFlightPromise =
     null;
 
   lastLocationAt =
@@ -4346,6 +4366,67 @@ function initDomEvents_() {
 
 
 /* ============================================================
+   SAFE BUTTON BINDINGS
+   Jika HTML sudah memakai onclick, binding otomatis tidak akan
+   menambahkan handler kedua.
+   ============================================================ */
+
+function bindClickOnce_(id, handler) {
+  const el = $(id);
+  if (!el || typeof handler !== 'function') {
+    return;
+  }
+
+  if (el.dataset.jsBound === '1') {
+    return;
+  }
+
+  if (el.getAttribute('onclick')) {
+    return;
+  }
+
+  el.addEventListener('click', handler);
+  el.dataset.jsBound = '1';
+}
+
+function initButtonEvents_() {
+  bindClickOnce_('firebaseLoginButton', loginWithFirebase);
+
+  bindClickOnce_('btnMasuk', () => openCamera('MASUK'));
+  bindClickOnce_('btnPulang', () => openCamera('PULANG'));
+
+  bindClickOnce_('captureBtn', capturePhoto);
+  bindClickOnce_('submitPhotoBtn', submitAttendance);
+  bindClickOnce_('switchCameraBtn', switchCamera);
+
+  bindClickOnce_('closeCameraBtn', closeCamera);
+  bindClickOnce_('closeCamera', closeCamera);
+  bindClickOnce_('closeResultBtn', closeResult);
+  bindClickOnce_('logoutBtn', logout);
+
+  bindClickOnce_('navHome', () => showPage('home'));
+  bindClickOnce_('navHistory', () => showPage('history'));
+  bindClickOnce_('navRequest', () => showPage('request'));
+  bindClickOnce_('navAssignment', () => showPage('assignment'));
+  bindClickOnce_('navProfile', () => showPage('profile'));
+
+  bindClickOnce_('requestTabIzin', () => setRequestType('IZIN'));
+  bindClickOnce_('requestTabCuti', () => setRequestType('CUTI'));
+
+  const requestForm = $('requestForm');
+  if (
+    requestForm &&
+    !requestForm.getAttribute('onsubmit') &&
+    requestForm.dataset.jsBound !== '1'
+  ) {
+    requestForm.addEventListener('submit', submitRequestForm);
+    requestForm.dataset.jsBound = '1';
+  }
+
+  bindClickOnce_('getLocationBtn', () => getLocation(true));
+}
+
+/* ============================================================
    INITIALIZATION
    ============================================================ */
 
@@ -4355,6 +4436,7 @@ async function initApp_() {
   updateClock();
 
   initDomEvents_();
+  initButtonEvents_();
 
   /*
    * Default request type.
