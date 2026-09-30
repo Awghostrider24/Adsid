@@ -205,9 +205,15 @@ async function initFirebase(){
 
     loading(false);
 
-    showToast(
-      'Konfigurasi Firebase belum lengkap.'
-    );
+const loginButton = $('firebaseLoginButton');
+
+if (loginButton) {
+  loginButton.disabled = false;
+  loginButton.style.pointerEvents = 'auto';
+  loginButton.innerHTML = `
+    <span class="google-icon">G</span>
+    <span>Masuk dengan Google</span>
+  `;
 
     return false;
 
