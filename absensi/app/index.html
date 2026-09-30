@@ -9,7 +9,6 @@
 >
 
 <meta name="theme-color" content="#1769e0">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -20,7 +19,11 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0"></noscript>
 
-<link rel="stylesheet" href="assets/css/style.css">
+
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,Arial,sans-serif;background:#f5f7fb;color:#172033}body{overflow-x:hidden}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#eef5ff,#f8fafc)}.login-card{width:min(440px,100%);background:#fff;border-radius:28px;padding:34px;box-shadow:0 20px 60px #17203318;text-align:center}.login-logo{width:68px;height:68px;margin:0 auto 18px;border-radius:20px;display:grid;place-items:center;background:#1769e0;color:#fff}.login-logo .material-symbols-rounded{font-size:34px}.login-title{margin:0;font-size:28px}.login-subtitle{color:#697386;line-height:1.6}.login-info{display:flex;gap:10px;text-align:left;background:#f4f7fb;border-radius:14px;padding:13px;font-size:13px;line-height:1.5;margin:20px 0}.login-button{width:100%;border:0;border-radius:14px;padding:15px;background:#1769e0;color:#fff;font-weight:700;font-size:15px;display:flex;justify-content:center;align-items:center;gap:10px;cursor:pointer}.login-button:disabled{opacity:.65;cursor:wait}.google-icon{width:24px;height:24px;border-radius:50%;background:#fff;color:#4285f4;display:grid;place-items:center;font-weight:800}.login-footer{margin-top:18px;color:#9aa3b2;font-size:11px}.app{min-height:100vh}.top{background:#fff;border-bottom:1px solid #e7ebf1;position:sticky;top:0;z-index:10}.top-content,.main{width:min(980px,100%);margin:auto}.top-content{padding:14px 18px}.top-row{display:flex;justify-content:space-between;align-items:center;gap:20px}.date-label{font-size:13px;color:#697386;display:flex;align-items:center;gap:6px}.clock{font-size:42px;font-weight:800;line-height:1.05}.clock span,.status-time span{font-size:.38em}.header-status{font-size:11px;color:#687386;display:flex;align-items:center;gap:5px}.header-status-dot{width:7px;height:7px;border-radius:50%;background:#19a463}.header-profile{display:flex;align-items:center;gap:10px;text-align:right}.header-avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e9eef5}.header-name{font-weight:800}.header-position{font-size:11px;color:#778196}.header-greeting{font-size:11px;color:#8a94a6}.main{padding:20px 16px 100px}.page{display:none}.page.active{display:block}.card{background:#fff;border:1px solid #e8ecf2;border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 8px 24px #17203308}.section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}.section-icon{width:44px;height:44px;border-radius:14px;background:#edf4ff;color:#1769e0;display:grid;place-items:center;flex:0 0 44px}.section-title{font-size:18px;margin:0}.section-subtitle{font-size:12px;color:#7b8494;margin-top:3px}.status-box{display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center;background:#f7f9fc;border-radius:16px;padding:14px}.status-circle{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#eaf6ef;color:#15905a}.status-label{font-size:11px;color:#7b8494}.status-time{font-size:30px;font-weight:800}.status-badge{font-size:11px;padding:7px 10px;border-radius:999px;background:#edf1f6;color:#697386}.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.action-button{border:0;border-radius:16px;min-height:110px;padding:14px;cursor:pointer;text-align:left;color:#fff}.action-button.green{background:#15905a}.action-button.red{background:#d94b55}.action-button:disabled{opacity:.45;cursor:not-allowed}.action-icon{width:42px;height:42px;border-radius:12px;background:#fff2;display:grid;place-items:center;margin-bottom:10px}.action-label{font-weight:800}.action-desc{font-size:11px;opacity:.85;margin-top:3px}.today-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e7ebf1;display:flex;justify-content:center;z-index:20}.bottom-nav>*{max-width:180px;flex:1}.nav-button{border:0;background:#fff;padding:10px 6px;color:#697386;cursor:pointer}.nav-button.active{color:#1769e0;font-weight:700}.loading{position:fixed;inset:0;background:#17203366;display:none;align-items:center;justify-content:center;z-index:100}.loading.show{display:flex}.loading-box{background:#fff;border-radius:18px;padding:24px;text-align:center;min-width:250px}.loading-spinner{width:28px;height:28px;border:3px solid #dfe5ee;border-top-color:#1769e0;border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-title{font-weight:800}.loading-text{font-size:12px;color:#737e90;margin-top:4px}.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#172033;color:#fff;padding:11px 15px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:120}.toast.show{opacity:1;transform:translate(-50%,0)}input,textarea,select{font:inherit}button{font-family:inherit}@media(max-width:600px){.top-row{align-items:flex-start}.clock{font-size:36px}.header-avatar{width:44px;height:44px}.header-name{font-size:12px}.header-position{font-size:9px}.main{padding:10px 9px 90px}.card{padding:14px;border-radius:18px}.section-title{font-size:17px}.status-box{grid-template-columns:51px minmax(0,1fr)}.status-badge{grid-column:2;font-size:9px}.status-time{font-size:26px}.action-grid{gap:8px}.action-button{min-height:100px;padding:12px}.today-grid{grid-template-columns:1fr}}
+</style>
+
 </head>
 
 <body>
@@ -886,8 +889,4515 @@
   style="display:none"
 ></iframe>
 
-<script src="assets/js/config.js" defer></script>
-<script src="assets/js/app.js" defer></script>
+<script>
+window.CONFIG = {
+  WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlqYfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
+  FIREBASE_CONFIG: {
+    apiKey: 'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
+    authDomain: 'absensiamil.firebaseapp.com',
+    projectId: 'absensiamil',
+    storageBucket: 'absensiamil.firebasestorage.app',
+    messagingSenderId: '962926272481',
+    appId: '1:962926272481:web:d6d5bae6d890ebecc2bca0'
+  }
+};
+</script>
+<script>
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const CONFIG = {
+
+  WEB_APP_URL:
+    'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
+
+  FIREBASE_CONFIG: {
+
+    apiKey:
+      'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
+
+    authDomain:
+      'absensiamil.firebaseapp.com',
+
+    projectId:
+      'absensiamil',
+
+    storageBucket:
+      'absensiamil.firebasestorage.app',
+
+    messagingSenderId:
+      '962926272481',
+
+    appId:
+      '1:962926272481:web:d6d5bae6d890ebecc2bca0'
+
+  }
+
+};
+
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let sessionToken =
+  localStorage.getItem(
+    'absen_session'
+  ) || '';
+
+let currentUser =
+  null;
+
+let currentLocation =
+  null;
+
+let cameraStream =
+  null;
+
+let facingMode =
+  'user';
+
+let attendanceType =
+  'MASUK';
+
+let capturedDataUrl =
+  '';
+
+let loginProcessing =
+  false;
+
+let attendanceProcessing =
+  false;
+
+let firebaseApp =
+  null;
+
+let firebaseAuth =
+  null;
+
+let firebaseGoogleProvider =
+  null;
+
+let firebaseReady =
+  false;
+
+
+/* =========================================================
+   HELPER
+========================================================= */
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+
+/* =========================================================
+   CONFIG CHECK
+========================================================= */
+
+async function validConfig(){
+
+  const f =
+    CONFIG.FIREBASE_CONFIG || {};
+
+  return (
+
+    typeof CONFIG.WEB_APP_URL ===
+      'string'
+
+    &&
+
+    CONFIG.WEB_APP_URL.startsWith(
+      'https://'
+    )
+
+    &&
+
+    f.apiKey
+
+    &&
+
+    !f.apiKey.startsWith(
+      'PASTE_'
+    )
+
+    &&
+
+    f.projectId
+
+    &&
+
+    !f.projectId.startsWith(
+      'PASTE_'
+    )
+
+    &&
+
+    f.appId
+
+    &&
+
+    !f.appId.startsWith(
+      'PASTE_'
+    )
+
+  );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+  const toast =
+    $('toast');
+
+  if(!toast){
+    return;
+  }
+
+  toast.textContent =
+    String(
+      message || ''
+    );
+
+  toast.classList.add(
+    'show'
+  );
+
+  clearTimeout(
+    window.toastTimer
+  );
+
+  window.toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          'show'
+        );
+
+      },
+      3500
+    );
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function loading(
+  on,
+  title='Memproses...',
+  text='Mohon tunggu sebentar.'
+){
+
+  $('loadingTitle')
+    .textContent =
+    title;
+
+  $('loadingText')
+    .textContent =
+    text;
+
+  $('loading')
+    .classList.toggle(
+      'show',
+      !!on
+    );
+
+}
+
+
+/* =========================================================
+   FIREBASE INITIALIZATION
+========================================================= */
+
+async function initFirebase(){
+
+  loading(
+    true,
+    'Menyiapkan Login',
+    'Menghubungkan sistem autentikasi...'
+  );
+
+  if(
+    !await validConfig()
+  ){
+
+    loading(false);
+
+    showToast(
+      'Konfigurasi Firebase belum lengkap.'
+    );
+
+    return false;
+
+  }
+
+  try{
+
+    const {
+      initializeApp,
+      getApps
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
+      );
+
+
+    const {
+      getAuth,
+      GoogleAuthProvider,
+      onAuthStateChanged,
+      getRedirectResult
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
+
+    firebaseApp =
+      getApps().length
+        ? getApps()[0]
+        : initializeApp(
+            CONFIG.FIREBASE_CONFIG
+          );
+
+
+    firebaseAuth =
+      getAuth(
+        firebaseApp
+      );
+
+
+    firebaseGoogleProvider =
+      new GoogleAuthProvider();
+
+
+    firebaseGoogleProvider
+      .setCustomParameters({
+        prompt:'select_account'
+      });
+
+
+    firebaseReady =
+      true;
+
+
+    try{
+
+      await getRedirectResult(
+        firebaseAuth
+      );
+
+    }catch(error){
+
+      console.warn(
+        'Redirect result:',
+        error
+      );
+
+    }
+
+
+    onAuthStateChanged(
+      firebaseAuth,
+      async user => {
+
+        if(
+          !user ||
+          loginProcessing ||
+          sessionToken
+        ){
+
+          return;
+
+        }
+
+        try{
+
+          loginProcessing =
+            true;
+
+          loading(
+            true,
+            'Memverifikasi Akun',
+            'Menghubungkan akun Google dengan data pegawai...'
+          );
+
+          await completeFirebaseLogin_(
+            user
+          );
+
+        }catch(error){
+
+          console.error(
+            error
+          );
+
+          loginProcessing =
+            false;
+
+          loading(false);
+
+          showToast(
+            error.message ||
+            'Login Firebase gagal.'
+          );
+
+        }
+
+      }
+    );
+
+
+    loading(false);
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      'Firebase Init Error:',
+      error
+    );
+
+    loading(false);
+
+    showToast(
+      'Firebase gagal dimuat. Periksa Authorized Domains.'
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+// Expose login immediately for HTML onclick handlers.
+window.loginWithFirebase = loginWithFirebase;
+
+async function loginWithFirebase(){
+
+  if(
+    loginProcessing
+  ){
+    return;
+  }
+
+
+  if(
+    !firebaseReady
+  ){
+
+    const ready =
+      await initFirebase();
+
+    if(!ready){
+      return;
+    }
+
+  }
+
+
+  loginProcessing =
+    true;
+
+
+  const button =
+    $('firebaseLoginButton');
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.innerHTML = `
+      <span class="material-symbols-rounded">
+        progress_activity
+      </span>
+      Menghubungkan...
+    `;
+
+  }
+
+
+  loading(
+    true,
+    'Memverifikasi Akun',
+    'Menghubungkan akun Google dengan data pegawai...'
+  );
+
+
+  try{
+
+    const {
+      signInWithPopup,
+      signInWithRedirect
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
+
+    let credentialResult;
+
+
+    try{
+
+      credentialResult =
+        await signInWithPopup(
+          firebaseAuth,
+          firebaseGoogleProvider
+        );
+
+    }catch(popupError){
+
+      console.warn(
+        'Popup login gagal:',
+        popupError
+      );
+
+
+      if(
+
+        popupError?.code ===
+          'auth/popup-blocked'
+
+        ||
+
+        popupError?.code ===
+          'auth/popup-closed-by-user'
+
+        ||
+
+        popupError?.code ===
+          'auth/cancelled-popup-request'
+
+      ){
+
+        loading(
+          true,
+          'Membuka Login Google',
+          'Silakan pilih akun Google Anda...'
+        );
+
+
+        await signInWithRedirect(
+          firebaseAuth,
+          firebaseGoogleProvider
+        );
+
+
+        return;
+
+      }
+
+
+      throw popupError;
+
+    }
+
+
+    if(
+      credentialResult?.user
+    ){
+
+      await completeFirebaseLogin_(
+        credentialResult.user
+      );
+
+    }
+
+  }catch(error){
+
+    loginProcessing =
+      false;
+
+    restoreLoginButton_();
+
+    loading(false);
+
+    console.error(
+      'Firebase Login Error:',
+      error
+    );
+
+    showToast(
+      firebaseErrorMessage_(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RESTORE LOGIN BUTTON
+========================================================= */
+
+function restoreLoginButton_(){
+
+  const button =
+    $('firebaseLoginButton');
+
+  if(!button){
+    return;
+  }
+
+  button.disabled =
+    false;
+
+  button.innerHTML = `
+    <span class="google-icon">
+      G
+    </span>
+
+    <span>
+      Masuk dengan Google
+    </span>
+  `;
+
+}
+
+
+/* =========================================================
+   COMPLETE FIREBASE LOGIN
+========================================================= */
+
+async function completeFirebaseLogin_(user){
+
+  if(!user){
+
+    throw new Error(
+      'Akun Firebase tidak ditemukan.'
+    );
+
+  }
+
+
+  const requestId =
+    makeId();
+
+
+  loading(
+    true,
+    'Memverifikasi Akun',
+    'Menghubungkan akun Google dengan data pegawai...'
+  );
+
+
+  const firebaseIdToken =
+    await user.getIdToken(
+      true
+    );
+
+
+  const sent =
+    await postForm({
+
+      action:
+        'firebaseLogin',
+
+      requestId:
+        requestId,
+
+      firebaseIdToken:
+        firebaseIdToken
+
+    });
+
+
+  if(!sent){
+
+    throw new Error(
+      'Tidak dapat mengirim data login ke server.'
+    );
+
+  }
+
+
+  poll(
+    requestId,
+    result => {
+
+      loginProcessing =
+        false;
+
+      restoreLoginButton_();
+
+
+      if(
+        !result ||
+        !result.ok
+      ){
+
+        loading(false);
+
+        showToast(
+          result?.error ||
+          'Login gagal. Pastikan akun terdaftar.'
+        );
+
+        return;
+
+      }
+
+
+      sessionToken =
+        result.sessionToken ||
+        '';
+
+
+      if(!sessionToken){
+
+        loading(false);
+
+        showToast(
+          'Server tidak memberikan sesi login.'
+        );
+
+        return;
+
+      }
+
+
+      localStorage.setItem(
+        'absen_session',
+        sessionToken
+      );
+
+
+      currentUser =
+        result.user ||
+        null;
+
+
+      showApp();
+
+
+      loading(
+        true,
+        'Memuat Absensi',
+        'Menyiapkan data pegawai dan lokasi...'
+      );
+
+
+      refreshAll();
+
+
+      setTimeout(
+        () => {
+
+          loading(false);
+
+        },
+        900
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FIREBASE ERROR
+========================================================= */
+
+function firebaseErrorMessage_(error){
+
+  const code =
+    String(
+      error?.code || ''
+    );
+
+
+  const messages = {
+
+    'auth/popup-blocked':
+      'Popup login diblokir browser. Izinkan popup lalu coba lagi.',
+
+    'auth/popup-closed-by-user':
+      'Jendela login ditutup sebelum selesai.',
+
+    'auth/cancelled-popup-request':
+      'Proses login sedang berjalan.',
+
+    'auth/unauthorized-domain':
+      'Domain aplikasi belum ditambahkan ke Authorized Domains Firebase.',
+
+    'auth/operation-not-allowed':
+      'Login Google belum diaktifkan di Firebase Authentication.',
+
+    'auth/network-request-failed':
+      'Koneksi internet bermasalah. Periksa jaringan Anda.'
+
+  };
+
+
+  return (
+    messages[code] ||
+    error?.message ||
+    'Login Firebase gagal.'
+  );
+
+}
+
+
+/* =========================================================
+   ID
+========================================================= */
+
+function makeId(){
+
+  if(
+    window.crypto &&
+    crypto.randomUUID
+  ){
+
+    return crypto
+      .randomUUID()
+      .replaceAll(
+        '-',
+        ''
+      );
+
+  }
+
+
+  return (
+    Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .slice(2) +
+    Date.now().toString(36)
+  );
+
+}
+
+
+/* =========================================================
+   POST APPS SCRIPT
+========================================================= */
+
+async function postForm(fields){
+
+  const body =
+    new URLSearchParams();
+
+
+  Object.entries(fields)
+    .forEach(
+      ([key,value]) => {
+
+        body.append(
+          key,
+          value ?? ''
+        );
+
+      }
+    );
+
+
+  try{
+
+    await fetch(
+      CONFIG.WEB_APP_URL,
+      {
+
+        method:'POST',
+
+        mode:'no-cors',
+
+        headers:{
+          'Content-Type':
+            'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        body:
+          body.toString(),
+
+        redirect:'follow',
+
+        keepalive:true
+
+      }
+    );
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      'POST Apps Script gagal:',
+      error
+    );
+
+
+    try{
+
+      const form =
+        document.createElement(
+          'form'
+        );
+
+
+      form.method =
+        'POST';
+
+      form.action =
+        CONFIG.WEB_APP_URL;
+
+      form.target =
+        'postFrame';
+
+      form.style.display =
+        'none';
+
+
+      Object.entries(fields)
+        .forEach(
+          ([key,value]) => {
+
+            const input =
+              document.createElement(
+                'input'
+              );
+
+            input.type =
+              'hidden';
+
+            input.name =
+              key;
+
+            input.value =
+              value ?? '';
+
+            form.appendChild(
+              input
+            );
+
+          }
+        );
+
+
+      document.body.appendChild(
+        form
+      );
+
+
+      form.submit();
+
+
+      setTimeout(
+        () => {
+
+          try{
+            form.remove();
+          }catch(e){}
+
+        },
+        1000
+      );
+
+
+      return true;
+
+    }catch(fallbackError){
+
+      console.error(
+        'Fallback POST gagal:',
+        fallbackError
+      );
+
+      return false;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   POLL
+========================================================= */
+
+function poll(
+  requestId,
+  onDone,
+  tries=0
+){
+
+  const MAX_TRIES =
+    45;
+
+
+  const cb =
+    'cb_' +
+    makeId();
+
+
+  let finished =
+    false;
+
+
+  window[cb] =
+    function(data){
+
+      if(finished){
+        return;
+      }
+
+
+      finished =
+        true;
+
+
+      delete window[cb];
+
+
+      const oldScript =
+        document.getElementById(
+          'jsonp_' + cb
+        );
+
+
+      if(oldScript){
+        oldScript.remove();
+      }
+
+
+      if(
+        data &&
+        data.state === 'DONE'
+      ){
+
+        onDone(
+          data.result ||
+          data
+        );
+
+        return;
+
+      }
+
+
+      if(
+        data &&
+        data.state === 'NOT_FOUND'
+      ){
+
+        if(
+          tries >= MAX_TRIES
+        ){
+
+          onDone({
+
+            ok:false,
+
+            error:
+              data.error ||
+              'Request tidak ditemukan.'
+
+          });
+
+          return;
+
+        }
+
+
+        setTimeout(
+          () => {
+
+            poll(
+              requestId,
+              onDone,
+              tries + 1
+            );
+
+          },
+          700
+        );
+
+
+        return;
+
+      }
+
+
+      if(
+        tries >= MAX_TRIES
+      ){
+
+        onDone({
+
+          ok:false,
+
+          error:
+            'Waktu menunggu respons server habis.'
+
+        });
+
+        return;
+
+      }
+
+
+      setTimeout(
+        () => {
+
+          poll(
+            requestId,
+            onDone,
+            tries + 1
+          );
+
+        },
+        600
+      );
+
+    };
+
+
+  const script =
+    document.createElement(
+      'script'
+    );
+
+
+  script.id =
+    'jsonp_' + cb;
+
+
+  script.src =
+    CONFIG.WEB_APP_URL +
+    '?action=status' +
+    '&requestId=' +
+    encodeURIComponent(
+      requestId
+    ) +
+    '&callback=' +
+    encodeURIComponent(
+      cb
+    ) +
+    '&_=' +
+    Date.now();
+
+
+  script.onerror =
+    function(){
+
+      delete window[cb];
+
+      script.remove();
+
+
+      if(
+        tries >= MAX_TRIES
+      ){
+
+        onDone({
+
+          ok:false,
+
+          error:
+            'Server tidak merespons.'
+
+        });
+
+        return;
+
+      }
+
+
+      setTimeout(
+        () => {
+
+          poll(
+            requestId,
+            onDone,
+            tries + 1
+          );
+
+        },
+        800
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =========================================================
+   REQUEST
+========================================================= */
+
+function request(
+  action,
+  extra,
+  onDone
+){
+
+  const requestId =
+    makeId();
+
+
+  const payload =
+    Object.assign(
+      {
+
+        action:
+          action,
+
+        requestId:
+          requestId,
+
+        sessionToken:
+          sessionToken
+
+      },
+
+      extra || {}
+
+    );
+
+
+  const sent =
+    postForm(
+      payload
+    );
+
+
+  Promise.resolve(sent)
+    .then(
+      result => {
+
+        if(result === false){
+
+          onDone({
+
+            ok:false,
+
+            error:
+              'Gagal mengirim permintaan ke server.'
+
+          });
+
+          return;
+
+        }
+
+
+        setTimeout(
+          () => {
+
+            poll(
+              requestId,
+              onDone,
+              0
+            );
+
+          },
+          300
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SHOW APP
+========================================================= */
+
+function showApp(){
+
+  $('loginView')
+    .style.display =
+    'none';
+
+
+  $('appView')
+    .style.display =
+    'block';
+
+
+  if(currentUser){
+
+    renderUser(
+      currentUser
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER USER
+========================================================= */
+
+function renderUser(u){
+
+  if(!u){
+    return;
+  }
+
+
+  const name =
+    u.name ||
+    '-';
+
+
+  $('userName')
+    .textContent =
+    name;
+
+
+  $('userPosition')
+    .textContent =
+    [
+      u.position,
+      u.role
+    ]
+    .filter(Boolean)
+    .join(' • ') ||
+    '-';
+
+
+  $('profileName')
+    .textContent =
+    name;
+
+
+  $('profilePosition')
+    .textContent =
+    u.position ||
+    '-';
+
+
+  $('profileNip')
+    .textContent =
+    u.nip ||
+    '-';
+
+
+  $('profileEmail')
+    .textContent =
+    u.email ||
+    '-';
+
+
+  $('profileRole')
+    .textContent =
+    u.role ||
+    '-';
+
+
+  $('profileStatus')
+    .textContent =
+    u.status ||
+    '-';
+
+
+  const photo =
+    u.photo ||
+    '';
+
+
+  const avatar =
+    photo ||
+    avatarData(
+      name
+    );
+
+
+  $('avatar').src =
+    avatar;
+
+
+  $('profilePhoto').src =
+    avatar;
+
+
+  updateGreeting_();
+
+}
+
+
+/* =========================================================
+   GREETING
+========================================================= */
+
+function updateGreeting_(){
+
+  const hour =
+    Number(
+      new Intl.DateTimeFormat(
+        'en-US',
+        {
+
+          hour:'2-digit',
+
+          hour12:false,
+
+          timeZone:
+            'Asia/Jakarta'
+
+        }
+      )
+      .format(
+        new Date()
+      )
+    );
+
+
+  let greeting =
+    'Selamat Datang';
+
+
+  if(hour >= 4 && hour < 11){
+
+    greeting =
+      'Selamat Pagi';
+
+  }else if(
+    hour >= 11 &&
+    hour < 15
+  ){
+
+    greeting =
+      'Selamat Siang';
+
+  }else if(
+    hour >= 15 &&
+    hour < 18
+  ){
+
+    greeting =
+      'Selamat Sore';
+
+  }else{
+
+    greeting =
+      'Selamat Malam';
+
+  }
+
+
+  const el =
+    $('greetingText');
+
+
+  if(el){
+
+    el.textContent =
+      greeting;
+
+  }
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function avatarData(name){
+
+  const initial =
+    String(
+      name ||
+      '?'
+    )
+    .charAt(0)
+    .toUpperCase();
+
+
+  return (
+
+    'data:image/svg+xml;charset=UTF-8,' +
+
+    encodeURIComponent(
+
+      `<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="200"
+        height="200"
+      >
+
+        <rect
+          width="100%"
+          height="100%"
+          rx="45"
+          fill="#eaf3ff"
+        />
+
+        <text
+          x="50%"
+          y="58%"
+          text-anchor="middle"
+          font-family="Arial"
+          font-size="82"
+          font-weight="700"
+          fill="#1769e0"
+        >
+          ${initial}
+        </text>
+
+      </svg>`
+
+    )
+
+  );
+
+}
+
+
+/* =========================================================
+   REFRESH ALL
+========================================================= */
+
+function refreshAll(){
+
+  if(!sessionToken){
+    return;
+  }
+
+
+  getLocation(false);
+
+
+  request(
+    'profile',
+    {},
+    r => {
+
+      if(
+        r &&
+        r.ok &&
+        r.user
+      ){
+
+        currentUser =
+          r.user;
+
+        renderUser(
+          currentUser
+        );
+
+      }
+
+    }
+  );
+
+
+  request(
+    'history',
+    {
+      limit:60
+    },
+    r => {
+
+      if(
+        r &&
+        r.ok
+      ){
+
+        renderHistory(
+          r.items ||
+          []
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function getLocation(force){
+
+  if(
+    !navigator.geolocation
+  ){
+
+    $('locationText')
+      .textContent =
+      'Browser tidak mendukung GPS';
+
+    $('accuracyText')
+      .textContent =
+      'Gunakan browser yang mendukung lokasi.';
+
+    return;
+
+  }
+
+
+  $('locationText')
+    .textContent =
+    'Mengambil lokasi...';
+
+
+  $('accuracyText')
+    .textContent =
+    'Mohon izinkan lokasi pada browser.';
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    pos => {
+
+      currentLocation = {
+
+        latitude:
+          Number(
+            pos.coords.latitude
+          ),
+
+        longitude:
+          Number(
+            pos.coords.longitude
+          ),
+
+        accuracy:
+          Number(
+            pos.coords.accuracy
+          )
+
+      };
+
+
+      $('accuracyText')
+        .textContent =
+        'Akurasi GPS: ' +
+        Math.round(
+          currentLocation.accuracy
+        ) +
+        ' meter';
+
+
+      request(
+        'location',
+        {
+
+          latitude:
+            currentLocation.latitude,
+
+          longitude:
+            currentLocation.longitude
+
+        },
+        r => {
+
+          if(
+            r &&
+            r.ok
+          ){
+
+            currentLocation.district =
+              r.district ||
+              '';
+
+            currentLocation.regency =
+              r.regency ||
+              '';
+
+            currentLocation.province =
+              r.province ||
+              '';
+
+
+            const area =
+              [
+                r.district,
+                r.regency
+              ]
+              .filter(Boolean)
+              .join(', ');
+
+
+            $('locationText')
+              .textContent =
+              area ||
+              'Area lokasi belum terdeteksi.';
+
+          }else{
+
+            $('locationText')
+              .textContent =
+              'Area lokasi belum terdeteksi.';
+
+          }
+
+        }
+      );
+
+    },
+
+    err => {
+
+      currentLocation =
+        null;
+
+
+      $('locationText')
+        .textContent =
+        'Lokasi belum tersedia';
+
+
+      $('accuracyText')
+        .textContent =
+        getLocationErrorMessage_(
+          err
+        );
+
+    },
+
+    {
+
+      enableHighAccuracy:true,
+
+      timeout:15000,
+
+      maximumAge:
+        force
+          ? 0
+          : 30000
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   LOCATION ERROR
+========================================================= */
+
+function getLocationErrorMessage_(err){
+
+  if(!err){
+
+    return 'Aktifkan izin lokasi.';
+
+  }
+
+
+  if(
+    err.code === 1
+  ){
+
+    return 'Izin lokasi ditolak. Aktifkan lokasi browser.';
+
+  }
+
+
+  if(
+    err.code === 2
+  ){
+
+    return 'Lokasi tidak tersedia. Pastikan GPS aktif.';
+
+  }
+
+
+  if(
+    err.code === 3
+  ){
+
+    return 'Pengambilan lokasi terlalu lama. Coba lagi.';
+
+  }
+
+
+  return (
+    err.message ||
+    'Lokasi belum tersedia.'
+  );
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+  const dateEl =
+    $('dateText');
+
+  const clockEl =
+    $('clockText');
+
+
+  if(
+    !dateEl ||
+    !clockEl
+  ){
+
+    return;
+
+  }
+
+
+  const now =
+    new Date();
+
+
+  dateEl.textContent =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        weekday:'long',
+
+        day:'2-digit',
+
+        month:'long',
+
+        year:'numeric',
+
+        timeZone:
+          'Asia/Jakarta'
+
+      }
+    )
+    .format(now);
+
+
+  const time =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        hour:'2-digit',
+
+        minute:'2-digit',
+
+        second:'2-digit',
+
+        hour12:false,
+
+        timeZone:
+          'Asia/Jakarta'
+
+      }
+    )
+    .format(now);
+
+
+  clockEl.innerHTML =
+    escapeHtml(
+      time
+    ) +
+    ' <span>WIB</span>';
+
+
+  updateGreeting_();
+
+}
+
+
+setInterval(
+  updateClock,
+  1000
+);
+
+
+updateClock();
+
+
+/* =========================================================
+   DATE NORMALIZER
+========================================================= */
+
+function formatAttendanceTime_(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '--:--';
+
+  }
+
+
+  const raw =
+    String(value)
+      .trim();
+
+
+  const clockMatch =
+    raw.match(
+      /\b(\d{1,2}):(\d{2})(?::\d{2})?\b/
+    );
+
+
+  if(clockMatch){
+
+    return (
+      String(
+        Number(
+          clockMatch[1]
+        )
+      ).padStart(
+        2,
+        '0'
+      ) +
+      ':' +
+      clockMatch[2]
+    );
+
+  }
+
+
+  const shortMatch =
+    raw.match(
+      /^\s*(\d{1,2})[.: -](\d{2})\s*(?:WIB)?\s*$/i
+    );
+
+
+  if(shortMatch){
+
+    return (
+      String(
+        Number(
+          shortMatch[1]
+        )
+      ).padStart(
+        2,
+        '0'
+      ) +
+      ':' +
+      shortMatch[2]
+    );
+
+  }
+
+
+  const parsed =
+    new Date(
+      raw
+    );
+
+
+  if(
+    !Number.isNaN(
+      parsed.getTime()
+    )
+  ){
+
+    return new Intl.DateTimeFormat(
+      'en-GB',
+      {
+
+        timeZone:
+          'Asia/Jakarta',
+
+        hour:'2-digit',
+
+        minute:'2-digit',
+
+        hour12:false
+
+      }
+    )
+    .format(
+      parsed
+    );
+
+  }
+
+
+  return '--:--';
+
+}
+
+
+function normalizeDate_(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '';
+
+  }
+
+
+  const raw =
+    String(value)
+      .trim();
+
+
+  const iso =
+    raw.match(
+      /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
+    );
+
+
+  if(iso){
+
+    const y =
+      Number(iso[1]);
+
+    const m =
+      Number(iso[2]);
+
+    const d =
+      Number(iso[3]);
+
+
+    if(
+      m >= 1 &&
+      m <= 12 &&
+      d >= 1 &&
+      d <= 31
+    ){
+
+      return (
+        y +
+        '-' +
+        String(m).padStart(2,'0') +
+        '-' +
+        String(d).padStart(2,'0')
+      );
+
+    }
+
+  }
+
+
+  const numeric =
+    raw.match(
+      /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/
+    );
+
+
+  if(numeric){
+
+    let a =
+      Number(
+        numeric[1]
+      );
+
+    let b =
+      Number(
+        numeric[2]
+      );
+
+    const y =
+      Number(
+        numeric[3]
+      );
+
+
+    let day =
+      a;
+
+    let month =
+      b;
+
+
+    if(
+      a <= 12 &&
+      b > 12
+    ){
+
+      month =
+        a;
+
+      day =
+        b;
+
+    }
+
+
+    if(
+      month >= 1 &&
+      month <= 12 &&
+      day >= 1 &&
+      day <= 31
+    ){
+
+      return (
+        y +
+        '-' +
+        String(month).padStart(2,'0') +
+        '-' +
+        String(day).padStart(2,'0')
+      );
+
+    }
+
+  }
+
+
+  const parsed =
+    new Date(
+      raw
+    );
+
+
+  if(
+    !Number.isNaN(
+      parsed.getTime()
+    )
+  ){
+
+    const parts =
+      new Intl.DateTimeFormat(
+        'en-GB',
+        {
+
+          timeZone:
+            'Asia/Jakarta',
+
+          year:'numeric',
+
+          month:'2-digit',
+
+          day:'2-digit'
+
+        }
+      )
+      .formatToParts(
+        parsed
+      );
+
+
+    const get =
+      type =>
+        parts.find(
+          x =>
+            x.type === type
+        )?.value || '';
+
+
+    if(
+      get('year') &&
+      get('month') &&
+      get('day')
+    ){
+
+      return (
+        get('year') +
+        '-' +
+        get('month') +
+        '-' +
+        get('day')
+      );
+
+    }
+
+  }
+
+
+  return raw.slice(
+    0,
+    10
+  );
+
+}
+
+
+/* =========================================================
+   TODAY
+========================================================= */
+
+function jakartaToday_(){
+
+  const parts =
+    new Intl.DateTimeFormat(
+      'en-GB',
+      {
+
+        timeZone:
+          'Asia/Jakarta',
+
+        year:'numeric',
+
+        month:'2-digit',
+
+        day:'2-digit'
+
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+
+  const get =
+    type =>
+      parts.find(
+        x =>
+          x.type === type
+      )?.value || '';
+
+
+  return (
+    get('year') +
+    '-' +
+    get('month') +
+    '-' +
+    get('day')
+  );
+
+}
+
+
+/* =========================================================
+   DISPLAY DATE
+========================================================= */
+
+function getDisplayDate_(value){
+
+  const normalized =
+    normalizeDate_(
+      value
+    );
+
+
+  if(!normalized){
+
+    return {
+      day:'-',
+      date:'-'
+    };
+
+  }
+
+
+  const match =
+    normalized.match(
+      /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+
+  if(!match){
+
+    return {
+      day:'-',
+      date:String(
+        value ||
+        '-'
+      )
+    };
+
+  }
+
+
+  const year =
+    Number(
+      match[1]
+    );
+
+  const month =
+    Number(
+      match[2]
+    );
+
+  const day =
+    Number(
+      match[3]
+    );
+
+
+  const d =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        day
+      )
+    );
+
+
+  const dayName =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        weekday:'long',
+
+        timeZone:'UTC'
+
+      }
+    )
+    .format(d);
+
+
+  const longDate =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        day:'2-digit',
+
+        month:'long',
+
+        year:'numeric',
+
+        timeZone:'UTC'
+
+      }
+    )
+    .format(d);
+
+
+  return {
+
+    day:
+      dayName,
+
+    date:
+      longDate
+
+  };
+
+}
+
+
+/* =========================================================
+   ATTENDANCE TYPE
+========================================================= */
+
+function attendanceTypeInfo_(type){
+
+  const t =
+    String(
+      type ||
+      ''
+    )
+    .trim()
+    .toUpperCase();
+
+
+  if(
+    t === 'MASUK'
+  ){
+
+    return {
+
+      label:
+        'Absen Masuk',
+
+      icon:
+        'login',
+
+      className:
+        'masuk'
+
+    };
+
+  }
+
+
+  if(
+    t === 'PULANG'
+  ){
+
+    return {
+
+      label:
+        'Absen Pulang',
+
+      icon:
+        'logout',
+
+      className:
+        'pulang'
+
+    };
+
+  }
+
+
+  return {
+
+    label:
+      type ||
+      'Absensi',
+
+    icon:
+      'check_circle',
+
+    className:
+      'masuk'
+
+  };
+
+}
+
+
+/* =========================================================
+   TODAY CARD
+========================================================= */
+
+function renderTodayAttendanceCard_(item){
+
+  const typeInfo =
+    attendanceTypeInfo_(
+      item.type
+    );
+
+
+  const dateInfo =
+    getDisplayDate_(
+      item.date
+    );
+
+
+  const location =
+    [
+      item.district,
+      item.regency
+    ]
+    .filter(Boolean)
+    .join(', ');
+
+
+  const distance =
+    item.distance !== undefined &&
+    item.distance !== null &&
+    item.distance !== '' &&
+    isFinite(
+      Number(
+        item.distance
+      )
+    )
+      ? (
+          Math.round(
+            Number(
+              item.distance
+            )
+          ) +
+          ' meter dari titik kantor'
+        )
+      : 'Jarak tidak tersedia';
+
+
+  return `
+
+    <div class="today-card ${typeInfo.className}">
+
+      <div class="today-head">
+
+        <div class="today-title">
+
+          <div class="today-type-icon">
+
+            <span class="material-symbols-rounded">
+              ${escapeHtml(typeInfo.icon)}
+            </span>
+
+          </div>
+
+          <span>
+            ${escapeHtml(typeInfo.label)}
+          </span>
+
+        </div>
+
+        <span class="today-status">
+          Tercatat
+        </span>
+
+      </div>
+
+
+      <div class="today-grid">
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Hari
+          </div>
+
+          <div class="today-value">
+            ${escapeHtml(dateInfo.day)}
+          </div>
+
+        </div>
+
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Tanggal
+          </div>
+
+          <div class="today-value">
+            ${escapeHtml(dateInfo.date)}
+          </div>
+
+        </div>
+
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Jam
+          </div>
+
+          <div class="today-value today-time">
+            ${escapeHtml(
+              formatAttendanceTime_(
+                item.time
+              )
+            )}
+            WIB
+          </div>
+
+        </div>
+
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Status
+          </div>
+
+          <div class="today-value">
+            ${escapeHtml(
+              typeInfo.label
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="today-info full">
+
+          <div class="today-label">
+            Lokasi
+          </div>
+
+          <div class="today-value today-location">
+
+            <span class="material-symbols-rounded">
+              location_on
+            </span>
+
+            <span>
+
+              ${
+                escapeHtml(
+                  location ||
+                  'Lokasi tercatat'
+                )
+              }
+
+              <div class="today-distance">
+                ${escapeHtml(distance)}
+              </div>
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY
+========================================================= */
+
+function renderHistory(items){
+
+  items =
+    Array.isArray(items)
+      ? items
+      : [];
+
+
+  const today =
+    jakartaToday_();
+
+
+  const todayItems =
+    items
+      .filter(
+        x =>
+          normalizeDate_(
+            x.date
+          ) === today
+      )
+      .sort(
+        (a,b) =>
+          String(
+            a.time ||
+            ''
+          )
+          .localeCompare(
+            String(
+              b.time ||
+              ''
+            )
+          )
+      );
+
+
+  const masuk =
+    todayItems.find(
+      x =>
+        String(
+          x.type ||
+          ''
+        )
+        .toUpperCase() ===
+        'MASUK'
+    );
+
+
+  const pulang =
+    todayItems.find(
+      x =>
+        String(
+          x.type ||
+          ''
+        )
+        .toUpperCase() ===
+        'PULANG'
+    );
+
+
+  $('btnMasuk').disabled =
+    !!masuk;
+
+
+  $('btnPulang').disabled =
+    !masuk ||
+    !!pulang;
+
+
+  if(
+    masuk &&
+    masuk.time
+  ){
+
+    $('arrivalTime').innerHTML =
+      escapeHtml(
+        formatAttendanceTime_(
+          masuk.time
+        )
+      ) +
+      ' <span>WIB</span>';
+
+  }else{
+
+    $('arrivalTime').innerHTML =
+      '--:-- <span>WIB</span>';
+
+  }
+
+
+  const badge =
+    $('statusBadge');
+
+
+  if(
+    masuk &&
+    pulang
+  ){
+
+    badge.textContent =
+      'Absensi Lengkap';
+
+    badge.className =
+      'status-badge ok';
+
+
+    $('statusSymbol').innerHTML = `
+      <span class="material-symbols-rounded">
+        check_circle
+      </span>
+    `;
+
+  }else if(masuk){
+
+    badge.textContent =
+      'Sudah Absen Masuk';
+
+    badge.className =
+      'status-badge ok';
+
+
+    $('statusSymbol').innerHTML = `
+      <span class="material-symbols-rounded">
+        check_circle
+      </span>
+    `;
+
+  }else{
+
+    badge.textContent =
+      'Belum Absen';
+
+    badge.className =
+      'status-badge';
+
+
+    $('statusSymbol').innerHTML = `
+      <span class="material-symbols-rounded">
+        login
+      </span>
+    `;
+
+  }
+
+
+  if(
+    todayItems.length
+  ){
+
+    $('todayHistory').innerHTML =
+      todayItems
+        .map(
+          item =>
+            renderTodayAttendanceCard_(
+              item
+            )
+        )
+        .join('');
+
+  }else{
+
+    $('todayHistory').innerHTML = `
+
+      <div class="empty-today">
+
+        <span class="material-symbols-rounded">
+          event_available
+        </span>
+
+        Belum ada absensi hari ini.
+
+        <br>
+
+        Silakan lakukan Absen Masuk.
+
+      </div>
+
+    `;
+
+  }
+
+
+  if(
+    items.length
+  ){
+
+    $('historyList').innerHTML =
+      items
+        .map(
+          x => {
+
+            const dateInfo =
+              getDisplayDate_(
+                x.date
+              );
+
+
+            const location =
+              [
+                x.district,
+                x.regency
+              ]
+              .filter(Boolean)
+              .join(', ');
+
+
+            const distance =
+              x.distance !== undefined &&
+              x.distance !== null &&
+              x.distance !== '' &&
+              isFinite(
+                Number(
+                  x.distance
+                )
+              )
+                ? (
+                    Math.round(
+                      Number(
+                        x.distance
+                      )
+                    ) +
+                    ' m'
+                  )
+                : '';
+
+
+            const typeInfo =
+              attendanceTypeInfo_(
+                x.type
+              );
+
+
+            return `
+
+              <div class="history-item">
+
+                <div class="history-date-icon">
+
+                  <span class="material-symbols-rounded">
+                    ${escapeHtml(typeInfo.icon)}
+                  </span>
+
+                </div>
+
+
+                <div class="history-main">
+
+                  <div class="history-date">
+
+                    ${escapeHtml(
+                      dateInfo.date
+                    )}
+
+                  </div>
+
+                  <div class="history-detail">
+
+                    ${escapeHtml(
+                      dateInfo.day
+                    )}
+
+                    •
+
+                    ${escapeHtml(
+                      typeInfo.label
+                    )}
+
+                    ${
+                      location
+                        ? ' • ' +
+                          escapeHtml(
+                            location
+                          )
+                        : ''
+                    }
+
+                  </div>
+
+                </div>
+
+
+                <div class="history-right">
+
+                  <div class="history-time">
+
+                    ${escapeHtml(
+                      formatAttendanceTime_(
+                        x.time
+                      )
+                    )}
+
+                    WIB
+
+                  </div>
+
+                  <div class="history-distance">
+
+                    ${escapeHtml(
+                      distance
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join('');
+
+  }else{
+
+    $('historyList').innerHTML = `
+
+      <div class="empty-today">
+
+        <span class="material-symbols-rounded">
+          history
+        </span>
+
+        Belum ada riwayat absensi.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(
+    value ??
+    ''
+  )
+  .replace(
+    /[&<>"']/g,
+    char =>
+      ({
+
+        '&':
+          '&amp;',
+
+        '<':
+          '&lt;',
+
+        '>':
+          '&gt;',
+
+        '"':
+          '&quot;',
+
+        "'":
+          '&#039;'
+
+      })[char]
+  );
+
+}
+
+
+/* =========================================================
+   OPEN CAMERA
+========================================================= */
+
+async function openCamera(type){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !currentLocation
+  ){
+
+    getLocation(true);
+
+    showToast(
+      'Lokasi sedang diambil. Tunggu sampai lokasi tersedia.'
+    );
+
+    return;
+
+  }
+
+
+  attendanceType =
+    String(
+      type ||
+      'MASUK'
+    )
+    .toUpperCase();
+
+
+  capturedDataUrl =
+    '';
+
+
+  $('cameraTitle')
+    .textContent =
+    attendanceType === 'MASUK'
+      ? 'Absen Masuk'
+      : 'Absen Pulang';
+
+
+  resetCameraUI_();
+
+
+  $('cameraModal')
+    .classList.add(
+      'show'
+    );
+
+
+  document.body.style.overflow =
+    'hidden';
+
+
+  try{
+
+    await startCamera();
+
+  }catch(error){
+
+    console.error(
+      'Camera error:',
+      error
+    );
+
+
+    closeCamera();
+
+
+    showToast(
+      'Kamera tidak dapat dibuka. Pastikan izin kamera diberikan.'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RESET CAMERA UI
+========================================================= */
+
+function resetCameraUI_(){
+
+  const video =
+    $('video');
+
+  const preview =
+    $('preview');
+
+  const capture =
+    $('captureBtn');
+
+  const submit =
+    $('submitPhotoBtn');
+
+  const switchButton =
+    $('switchCameraBtn');
+
+
+  if(video){
+
+    video.style.display =
+      'block';
+
+  }
+
+
+  if(preview){
+
+    preview.style.display =
+      'none';
+
+    preview.removeAttribute(
+      'src'
+    );
+
+  }
+
+
+  if(capture){
+
+    capture.disabled =
+      false;
+
+    capture.innerHTML = `
+      <span class="material-symbols-rounded">
+        photo_camera
+      </span>
+      Ambil Foto
+    `;
+
+  }
+
+
+  if(submit){
+
+    submit.disabled =
+      false;
+
+    submit.style.display =
+      'none';
+
+    submit.innerHTML = `
+      <span class="material-symbols-rounded">
+        how_to_reg
+      </span>
+      Gunakan Foto & Absen
+    `;
+
+  }
+
+
+  if(switchButton){
+
+    switchButton.disabled =
+      false;
+
+    switchButton.innerHTML = `
+      <span class="material-symbols-rounded">
+        flip_camera_android
+      </span>
+      Ganti Kamera
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   START CAMERA
+========================================================= */
+
+async function startCamera(){
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    throw new Error(
+      'Browser tidak mendukung kamera.'
+    );
+
+  }
+
+
+  stopCamera();
+
+
+  let constraints = {
+
+    video:{
+
+      facingMode:{
+        ideal:
+          facingMode
+      },
+
+      width:{
+        ideal:1280
+      },
+
+      height:{
+        ideal:1280
+      }
+
+    },
+
+    audio:false
+
+  };
+
+
+  try{
+
+    cameraStream =
+      await navigator.mediaDevices
+        .getUserMedia(
+          constraints
+        );
+
+  }catch(firstError){
+
+    console.warn(
+      'Kamera utama gagal:',
+      firstError
+    );
+
+
+    try{
+
+      cameraStream =
+        await navigator.mediaDevices
+          .getUserMedia({
+
+            video:{
+              facingMode:
+                facingMode
+            },
+
+            audio:false
+
+          });
+
+    }catch(secondError){
+
+      console.warn(
+        'Fallback kamera gagal:',
+        secondError
+      );
+
+
+      cameraStream =
+        await navigator.mediaDevices
+          .getUserMedia({
+
+            video:true,
+
+            audio:false
+
+          });
+
+    }
+
+  }
+
+
+  const video =
+    $('video');
+
+
+  video.srcObject =
+    cameraStream;
+
+
+  video.muted =
+    true;
+
+
+  video.playsInline =
+    true;
+
+
+  try{
+
+    await video.play();
+
+  }catch(error){
+
+    console.warn(
+      'Video play:',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   STOP CAMERA
+========================================================= */
+
+function stopCamera(){
+
+  if(cameraStream){
+
+    cameraStream
+      .getTracks()
+      .forEach(
+        track => {
+
+          try{
+
+            track.stop();
+
+          }catch(error){}
+
+        }
+      );
+
+
+    cameraStream =
+      null;
+
+  }
+
+
+  const video =
+    $('video');
+
+
+  if(video){
+
+    try{
+
+      video.pause();
+
+    }catch(error){}
+
+
+    video.srcObject =
+      null;
+
+  }
+
+}
+
+
+/* =========================================================
+   SWITCH CAMERA
+========================================================= */
+
+async function switchCamera(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  const previous =
+    facingMode;
+
+
+  facingMode =
+    facingMode === 'user'
+      ? 'environment'
+      : 'user';
+
+
+  const button =
+    $('switchCameraBtn');
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.innerHTML = `
+      <span class="material-symbols-rounded">
+        progress_activity
+      </span>
+      Membuka...
+    `;
+
+  }
+
+
+  try{
+
+    await startCamera();
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    facingMode =
+      previous;
+
+
+    showToast(
+      'Kamera tidak tersedia.'
+    );
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.innerHTML = `
+        <span class="material-symbols-rounded">
+          flip_camera_android
+        </span>
+        Ganti Kamera
+      `;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   CAPTURE PHOTO
+========================================================= */
+
+function capturePhoto(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  const video =
+    $('video');
+
+  const canvas =
+    $('canvas');
+
+
+  if(
+    !video ||
+    !canvas
+  ){
+
+    showToast(
+      'Komponen kamera belum siap.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !video.videoWidth ||
+    !video.videoHeight
+  ){
+
+    showToast(
+      'Kamera belum siap. Tunggu sebentar.'
+    );
+
+    return;
+
+  }
+
+
+  const maxWidth =
+    800;
+
+
+  const sourceWidth =
+    video.videoWidth;
+
+
+  const sourceHeight =
+    video.videoHeight;
+
+
+  const ratio =
+    sourceHeight /
+    sourceWidth;
+
+
+  const width =
+    Math.min(
+      maxWidth,
+      sourceWidth
+    );
+
+
+  const height =
+    Math.round(
+      width *
+      ratio
+    );
+
+
+  canvas.width =
+    width;
+
+  canvas.height =
+    height;
+
+
+  const ctx =
+    canvas.getContext(
+      '2d',
+      {
+        alpha:false
+      }
+    );
+
+
+  if(!ctx){
+
+    showToast(
+      'Canvas kamera tidak tersedia.'
+    );
+
+    return;
+
+  }
+
+
+  ctx.imageSmoothingEnabled =
+    true;
+
+
+  ctx.imageSmoothingQuality =
+    'high';
+
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  const MAX_CLIENT_BYTES =
+    600 *
+    1024;
+
+
+  let quality =
+    0.80;
+
+
+  let dataUrl =
+    '';
+
+
+  for(
+    let i = 0;
+    i < 10;
+    i++
+  ){
+
+    dataUrl =
+      canvas.toDataURL(
+        'image/jpeg',
+        quality
+      );
+
+
+    const estimatedBytes =
+      Math.floor(
+        dataUrl.length *
+        0.75
+      );
+
+
+    if(
+      estimatedBytes <=
+      MAX_CLIENT_BYTES
+    ){
+
+      break;
+
+    }
+
+
+    quality -=
+      0.06;
+
+
+    if(
+      quality < 0.35
+    ){
+
+      quality =
+        0.35;
+
+    }
+
+  }
+
+
+  /*
+   * VALIDASI FOTO
+   */
+
+  const validPhoto =
+    /^data:image\/[^;]+;base64,/i
+      .test(
+        String(
+          dataUrl ||
+          ''
+        )
+      );
+
+
+  if(!validPhoto){
+
+    showToast(
+      'Foto gagal diproses. Silakan ambil foto lagi.'
+    );
+
+    return;
+
+  }
+
+
+  const finalPhoto =
+    String(
+      dataUrl
+    )
+    .trim();
+
+
+  if(
+    !finalPhoto ||
+    finalPhoto.length < 100
+  ){
+
+    showToast(
+      'Foto belum berhasil disimpan.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * PENTING:
+   * Simpan hasil foto ke GLOBAL.
+   */
+
+  capturedDataUrl =
+    finalPhoto;
+
+
+  /*
+   * PREVIEW
+   */
+
+  $('preview').src =
+    capturedDataUrl;
+
+
+  $('video').style.display =
+    'none';
+
+
+  $('preview').style.display =
+    'block';
+
+
+  $('captureBtn').innerHTML = `
+    <span class="material-symbols-rounded">
+      replay
+    </span>
+    Ambil Ulang
+  `;
+
+
+  $('submitPhotoBtn').style.display =
+    'flex';
+
+
+  /*
+   * Kamera boleh tetap hidup
+   * sampai user submit/close.
+   */
+
+  showToast(
+    'Foto berhasil diambil. Periksa foto lalu tekan Gunakan Foto & Absen.'
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE CAMERA
+========================================================= */
+
+function closeCamera(){
+
+  stopCamera();
+
+
+  $('cameraModal')
+    .classList.remove(
+      'show'
+    );
+
+
+  document.body.style.overflow =
+    '';
+
+}
+
+
+/* =========================================================
+   SUBMIT ATTENDANCE
+========================================================= */
+
+function submitAttendance(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  /*
+   * =====================================================
+   * FOTO DIAMBIL DARI GLOBAL TERLEBIH DAHULU
+   * =====================================================
+   */
+
+  const photoToSend =
+    String(
+      capturedDataUrl ||
+      ''
+    )
+    .trim();
+
+
+  /*
+   * =====================================================
+   * VALIDASI FOTO BASE64
+   * =====================================================
+   */
+
+  const validPhoto =
+    /^data:image\/[^;]+;base64,/i
+      .test(
+        photoToSend
+      );
+
+
+  if(
+    !photoToSend ||
+    !validPhoto
+  ){
+
+    showToast(
+      'Foto selfie belum siap. Silakan ambil foto terlebih dahulu.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * =====================================================
+   * VALIDASI LOKASI
+   * =====================================================
+   */
+
+  const locationToSend =
+    currentLocation
+      ? {
+
+          latitude:
+            Number(
+              currentLocation.latitude
+            ),
+
+          longitude:
+            Number(
+              currentLocation.longitude
+            ),
+
+          accuracy:
+            Number(
+              currentLocation.accuracy
+            )
+
+        }
+      : null;
+
+
+  if(
+    !locationToSend ||
+
+    !isFinite(
+      locationToSend.latitude
+    ) ||
+
+    !isFinite(
+      locationToSend.longitude
+    ) ||
+
+    !isFinite(
+      locationToSend.accuracy
+    )
+  ){
+
+    showToast(
+      'Lokasi GPS belum siap. Tunggu sampai lokasi tersedia.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    locationToSend.accuracy <= 0
+  ){
+
+    showToast(
+      'Akurasi GPS belum valid. Silakan tunggu sebentar.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * =====================================================
+   * SIMPAN TIPE
+   * =====================================================
+   */
+
+  const typeToSend =
+    attendanceType;
+
+
+  attendanceProcessing =
+    true;
+
+
+  const submitButton =
+    $('submitPhotoBtn');
+
+  const captureButton =
+    $('captureBtn');
+
+  const switchButton =
+    $('switchCameraBtn');
+
+
+  if(submitButton){
+
+    submitButton.disabled =
+      true;
+
+    submitButton.innerHTML = `
+      <span class="material-symbols-rounded">
+        progress_activity
+      </span>
+      Menyimpan Absensi...
+    `;
+
+  }
+
+
+  if(captureButton){
+
+    captureButton.disabled =
+      true;
+
+  }
+
+
+  if(switchButton){
+
+    switchButton.disabled =
+      true;
+
+  }
+
+
+  /*
+   * =====================================================
+   * SIMPAN FOTO LOKAL TERLEBIH DAHULU
+   * =====================================================
+   */
+
+  const photoBackup =
+    photoToSend;
+
+
+  /*
+   * Tutup kamera.
+   *
+   * capturedDataUrl TIDAK DIHAPUS.
+   */
+
+  closeCamera();
+
+
+  loading(
+    true,
+    'Menyimpan Absensi',
+    'Mengirim foto, lokasi, dan data absensi...'
+  );
+
+
+  request(
+    'attendance',
+    {
+
+      type:
+        typeToSend,
+
+      latitude:
+        locationToSend.latitude,
+
+      longitude:
+        locationToSend.longitude,
+
+      accuracy:
+        locationToSend.accuracy,
+
+      photo:
+        photoToSend
+
+    },
+    r => {
+
+      loading(false);
+
+
+      attendanceProcessing =
+        false;
+
+
+      /*
+       * =================================================
+       * GAGAL
+       * =================================================
+       */
+
+      if(
+        !r ||
+        !r.ok
+      ){
+
+        /*
+         * FOTO TETAP DISIMPAN.
+         */
+
+        capturedDataUrl =
+          photoBackup;
+
+
+        showToast(
+          r?.error ||
+          'Absen gagal. Silakan coba lagi.'
+        );
+
+
+        /*
+         * Pulihkan tombol.
+         */
+
+        restoreCameraAfterSubmitError_();
+
+
+        /*
+         * Buka modal kembali dalam mode preview.
+         */
+
+        $('preview').src =
+          capturedDataUrl;
+
+
+        $('preview').style.display =
+          'block';
+
+
+        $('video').style.display =
+          'none';
+
+
+        $('submitPhotoBtn').style.display =
+          'flex';
+
+
+        $('cameraModal')
+          .classList.add(
+            'show'
+          );
+
+
+        document.body.style.overflow =
+          'hidden';
+
+
+        return;
+
+      }
+
+
+      /*
+       * =================================================
+       * BERHASIL
+       * =================================================
+       */
+
+      $('resultTime')
+        .textContent =
+        (
+          r.time ||
+          formatAttendanceTime_(
+            new Date()
+          )
+        ) +
+        ' WIB';
+
+
+      $('resultDate')
+        .textContent =
+        r.date ||
+        '-';
+
+
+      $('resultLoc')
+        .textContent =
+        [
+          r.district,
+          r.regency
+        ]
+        .filter(Boolean)
+        .join(', ') ||
+        'Lokasi tercatat';
+
+
+      $('resultPhoto')
+        .src =
+        photoBackup;
+
+
+      $('resultModal')
+        .classList.add(
+          'show'
+        );
+
+
+      document.body.style.overflow =
+        'hidden';
+
+
+      /*
+       * Foto baru boleh dihapus
+       * setelah server sukses.
+       */
+
+      capturedDataUrl =
+        '';
+
+
+      /*
+       * Refresh data.
+       */
+
+      refreshAll();
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RESTORE CAMERA AFTER ERROR
+========================================================= */
+
+function restoreCameraAfterSubmitError_(){
+
+  const submit =
+    $('submitPhotoBtn');
+
+  const capture =
+    $('captureBtn');
+
+  const switchButton =
+    $('switchCameraBtn');
+
+
+  if(submit){
+
+    submit.disabled =
+      false;
+
+    submit.innerHTML = `
+      <span class="material-symbols-rounded">
+        how_to_reg
+      </span>
+      Gunakan Foto & Absen
+    `;
+
+  }
+
+
+  if(capture){
+
+    capture.disabled =
+      false;
+
+    capture.innerHTML = `
+      <span class="material-symbols-rounded">
+        replay
+      </span>
+      Ambil Ulang
+    `;
+
+  }
+
+
+  if(switchButton){
+
+    switchButton.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   CLOSE RESULT
+========================================================= */
+
+function closeResult(){
+
+  $('resultModal')
+    .classList.remove(
+      'show'
+    );
+
+
+  document.body.style.overflow =
+    '';
+
+
+  showPage(
+    'home'
+  );
+
+
+  refreshAll();
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(page){
+
+  [
+    'home',
+    'history',
+    'profile'
+  ]
+  .forEach(
+    p => {
+
+      const pageEl =
+        $(p + 'Page');
+
+
+      if(pageEl){
+
+        pageEl.classList.toggle(
+          'active',
+          p === page
+        );
+
+      }
+
+    }
+  );
+
+
+  [
+    'Home',
+    'History',
+    'Profile'
+  ]
+  .forEach(
+    p => {
+
+      const navEl =
+        $('nav' + p);
+
+
+      if(navEl){
+
+        navEl.classList.toggle(
+          'active',
+          p.toLowerCase() === page
+        );
+
+      }
+
+    }
+  );
+
+
+  window.scrollTo({
+
+    top:0,
+
+    behavior:
+      'smooth'
+
+  });
+
+
+  if(
+    page === 'history'
+  ){
+
+    request(
+      'history',
+      {
+        limit:60
+      },
+      r => {
+
+        if(
+          r &&
+          r.ok
+        ){
+
+          renderHistory(
+            r.items ||
+            []
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    showToast(
+      'Tunggu proses absensi selesai.'
+    );
+
+    return;
+
+  }
+
+
+  loading(
+    true,
+    'Keluar dari Aplikasi',
+    'Mengakhiri sesi login...'
+  );
+
+
+  const tokenBeforeLogout = sessionToken;
+
+  try{
+
+    if(tokenBeforeLogout){
+      await new Promise(resolve => {
+        request(
+          'logout',
+          {},
+          () => resolve()
+        );
+      });
+    }
+
+  }catch(error){
+
+    console.warn(
+      'Server logout:',
+      error
+    );
+
+  }
+
+
+  try{
+
+    if(
+      firebaseAuth
+    ){
+
+      const {
+        signOut
+      } =
+        await import(
+          'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+        );
+
+
+      await signOut(
+        firebaseAuth
+      );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      'Firebase signOut:',
+      error
+    );
+
+  }
+
+
+  localStorage.removeItem(
+    'absen_session'
+  );
+
+
+  sessionToken =
+    '';
+
+
+  currentUser =
+    null;
+
+
+  capturedDataUrl =
+    '';
+
+
+  stopCamera();
+
+
+  window.location.reload();
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+window.addEventListener(
+  'load',
+  async () => {
+
+    /*
+     * Loading sejak awal.
+     */
+
+    loading(
+      true,
+      'Menyiapkan Aplikasi',
+      'Memuat sistem absensi...'
+    );
+
+
+    /*
+     * Firebase.
+     */
+
+    await initFirebase();
+
+
+    /*
+     * Session lama.
+     */
+
+    if(
+      sessionToken
+    ){
+
+      showApp();
+
+
+      loading(
+        true,
+        'Memuat Absensi',
+        'Memeriksa sesi login Anda...'
+      );
+
+
+      setTimeout(
+        () => {
+
+          refreshAll();
+
+
+          setTimeout(
+            () => {
+
+              loading(false);
+
+            },
+            700
+          );
+
+        },
+        200
+      );
+
+    }else{
+
+      loading(false);
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   CAMERA MODAL BACKDROP
+========================================================= */
+
+$('cameraModal')
+  .addEventListener(
+    'click',
+    event => {
+
+      if(
+        event.target ===
+        $('cameraModal')
+      ){
+
+        closeCamera();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   RESULT MODAL BACKDROP
+========================================================= */
+
+$('resultModal')
+  .addEventListener(
+    'click',
+    event => {
+
+      if(
+        event.target ===
+        $('resultModal')
+      ){
+
+        closeResult();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   VISIBILITY
+========================================================= */
+
+document.addEventListener(
+  'visibilitychange',
+  () => {
+
+    if(
+      document.visibilityState ===
+      'visible'
+    ){
+
+      updateClock();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   BEFORE UNLOAD
+========================================================= */
+
+window.addEventListener(
+  'beforeunload',
+  () => {
+
+    stopCamera();
+
+  }
+);
+
+
+/* =========================================================
+   PREVENT HORIZONTAL GESTURE
+========================================================= */
+
+document.addEventListener(
+  'touchstart',
+  () => {},
+  {
+    passive:true
+  }
+);
+
+
+
+/* =========================================================
+   GLOBAL HANDLERS FOR HTML ONCLICK
+========================================================= */
+window.loginWithFirebase = loginWithFirebase;
+window.logout = logout;
+window.openCamera = openCamera;
+window.closeCamera = closeCamera;
+window.capturePhoto = capturePhoto;
+window.submitAttendance = submitAttendance;
+window.switchCamera = switchCamera;
+window.closeResult = closeResult;
+window.showPage = showPage;
+window.getLocation = getLocation;
+window.setRequestType = setRequestType;
+window.submitRequestForm = submitRequestForm;
+
+</script>
 
 </body>
 </html>
