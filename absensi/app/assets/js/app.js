@@ -1,1908 +1,110 @@
+
 /* =========================================================
-   ABSENSI PEGAWAI - APP.JS
-   Firebase Authentication + Google Apps Script
+   GLOBAL STATE
 ========================================================= */
 
 let sessionToken =
-  localStorage.getItem('absen_session') || '';
-
-let currentUser = null;
-let currentLocation = null;
-let cameraStream = null;
-let facingMode = 'user';
-let attendanceType = 'MASUK';
-let capturedDataUrl = '';
-let loginProcessing = false;
-let attendanceProcessing = false;
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-
-  console.log('Absensi Pegawai initialized');
-
-  initializeFirebase();
-
-  updateDateTime();
-
-  setInterval(updateDateTime, 1000);
-
-  if (sessionToken) {
-    restoreSession();
-  } else {
-    showLogin();
-  }
-
-});
-
-
-/* =========================================================
-   FIREBASE INITIALIZATION
-========================================================= */
-
-function initializeFirebase() {
-
-  try {
-
-    if (!window.firebase) {
-      console.error('Firebase SDK belum dimuat.');
-      return;
-    }
-
-    if (!firebase.apps.length) {
-
-      firebase.initializeApp(
-        CONFIG.FIREBASE_CONFIG
-      );
-
-    }
-
-    console.log(
-      'Firebase initialized:',
-      CONFIG.FIREBASE_CONFIG.projectId
-    );
-
-  } catch (error) {
-
-    console.error(
-      'Firebase initialization error:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOGIN GOOGLE
-========================================================= */
-
-async function loginWithFirebase() {
-
-  if (loginProcessing) {
-    return;
-  }
-
-  loginProcessing = true;
-
-  const button =
-    document.getElementById(
-      'firebaseLoginButton'
-    );
-
-  try {
-
-    if (!window.firebase) {
-      throw new Error(
-        'Firebase SDK belum dimuat.'
-      );
-    }
-
-    if (!firebase.apps.length) {
-      initializeFirebase();
-    }
-
-    if (button) {
-
-      button.disabled = true;
-
-      button.innerHTML = `
-        <span class="google-icon">G</span>
-        <span>Memproses login...</span>
-      `;
-
-    }
-
-    const provider =
-      new firebase.auth.GoogleAuthProvider();
-
-    provider.setCustomParameters({
-      prompt: 'select_account'
-    });
-
-    showLoading(
-      'Login...',
-      'Menghubungkan dengan akun Google.'
-    );
-
-    const result =
-      await firebase.auth()
-        .signInWithPopup(provider);
-
-    const user = result.user;
-
-    if (!user || !user.email) {
-      throw new Error(
-        'Email akun Google tidak ditemukan.'
-      );
-    }
-
-    console.log(
-      'Google login berhasil:',
-      user.email
-    );
-
-    /*
-      Setelah Firebase berhasil,
-      cek user ke Google Apps Script.
-    */
-
-    showLoading(
-      'Memeriksa akun...',
-      'Memverifikasi data pegawai.'
-    );
-
-    const response =
-      const firebaseIdToken =
-  await user.getIdToken(true);
-
-const response =
-  await apiRequest(
-    'firebaseLogin',
-    {
-      firebaseIdToken
-    }
-  );
-
-    console.log(
-      'Response login:',
-      response
-    );
-
-    if (!response) {
-      throw new Error(
-        'Server tidak memberikan respons.'
-      );
-    }
-
-    if (
-      response.success === false ||
-      response.status === false
-    ) {
-
-      throw new Error(
-        response.message ||
-        'Akun tidak dapat digunakan.'
-      );
-
-    }
-
-    /*
-      Simpan session.
-    */
-
-    sessionToken =
-      response.token ||
-      response.sessionToken ||
-      response.data?.token ||
-      response.data?.sessionToken ||
-      '';
-
-    if (sessionToken) {
-
-      localStorage.setItem(
-        'absen_session',
-        sessionToken
-      );
-
-    }
-
-    currentUser =
-      response.user ||
-      response.data ||
-      {
-        email: user.email,
-        nama:
-          user.displayName ||
-          user.email,
-        photo:
-          user.photoURL ||
-          ''
-      };
-
-    localStorage.setItem(
-      'absen_user',
-      JSON.stringify(currentUser)
-    );
-
-    hideLoading();
-
-    showApp();
-
-    await loadUserData();
-
-    await getLocation(false);
-
-    await loadTodayHistory();
-
-    await loadHistory();
-
-    await loadRequests();
-
-    await loadAssignments();
-
-    showToast(
-      'Login berhasil.'
-    );
-
-  } catch (error) {
-
-    console.error(
-      'LOGIN ERROR:',
-      error
-    );
-
-    hideLoading();
-
-    try {
-
-      if (
-        error.code &&
-        error.code !==
-        'auth/popup-closed-by-user'
-      ) {
-
-        /*
-          Jangan signOut untuk error
-          backend agar user Firebase
-          tetap bisa diperiksa ulang.
-        */
-
-      }
-
-    } catch (_) {}
-
-    let message =
-      'Login gagal.';
-
-    switch (error.code) {
-
-      case 'auth/popup-closed-by-user':
-
-        message =
-          'Jendela login ditutup.';
-
-        break;
-
-      case 'auth/popup-blocked':
-
-        message =
-          'Popup login diblokir browser. Izinkan popup untuk situs ini.';
-
-        break;
-
-      case 'auth/network-request-failed':
-
-        message =
-          'Koneksi internet bermasalah.';
-
-        break;
-
-      case 'auth/unauthorized-domain':
-
-        message =
-          'Domain website belum diizinkan di Firebase Authentication.';
-
-        break;
-
-      default:
-
-        message =
-          error.message ||
-          'Terjadi kesalahan saat login.';
-
-    }
-
-    showToast(message);
-
-  } finally {
-
-    loginProcessing = false;
-
-    if (button) {
-
-      button.disabled = false;
-
-      button.innerHTML = `
-        <span class="google-icon">G</span>
-        <span>Masuk dengan Google</span>
-      `;
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   RESTORE SESSION
-========================================================= */
-
-async function restoreSession() {
-
-  try {
-
-    const savedUser =
-      localStorage.getItem(
-        'absen_user'
-      );
-
-    if (savedUser) {
-
-      try {
-
-        currentUser =
-          JSON.parse(savedUser);
-
-      } catch (_) {}
-
-    }
-
-    showLoading(
-      'Memuat aplikasi...',
-      'Memeriksa sesi login.'
-    );
-
-    const response =
-      await apiRequest(
-        'status',
-        {
-          token: sessionToken
-        }
-      );
-
-    if (
-      !response ||
-      response.success === false ||
-      response.status === false
-    ) {
-
-      clearSession();
-
-      hideLoading();
-
-      showLogin();
-
-      return;
-
-    }
-
-    currentUser =
-      response.user ||
-      response.data ||
-      currentUser;
-
-    localStorage.setItem(
-      'absen_user',
-      JSON.stringify(currentUser)
-    );
-
-    hideLoading();
-
-    showApp();
-
-    await loadUserData();
-
-    await getLocation(false);
-
-    await loadTodayHistory();
-
-    await loadHistory();
-
-    await loadRequests();
-
-    await loadAssignments();
-
-  } catch (error) {
-
-    console.error(
-      'Restore session error:',
-      error
-    );
-
-    clearSession();
-
-    hideLoading();
-
-    showLogin();
-
-  }
-
-}
-
-
-/* =========================================================
-   API REQUEST
-========================================================= */
-
-async function apiRequest(
-  action,
-  data = {}
-) {
-
-  const payload = {
-
-    action,
-
-    ...data
-
-  };
-
-  if (sessionToken) {
-
-    payload.token =
-      sessionToken;
-
-  }
-
-  const controller =
-    new AbortController();
-
-  const timeout =
-    setTimeout(
-      () => controller.abort(),
-      30000
-    );
-
-  try {
-
-    const response =
-      await fetch(
-        CONFIG.WEB_APP_URL,
-        {
-          method: 'POST',
-
-          headers: {
-            'Content-Type':
-              'text/plain;charset=utf-8'
-          },
-
-          body:
-            JSON.stringify(payload),
-
-          signal:
-            controller.signal
-        }
-      );
-
-    clearTimeout(timeout);
-
-    if (!response.ok) {
-
-      throw new Error(
-        `Server HTTP ${response.status}`
-      );
-
-    }
-
-    const text =
-      await response.text();
-
-    let json;
-
-    try {
-
-      json =
-        JSON.parse(text);
-
-    } catch (error) {
-
-      console.error(
-        'Invalid JSON:',
-        text
-      );
-
-      throw new Error(
-        'Respons server tidak valid.'
-      );
-
-    }
-
-    return json;
-
-  } catch (error) {
-
-    clearTimeout(timeout);
-
-    if (
-      error.name ===
-      'AbortError'
-    ) {
-
-      throw new Error(
-        'Waktu tunggu server habis.'
-      );
-
-    }
-
-    throw error;
-
-  }
-
-}
-
-
-/* =========================================================
-   USER DATA
-========================================================= */
-
-async function loadUserData() {
-
-  try {
-
-    if (!currentUser) {
-      return;
-    }
-
-    setText(
-      'userName',
-      getUserName()
-    );
-
-    setText(
-      'userPosition',
-      getUserPosition()
-    );
-
-    setText(
-      'profileName',
-      getUserName()
-    );
-
-    setText(
-      'profilePosition',
-      getUserPosition()
-    );
-
-    setText(
-      'profileNip',
-      currentUser.nip ||
-      currentUser.NIP ||
-      '-'
-    );
-
-    setText(
-      'profileEmail',
-      currentUser.email ||
-      '-'
-    );
-
-    setText(
-      'profileRole',
-      currentUser.role ||
-      currentUser.ROLE ||
-      '-'
-    );
-
-    setText(
-      'profileStatus',
-      currentUser.status ||
-      currentUser.STATUS ||
-      'AKTIF'
-    );
-
-    const photo =
-      currentUser.photo ||
-      currentUser.photoURL ||
-      '';
-
-    if (photo) {
-
-      setImage(
-        'avatar',
-        photo
-      );
-
-      setImage(
-        'profilePhoto',
-        photo
-      );
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      'loadUserData:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOCATION
-========================================================= */
-
-function getLocation(showMessage = false) {
-
-  return new Promise(
-    (resolve) => {
-
-      if (!navigator.geolocation) {
-
-        setText(
-          'locationText',
-          'GPS tidak didukung browser.'
-        );
-
-        setText(
-          'accuracyText',
-          'Gunakan browser yang mendukung lokasi.'
-        );
-
-        resolve(null);
-
-        return;
-
-      }
-
-      setText(
-        'locationText',
-        'Mengambil lokasi...'
-      );
-
-      navigator.geolocation.getCurrentPosition(
-
-        position => {
-
-          currentLocation = {
-
-            latitude:
-              position.coords.latitude,
-
-            longitude:
-              position.coords.longitude,
-
-            accuracy:
-              position.coords.accuracy
-
-          };
-
-          setText(
-            'locationText',
-            `${currentLocation.latitude.toFixed(6)}, ${currentLocation.longitude.toFixed(6)}`
-          );
-
-          setText(
-            'accuracyText',
-            `Akurasi GPS ±${Math.round(currentLocation.accuracy)} meter`
-          );
-
-          if (showMessage) {
-
-            showToast(
-              'Lokasi berhasil diperbarui.'
-            );
-
-          }
-
-          resolve(
-            currentLocation
-          );
-
-        },
-
-        error => {
-
-          console.error(
-            'GPS error:',
-            error
-          );
-
-          let message =
-            'Lokasi tidak tersedia.';
-
-          if (
-            error.code ===
-            1
-          ) {
-
-            message =
-              'Izin lokasi ditolak. Silakan izinkan GPS.';
-
-          }
-
-          setText(
-            'locationText',
-            message
-          );
-
-          setText(
-            'accuracyText',
-            'Mohon aktifkan GPS dan izin lokasi.'
-          );
-
-          if (showMessage) {
-
-            showToast(message);
-
-          }
-
-          resolve(null);
-
-        },
-
-        {
-
-          enableHighAccuracy:
-            true,
-
-          timeout:
-            15000,
-
-          maximumAge:
-            30000
-
-        }
-
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   CAMERA
-========================================================= */
-
-async function openCamera(type) {
-
-  if (attendanceProcessing) {
-    return;
-  }
-
-  attendanceType =
-    type || 'MASUK';
-
-  capturedDataUrl = '';
-
-  const modal =
-    document.getElementById(
-      'cameraModal'
-    );
-
-  const video =
-    document.getElementById(
-      'video'
-    );
-
-  const preview =
-    document.getElementById(
-      'preview'
-    );
-
-  const submit =
-    document.getElementById(
-      'submitPhotoBtn'
-    );
-
-  if (!modal || !video) {
-    return;
-  }
-
-  setText(
-    'cameraTitle',
-    attendanceType === 'MASUK'
-      ? 'Absen Masuk'
-      : 'Absen Pulang'
-  );
-
-  if (preview) {
-    preview.style.display =
-      'none';
-  }
-
-  if (submit) {
-    submit.style.display =
-      'none';
-  }
-
-  try {
-
-    await getLocation(false);
-
-    if (cameraStream) {
-      stopCamera();
-    }
-
-    cameraStream =
-      await navigator.mediaDevices.getUserMedia(
-        {
-          video: {
-            facingMode:
-              facingMode,
-            width: {
-              ideal: 1280
-            },
-            height: {
-              ideal: 720
-            }
-          },
-          audio: false
-        }
-      );
-
-    video.srcObject =
-      cameraStream;
-
-    video.style.display =
-      'block';
-
-    modal.classList.add(
-      'show'
-    );
-
-  } catch (error) {
-
-    console.error(
-      'Camera error:',
-      error
-    );
-
-    showToast(
-      'Kamera tidak dapat digunakan. Pastikan izin kamera diberikan.'
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   SWITCH CAMERA
-========================================================= */
-
-async function switchCamera() {
-
-  facingMode =
-    facingMode === 'user'
-      ? 'environment'
-      : 'user';
-
-  if (
-    !document
-      .getElementById(
-        'cameraModal'
-      )
-      ?.classList.contains('show')
-  ) {
-
-    return;
-
-  }
-
-  try {
-
-    stopCamera();
-
-    cameraStream =
-      await navigator.mediaDevices.getUserMedia(
-        {
-          video: {
-            facingMode:
-              facingMode,
-            width: {
-              ideal: 1280
-            },
-            height: {
-              ideal: 720
-            }
-          },
-          audio: false
-        }
-      );
-
-    const video =
-      document.getElementById(
-        'video'
-      );
-
-    if (video) {
-
-      video.srcObject =
-        cameraStream;
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      'Switch camera:',
-      error
-    );
-
-    showToast(
-      'Tidak dapat mengganti kamera.'
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CAPTURE PHOTO
-========================================================= */
-
-function capturePhoto() {
-
-  const video =
-    document.getElementById(
-      'video'
-    );
-
-  const canvas =
-    document.getElementById(
-      'canvas'
-    );
-
-  const preview =
-    document.getElementById(
-      'preview'
-    );
-
-  const submit =
-    document.getElementById(
-      'submitPhotoBtn'
-    );
-
-  if (
-    !video ||
-    !canvas ||
-    !video.videoWidth
-  ) {
-
-    showToast(
-      'Kamera belum siap.'
-    );
-
-    return;
-
-  }
-
-  canvas.width =
-    video.videoWidth;
-
-  canvas.height =
-    video.videoHeight;
-
-  const ctx =
-    canvas.getContext(
-      '2d'
-    );
-
-  if (facingMode === 'user') {
-
-    ctx.translate(
-      canvas.width,
-      0
-    );
-
-    ctx.scale(
-      -1,
-      1
-    );
-
-  }
-
-  ctx.drawImage(
-    video,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  capturedDataUrl =
-    canvas.toDataURL(
-      'image/jpeg',
-      0.82
-    );
-
-  if (preview) {
-
-    preview.src =
-      capturedDataUrl;
-
-    preview.style.display =
-      'block';
-
-  }
-
-  video.style.display =
-    'none';
-
-  if (submit) {
-
-    submit.style.display =
-      'flex';
-
-  }
-
-  stopCamera();
-
-}
-
-
-/* =========================================================
-   SUBMIT ATTENDANCE
-========================================================= */
-
-async function submitAttendance() {
-
-  if (attendanceProcessing) {
-    return;
-  }
-
-  if (!capturedDataUrl) {
-
-    showToast(
-      'Silakan ambil foto terlebih dahulu.'
-    );
-
-    return;
-
-  }
-
-  if (!currentLocation) {
-
-    await getLocation(false);
-
-  }
-
-  if (!currentLocation) {
-
-    showToast(
-      'Lokasi GPS belum tersedia.'
-    );
-
-    return;
-
-  }
-
-  attendanceProcessing =
-    true;
-
-  try {
-
-    showLoading(
-      'Menyimpan absensi...',
-      'Mengirim foto, lokasi, dan waktu.'
-    );
-
-    const response =
-      await apiRequest(
-        'attendance',
-        {
-
-          type:
-            attendanceType,
-
-          attendanceType:
-            attendanceType,
-
-          latitude:
-            currentLocation.latitude,
-
-          longitude:
-            currentLocation.longitude,
-
-          accuracy:
-            currentLocation.accuracy,
-
-          photo:
-            capturedDataUrl
-
-        }
-      );
-
-    hideLoading();
-
-    if (
-      !response ||
-      response.success === false
-    ) {
-
-      throw new Error(
-        response?.message ||
-        'Absensi gagal disimpan.'
-      );
-
-    }
-
-    closeCamera();
-
-    const data =
-      response.data ||
-      response;
-
-    showResult(
-      data
-    );
-
-    await loadTodayHistory();
-
-    await loadHistory();
-
-  } catch (error) {
-
-    hideLoading();
-
-    console.error(
-      'Attendance error:',
-      error
-    );
-
-    showToast(
-      error.message ||
-      'Gagal menyimpan absensi.'
-    );
-
-  } finally {
-
-    attendanceProcessing =
-      false;
-
-  }
-
-}
-
-
-/* =========================================================
-   TODAY HISTORY
-========================================================= */
-
-async function loadTodayHistory() {
-
-  try {
-
-    const container =
-      document.getElementById(
-        'todayHistory'
-      );
-
-    if (!container) {
-      return;
-    }
-
-    const response =
-      await apiRequest(
-        'history',
-        {
-          limit: 2
-        }
-      );
-
-    const rows =
-      response?.data ||
-      response?.history ||
-      [];
-
-    renderTodayHistory(
-      rows
-    );
-
-  } catch (error) {
-
-    console.error(
-      'Today history:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
-async function loadHistory() {
-
-  try {
-
-    const container =
-      document.getElementById(
-        'historyList'
-      );
-
-    if (!container) {
-      return;
-    }
-
-    const response =
-      await apiRequest(
-        'history',
-        {}
-      );
-
-    const rows =
-      response?.data ||
-      response?.history ||
-      [];
-
-    renderHistory(
-      rows
-    );
-
-  } catch (error) {
-
-    console.error(
-      'History error:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   REQUEST
-========================================================= */
-
-function setRequestType(type) {
-
-  setText(
-    'requestType',
-    type
-  );
-
-  const input =
-    document.getElementById(
-      'requestType'
-    );
-
-  if (input) {
-    input.value =
-      type;
-  }
-
-  document
-    .getElementById(
-      'requestTabIzin'
-    )
-    ?.classList.toggle(
-      'active',
-      type === 'IZIN'
-    );
-
-  document
-    .getElementById(
-      'requestTabCuti'
-    )
-    ?.classList.toggle(
-      'active',
-      type === 'CUTI'
-    );
-
-}
-
-
-async function submitRequestForm(event) {
-
-  event.preventDefault();
-
-  const type =
-    document.getElementById(
-      'requestType'
-    )?.value ||
-    'IZIN';
-
-  const start =
-    document.getElementById(
-      'requestStartDate'
-    )?.value;
-
-  const end =
-    document.getElementById(
-      'requestEndDate'
-    )?.value;
-
-  const reason =
-    document.getElementById(
-      'requestReason'
-    )?.value.trim();
-
-  if (!start || !end || !reason) {
-
-    showToast(
-      'Lengkapi formulir pengajuan.'
-    );
-
-    return;
-
-  }
-
-  try {
-
-    showLoading(
-      'Mengirim pengajuan...',
-      'Mohon tunggu.'
-    );
-
-    const response =
-      await apiRequest(
-        'submitRequest',
-        {
-
-          type,
-
-          startDate:
-            start,
-
-          endDate:
-            end,
-
-          reason
-
-        }
-      );
-
-    hideLoading();
-
-    if (
-      !response ||
-      response.success === false
-    ) {
-
-      throw new Error(
-        response?.message ||
-        'Pengajuan gagal dikirim.'
-      );
-
-    }
-
-    document
-      .getElementById(
-        'requestForm'
-      )
-      ?.reset();
-
-    setRequestType(
-      'IZIN'
-    );
-
-    showToast(
-      'Pengajuan berhasil dikirim.'
-    );
-
-    await loadRequests();
-
-  } catch (error) {
-
-    hideLoading();
-
-    showToast(
-      error.message ||
-      'Gagal mengirim pengajuan.'
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   REQUEST HISTORY
-========================================================= */
-
-async function loadRequests() {
-
-  try {
-
-    const container =
-      document.getElementById(
-        'requestList'
-      );
-
-    if (!container) {
-      return;
-    }
-
-    const response =
-      await apiRequest(
-        'requests',
-        {}
-      );
-
-    const rows =
-      response?.data ||
-      response?.requests ||
-      [];
-
-    renderRequests(
-      rows
-    );
-
-  } catch (error) {
-
-    console.error(
-      'Request history:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   ASSIGNMENT
-========================================================= */
-
-async function loadAssignments() {
-
-  try {
-
-    const container =
-      document.getElementById(
-        'assignmentList'
-      );
-
-    if (!container) {
-      return;
-    }
-
-    const response =
-      await apiRequest(
-        'assignments',
-        {}
-      );
-
-    const rows =
-      response?.data ||
-      response?.assignments ||
-      [];
-
-    renderAssignments(
-      rows
-    );
-
-  } catch (error) {
-
-    console.error(
-      'Assignment:',
-      error
-    );
-
-    container.innerHTML = `
-      <div class="empty-today">
-        Gagal memuat penugasan.
-      </div>
-    `;
-
-  }
-
-}
-
-
-/* =========================================================
-   PAGE NAVIGATION
-========================================================= */
-
-function showPage(page) {
-
-  const pages = [
-    'home',
-    'history',
-    'request',
-    'assignment',
-    'profile'
-  ];
-
-  pages.forEach(
-    item => {
-
-      const element =
-        document.getElementById(
-          item + 'Page'
-        );
-
-      if (element) {
-
-        element.classList.toggle(
-          'active',
-          item === page
-        );
-
-      }
-
-      const nav =
-        document.getElementById(
-          'nav' +
-          item.charAt(0).toUpperCase() +
-          item.slice(1)
-        );
-
-      if (nav) {
-
-        nav.classList.toggle(
-          'active',
-          item === page
-        );
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SHOW / HIDE APP
-========================================================= */
-
-function showLogin() {
-
-  const login =
-    document.getElementById(
-      'loginView'
-    );
-
-  const app =
-    document.getElementById(
-      'appView'
-    );
-
-  if (login) {
-    login.style.display =
-      'flex';
-  }
-
-  if (app) {
-    app.style.display =
-      'none';
-  }
-
-}
-
-
-function showApp() {
-
-  const login =
-    document.getElementById(
-      'loginView'
-    );
-
-  const app =
-    document.getElementById(
-      'appView'
-    );
-
-  if (login) {
-    login.style.display =
-      'none';
-  }
-
-  if (app) {
-    app.style.display =
-      'block';
-  }
-
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logout() {
-
-  try {
-
-    showLoading(
-      'Keluar...',
-      'Menghapus sesi login.'
-    );
-
-    if (
-      window.firebase &&
-      firebase.auth
-    ) {
-
-      async function logout() {
-
-  try {
-
-    showLoading(
-      'Keluar...',
-      'Menghapus sesi login.'
-    );
-
-    if (sessionToken) {
-      try {
-        await apiRequest('logout', {
-          sessionToken
-        });
-      } catch (error) {
-        console.error(
-          'Server logout:',
-          error
-        );
-      }
-    }
-
-    if (
-      window.firebase &&
-      firebase.auth
-    ) {
-      await firebase.auth().signOut();
-    }
-
-  } catch (error) {
-
-    console.error(
-      'Firebase logout:',
-      error
-    );
-
-  } finally {
-
-    clearSession();
-
-    hideLoading();
-
-    showLogin();
-
-    showToast(
-      'Anda telah keluar.'
-    );
-
-  }
-
-}
-
-  } catch (error) {
-
-    console.error(
-      'Firebase logout:',
-      error
-    );
-
-  } finally {
-
-    clearSession();
-
-    hideLoading();
-
-    showLogin();
-
-    showToast(
-      'Anda telah keluar.'
-    );
-
-  }
-
-}
-
-
-function clearSession() {
-
-  sessionToken = '';
-
-  currentUser = null;
-
-  localStorage.removeItem(
+  localStorage.getItem(
     'absen_session'
-  );
+  ) || '';
 
-  localStorage.removeItem(
-    'absen_user'
-  );
+let currentUser =
+  null;
 
-}
+let currentLocation =
+  null;
 
+let cameraStream =
+  null;
 
-/* =========================================================
-   CAMERA CLOSE
-========================================================= */
+let facingMode =
+  'user';
 
-function closeCamera() {
+let attendanceType =
+  'MASUK';
 
-  stopCamera();
+let capturedDataUrl =
+  '';
 
-  const modal =
-    document.getElementById(
-      'cameraModal'
-    );
+let loginProcessing =
+  false;
 
-  if (modal) {
+let attendanceProcessing =
+  false;
 
-    modal.classList.remove(
-      'show'
-    );
+let firebaseApp =
+  null;
 
-  }
+let firebaseAuth =
+  null;
 
-}
+let firebaseGoogleProvider =
+  null;
 
-
-function stopCamera() {
-
-  if (cameraStream) {
-
-    cameraStream
-      .getTracks()
-      .forEach(
-        track => track.stop()
-      );
-
-    cameraStream =
-      null;
-
-  }
-
-  const video =
-    document.getElementById(
-      'video'
-    );
-
-  if (video) {
-    video.srcObject =
-      null;
-  }
-
-}
+let firebaseReady =
+  false;
 
 
 /* =========================================================
-   RESULT
+   HELPER
 ========================================================= */
 
-function showResult(data = {}) {
-
-  const modal =
-    document.getElementById(
-      'resultModal'
-    );
-
-  if (!modal) {
-    return;
-  }
-
-  const time =
-    data.time ||
-    data.jam ||
-    formatTime(
-      new Date()
-    );
-
-  const date =
-    data.date ||
-    data.tanggal ||
-    formatDate(
-      new Date()
-    );
-
-  setText(
-    'resultTime',
-    time
-  );
-
-  setText(
-    'resultDate',
-    date
-  );
-
-  setText(
-    'resultLoc',
-    currentLocation
-      ? `${currentLocation.latitude.toFixed(6)}, ${currentLocation.longitude.toFixed(6)}`
-      : 'Lokasi tercatat'
-  );
-
-  const photo =
-    document.getElementById(
-      'resultPhoto'
-    );
-
-  if (
-    photo &&
-    capturedDataUrl
-  ) {
-
-    photo.src =
-      capturedDataUrl;
-
-  }
-
-  modal.classList.add(
-    'show'
-  );
-
-}
+const $ =
+  id =>
+    document.getElementById(id);
 
 
-function closeResult() {
+/* =========================================================
+   CONFIG CHECK
+========================================================= */
 
-  document
-    .getElementById(
-      'resultModal'
+async function validConfig(){
+
+  const f =
+    CONFIG.FIREBASE_CONFIG || {};
+
+  return (
+
+    typeof CONFIG.WEB_APP_URL ===
+      'string'
+
+    &&
+
+    CONFIG.WEB_APP_URL.startsWith(
+      'https://'
     )
-    ?.classList.remove(
-      'show'
-    );
 
-}
+    &&
 
+    f.apiKey
 
-/* =========================================================
-   LOADING
-========================================================= */
+    &&
 
-function showLoading(
-  title = 'Memuat...',
-  text = 'Mohon tunggu sebentar.'
-) {
-
-  const loading =
-    document.getElementById(
-      'loading'
-    );
-
-  setText(
-    'loadingTitle',
-    title
-  );
-
-  setText(
-    'loadingText',
-    text
-  );
-
-  if (loading) {
-
-    loading.classList.add(
-      'show'
-    );
-
-  }
-
-}
-
-
-function hideLoading() {
-
-  document
-    .getElementById(
-      'loading'
+    !f.apiKey.startsWith(
+      'PASTE_'
     )
-    ?.classList.remove(
-      'show'
-    );
+
+    &&
+
+    f.projectId
+
+    &&
+
+    !f.projectId.startsWith(
+      'PASTE_'
+    )
+
+    &&
+
+    f.appId
+
+    &&
+
+    !f.appId.startsWith(
+      'PASTE_'
+    )
+
+  );
 
 }
 
@@ -1911,25 +113,19 @@ function hideLoading() {
    TOAST
 ========================================================= */
 
-function showToast(message) {
+function showToast(message){
 
   const toast =
-    document.getElementById(
-      'toast'
-    );
+    $('toast');
 
-  if (!toast) {
-
-    console.log(
-      message
-    );
-
+  if(!toast){
     return;
-
   }
 
   toast.textContent =
-    message;
+    String(
+      message || ''
+    );
 
   toast.classList.add(
     'show'
@@ -1955,132 +151,2353 @@ function showToast(message) {
 
 
 /* =========================================================
-   DATE / CLOCK
+   LOADING
 ========================================================= */
 
-function updateDateTime() {
+function loading(
+  on,
+  title='Memproses...',
+  text='Mohon tunggu sebentar.'
+){
 
-  const now =
-    new Date();
+  $('loadingTitle')
+    .textContent =
+    title;
 
-  setText(
-    'dateText',
-    formatDate(now)
+  $('loadingText')
+    .textContent =
+    text;
+
+  $('loading')
+    .classList.toggle(
+      'show',
+      !!on
+    );
+
+}
+
+
+/* =========================================================
+   FIREBASE INITIALIZATION
+========================================================= */
+
+async function initFirebase(){
+
+  loading(
+    true,
+    'Menyiapkan Login',
+    'Menghubungkan sistem autentikasi...'
   );
 
-  setText(
-    'clockText',
-    formatTime(now)
-  );
+  if(
+    !await validConfig()
+  ){
 
-  const hour =
-    now.getHours();
+    loading(false);
 
-  let greeting =
-    'Selamat Datang';
+    showToast(
+      'Konfigurasi Firebase belum lengkap.'
+    );
 
-  if (hour >= 4 && hour < 11) {
-
-    greeting =
-      'Selamat Pagi';
-
-  } else if (
-    hour >= 11 &&
-    hour < 15
-  ) {
-
-    greeting =
-      'Selamat Siang';
-
-  } else if (
-    hour >= 15 &&
-    hour < 18
-  ) {
-
-    greeting =
-      'Selamat Sore';
-
-  } else {
-
-    greeting =
-      'Selamat Malam';
+    return false;
 
   }
 
-  setText(
-    'greetingText',
-    greeting
+  try{
+
+    const {
+      initializeApp,
+      getApps
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
+      );
+
+
+    const {
+      getAuth,
+      GoogleAuthProvider,
+      onAuthStateChanged,
+      getRedirectResult
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
+
+    firebaseApp =
+      getApps().length
+        ? getApps()[0]
+        : initializeApp(
+            CONFIG.FIREBASE_CONFIG
+          );
+
+
+    firebaseAuth =
+      getAuth(
+        firebaseApp
+      );
+
+
+    firebaseGoogleProvider =
+      new GoogleAuthProvider();
+
+
+    firebaseGoogleProvider
+      .setCustomParameters({
+        prompt:'select_account'
+      });
+
+
+    firebaseReady =
+      true;
+
+
+    try{
+
+      await getRedirectResult(
+        firebaseAuth
+      );
+
+    }catch(error){
+
+      console.warn(
+        'Redirect result:',
+        error
+      );
+
+    }
+
+
+    onAuthStateChanged(
+      firebaseAuth,
+      async user => {
+
+        if(
+          !user ||
+          loginProcessing ||
+          sessionToken
+        ){
+
+          return;
+
+        }
+
+        try{
+
+          loginProcessing =
+            true;
+
+          loading(
+            true,
+            'Memverifikasi Akun',
+            'Menghubungkan akun Google dengan data pegawai...'
+          );
+
+          await completeFirebaseLogin_(
+            user
+          );
+
+        }catch(error){
+
+          console.error(
+            error
+          );
+
+          loginProcessing =
+            false;
+
+          loading(false);
+
+          showToast(
+            error.message ||
+            'Login Firebase gagal.'
+          );
+
+        }
+
+      }
+    );
+
+
+    loading(false);
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      'Firebase Init Error:',
+      error
+    );
+
+    loading(false);
+
+    showToast(
+      'Firebase gagal dimuat. Periksa Authorized Domains.'
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function loginWithFirebase(){
+
+  if(
+    loginProcessing
+  ){
+    return;
+  }
+
+
+  if(
+    !firebaseReady
+  ){
+
+    const ready =
+      await initFirebase();
+
+    if(!ready){
+      return;
+    }
+
+  }
+
+
+  loginProcessing =
+    true;
+
+
+  const button =
+    $('firebaseLoginButton');
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.innerHTML = `
+      <span class="material-symbols-rounded">
+        progress_activity
+      </span>
+      Menghubungkan...
+    `;
+
+  }
+
+
+  loading(
+    true,
+    'Memverifikasi Akun',
+    'Menghubungkan akun Google dengan data pegawai...'
+  );
+
+
+  try{
+
+    const {
+      signInWithPopup,
+      signInWithRedirect
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
+
+    let credentialResult;
+
+
+    try{
+
+      credentialResult =
+        await signInWithPopup(
+          firebaseAuth,
+          firebaseGoogleProvider
+        );
+
+    }catch(popupError){
+
+      console.warn(
+        'Popup login gagal:',
+        popupError
+      );
+
+
+      if(
+
+        popupError?.code ===
+          'auth/popup-blocked'
+
+        ||
+
+        popupError?.code ===
+          'auth/popup-closed-by-user'
+
+        ||
+
+        popupError?.code ===
+          'auth/cancelled-popup-request'
+
+      ){
+
+        loading(
+          true,
+          'Membuka Login Google',
+          'Silakan pilih akun Google Anda...'
+        );
+
+
+        await signInWithRedirect(
+          firebaseAuth,
+          firebaseGoogleProvider
+        );
+
+
+        return;
+
+      }
+
+
+      throw popupError;
+
+    }
+
+
+    if(
+      credentialResult?.user
+    ){
+
+      await completeFirebaseLogin_(
+        credentialResult.user
+      );
+
+    }
+
+  }catch(error){
+
+    loginProcessing =
+      false;
+
+    restoreLoginButton_();
+
+    loading(false);
+
+    console.error(
+      'Firebase Login Error:',
+      error
+    );
+
+    showToast(
+      firebaseErrorMessage_(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RESTORE LOGIN BUTTON
+========================================================= */
+
+function restoreLoginButton_(){
+
+  const button =
+    $('firebaseLoginButton');
+
+  if(!button){
+    return;
+  }
+
+  button.disabled =
+    false;
+
+  button.innerHTML = `
+    <span class="google-icon">
+      G
+    </span>
+
+    <span>
+      Masuk dengan Google
+    </span>
+  `;
+
+}
+
+
+/* =========================================================
+   COMPLETE FIREBASE LOGIN
+========================================================= */
+
+async function completeFirebaseLogin_(user){
+
+  if(!user){
+
+    throw new Error(
+      'Akun Firebase tidak ditemukan.'
+    );
+
+  }
+
+
+  const requestId =
+    makeId();
+
+
+  loading(
+    true,
+    'Memverifikasi Akun',
+    'Menghubungkan akun Google dengan data pegawai...'
+  );
+
+
+  const firebaseIdToken =
+    await user.getIdToken(
+      true
+    );
+
+
+  const sent =
+    await postForm({
+
+      action:
+        'firebaseLogin',
+
+      requestId:
+        requestId,
+
+      firebaseIdToken:
+        firebaseIdToken
+
+    });
+
+
+  if(!sent){
+
+    throw new Error(
+      'Tidak dapat mengirim data login ke server.'
+    );
+
+  }
+
+
+  poll(
+    requestId,
+    result => {
+
+      loginProcessing =
+        false;
+
+      restoreLoginButton_();
+
+
+      if(
+        !result ||
+        !result.ok
+      ){
+
+        loading(false);
+
+        showToast(
+          result?.error ||
+          'Login gagal. Pastikan akun terdaftar.'
+        );
+
+        return;
+
+      }
+
+
+      sessionToken =
+        result.sessionToken ||
+        '';
+
+
+      if(!sessionToken){
+
+        loading(false);
+
+        showToast(
+          'Server tidak memberikan sesi login.'
+        );
+
+        return;
+
+      }
+
+
+      localStorage.setItem(
+        'absen_session',
+        sessionToken
+      );
+
+
+      currentUser =
+        result.user ||
+        null;
+
+
+      showApp();
+
+
+      loading(
+        true,
+        'Memuat Absensi',
+        'Menyiapkan data pegawai dan lokasi...'
+      );
+
+
+      refreshAll();
+
+
+      setTimeout(
+        () => {
+
+          loading(false);
+
+        },
+        900
+      );
+
+    }
   );
 
 }
 
 
 /* =========================================================
-   RENDER TODAY HISTORY
+   FIREBASE ERROR
 ========================================================= */
 
-function renderTodayHistory(rows) {
+function firebaseErrorMessage_(error){
 
-  const container =
-    document.getElementById(
-      'todayHistory'
+  const code =
+    String(
+      error?.code || ''
     );
 
-  if (!container) {
+
+  const messages = {
+
+    'auth/popup-blocked':
+      'Popup login diblokir browser. Izinkan popup lalu coba lagi.',
+
+    'auth/popup-closed-by-user':
+      'Jendela login ditutup sebelum selesai.',
+
+    'auth/cancelled-popup-request':
+      'Proses login sedang berjalan.',
+
+    'auth/unauthorized-domain':
+      'Domain aplikasi belum ditambahkan ke Authorized Domains Firebase.',
+
+    'auth/operation-not-allowed':
+      'Login Google belum diaktifkan di Firebase Authentication.',
+
+    'auth/network-request-failed':
+      'Koneksi internet bermasalah. Periksa jaringan Anda.'
+
+  };
+
+
+  return (
+    messages[code] ||
+    error?.message ||
+    'Login Firebase gagal.'
+  );
+
+}
+
+
+/* =========================================================
+   ID
+========================================================= */
+
+function makeId(){
+
+  if(
+    window.crypto &&
+    crypto.randomUUID
+  ){
+
+    return crypto
+      .randomUUID()
+      .replaceAll(
+        '-',
+        ''
+      );
+
+  }
+
+
+  return (
+    Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .slice(2) +
+    Date.now().toString(36)
+  );
+
+}
+
+
+/* =========================================================
+   POST APPS SCRIPT
+========================================================= */
+
+async function postForm(fields){
+
+  const body =
+    new URLSearchParams();
+
+
+  Object.entries(fields)
+    .forEach(
+      ([key,value]) => {
+
+        body.append(
+          key,
+          value ?? ''
+        );
+
+      }
+    );
+
+
+  try{
+
+    await fetch(
+      CONFIG.WEB_APP_URL,
+      {
+
+        method:'POST',
+
+        mode:'no-cors',
+
+        headers:{
+          'Content-Type':
+            'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        body:
+          body.toString(),
+
+        redirect:'follow',
+
+        keepalive:true
+
+      }
+    );
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      'POST Apps Script gagal:',
+      error
+    );
+
+
+    try{
+
+      const form =
+        document.createElement(
+          'form'
+        );
+
+
+      form.method =
+        'POST';
+
+      form.action =
+        CONFIG.WEB_APP_URL;
+
+      form.target =
+        'postFrame';
+
+      form.style.display =
+        'none';
+
+
+      Object.entries(fields)
+        .forEach(
+          ([key,value]) => {
+
+            const input =
+              document.createElement(
+                'input'
+              );
+
+            input.type =
+              'hidden';
+
+            input.name =
+              key;
+
+            input.value =
+              value ?? '';
+
+            form.appendChild(
+              input
+            );
+
+          }
+        );
+
+
+      document.body.appendChild(
+        form
+      );
+
+
+      form.submit();
+
+
+      setTimeout(
+        () => {
+
+          try{
+            form.remove();
+          }catch(e){}
+
+        },
+        1000
+      );
+
+
+      return true;
+
+    }catch(fallbackError){
+
+      console.error(
+        'Fallback POST gagal:',
+        fallbackError
+      );
+
+      return false;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   POLL
+========================================================= */
+
+function poll(
+  requestId,
+  onDone,
+  tries=0
+){
+
+  const MAX_TRIES =
+    45;
+
+
+  const cb =
+    'cb_' +
+    makeId();
+
+
+  let finished =
+    false;
+
+
+  window[cb] =
+    function(data){
+
+      if(finished){
+        return;
+      }
+
+
+      finished =
+        true;
+
+
+      delete window[cb];
+
+
+      const oldScript =
+        document.getElementById(
+          'jsonp_' + cb
+        );
+
+
+      if(oldScript){
+        oldScript.remove();
+      }
+
+
+      if(
+        data &&
+        data.state === 'DONE'
+      ){
+
+        onDone(
+          data.result ||
+          data
+        );
+
+        return;
+
+      }
+
+
+      if(
+        data &&
+        data.state === 'NOT_FOUND'
+      ){
+
+        if(
+          tries >= MAX_TRIES
+        ){
+
+          onDone({
+
+            ok:false,
+
+            error:
+              data.error ||
+              'Request tidak ditemukan.'
+
+          });
+
+          return;
+
+        }
+
+
+        setTimeout(
+          () => {
+
+            poll(
+              requestId,
+              onDone,
+              tries + 1
+            );
+
+          },
+          700
+        );
+
+
+        return;
+
+      }
+
+
+      if(
+        tries >= MAX_TRIES
+      ){
+
+        onDone({
+
+          ok:false,
+
+          error:
+            'Waktu menunggu respons server habis.'
+
+        });
+
+        return;
+
+      }
+
+
+      setTimeout(
+        () => {
+
+          poll(
+            requestId,
+            onDone,
+            tries + 1
+          );
+
+        },
+        600
+      );
+
+    };
+
+
+  const script =
+    document.createElement(
+      'script'
+    );
+
+
+  script.id =
+    'jsonp_' + cb;
+
+
+  script.src =
+    CONFIG.WEB_APP_URL +
+    '?action=status' +
+    '&requestId=' +
+    encodeURIComponent(
+      requestId
+    ) +
+    '&callback=' +
+    encodeURIComponent(
+      cb
+    ) +
+    '&_=' +
+    Date.now();
+
+
+  script.onerror =
+    function(){
+
+      delete window[cb];
+
+      script.remove();
+
+
+      if(
+        tries >= MAX_TRIES
+      ){
+
+        onDone({
+
+          ok:false,
+
+          error:
+            'Server tidak merespons.'
+
+        });
+
+        return;
+
+      }
+
+
+      setTimeout(
+        () => {
+
+          poll(
+            requestId,
+            onDone,
+            tries + 1
+          );
+
+        },
+        800
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =========================================================
+   REQUEST
+========================================================= */
+
+function request(
+  action,
+  extra,
+  onDone
+){
+
+  const requestId =
+    makeId();
+
+
+  const payload =
+    Object.assign(
+      {
+
+        action:
+          action,
+
+        requestId:
+          requestId,
+
+        sessionToken:
+          sessionToken
+
+      },
+
+      extra || {}
+
+    );
+
+
+  const sent =
+    postForm(
+      payload
+    );
+
+
+  Promise.resolve(sent)
+    .then(
+      result => {
+
+        if(result === false){
+
+          onDone({
+
+            ok:false,
+
+            error:
+              'Gagal mengirim permintaan ke server.'
+
+          });
+
+          return;
+
+        }
+
+
+        setTimeout(
+          () => {
+
+            poll(
+              requestId,
+              onDone,
+              0
+            );
+
+          },
+          300
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SHOW APP
+========================================================= */
+
+function showApp(){
+
+  $('loginView')
+    .style.display =
+    'none';
+
+
+  $('appView')
+    .style.display =
+    'block';
+
+
+  if(currentUser){
+
+    renderUser(
+      currentUser
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER USER
+========================================================= */
+
+function renderUser(u){
+
+  if(!u){
     return;
   }
 
-  if (
-    !Array.isArray(rows) ||
-    rows.length === 0
-  ) {
 
-    container.innerHTML = `
-      <div class="empty-today">
-        <span class="material-symbols-rounded">
-          event_available
-        </span>
-        Belum ada aktivitas absensi hari ini.
-      </div>
-    `;
+  const name =
+    u.name ||
+    '-';
 
-    return;
 
-  }
+  $('userName')
+    .textContent =
+    name;
 
-  container.innerHTML =
-    rows.slice(0, 10)
-      .map(
-        row => {
 
-          const type =
-            row.type ||
-            row.jenis ||
-            row.attendanceType ||
-            '-';
+  $('userPosition')
+    .textContent =
+    [
+      u.position,
+      u.role
+    ]
+    .filter(Boolean)
+    .join(' • ') ||
+    '-';
 
-          const time =
-            row.time ||
-            row.jam ||
-            row.waktu ||
-            '-';
 
-          return `
-            <div class="history-item">
-              <div>
-                <strong>
-                  ${escapeHtml(type)}
-                </strong>
-                <small>
-                  ${escapeHtml(time)}
-                </small>
-              </div>
-            </div>
-          `;
+  $('profileName')
+    .textContent =
+    name;
+
+
+  $('profilePosition')
+    .textContent =
+    u.position ||
+    '-';
+
+
+  $('profileNip')
+    .textContent =
+    u.nip ||
+    '-';
+
+
+  $('profileEmail')
+    .textContent =
+    u.email ||
+    '-';
+
+
+  $('profileRole')
+    .textContent =
+    u.role ||
+    '-';
+
+
+  $('profileStatus')
+    .textContent =
+    u.status ||
+    '-';
+
+
+  const photo =
+    u.photo ||
+    '';
+
+
+  const avatar =
+    photo ||
+    avatarData(
+      name
+    );
+
+
+  $('avatar').src =
+    avatar;
+
+
+  $('profilePhoto').src =
+    avatar;
+
+
+  updateGreeting_();
+
+}
+
+
+/* =========================================================
+   GREETING
+========================================================= */
+
+function updateGreeting_(){
+
+  const hour =
+    Number(
+      new Intl.DateTimeFormat(
+        'en-US',
+        {
+
+          hour:'2-digit',
+
+          hour12:false,
+
+          timeZone:
+            'Asia/Jakarta'
 
         }
       )
-      .join('');
+      .format(
+        new Date()
+      )
+    );
+
+
+  let greeting =
+    'Selamat Datang';
+
+
+  if(hour >= 4 && hour < 11){
+
+    greeting =
+      'Selamat Pagi';
+
+  }else if(
+    hour >= 11 &&
+    hour < 15
+  ){
+
+    greeting =
+      'Selamat Siang';
+
+  }else if(
+    hour >= 15 &&
+    hour < 18
+  ){
+
+    greeting =
+      'Selamat Sore';
+
+  }else{
+
+    greeting =
+      'Selamat Malam';
+
+  }
+
+
+  const el =
+    $('greetingText');
+
+
+  if(el){
+
+    el.textContent =
+      greeting;
+
+  }
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function avatarData(name){
+
+  const initial =
+    String(
+      name ||
+      '?'
+    )
+    .charAt(0)
+    .toUpperCase();
+
+
+  return (
+
+    'data:image/svg+xml;charset=UTF-8,' +
+
+    encodeURIComponent(
+
+      `<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="200"
+        height="200"
+      >
+
+        <rect
+          width="100%"
+          height="100%"
+          rx="45"
+          fill="#eaf3ff"
+        />
+
+        <text
+          x="50%"
+          y="58%"
+          text-anchor="middle"
+          font-family="Arial"
+          font-size="82"
+          font-weight="700"
+          fill="#1769e0"
+        >
+          ${initial}
+        </text>
+
+      </svg>`
+
+    )
+
+  );
+
+}
+
+
+/* =========================================================
+   REFRESH ALL
+========================================================= */
+
+function refreshAll(){
+
+  if(!sessionToken){
+    return;
+  }
+
+
+  getLocation(false);
+
+
+  request(
+    'profile',
+    {},
+    r => {
+
+      if(
+        r &&
+        r.ok &&
+        r.user
+      ){
+
+        currentUser =
+          r.user;
+
+        renderUser(
+          currentUser
+        );
+
+      }
+
+    }
+  );
+
+
+  request(
+    'history',
+    {
+      limit:60
+    },
+    r => {
+
+      if(
+        r &&
+        r.ok
+      ){
+
+        renderHistory(
+          r.items ||
+          []
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function getLocation(force){
+
+  if(
+    !navigator.geolocation
+  ){
+
+    $('locationText')
+      .textContent =
+      'Browser tidak mendukung GPS';
+
+    $('accuracyText')
+      .textContent =
+      'Gunakan browser yang mendukung lokasi.';
+
+    return;
+
+  }
+
+
+  $('locationText')
+    .textContent =
+    'Mengambil lokasi...';
+
+
+  $('accuracyText')
+    .textContent =
+    'Mohon izinkan lokasi pada browser.';
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    pos => {
+
+      currentLocation = {
+
+        latitude:
+          Number(
+            pos.coords.latitude
+          ),
+
+        longitude:
+          Number(
+            pos.coords.longitude
+          ),
+
+        accuracy:
+          Number(
+            pos.coords.accuracy
+          )
+
+      };
+
+
+      $('accuracyText')
+        .textContent =
+        'Akurasi GPS: ' +
+        Math.round(
+          currentLocation.accuracy
+        ) +
+        ' meter';
+
+
+      request(
+        'location',
+        {
+
+          latitude:
+            currentLocation.latitude,
+
+          longitude:
+            currentLocation.longitude
+
+        },
+        r => {
+
+          if(
+            r &&
+            r.ok
+          ){
+
+            currentLocation.district =
+              r.district ||
+              '';
+
+            currentLocation.regency =
+              r.regency ||
+              '';
+
+            currentLocation.province =
+              r.province ||
+              '';
+
+
+            const area =
+              [
+                r.district,
+                r.regency
+              ]
+              .filter(Boolean)
+              .join(', ');
+
+
+            $('locationText')
+              .textContent =
+              area ||
+              'Area lokasi belum terdeteksi.';
+
+          }else{
+
+            $('locationText')
+              .textContent =
+              'Area lokasi belum terdeteksi.';
+
+          }
+
+        }
+      );
+
+    },
+
+    err => {
+
+      currentLocation =
+        null;
+
+
+      $('locationText')
+        .textContent =
+        'Lokasi belum tersedia';
+
+
+      $('accuracyText')
+        .textContent =
+        getLocationErrorMessage_(
+          err
+        );
+
+    },
+
+    {
+
+      enableHighAccuracy:true,
+
+      timeout:15000,
+
+      maximumAge:
+        force
+          ? 0
+          : 30000
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   LOCATION ERROR
+========================================================= */
+
+function getLocationErrorMessage_(err){
+
+  if(!err){
+
+    return 'Aktifkan izin lokasi.';
+
+  }
+
+
+  if(
+    err.code === 1
+  ){
+
+    return 'Izin lokasi ditolak. Aktifkan lokasi browser.';
+
+  }
+
+
+  if(
+    err.code === 2
+  ){
+
+    return 'Lokasi tidak tersedia. Pastikan GPS aktif.';
+
+  }
+
+
+  if(
+    err.code === 3
+  ){
+
+    return 'Pengambilan lokasi terlalu lama. Coba lagi.';
+
+  }
+
+
+  return (
+    err.message ||
+    'Lokasi belum tersedia.'
+  );
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+  const dateEl =
+    $('dateText');
+
+  const clockEl =
+    $('clockText');
+
+
+  if(
+    !dateEl ||
+    !clockEl
+  ){
+
+    return;
+
+  }
+
+
+  const now =
+    new Date();
+
+
+  dateEl.textContent =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        weekday:'long',
+
+        day:'2-digit',
+
+        month:'long',
+
+        year:'numeric',
+
+        timeZone:
+          'Asia/Jakarta'
+
+      }
+    )
+    .format(now);
+
+
+  const time =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        hour:'2-digit',
+
+        minute:'2-digit',
+
+        second:'2-digit',
+
+        hour12:false,
+
+        timeZone:
+          'Asia/Jakarta'
+
+      }
+    )
+    .format(now);
+
+
+  clockEl.innerHTML =
+    escapeHtml(
+      time
+    ) +
+    ' <span>WIB</span>';
+
+
+  updateGreeting_();
+
+}
+
+
+setInterval(
+  updateClock,
+  1000
+);
+
+
+updateClock();
+
+
+/* =========================================================
+   DATE NORMALIZER
+========================================================= */
+
+function formatAttendanceTime_(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '--:--';
+
+  }
+
+
+  const raw =
+    String(value)
+      .trim();
+
+
+  const clockMatch =
+    raw.match(
+      /\b(\d{1,2}):(\d{2})(?::\d{2})?\b/
+    );
+
+
+  if(clockMatch){
+
+    return (
+      String(
+        Number(
+          clockMatch[1]
+        )
+      ).padStart(
+        2,
+        '0'
+      ) +
+      ':' +
+      clockMatch[2]
+    );
+
+  }
+
+
+  const shortMatch =
+    raw.match(
+      /^\s*(\d{1,2})[.: -](\d{2})\s*(?:WIB)?\s*$/i
+    );
+
+
+  if(shortMatch){
+
+    return (
+      String(
+        Number(
+          shortMatch[1]
+        )
+      ).padStart(
+        2,
+        '0'
+      ) +
+      ':' +
+      shortMatch[2]
+    );
+
+  }
+
+
+  const parsed =
+    new Date(
+      raw
+    );
+
+
+  if(
+    !Number.isNaN(
+      parsed.getTime()
+    )
+  ){
+
+    return new Intl.DateTimeFormat(
+      'en-GB',
+      {
+
+        timeZone:
+          'Asia/Jakarta',
+
+        hour:'2-digit',
+
+        minute:'2-digit',
+
+        hour12:false
+
+      }
+    )
+    .format(
+      parsed
+    );
+
+  }
+
+
+  return '--:--';
+
+}
+
+
+function normalizeDate_(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '';
+
+  }
+
+
+  const raw =
+    String(value)
+      .trim();
+
+
+  const iso =
+    raw.match(
+      /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
+    );
+
+
+  if(iso){
+
+    const y =
+      Number(iso[1]);
+
+    const m =
+      Number(iso[2]);
+
+    const d =
+      Number(iso[3]);
+
+
+    if(
+      m >= 1 &&
+      m <= 12 &&
+      d >= 1 &&
+      d <= 31
+    ){
+
+      return (
+        y +
+        '-' +
+        String(m).padStart(2,'0') +
+        '-' +
+        String(d).padStart(2,'0')
+      );
+
+    }
+
+  }
+
+
+  const numeric =
+    raw.match(
+      /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/
+    );
+
+
+  if(numeric){
+
+    let a =
+      Number(
+        numeric[1]
+      );
+
+    let b =
+      Number(
+        numeric[2]
+      );
+
+    const y =
+      Number(
+        numeric[3]
+      );
+
+
+    let day =
+      a;
+
+    let month =
+      b;
+
+
+    if(
+      a <= 12 &&
+      b > 12
+    ){
+
+      month =
+        a;
+
+      day =
+        b;
+
+    }
+
+
+    if(
+      month >= 1 &&
+      month <= 12 &&
+      day >= 1 &&
+      day <= 31
+    ){
+
+      return (
+        y +
+        '-' +
+        String(month).padStart(2,'0') +
+        '-' +
+        String(day).padStart(2,'0')
+      );
+
+    }
+
+  }
+
+
+  const parsed =
+    new Date(
+      raw
+    );
+
+
+  if(
+    !Number.isNaN(
+      parsed.getTime()
+    )
+  ){
+
+    const parts =
+      new Intl.DateTimeFormat(
+        'en-GB',
+        {
+
+          timeZone:
+            'Asia/Jakarta',
+
+          year:'numeric',
+
+          month:'2-digit',
+
+          day:'2-digit'
+
+        }
+      )
+      .formatToParts(
+        parsed
+      );
+
+
+    const get =
+      type =>
+        parts.find(
+          x =>
+            x.type === type
+        )?.value || '';
+
+
+    if(
+      get('year') &&
+      get('month') &&
+      get('day')
+    ){
+
+      return (
+        get('year') +
+        '-' +
+        get('month') +
+        '-' +
+        get('day')
+      );
+
+    }
+
+  }
+
+
+  return raw.slice(
+    0,
+    10
+  );
+
+}
+
+
+/* =========================================================
+   TODAY
+========================================================= */
+
+function jakartaToday_(){
+
+  const parts =
+    new Intl.DateTimeFormat(
+      'en-GB',
+      {
+
+        timeZone:
+          'Asia/Jakarta',
+
+        year:'numeric',
+
+        month:'2-digit',
+
+        day:'2-digit'
+
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+
+  const get =
+    type =>
+      parts.find(
+        x =>
+          x.type === type
+      )?.value || '';
+
+
+  return (
+    get('year') +
+    '-' +
+    get('month') +
+    '-' +
+    get('day')
+  );
+
+}
+
+
+/* =========================================================
+   DISPLAY DATE
+========================================================= */
+
+function getDisplayDate_(value){
+
+  const normalized =
+    normalizeDate_(
+      value
+    );
+
+
+  if(!normalized){
+
+    return {
+      day:'-',
+      date:'-'
+    };
+
+  }
+
+
+  const match =
+    normalized.match(
+      /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+
+  if(!match){
+
+    return {
+      day:'-',
+      date:String(
+        value ||
+        '-'
+      )
+    };
+
+  }
+
+
+  const year =
+    Number(
+      match[1]
+    );
+
+  const month =
+    Number(
+      match[2]
+    );
+
+  const day =
+    Number(
+      match[3]
+    );
+
+
+  const d =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        day
+      )
+    );
+
+
+  const dayName =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        weekday:'long',
+
+        timeZone:'UTC'
+
+      }
+    )
+    .format(d);
+
+
+  const longDate =
+    new Intl.DateTimeFormat(
+      'id-ID',
+      {
+
+        day:'2-digit',
+
+        month:'long',
+
+        year:'numeric',
+
+        timeZone:'UTC'
+
+      }
+    )
+    .format(d);
+
+
+  return {
+
+    day:
+      dayName,
+
+    date:
+      longDate
+
+  };
+
+}
+
+
+/* =========================================================
+   ATTENDANCE TYPE
+========================================================= */
+
+function attendanceTypeInfo_(type){
+
+  const t =
+    String(
+      type ||
+      ''
+    )
+    .trim()
+    .toUpperCase();
+
+
+  if(
+    t === 'MASUK'
+  ){
+
+    return {
+
+      label:
+        'Absen Masuk',
+
+      icon:
+        'login',
+
+      className:
+        'masuk'
+
+    };
+
+  }
+
+
+  if(
+    t === 'PULANG'
+  ){
+
+    return {
+
+      label:
+        'Absen Pulang',
+
+      icon:
+        'logout',
+
+      className:
+        'pulang'
+
+    };
+
+  }
+
+
+  return {
+
+    label:
+      type ||
+      'Absensi',
+
+    icon:
+      'check_circle',
+
+    className:
+      'masuk'
+
+  };
+
+}
+
+
+/* =========================================================
+   TODAY CARD
+========================================================= */
+
+function renderTodayAttendanceCard_(item){
+
+  const typeInfo =
+    attendanceTypeInfo_(
+      item.type
+    );
+
+
+  const dateInfo =
+    getDisplayDate_(
+      item.date
+    );
+
+
+  const location =
+    [
+      item.district,
+      item.regency
+    ]
+    .filter(Boolean)
+    .join(', ');
+
+
+  const distance =
+    item.distance !== undefined &&
+    item.distance !== null &&
+    item.distance !== '' &&
+    isFinite(
+      Number(
+        item.distance
+      )
+    )
+      ? (
+          Math.round(
+            Number(
+              item.distance
+            )
+          ) +
+          ' meter dari titik kantor'
+        )
+      : 'Jarak tidak tersedia';
+
+
+  return `
+
+    <div class="today-card ${typeInfo.className}">
+
+      <div class="today-head">
+
+        <div class="today-title">
+
+          <div class="today-type-icon">
+
+            <span class="material-symbols-rounded">
+              ${escapeHtml(typeInfo.icon)}
+            </span>
+
+          </div>
+
+          <span>
+            ${escapeHtml(typeInfo.label)}
+          </span>
+
+        </div>
+
+        <span class="today-status">
+          Tercatat
+        </span>
+
+      </div>
+
+
+      <div class="today-grid">
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Hari
+          </div>
+
+          <div class="today-value">
+            ${escapeHtml(dateInfo.day)}
+          </div>
+
+        </div>
+
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Tanggal
+          </div>
+
+          <div class="today-value">
+            ${escapeHtml(dateInfo.date)}
+          </div>
+
+        </div>
+
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Jam
+          </div>
+
+          <div class="today-value today-time">
+            ${escapeHtml(
+              formatAttendanceTime_(
+                item.time
+              )
+            )}
+            WIB
+          </div>
+
+        </div>
+
+
+        <div class="today-info">
+
+          <div class="today-label">
+            Status
+          </div>
+
+          <div class="today-value">
+            ${escapeHtml(
+              typeInfo.label
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="today-info full">
+
+          <div class="today-label">
+            Lokasi
+          </div>
+
+          <div class="today-value today-location">
+
+            <span class="material-symbols-rounded">
+              location_on
+            </span>
+
+            <span>
+
+              ${
+                escapeHtml(
+                  location ||
+                  'Lokasi tercatat'
+                )
+              }
+
+              <div class="today-distance">
+                ${escapeHtml(distance)}
+              </div>
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
 
 }
 
@@ -2089,437 +2506,1933 @@ function renderTodayHistory(rows) {
    RENDER HISTORY
 ========================================================= */
 
-function renderHistory(rows) {
+function renderHistory(items){
 
-  const container =
-    document.getElementById(
-      'historyList'
+  items =
+    Array.isArray(items)
+      ? items
+      : [];
+
+
+  const today =
+    jakartaToday_();
+
+
+  const todayItems =
+    items
+      .filter(
+        x =>
+          normalizeDate_(
+            x.date
+          ) === today
+      )
+      .sort(
+        (a,b) =>
+          String(
+            a.time ||
+            ''
+          )
+          .localeCompare(
+            String(
+              b.time ||
+              ''
+            )
+          )
+      );
+
+
+  const masuk =
+    todayItems.find(
+      x =>
+        String(
+          x.type ||
+          ''
+        )
+        .toUpperCase() ===
+        'MASUK'
     );
 
-  if (!container) {
-    return;
-  }
 
-  if (
-    !Array.isArray(rows) ||
-    rows.length === 0
-  ) {
-
-    container.innerHTML = `
-      <div class="empty-today">
-        Belum ada riwayat absensi.
-      </div>
-    `;
-
-    return;
-
-  }
-
-  container.innerHTML =
-    rows.map(
-      row => {
-
-        const date =
-          row.date ||
-          row.tanggal ||
-          '-';
-
-        const type =
-          row.type ||
-          row.jenis ||
-          '-';
-
-        const time =
-          row.time ||
-          row.jam ||
-          row.waktu ||
-          '-';
-
-        return `
-          <div class="history-item">
-            <div>
-              <strong>
-                ${escapeHtml(type)}
-              </strong>
-              <small>
-                ${escapeHtml(date)}
-              </small>
-            </div>
-
-            <strong>
-              ${escapeHtml(time)}
-            </strong>
-          </div>
-        `;
-
-      }
-    )
-    .join('');
-
-}
-
-
-/* =========================================================
-   RENDER REQUEST
-========================================================= */
-
-function renderRequests(rows) {
-
-  const container =
-    document.getElementById(
-      'requestList'
+  const pulang =
+    todayItems.find(
+      x =>
+        String(
+          x.type ||
+          ''
+        )
+        .toUpperCase() ===
+        'PULANG'
     );
 
-  if (!container) {
-    return;
+
+  $('btnMasuk').disabled =
+    !!masuk;
+
+
+  $('btnPulang').disabled =
+    !masuk ||
+    !!pulang;
+
+
+  if(
+    masuk &&
+    masuk.time
+  ){
+
+    $('arrivalTime').innerHTML =
+      escapeHtml(
+        formatAttendanceTime_(
+          masuk.time
+        )
+      ) +
+      ' <span>WIB</span>';
+
+  }else{
+
+    $('arrivalTime').innerHTML =
+      '--:-- <span>WIB</span>';
+
   }
 
-  if (
-    !Array.isArray(rows) ||
-    rows.length === 0
-  ) {
 
-    container.innerHTML = `
-      <div class="empty-today">
-        Belum ada pengajuan.
-      </div>
+  const badge =
+    $('statusBadge');
+
+
+  if(
+    masuk &&
+    pulang
+  ){
+
+    badge.textContent =
+      'Absensi Lengkap';
+
+    badge.className =
+      'status-badge ok';
+
+
+    $('statusSymbol').innerHTML = `
+      <span class="material-symbols-rounded">
+        check_circle
+      </span>
     `;
 
-    return;
+  }else if(masuk){
+
+    badge.textContent =
+      'Sudah Absen Masuk';
+
+    badge.className =
+      'status-badge ok';
+
+
+    $('statusSymbol').innerHTML = `
+      <span class="material-symbols-rounded">
+        check_circle
+      </span>
+    `;
+
+  }else{
+
+    badge.textContent =
+      'Belum Absen';
+
+    badge.className =
+      'status-badge';
+
+
+    $('statusSymbol').innerHTML = `
+      <span class="material-symbols-rounded">
+        login
+      </span>
+    `;
 
   }
 
-  container.innerHTML =
-    rows.map(
-      row => {
 
-        const type =
-          row.type ||
-          row.jenis ||
-          '-';
+  if(
+    todayItems.length
+  ){
 
-        const status =
-          row.status ||
-          'DIAJUKAN';
+    $('todayHistory').innerHTML =
+      todayItems
+        .map(
+          item =>
+            renderTodayAttendanceCard_(
+              item
+            )
+        )
+        .join('');
 
-        const start =
-          row.startDate ||
-          row.tanggalMulai ||
-          '-';
+  }else{
 
-        const end =
-          row.endDate ||
-          row.tanggalSelesai ||
-          '-';
+    $('todayHistory').innerHTML = `
 
-        const reason =
-          row.reason ||
-          row.alasan ||
-          '';
+      <div class="empty-today">
 
-        return `
-          <div class="request-item">
+        <span class="material-symbols-rounded">
+          event_available
+        </span>
 
-            <div>
-              <strong>
-                ${escapeHtml(type)}
-              </strong>
+        Belum ada absensi hari ini.
 
-              <div>
-                ${escapeHtml(start)}
-                s/d
-                ${escapeHtml(end)}
+        <br>
+
+        Silakan lakukan Absen Masuk.
+
+      </div>
+
+    `;
+
+  }
+
+
+  if(
+    items.length
+  ){
+
+    $('historyList').innerHTML =
+      items
+        .map(
+          x => {
+
+            const dateInfo =
+              getDisplayDate_(
+                x.date
+              );
+
+
+            const location =
+              [
+                x.district,
+                x.regency
+              ]
+              .filter(Boolean)
+              .join(', ');
+
+
+            const distance =
+              x.distance !== undefined &&
+              x.distance !== null &&
+              x.distance !== '' &&
+              isFinite(
+                Number(
+                  x.distance
+                )
+              )
+                ? (
+                    Math.round(
+                      Number(
+                        x.distance
+                      )
+                    ) +
+                    ' m'
+                  )
+                : '';
+
+
+            const typeInfo =
+              attendanceTypeInfo_(
+                x.type
+              );
+
+
+            return `
+
+              <div class="history-item">
+
+                <div class="history-date-icon">
+
+                  <span class="material-symbols-rounded">
+                    ${escapeHtml(typeInfo.icon)}
+                  </span>
+
+                </div>
+
+
+                <div class="history-main">
+
+                  <div class="history-date">
+
+                    ${escapeHtml(
+                      dateInfo.date
+                    )}
+
+                  </div>
+
+                  <div class="history-detail">
+
+                    ${escapeHtml(
+                      dateInfo.day
+                    )}
+
+                    •
+
+                    ${escapeHtml(
+                      typeInfo.label
+                    )}
+
+                    ${
+                      location
+                        ? ' • ' +
+                          escapeHtml(
+                            location
+                          )
+                        : ''
+                    }
+
+                  </div>
+
+                </div>
+
+
+                <div class="history-right">
+
+                  <div class="history-time">
+
+                    ${escapeHtml(
+                      formatAttendanceTime_(
+                        x.time
+                      )
+                    )}
+
+                    WIB
+
+                  </div>
+
+                  <div class="history-distance">
+
+                    ${escapeHtml(
+                      distance
+                    )}
+
+                  </div>
+
+                </div>
+
               </div>
 
-              <small>
-                ${escapeHtml(reason)}
-              </small>
-            </div>
+            `;
 
-            <span>
-              ${escapeHtml(status)}
-            </span>
+          }
+        )
+        .join('');
 
-          </div>
-        `;
+  }else{
 
-      }
-    )
-    .join('');
+    $('historyList').innerHTML = `
 
-}
-
-
-/* =========================================================
-   RENDER ASSIGNMENT
-========================================================= */
-
-function renderAssignments(rows) {
-
-  const container =
-    document.getElementById(
-      'assignmentList'
-    );
-
-  if (!container) {
-    return;
-  }
-
-  if (
-    !Array.isArray(rows) ||
-    rows.length === 0
-  ) {
-
-    container.innerHTML = `
       <div class="empty-today">
-        Belum ada penugasan.
+
+        <span class="material-symbols-rounded">
+          history
+        </span>
+
+        Belum ada riwayat absensi.
+
       </div>
+
     `;
 
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(
+    value ??
+    ''
+  )
+  .replace(
+    /[&<>"']/g,
+    char =>
+      ({
+
+        '&':
+          '&amp;',
+
+        '<':
+          '&lt;',
+
+        '>':
+          '&gt;',
+
+        '"':
+          '&quot;',
+
+        "'":
+          '&#039;'
+
+      })[char]
+  );
+
+}
+
+
+/* =========================================================
+   OPEN CAMERA
+========================================================= */
+
+async function openCamera(type){
+
+  if(
+    attendanceProcessing
+  ){
+
     return;
 
   }
 
-  container.innerHTML =
-    rows.map(
-      row => {
 
-        const title =
-          row.title ||
-          row.judul ||
-          row.nama ||
-          'Penugasan';
+  if(
+    !currentLocation
+  ){
 
-        const date =
-          row.date ||
-          row.tanggal ||
-          '';
+    getLocation(true);
 
-        const location =
-          row.location ||
-          row.lokasi ||
-          '';
-
-        const status =
-          row.status ||
-          '';
-
-        return `
-          <div class="assignment-item">
-
-            <strong>
-              ${escapeHtml(title)}
-            </strong>
-
-            <small>
-              ${escapeHtml(date)}
-            </small>
-
-            <small>
-              ${escapeHtml(location)}
-            </small>
-
-            <span>
-              ${escapeHtml(status)}
-            </span>
-
-          </div>
-        `;
-
-      }
-    )
-    .join('');
-
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function getUserName() {
-
-  if (!currentUser) {
-    return '-';
-  }
-
-  return (
-    currentUser.nama ||
-    currentUser.name ||
-    currentUser.Nama ||
-    currentUser.NAME ||
-    currentUser.displayName ||
-    currentUser.email ||
-    '-'
-  );
-
-}
-
-
-function getUserPosition() {
-
-  if (!currentUser) {
-    return '-';
-  }
-
-  return (
-    currentUser.jabatan ||
-    currentUser.position ||
-    currentUser.posisi ||
-    currentUser.Jabatan ||
-    '-'
-  );
-
-}
-
-
-function setText(
-  id,
-  value
-) {
-
-  const element =
-    document.getElementById(id);
-
-  if (element) {
-
-    element.textContent =
-      value == null
-        ? ''
-        : value;
-
-  }
-
-}
-
-
-function setImage(
-  id,
-  src
-) {
-
-  const element =
-    document.getElementById(id);
-
-  if (element && src) {
-
-    element.src =
-      src;
-
-  }
-
-}
-
-
-function formatDate(date) {
-
-  return new Intl.DateTimeFormat(
-    'id-ID',
-    {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      timeZone:
-        'Asia/Jakarta'
-    }
-  ).format(date);
-
-}
-
-
-function formatTime(date) {
-
-  return new Intl.DateTimeFormat(
-    'id-ID',
-    {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      timeZone:
-        'Asia/Jakarta'
-    }
-  ).format(date) + ' WIB';
-
-}
-
-
-function escapeHtml(value) {
-
-  return String(
-    value ?? ''
-  )
-    .replace(
-      /&/g,
-      '&amp;'
-    )
-    .replace(
-      /</g,
-      '&lt;'
-    )
-    .replace(
-      />/g,
-      '&gt;'
-    )
-    .replace(
-      /"/g,
-      '&quot;'
-    )
-    .replace(
-      /'/g,
-      '&#039;'
+    showToast(
+      'Lokasi sedang diambil. Tunggu sampai lokasi tersedia.'
     );
 
+    return;
+
+  }
+
+
+  attendanceType =
+    String(
+      type ||
+      'MASUK'
+    )
+    .toUpperCase();
+
+
+  capturedDataUrl =
+    '';
+
+
+  $('cameraTitle')
+    .textContent =
+    attendanceType === 'MASUK'
+      ? 'Absen Masuk'
+      : 'Absen Pulang';
+
+
+  resetCameraUI_();
+
+
+  $('cameraModal')
+    .classList.add(
+      'show'
+    );
+
+
+  document.body.style.overflow =
+    'hidden';
+
+
+  try{
+
+    await startCamera();
+
+  }catch(error){
+
+    console.error(
+      'Camera error:',
+      error
+    );
+
+
+    closeCamera();
+
+
+    showToast(
+      'Kamera tidak dapat dibuka. Pastikan izin kamera diberikan.'
+    );
+
+  }
+
 }
 
 
 /* =========================================================
-   GLOBAL EXPORT
-   Memastikan onclick="" di HTML dapat menemukan fungsi.
+   RESET CAMERA UI
 ========================================================= */
 
-window.loginWithFirebase =
-  loginWithFirebase;
+function resetCameraUI_(){
 
-window.logout =
-  logout;
+  const video =
+    $('video');
 
-window.openCamera =
-  openCamera;
+  const preview =
+    $('preview');
 
-window.closeCamera =
-  closeCamera;
+  const capture =
+    $('captureBtn');
 
-window.switchCamera =
-  switchCamera;
+  const submit =
+    $('submitPhotoBtn');
 
-window.capturePhoto =
-  capturePhoto;
+  const switchButton =
+    $('switchCameraBtn');
 
-window.submitAttendance =
-  submitAttendance;
 
-window.closeResult =
-  closeResult;
+  if(video){
 
-window.getLocation =
-  getLocation;
+    video.style.display =
+      'block';
 
-window.showPage =
-  showPage;
+  }
 
-window.setRequestType =
-  setRequestType;
 
-window.submitRequestForm =
-  submitRequestForm;
+  if(preview){
 
-window.loadHistory =
-  loadHistory;
+    preview.style.display =
+      'none';
 
-window.loadRequests =
-  loadRequests;
+    preview.removeAttribute(
+      'src'
+    );
 
-window.loadAssignments =
-  loadAssignments;
+  }
+
+
+  if(capture){
+
+    capture.disabled =
+      false;
+
+    capture.innerHTML = `
+      <span class="material-symbols-rounded">
+        photo_camera
+      </span>
+      Ambil Foto
+    `;
+
+  }
+
+
+  if(submit){
+
+    submit.disabled =
+      false;
+
+    submit.style.display =
+      'none';
+
+    submit.innerHTML = `
+      <span class="material-symbols-rounded">
+        how_to_reg
+      </span>
+      Gunakan Foto & Absen
+    `;
+
+  }
+
+
+  if(switchButton){
+
+    switchButton.disabled =
+      false;
+
+    switchButton.innerHTML = `
+      <span class="material-symbols-rounded">
+        flip_camera_android
+      </span>
+      Ganti Kamera
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   START CAMERA
+========================================================= */
+
+async function startCamera(){
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    throw new Error(
+      'Browser tidak mendukung kamera.'
+    );
+
+  }
+
+
+  stopCamera();
+
+
+  let constraints = {
+
+    video:{
+
+      facingMode:{
+        ideal:
+          facingMode
+      },
+
+      width:{
+        ideal:1280
+      },
+
+      height:{
+        ideal:1280
+      }
+
+    },
+
+    audio:false
+
+  };
+
+
+  try{
+
+    cameraStream =
+      await navigator.mediaDevices
+        .getUserMedia(
+          constraints
+        );
+
+  }catch(firstError){
+
+    console.warn(
+      'Kamera utama gagal:',
+      firstError
+    );
+
+
+    try{
+
+      cameraStream =
+        await navigator.mediaDevices
+          .getUserMedia({
+
+            video:{
+              facingMode:
+                facingMode
+            },
+
+            audio:false
+
+          });
+
+    }catch(secondError){
+
+      console.warn(
+        'Fallback kamera gagal:',
+        secondError
+      );
+
+
+      cameraStream =
+        await navigator.mediaDevices
+          .getUserMedia({
+
+            video:true,
+
+            audio:false
+
+          });
+
+    }
+
+  }
+
+
+  const video =
+    $('video');
+
+
+  video.srcObject =
+    cameraStream;
+
+
+  video.muted =
+    true;
+
+
+  video.playsInline =
+    true;
+
+
+  try{
+
+    await video.play();
+
+  }catch(error){
+
+    console.warn(
+      'Video play:',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   STOP CAMERA
+========================================================= */
+
+function stopCamera(){
+
+  if(cameraStream){
+
+    cameraStream
+      .getTracks()
+      .forEach(
+        track => {
+
+          try{
+
+            track.stop();
+
+          }catch(error){}
+
+        }
+      );
+
+
+    cameraStream =
+      null;
+
+  }
+
+
+  const video =
+    $('video');
+
+
+  if(video){
+
+    try{
+
+      video.pause();
+
+    }catch(error){}
+
+
+    video.srcObject =
+      null;
+
+  }
+
+}
+
+
+/* =========================================================
+   SWITCH CAMERA
+========================================================= */
+
+async function switchCamera(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  const previous =
+    facingMode;
+
+
+  facingMode =
+    facingMode === 'user'
+      ? 'environment'
+      : 'user';
+
+
+  const button =
+    $('switchCameraBtn');
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.innerHTML = `
+      <span class="material-symbols-rounded">
+        progress_activity
+      </span>
+      Membuka...
+    `;
+
+  }
+
+
+  try{
+
+    await startCamera();
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    facingMode =
+      previous;
+
+
+    showToast(
+      'Kamera tidak tersedia.'
+    );
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.innerHTML = `
+        <span class="material-symbols-rounded">
+          flip_camera_android
+        </span>
+        Ganti Kamera
+      `;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   CAPTURE PHOTO
+========================================================= */
+
+function capturePhoto(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  const video =
+    $('video');
+
+  const canvas =
+    $('canvas');
+
+
+  if(
+    !video ||
+    !canvas
+  ){
+
+    showToast(
+      'Komponen kamera belum siap.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !video.videoWidth ||
+    !video.videoHeight
+  ){
+
+    showToast(
+      'Kamera belum siap. Tunggu sebentar.'
+    );
+
+    return;
+
+  }
+
+
+  const maxWidth =
+    800;
+
+
+  const sourceWidth =
+    video.videoWidth;
+
+
+  const sourceHeight =
+    video.videoHeight;
+
+
+  const ratio =
+    sourceHeight /
+    sourceWidth;
+
+
+  const width =
+    Math.min(
+      maxWidth,
+      sourceWidth
+    );
+
+
+  const height =
+    Math.round(
+      width *
+      ratio
+    );
+
+
+  canvas.width =
+    width;
+
+  canvas.height =
+    height;
+
+
+  const ctx =
+    canvas.getContext(
+      '2d',
+      {
+        alpha:false
+      }
+    );
+
+
+  if(!ctx){
+
+    showToast(
+      'Canvas kamera tidak tersedia.'
+    );
+
+    return;
+
+  }
+
+
+  ctx.imageSmoothingEnabled =
+    true;
+
+
+  ctx.imageSmoothingQuality =
+    'high';
+
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  const MAX_CLIENT_BYTES =
+    600 *
+    1024;
+
+
+  let quality =
+    0.80;
+
+
+  let dataUrl =
+    '';
+
+
+  for(
+    let i = 0;
+    i < 10;
+    i++
+  ){
+
+    dataUrl =
+      canvas.toDataURL(
+        'image/jpeg',
+        quality
+      );
+
+
+    const estimatedBytes =
+      Math.floor(
+        dataUrl.length *
+        0.75
+      );
+
+
+    if(
+      estimatedBytes <=
+      MAX_CLIENT_BYTES
+    ){
+
+      break;
+
+    }
+
+
+    quality -=
+      0.06;
+
+
+    if(
+      quality < 0.35
+    ){
+
+      quality =
+        0.35;
+
+    }
+
+  }
+
+
+  /*
+   * VALIDASI FOTO
+   */
+
+  const validPhoto =
+    /^data:image\/[^;]+;base64,/i
+      .test(
+        String(
+          dataUrl ||
+          ''
+        )
+      );
+
+
+  if(!validPhoto){
+
+    showToast(
+      'Foto gagal diproses. Silakan ambil foto lagi.'
+    );
+
+    return;
+
+  }
+
+
+  const finalPhoto =
+    String(
+      dataUrl
+    )
+    .trim();
+
+
+  if(
+    !finalPhoto ||
+    finalPhoto.length < 100
+  ){
+
+    showToast(
+      'Foto belum berhasil disimpan.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * PENTING:
+   * Simpan hasil foto ke GLOBAL.
+   */
+
+  capturedDataUrl =
+    finalPhoto;
+
+
+  /*
+   * PREVIEW
+   */
+
+  $('preview').src =
+    capturedDataUrl;
+
+
+  $('video').style.display =
+    'none';
+
+
+  $('preview').style.display =
+    'block';
+
+
+  $('captureBtn').innerHTML = `
+    <span class="material-symbols-rounded">
+      replay
+    </span>
+    Ambil Ulang
+  `;
+
+
+  $('submitPhotoBtn').style.display =
+    'flex';
+
+
+  /*
+   * Kamera boleh tetap hidup
+   * sampai user submit/close.
+   */
+
+  showToast(
+    'Foto berhasil diambil. Periksa foto lalu tekan Gunakan Foto & Absen.'
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE CAMERA
+========================================================= */
+
+function closeCamera(){
+
+  stopCamera();
+
+
+  $('cameraModal')
+    .classList.remove(
+      'show'
+    );
+
+
+  document.body.style.overflow =
+    '';
+
+}
+
+
+/* =========================================================
+   SUBMIT ATTENDANCE
+========================================================= */
+
+function submitAttendance(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    return;
+
+  }
+
+
+  /*
+   * =====================================================
+   * FOTO DIAMBIL DARI GLOBAL TERLEBIH DAHULU
+   * =====================================================
+   */
+
+  const photoToSend =
+    String(
+      capturedDataUrl ||
+      ''
+    )
+    .trim();
+
+
+  /*
+   * =====================================================
+   * VALIDASI FOTO BASE64
+   * =====================================================
+   */
+
+  const validPhoto =
+    /^data:image\/[^;]+;base64,/i
+      .test(
+        photoToSend
+      );
+
+
+  if(
+    !photoToSend ||
+    !validPhoto
+  ){
+
+    showToast(
+      'Foto selfie belum siap. Silakan ambil foto terlebih dahulu.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * =====================================================
+   * VALIDASI LOKASI
+   * =====================================================
+   */
+
+  const locationToSend =
+    currentLocation
+      ? {
+
+          latitude:
+            Number(
+              currentLocation.latitude
+            ),
+
+          longitude:
+            Number(
+              currentLocation.longitude
+            ),
+
+          accuracy:
+            Number(
+              currentLocation.accuracy
+            )
+
+        }
+      : null;
+
+
+  if(
+    !locationToSend ||
+
+    !isFinite(
+      locationToSend.latitude
+    ) ||
+
+    !isFinite(
+      locationToSend.longitude
+    ) ||
+
+    !isFinite(
+      locationToSend.accuracy
+    )
+  ){
+
+    showToast(
+      'Lokasi GPS belum siap. Tunggu sampai lokasi tersedia.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    locationToSend.accuracy <= 0
+  ){
+
+    showToast(
+      'Akurasi GPS belum valid. Silakan tunggu sebentar.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * =====================================================
+   * SIMPAN TIPE
+   * =====================================================
+   */
+
+  const typeToSend =
+    attendanceType;
+
+
+  attendanceProcessing =
+    true;
+
+
+  const submitButton =
+    $('submitPhotoBtn');
+
+  const captureButton =
+    $('captureBtn');
+
+  const switchButton =
+    $('switchCameraBtn');
+
+
+  if(submitButton){
+
+    submitButton.disabled =
+      true;
+
+    submitButton.innerHTML = `
+      <span class="material-symbols-rounded">
+        progress_activity
+      </span>
+      Menyimpan Absensi...
+    `;
+
+  }
+
+
+  if(captureButton){
+
+    captureButton.disabled =
+      true;
+
+  }
+
+
+  if(switchButton){
+
+    switchButton.disabled =
+      true;
+
+  }
+
+
+  /*
+   * =====================================================
+   * SIMPAN FOTO LOKAL TERLEBIH DAHULU
+   * =====================================================
+   */
+
+  const photoBackup =
+    photoToSend;
+
+
+  /*
+   * Tutup kamera.
+   *
+   * capturedDataUrl TIDAK DIHAPUS.
+   */
+
+  closeCamera();
+
+
+  loading(
+    true,
+    'Menyimpan Absensi',
+    'Mengirim foto, lokasi, dan data absensi...'
+  );
+
+
+  request(
+    'attendance',
+    {
+
+      type:
+        typeToSend,
+
+      latitude:
+        locationToSend.latitude,
+
+      longitude:
+        locationToSend.longitude,
+
+      accuracy:
+        locationToSend.accuracy,
+
+      photo:
+        photoToSend
+
+    },
+    r => {
+
+      loading(false);
+
+
+      attendanceProcessing =
+        false;
+
+
+      /*
+       * =================================================
+       * GAGAL
+       * =================================================
+       */
+
+      if(
+        !r ||
+        !r.ok
+      ){
+
+        /*
+         * FOTO TETAP DISIMPAN.
+         */
+
+        capturedDataUrl =
+          photoBackup;
+
+
+        showToast(
+          r?.error ||
+          'Absen gagal. Silakan coba lagi.'
+        );
+
+
+        /*
+         * Pulihkan tombol.
+         */
+
+        restoreCameraAfterSubmitError_();
+
+
+        /*
+         * Buka modal kembali dalam mode preview.
+         */
+
+        $('preview').src =
+          capturedDataUrl;
+
+
+        $('preview').style.display =
+          'block';
+
+
+        $('video').style.display =
+          'none';
+
+
+        $('submitPhotoBtn').style.display =
+          'flex';
+
+
+        $('cameraModal')
+          .classList.add(
+            'show'
+          );
+
+
+        document.body.style.overflow =
+          'hidden';
+
+
+        return;
+
+      }
+
+
+      /*
+       * =================================================
+       * BERHASIL
+       * =================================================
+       */
+
+      $('resultTime')
+        .textContent =
+        (
+          r.time ||
+          formatAttendanceTime_(
+            new Date()
+          )
+        ) +
+        ' WIB';
+
+
+      $('resultDate')
+        .textContent =
+        r.date ||
+        '-';
+
+
+      $('resultLoc')
+        .textContent =
+        [
+          r.district,
+          r.regency
+        ]
+        .filter(Boolean)
+        .join(', ') ||
+        'Lokasi tercatat';
+
+
+      $('resultPhoto')
+        .src =
+        photoBackup;
+
+
+      $('resultModal')
+        .classList.add(
+          'show'
+        );
+
+
+      document.body.style.overflow =
+        'hidden';
+
+
+      /*
+       * Foto baru boleh dihapus
+       * setelah server sukses.
+       */
+
+      capturedDataUrl =
+        '';
+
+
+      /*
+       * Refresh data.
+       */
+
+      refreshAll();
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RESTORE CAMERA AFTER ERROR
+========================================================= */
+
+function restoreCameraAfterSubmitError_(){
+
+  const submit =
+    $('submitPhotoBtn');
+
+  const capture =
+    $('captureBtn');
+
+  const switchButton =
+    $('switchCameraBtn');
+
+
+  if(submit){
+
+    submit.disabled =
+      false;
+
+    submit.innerHTML = `
+      <span class="material-symbols-rounded">
+        how_to_reg
+      </span>
+      Gunakan Foto & Absen
+    `;
+
+  }
+
+
+  if(capture){
+
+    capture.disabled =
+      false;
+
+    capture.innerHTML = `
+      <span class="material-symbols-rounded">
+        replay
+      </span>
+      Ambil Ulang
+    `;
+
+  }
+
+
+  if(switchButton){
+
+    switchButton.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   CLOSE RESULT
+========================================================= */
+
+function closeResult(){
+
+  $('resultModal')
+    .classList.remove(
+      'show'
+    );
+
+
+  document.body.style.overflow =
+    '';
+
+
+  showPage(
+    'home'
+  );
+
+
+  refreshAll();
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(page){
+
+  [
+    'home',
+    'history',
+    'profile'
+  ]
+  .forEach(
+    p => {
+
+      const pageEl =
+        $(p + 'Page');
+
+
+      if(pageEl){
+
+        pageEl.classList.toggle(
+          'active',
+          p === page
+        );
+
+      }
+
+    }
+  );
+
+
+  [
+    'Home',
+    'History',
+    'Profile'
+  ]
+  .forEach(
+    p => {
+
+      const navEl =
+        $('nav' + p);
+
+
+      if(navEl){
+
+        navEl.classList.toggle(
+          'active',
+          p.toLowerCase() === page
+        );
+
+      }
+
+    }
+  );
+
+
+  window.scrollTo({
+
+    top:0,
+
+    behavior:
+      'smooth'
+
+  });
+
+
+  if(
+    page === 'history'
+  ){
+
+    request(
+      'history',
+      {
+        limit:60
+      },
+      r => {
+
+        if(
+          r &&
+          r.ok
+        ){
+
+          renderHistory(
+            r.items ||
+            []
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+  if(
+    attendanceProcessing
+  ){
+
+    showToast(
+      'Tunggu proses absensi selesai.'
+    );
+
+    return;
+
+  }
+
+
+  loading(
+    true,
+    'Keluar dari Aplikasi',
+    'Mengakhiri sesi login...'
+  );
+
+
+  const tokenBeforeLogout = sessionToken;
+
+  try{
+
+    if(tokenBeforeLogout){
+      await new Promise(resolve => {
+        request(
+          'logout',
+          {},
+          () => resolve()
+        );
+      });
+    }
+
+  }catch(error){
+
+    console.warn(
+      'Server logout:',
+      error
+    );
+
+  }
+
+
+  try{
+
+    if(
+      firebaseAuth
+    ){
+
+      const {
+        signOut
+      } =
+        await import(
+          'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+        );
+
+
+      await signOut(
+        firebaseAuth
+      );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      'Firebase signOut:',
+      error
+    );
+
+  }
+
+
+  localStorage.removeItem(
+    'absen_session'
+  );
+
+
+  sessionToken =
+    '';
+
+
+  currentUser =
+    null;
+
+
+  capturedDataUrl =
+    '';
+
+
+  stopCamera();
+
+
+  window.location.reload();
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+window.addEventListener(
+  'load',
+  async () => {
+
+    /*
+     * Loading sejak awal.
+     */
+
+    loading(
+      true,
+      'Menyiapkan Aplikasi',
+      'Memuat sistem absensi...'
+    );
+
+
+    /*
+     * Firebase.
+     */
+
+    await initFirebase();
+
+
+    /*
+     * Session lama.
+     */
+
+    if(
+      sessionToken
+    ){
+
+      showApp();
+
+
+      loading(
+        true,
+        'Memuat Absensi',
+        'Memeriksa sesi login Anda...'
+      );
+
+
+      setTimeout(
+        () => {
+
+          refreshAll();
+
+
+          setTimeout(
+            () => {
+
+              loading(false);
+
+            },
+            700
+          );
+
+        },
+        200
+      );
+
+    }else{
+
+      loading(false);
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   CAMERA MODAL BACKDROP
+========================================================= */
+
+$('cameraModal')
+  .addEventListener(
+    'click',
+    event => {
+
+      if(
+        event.target ===
+        $('cameraModal')
+      ){
+
+        closeCamera();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   RESULT MODAL BACKDROP
+========================================================= */
+
+$('resultModal')
+  .addEventListener(
+    'click',
+    event => {
+
+      if(
+        event.target ===
+        $('resultModal')
+      ){
+
+        closeResult();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   VISIBILITY
+========================================================= */
+
+document.addEventListener(
+  'visibilitychange',
+  () => {
+
+    if(
+      document.visibilityState ===
+      'visible'
+    ){
+
+      updateClock();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   BEFORE UNLOAD
+========================================================= */
+
+window.addEventListener(
+  'beforeunload',
+  () => {
+
+    stopCamera();
+
+  }
+);
+
+
+/* =========================================================
+   PREVENT HORIZONTAL GESTURE
+========================================================= */
+
+document.addEventListener(
+  'touchstart',
+  () => {},
+  {
+    passive:true
+  }
+);
+
