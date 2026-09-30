@@ -1,43 +1,3 @@
-
-
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const CONFIG = {
-
-  WEB_APP_URL:
-    'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
-
-  FIREBASE_CONFIG: {
-
-    apiKey:
-      'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
-
-    authDomain:
-      'absensiamil.firebaseapp.com',
-
-    projectId:
-      'absensiamil',
-
-    storageBucket:
-      'absensiamil.firebasestorage.app',
-
-    messagingSenderId:
-      '962926272481',
-
-    appId:
-      '1:962926272481:web:d6d5bae6d890ebecc2bca0'
-
-  }
-
-};
-
-
-/* =========================================================
-   GLOBAL STATE
-========================================================= */
-
 let sessionToken =
   localStorage.getItem(
     'absen_session'
@@ -79,19 +39,53 @@ let firebaseGoogleProvider =
 let firebaseReady =
   false;
 
+// ============================================================
+// CLIENT PERFORMANCE CACHE
+// Mengurangi request berulang ke Google Apps Script.
+// ============================================================
+const CLIENT_CACHE = Object.create(null);
+const CLIENT_INFLIGHT = Object.create(null);
+const CACHE_TTL = {
+  profile: 5 * 60 * 1000,
+  history: 20 * 1000,
+  requests: 30 * 1000,
+  assignments: 30 * 1000,
+  location: 5 * 60 * 1000
+};
+let locationInFlight = false;
+let lastLocationAt = 0;
+let locationLookupKey = '';
 
-/* =========================================================
-   HELPER
-========================================================= */
+function cacheGet_(key, ttl) {
+  const item = CLIENT_CACHE[key];
+  if (!item) return null;
+  if (Date.now() - item.at > ttl) {
+    delete CLIENT_CACHE[key];
+    return null;
+  }
+  return item.value;
+}
+
+function cacheSet_(key, value) {
+  CLIENT_CACHE[key] = { at: Date.now(), value: value };
+  return value;
+}
+
+function cacheClear_(key) {
+  if (key) delete CLIENT_CACHE[key];
+}
+
+function cacheClearAll_() {
+  Object.keys(CLIENT_CACHE).forEach(k => delete CLIENT_CACHE[k]);
+}
+
+function requestPromise_(action, extra = {}) {
+  return new Promise(resolve => request(action, extra, resolve));
+}
 
 const $ =
   id =>
     document.getElementById(id);
-
-
-/* =========================================================
-   CONFIG CHECK
-========================================================= */
 
 async function validConfig(){
 
@@ -143,11 +137,6 @@ async function validConfig(){
 
 }
 
-
-/* =========================================================
-   TOAST
-========================================================= */
-
 function showToast(message){
 
   const toast =
@@ -184,11 +173,6 @@ function showToast(message){
 
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
-
 function loading(
   on,
   title='Memproses...',
@@ -210,11 +194,6 @@ function loading(
     );
 
 }
-
-
-/* =========================================================
-   FIREBASE INITIALIZATION
-========================================================= */
 
 async function initFirebase(){
 
@@ -248,7 +227,6 @@ async function initFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
       );
 
-
     const {
       getAuth,
       GoogleAuthProvider,
@@ -259,7 +237,6 @@ async function initFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
       );
 
-
     firebaseApp =
       getApps().length
         ? getApps()[0]
@@ -267,26 +244,21 @@ async function initFirebase(){
             CONFIG.FIREBASE_CONFIG
           );
 
-
     firebaseAuth =
       getAuth(
         firebaseApp
       );
 
-
     firebaseGoogleProvider =
       new GoogleAuthProvider();
-
 
     firebaseGoogleProvider
       .setCustomParameters({
         prompt:'select_account'
       });
 
-
     firebaseReady =
       true;
-
 
     try{
 
@@ -302,7 +274,6 @@ async function initFirebase(){
       );
 
     }
-
 
     onAuthStateChanged(
       firebaseAuth,
@@ -354,7 +325,6 @@ async function initFirebase(){
       }
     );
 
-
     loading(false);
 
     return true;
@@ -378,14 +348,6 @@ async function initFirebase(){
 
 }
 
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-// Expose login immediately for HTML onclick handlers.
-window.loginWithFirebase = loginWithFirebase;
-
 async function loginWithFirebase(){
 
   if(
@@ -393,7 +355,6 @@ async function loginWithFirebase(){
   ){
     return;
   }
-
 
   if(
     !firebaseReady
@@ -408,14 +369,11 @@ async function loginWithFirebase(){
 
   }
 
-
   loginProcessing =
     true;
 
-
   const button =
     $('firebaseLoginButton');
-
 
   if(button){
 
@@ -431,13 +389,11 @@ async function loginWithFirebase(){
 
   }
 
-
   loading(
     true,
     'Memverifikasi Akun',
     'Menghubungkan akun Google dengan data pegawai...'
   );
-
 
   try{
 
@@ -449,9 +405,7 @@ async function loginWithFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
       );
 
-
     let credentialResult;
-
 
     try{
 
@@ -467,7 +421,6 @@ async function loginWithFirebase(){
         'Popup login gagal:',
         popupError
       );
-
 
       if(
 
@@ -492,22 +445,18 @@ async function loginWithFirebase(){
           'Silakan pilih akun Google Anda...'
         );
 
-
         await signInWithRedirect(
           firebaseAuth,
           firebaseGoogleProvider
         );
 
-
         return;
 
       }
 
-
       throw popupError;
 
     }
-
 
     if(
       credentialResult?.user
@@ -541,11 +490,6 @@ async function loginWithFirebase(){
 
 }
 
-
-/* =========================================================
-   RESTORE LOGIN BUTTON
-========================================================= */
-
 function restoreLoginButton_(){
 
   const button =
@@ -570,11 +514,6 @@ function restoreLoginButton_(){
 
 }
 
-
-/* =========================================================
-   COMPLETE FIREBASE LOGIN
-========================================================= */
-
 async function completeFirebaseLogin_(user){
 
   if(!user){
@@ -585,10 +524,8 @@ async function completeFirebaseLogin_(user){
 
   }
 
-
   const requestId =
     makeId();
-
 
   loading(
     true,
@@ -596,12 +533,10 @@ async function completeFirebaseLogin_(user){
     'Menghubungkan akun Google dengan data pegawai...'
   );
 
-
   const firebaseIdToken =
     await user.getIdToken(
       true
     );
-
 
   const sent =
     await postForm({
@@ -617,7 +552,6 @@ async function completeFirebaseLogin_(user){
 
     });
 
-
   if(!sent){
 
     throw new Error(
@@ -625,7 +559,6 @@ async function completeFirebaseLogin_(user){
     );
 
   }
-
 
   poll(
     requestId,
@@ -635,7 +568,6 @@ async function completeFirebaseLogin_(user){
         false;
 
       restoreLoginButton_();
-
 
       if(
         !result ||
@@ -653,11 +585,9 @@ async function completeFirebaseLogin_(user){
 
       }
 
-
       sessionToken =
         result.sessionToken ||
         '';
-
 
       if(!sessionToken){
 
@@ -671,49 +601,27 @@ async function completeFirebaseLogin_(user){
 
       }
 
-
       localStorage.setItem(
         'absen_session',
         sessionToken
       );
 
-
       currentUser =
         result.user ||
         null;
 
+      if (currentUser) cacheSet_('profile', currentUser);
 
       showApp();
 
-
-      loading(
-        true,
-        'Memuat Absensi',
-        'Menyiapkan data pegawai dan lokasi...'
-      );
-
-
-      refreshAll();
-
-
-      setTimeout(
-        () => {
-
-          loading(false);
-
-        },
-        900
-      );
+      // Tampilkan aplikasi segera. Data utama dimuat bertahap di background.
+      loading(false);
+      refreshAll({ initial: true });
 
     }
   );
 
 }
-
-
-/* =========================================================
-   FIREBASE ERROR
-========================================================= */
 
 function firebaseErrorMessage_(error){
 
@@ -721,7 +629,6 @@ function firebaseErrorMessage_(error){
     String(
       error?.code || ''
     );
-
 
   const messages = {
 
@@ -745,7 +652,6 @@ function firebaseErrorMessage_(error){
 
   };
 
-
   return (
     messages[code] ||
     error?.message ||
@@ -753,11 +659,6 @@ function firebaseErrorMessage_(error){
   );
 
 }
-
-
-/* =========================================================
-   ID
-========================================================= */
 
 function makeId(){
 
@@ -775,7 +676,6 @@ function makeId(){
 
   }
 
-
   return (
     Date.now().toString(36) +
     Math.random()
@@ -786,16 +686,10 @@ function makeId(){
 
 }
 
-
-/* =========================================================
-   POST APPS SCRIPT
-========================================================= */
-
 async function postForm(fields){
 
   const body =
     new URLSearchParams();
-
 
   Object.entries(fields)
     .forEach(
@@ -808,7 +702,6 @@ async function postForm(fields){
 
       }
     );
-
 
   try{
 
@@ -835,7 +728,6 @@ async function postForm(fields){
       }
     );
 
-
     return true;
 
   }catch(error){
@@ -845,14 +737,12 @@ async function postForm(fields){
       error
     );
 
-
     try{
 
       const form =
         document.createElement(
           'form'
         );
-
 
       form.method =
         'POST';
@@ -865,7 +755,6 @@ async function postForm(fields){
 
       form.style.display =
         'none';
-
 
       Object.entries(fields)
         .forEach(
@@ -892,14 +781,11 @@ async function postForm(fields){
           }
         );
 
-
       document.body.appendChild(
         form
       );
 
-
       form.submit();
-
 
       setTimeout(
         () => {
@@ -911,7 +797,6 @@ async function postForm(fields){
         },
         1000
       );
-
 
       return true;
 
@@ -930,304 +815,135 @@ async function postForm(fields){
 
 }
 
-
-/* =========================================================
-   POLL
-========================================================= */
-
 function poll(
   requestId,
   onDone,
-  tries=0
+  tries = 0
 ){
+  const MAX_TRIES = 28;
+  const delays = [120, 180, 250, 350, 450, 600];
+  const cb = 'cb_' + makeId();
+  let finished = false;
+  let timer = null;
 
-  const MAX_TRIES =
-    45;
+  function cleanup(){
+    if (timer) clearTimeout(timer);
+    try { delete window[cb]; } catch(e) {}
+    const oldScript = document.getElementById('jsonp_' + cb);
+    if (oldScript) oldScript.remove();
+  }
 
+  function finish(result){
+    if (finished) return;
+    finished = true;
+    cleanup();
+    onDone(result);
+  }
 
-  const cb =
-    'cb_' +
-    makeId();
+  function retry(nextTry, delay){
+    if (finished) return;
+    if (nextTry >= MAX_TRIES) {
+      finish({ ok:false, error:'Waktu menunggu respons server habis.' });
+      return;
+    }
+    try { delete window[cb]; } catch(e) {}
+    const currentScript = document.getElementById('jsonp_' + cb);
+    if (currentScript) currentScript.remove();
+    timer = setTimeout(() => poll(requestId, onDone, nextTry), delay);
+  }
 
+  window[cb] = function(data){
+    if (finished) return;
 
-  let finished =
-    false;
+    if (data && data.state === 'DONE') {
+      finish(data.result || data);
+      return;
+    }
 
+    if (data && data.state === 'NOT_FOUND' && tries >= MAX_TRIES) {
+      finish({ ok:false, error:data.error || 'Request tidak ditemukan.' });
+      return;
+    }
 
-  window[cb] =
-    function(data){
+    // Backend Apps Script memakai CacheService untuk status.
+    // Poll cepat di awal, lalu melambat agar tidak membebani endpoint.
+    retry(tries + 1, delays[Math.min(tries, delays.length - 1)]);
+  };
 
-      if(finished){
-        return;
-      }
-
-
-      finished =
-        true;
-
-
-      delete window[cb];
-
-
-      const oldScript =
-        document.getElementById(
-          'jsonp_' + cb
-        );
-
-
-      if(oldScript){
-        oldScript.remove();
-      }
-
-
-      if(
-        data &&
-        data.state === 'DONE'
-      ){
-
-        onDone(
-          data.result ||
-          data
-        );
-
-        return;
-
-      }
-
-
-      if(
-        data &&
-        data.state === 'NOT_FOUND'
-      ){
-
-        if(
-          tries >= MAX_TRIES
-        ){
-
-          onDone({
-
-            ok:false,
-
-            error:
-              data.error ||
-              'Request tidak ditemukan.'
-
-          });
-
-          return;
-
-        }
-
-
-        setTimeout(
-          () => {
-
-            poll(
-              requestId,
-              onDone,
-              tries + 1
-            );
-
-          },
-          700
-        );
-
-
-        return;
-
-      }
-
-
-      if(
-        tries >= MAX_TRIES
-      ){
-
-        onDone({
-
-          ok:false,
-
-          error:
-            'Waktu menunggu respons server habis.'
-
-        });
-
-        return;
-
-      }
-
-
-      setTimeout(
-        () => {
-
-          poll(
-            requestId,
-            onDone,
-            tries + 1
-          );
-
-        },
-        600
-      );
-
-    };
-
-
-  const script =
-    document.createElement(
-      'script'
-    );
-
-
-  script.id =
-    'jsonp_' + cb;
-
-
-  script.src =
-    CONFIG.WEB_APP_URL +
+  const script = document.createElement('script');
+  script.id = 'jsonp_' + cb;
+  script.src = CONFIG.WEB_APP_URL +
     '?action=status' +
-    '&requestId=' +
-    encodeURIComponent(
-      requestId
-    ) +
-    '&callback=' +
-    encodeURIComponent(
-      cb
-    ) +
-    '&_=' +
-    Date.now();
+    '&requestId=' + encodeURIComponent(requestId) +
+    '&callback=' + encodeURIComponent(cb) +
+    '&_=' + Date.now();
 
+  script.onerror = function(){
+    if (finished) return;
+    try { delete window[cb]; } catch(e) {}
+    script.remove();
+    retry(tries + 1, Math.min(900, 250 + tries * 75));
+  };
 
-  script.onerror =
-    function(){
-
-      delete window[cb];
-
-      script.remove();
-
-
-      if(
-        tries >= MAX_TRIES
-      ){
-
-        onDone({
-
-          ok:false,
-
-          error:
-            'Server tidak merespons.'
-
-        });
-
-        return;
-
-      }
-
-
-      setTimeout(
-        () => {
-
-          poll(
-            requestId,
-            onDone,
-            tries + 1
-          );
-
-        },
-        800
-      );
-
-    };
-
-
-  document.body.appendChild(
-    script
-  );
-
+  document.body.appendChild(script);
 }
-
-
-/* =========================================================
-   REQUEST
-========================================================= */
 
 function request(
   action,
   extra,
   onDone
 ){
+  const callback = typeof onDone === 'function' ? onDone : function(){};
+  const payloadExtra = extra || {};
+  const requestId = makeId();
+  const payload = Object.assign({
+    action: action,
+    requestId: requestId,
+    sessionToken: sessionToken
+  }, payloadExtra);
 
-  const requestId =
-    makeId();
+  // Read-only requests dapat dideduplikasi ketika halaman sedang memuat.
+  const dedupeActions = {
+    profile: true,
+    history: true,
+    requests: true,
+    assignments: true,
+    location: true
+  };
+  const dedupeKey = dedupeActions[action]
+    ? action + ':' + JSON.stringify(payloadExtra)
+    : '';
 
+  if (dedupeKey && CLIENT_INFLIGHT[dedupeKey]) {
+    CLIENT_INFLIGHT[dedupeKey].then(callback);
+    return CLIENT_INFLIGHT[dedupeKey];
+  }
 
-  const payload =
-    Object.assign(
-      {
-
-        action:
-          action,
-
-        requestId:
-          requestId,
-
-        sessionToken:
-          sessionToken
-
-      },
-
-      extra || {}
-
-    );
-
-
-  const sent =
-    postForm(
-      payload
-    );
-
-
-  Promise.resolve(sent)
-    .then(
-      result => {
-
-        if(result === false){
-
-          onDone({
-
-            ok:false,
-
-            error:
-              'Gagal mengirim permintaan ke server.'
-
-          });
-
-          return;
-
-        }
-
-
-        setTimeout(
-          () => {
-
-            poll(
-              requestId,
-              onDone,
-              0
-            );
-
-          },
-          300
-        );
-
+  const promise = Promise.resolve()
+    .then(() => postForm(payload))
+    .then(sent => {
+      if (sent === false) {
+        return { ok:false, error:'Gagal mengirim permintaan ke server.' };
       }
-    );
+      return new Promise(resolve => poll(requestId, resolve, 0));
+    })
+    .catch(error => ({
+      ok:false,
+      error:error?.message || 'Terjadi kesalahan komunikasi dengan server.'
+    }));
 
+  if (dedupeKey) {
+    CLIENT_INFLIGHT[dedupeKey] = promise;
+    promise.finally(() => {
+      setTimeout(() => {
+        if (CLIENT_INFLIGHT[dedupeKey] === promise) delete CLIENT_INFLIGHT[dedupeKey];
+      }, 0);
+    });
+  }
+
+  promise.then(callback);
+  return promise;
 }
-
-
-/* =========================================================
-   SHOW APP
-========================================================= */
 
 function showApp(){
 
@@ -1235,11 +951,9 @@ function showApp(){
     .style.display =
     'none';
 
-
   $('appView')
     .style.display =
     'block';
-
 
   if(currentUser){
 
@@ -1251,27 +965,19 @@ function showApp(){
 
 }
 
-
-/* =========================================================
-   RENDER USER
-========================================================= */
-
 function renderUser(u){
 
   if(!u){
     return;
   }
 
-
   const name =
     u.name ||
     '-';
 
-
   $('userName')
     .textContent =
     name;
-
 
   $('userPosition')
     .textContent =
@@ -1283,46 +989,38 @@ function renderUser(u){
     .join(' • ') ||
     '-';
 
-
   $('profileName')
     .textContent =
     name;
-
 
   $('profilePosition')
     .textContent =
     u.position ||
     '-';
 
-
   $('profileNip')
     .textContent =
     u.nip ||
     '-';
-
 
   $('profileEmail')
     .textContent =
     u.email ||
     '-';
 
-
   $('profileRole')
     .textContent =
     u.role ||
     '-';
-
 
   $('profileStatus')
     .textContent =
     u.status ||
     '-';
 
-
   const photo =
     u.photo ||
     '';
-
 
   const avatar =
     photo ||
@@ -1330,23 +1028,15 @@ function renderUser(u){
       name
     );
 
-
   $('avatar').src =
     avatar;
-
 
   $('profilePhoto').src =
     avatar;
 
-
   updateGreeting_();
 
 }
-
-
-/* =========================================================
-   GREETING
-========================================================= */
 
 function updateGreeting_(){
 
@@ -1370,10 +1060,8 @@ function updateGreeting_(){
       )
     );
 
-
   let greeting =
     'Selamat Datang';
-
 
   if(hour >= 4 && hour < 11){
 
@@ -1403,10 +1091,8 @@ function updateGreeting_(){
 
   }
 
-
   const el =
     $('greetingText');
-
 
   if(el){
 
@@ -1417,11 +1103,6 @@ function updateGreeting_(){
 
 }
 
-
-/* =========================================================
-   AVATAR
-========================================================= */
-
 function avatarData(name){
 
   const initial =
@@ -1431,7 +1112,6 @@ function avatarData(name){
     )
     .charAt(0)
     .toUpperCase();
-
 
   return (
 
@@ -1472,234 +1152,128 @@ function avatarData(name){
 
 }
 
+async function refreshAll(options = {}){
+  if (!sessionToken) return;
 
-/* =========================================================
-   REFRESH ALL
-========================================================= */
+  const initial = !!options.initial;
 
-function refreshAll(){
-
-  if(!sessionToken){
-    return;
+  // User hasil login sudah dikembalikan backend, jadi profile tidak perlu
+  // diminta lagi pada startup. Profile hanya disegarkan bila belum ada.
+  if (!currentUser || !cacheGet_('profile', CACHE_TTL.profile)) {
+    request('profile', {}, r => {
+      if (r?.ok && r.user) {
+        currentUser = r.user;
+        cacheSet_('profile', r.user);
+        renderUser(currentUser);
+      }
+    });
+  } else {
+    renderUser(currentUser);
   }
 
-
+  // GPS tidak menghalangi render Home.
   getLocation(false);
 
-
-  request(
-    'profile',
-    {},
-    r => {
-
-      if(
-        r &&
-        r.ok &&
-        r.user
-      ){
-
-        currentUser =
-          r.user;
-
-        renderUser(
-          currentUser
-        );
-
+  const cachedHistory = cacheGet_('history', CACHE_TTL.history);
+  if (cachedHistory) {
+    renderHistory(cachedHistory);
+  } else {
+    request('history', { limit:60 }, r => {
+      if (r?.ok) {
+        const items = r.items || [];
+        cacheSet_('history', items);
+        renderHistory(items);
       }
-
-    }
-  );
-
-
-  request(
-    'history',
-    {
-      limit:60
-    },
-    r => {
-
-      if(
-        r &&
-        r.ok
-      ){
-
-        renderHistory(
-          r.items ||
-          []
-        );
-
-      }
-
-    }
-  );
-
+    });
+  }
 }
-
-
-/* =========================================================
-   LOCATION
-========================================================= */
 
 function getLocation(force){
-
-  if(
-    !navigator.geolocation
-  ){
-
-    $('locationText')
-      .textContent =
-      'Browser tidak mendukung GPS';
-
-    $('accuracyText')
-      .textContent =
-      'Gunakan browser yang mendukung lokasi.';
-
-    return;
-
+  if (!navigator.geolocation) {
+    $('locationText').textContent = 'Browser tidak mendukung GPS';
+    $('accuracyText').textContent = 'Gunakan browser yang mendukung lokasi.';
+    return Promise.resolve(null);
   }
 
+  if (!force && currentLocation && Date.now() - lastLocationAt < CACHE_TTL.location) {
+    return Promise.resolve(currentLocation);
+  }
 
-  $('locationText')
-    .textContent =
-    'Mengambil lokasi...';
+  if (locationInFlight) return Promise.resolve(currentLocation);
+  locationInFlight = true;
 
+  $('locationText').textContent = 'Mengambil lokasi...';
+  $('accuracyText').textContent = 'Mohon izinkan lokasi pada browser.';
 
-  $('accuracyText')
-    .textContent =
-    'Mohon izinkan lokasi pada browser.';
+  return new Promise(resolve => {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        currentLocation = {
+          latitude: Number(pos.coords.latitude),
+          longitude: Number(pos.coords.longitude),
+          accuracy: Number(pos.coords.accuracy)
+        };
+        lastLocationAt = Date.now();
 
+        $('accuracyText').textContent =
+          'Akurasi GPS: ' + Math.round(currentLocation.accuracy) + ' meter';
 
-  navigator.geolocation.getCurrentPosition(
-
-    pos => {
-
-      currentLocation = {
-
-        latitude:
-          Number(
-            pos.coords.latitude
-          ),
-
-        longitude:
-          Number(
-            pos.coords.longitude
-          ),
-
-        accuracy:
-          Number(
-            pos.coords.accuracy
-          )
-
-      };
-
-
-      $('accuracyText')
-        .textContent =
-        'Akurasi GPS: ' +
-        Math.round(
-          currentLocation.accuracy
-        ) +
-        ' meter';
-
-
-      request(
-        'location',
-        {
-
-          latitude:
-            currentLocation.latitude,
-
-          longitude:
-            currentLocation.longitude
-
-        },
-        r => {
-
-          if(
-            r &&
-            r.ok
-          ){
-
-            currentLocation.district =
-              r.district ||
-              '';
-
-            currentLocation.regency =
-              r.regency ||
-              '';
-
-            currentLocation.province =
-              r.province ||
-              '';
-
-
-            const area =
-              [
-                r.district,
-                r.regency
-              ]
-              .filter(Boolean)
-              .join(', ');
-
-
-            $('locationText')
-              .textContent =
-              area ||
-              'Area lokasi belum terdeteksi.';
-
-          }else{
-
-            $('locationText')
-              .textContent =
-              'Area lokasi belum terdeteksi.';
-
-          }
-
+        // Jangan reverse-geocode berulang untuk titik yang sama.
+        const key = currentLocation.latitude.toFixed(4) + ',' + currentLocation.longitude.toFixed(4);
+        if (key === locationLookupKey) {
+          locationInFlight = false;
+          resolve(currentLocation);
+          return;
         }
-      );
+        locationLookupKey = key;
 
-    },
+        const cached = cacheGet_('location:' + key, CACHE_TTL.location);
+        if (cached) {
+          Object.assign(currentLocation, cached);
+          const area = [cached.district, cached.regency].filter(Boolean).join(', ');
+          $('locationText').textContent = area || 'Area lokasi belum terdeteksi.';
+          locationInFlight = false;
+          resolve(currentLocation);
+          return;
+        }
 
-    err => {
-
-      currentLocation =
-        null;
-
-
-      $('locationText')
-        .textContent =
-        'Lokasi belum tersedia';
-
-
-      $('accuracyText')
-        .textContent =
-        getLocationErrorMessage_(
-          err
-        );
-
-    },
-
-    {
-
-      enableHighAccuracy:true,
-
-      timeout:15000,
-
-      maximumAge:
-        force
-          ? 0
-          : 30000
-
-    }
-
-  );
-
+        request('location', {
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude
+        }, r => {
+          if (r?.ok) {
+            const data = {
+              district: r.district || '',
+              regency: r.regency || '',
+              province: r.province || ''
+            };
+            Object.assign(currentLocation, data);
+            cacheSet_('location:' + key, data);
+            $('locationText').textContent =
+              [data.district, data.regency].filter(Boolean).join(', ') ||
+              'Area lokasi belum terdeteksi.';
+          } else {
+            $('locationText').textContent = 'Area lokasi belum terdeteksi.';
+          }
+          locationInFlight = false;
+          resolve(currentLocation);
+        });
+      },
+      err => {
+        currentLocation = null;
+        locationInFlight = false;
+        $('locationText').textContent = 'Lokasi belum tersedia';
+        $('accuracyText').textContent = getLocationErrorMessage_(err);
+        resolve(null);
+      },
+      {
+        enableHighAccuracy: !!force,
+        timeout: force ? 8000 : 5000,
+        maximumAge: force ? 0 : 120000
+      }
+    );
+  });
 }
-
-
-/* =========================================================
-   LOCATION ERROR
-========================================================= */
 
 function getLocationErrorMessage_(err){
 
@@ -1709,7 +1283,6 @@ function getLocationErrorMessage_(err){
 
   }
 
-
   if(
     err.code === 1
   ){
@@ -1717,7 +1290,6 @@ function getLocationErrorMessage_(err){
     return 'Izin lokasi ditolak. Aktifkan lokasi browser.';
 
   }
-
 
   if(
     err.code === 2
@@ -1727,7 +1299,6 @@ function getLocationErrorMessage_(err){
 
   }
 
-
   if(
     err.code === 3
   ){
@@ -1736,18 +1307,12 @@ function getLocationErrorMessage_(err){
 
   }
 
-
   return (
     err.message ||
     'Lokasi belum tersedia.'
   );
 
 }
-
-
-/* =========================================================
-   CLOCK
-========================================================= */
 
 function updateClock(){
 
@@ -1756,7 +1321,6 @@ function updateClock(){
 
   const clockEl =
     $('clockText');
-
 
   if(
     !dateEl ||
@@ -1767,10 +1331,8 @@ function updateClock(){
 
   }
 
-
   const now =
     new Date();
-
 
   dateEl.textContent =
     new Intl.DateTimeFormat(
@@ -1792,7 +1354,6 @@ function updateClock(){
     )
     .format(now);
 
-
   const time =
     new Intl.DateTimeFormat(
       'id-ID',
@@ -1813,31 +1374,22 @@ function updateClock(){
     )
     .format(now);
 
-
   clockEl.innerHTML =
     escapeHtml(
       time
     ) +
     ' <span>WIB</span>';
 
-
   updateGreeting_();
 
 }
-
 
 setInterval(
   updateClock,
   1000
 );
 
-
 updateClock();
-
-
-/* =========================================================
-   DATE NORMALIZER
-========================================================= */
 
 function formatAttendanceTime_(value){
 
@@ -1851,17 +1403,14 @@ function formatAttendanceTime_(value){
 
   }
 
-
   const raw =
     String(value)
       .trim();
-
 
   const clockMatch =
     raw.match(
       /\b(\d{1,2}):(\d{2})(?::\d{2})?\b/
     );
-
 
   if(clockMatch){
 
@@ -1880,12 +1429,10 @@ function formatAttendanceTime_(value){
 
   }
 
-
   const shortMatch =
     raw.match(
       /^\s*(\d{1,2})[.: -](\d{2})\s*(?:WIB)?\s*$/i
     );
-
 
   if(shortMatch){
 
@@ -1904,12 +1451,10 @@ function formatAttendanceTime_(value){
 
   }
 
-
   const parsed =
     new Date(
       raw
     );
-
 
   if(
     !Number.isNaN(
@@ -1938,11 +1483,9 @@ function formatAttendanceTime_(value){
 
   }
 
-
   return '--:--';
 
 }
-
 
 function normalizeDate_(value){
 
@@ -1956,17 +1499,14 @@ function normalizeDate_(value){
 
   }
 
-
   const raw =
     String(value)
       .trim();
-
 
   const iso =
     raw.match(
       /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
     );
-
 
   if(iso){
 
@@ -1978,7 +1518,6 @@ function normalizeDate_(value){
 
     const d =
       Number(iso[3]);
-
 
     if(
       m >= 1 &&
@@ -1999,12 +1538,10 @@ function normalizeDate_(value){
 
   }
 
-
   const numeric =
     raw.match(
       /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/
     );
-
 
   if(numeric){
 
@@ -2023,13 +1560,11 @@ function normalizeDate_(value){
         numeric[3]
       );
 
-
     let day =
       a;
 
     let month =
       b;
-
 
     if(
       a <= 12 &&
@@ -2043,7 +1578,6 @@ function normalizeDate_(value){
         b;
 
     }
-
 
     if(
       month >= 1 &&
@@ -2064,12 +1598,10 @@ function normalizeDate_(value){
 
   }
 
-
   const parsed =
     new Date(
       raw
     );
-
 
   if(
     !Number.isNaN(
@@ -2097,14 +1629,12 @@ function normalizeDate_(value){
         parsed
       );
 
-
     const get =
       type =>
         parts.find(
           x =>
             x.type === type
         )?.value || '';
-
 
     if(
       get('year') &&
@@ -2124,18 +1654,12 @@ function normalizeDate_(value){
 
   }
 
-
   return raw.slice(
     0,
     10
   );
 
 }
-
-
-/* =========================================================
-   TODAY
-========================================================= */
 
 function jakartaToday_(){
 
@@ -2159,14 +1683,12 @@ function jakartaToday_(){
       new Date()
     );
 
-
   const get =
     type =>
       parts.find(
         x =>
           x.type === type
       )?.value || '';
-
 
   return (
     get('year') +
@@ -2178,18 +1700,12 @@ function jakartaToday_(){
 
 }
 
-
-/* =========================================================
-   DISPLAY DATE
-========================================================= */
-
 function getDisplayDate_(value){
 
   const normalized =
     normalizeDate_(
       value
     );
-
 
   if(!normalized){
 
@@ -2200,12 +1716,10 @@ function getDisplayDate_(value){
 
   }
 
-
   const match =
     normalized.match(
       /^(\d{4})-(\d{2})-(\d{2})$/
     );
-
 
   if(!match){
 
@@ -2218,7 +1732,6 @@ function getDisplayDate_(value){
     };
 
   }
-
 
   const year =
     Number(
@@ -2235,7 +1748,6 @@ function getDisplayDate_(value){
       match[3]
     );
 
-
   const d =
     new Date(
       Date.UTC(
@@ -2244,7 +1756,6 @@ function getDisplayDate_(value){
         day
       )
     );
-
 
   const dayName =
     new Intl.DateTimeFormat(
@@ -2258,7 +1769,6 @@ function getDisplayDate_(value){
       }
     )
     .format(d);
-
 
   const longDate =
     new Intl.DateTimeFormat(
@@ -2277,7 +1787,6 @@ function getDisplayDate_(value){
     )
     .format(d);
 
-
   return {
 
     day:
@@ -2290,11 +1799,6 @@ function getDisplayDate_(value){
 
 }
 
-
-/* =========================================================
-   ATTENDANCE TYPE
-========================================================= */
-
 function attendanceTypeInfo_(type){
 
   const t =
@@ -2304,7 +1808,6 @@ function attendanceTypeInfo_(type){
     )
     .trim()
     .toUpperCase();
-
 
   if(
     t === 'MASUK'
@@ -2325,7 +1828,6 @@ function attendanceTypeInfo_(type){
 
   }
 
-
   if(
     t === 'PULANG'
   ){
@@ -2345,7 +1847,6 @@ function attendanceTypeInfo_(type){
 
   }
 
-
   return {
 
     label:
@@ -2362,11 +1863,6 @@ function attendanceTypeInfo_(type){
 
 }
 
-
-/* =========================================================
-   TODAY CARD
-========================================================= */
-
 function renderTodayAttendanceCard_(item){
 
   const typeInfo =
@@ -2374,12 +1870,10 @@ function renderTodayAttendanceCard_(item){
       item.type
     );
 
-
   const dateInfo =
     getDisplayDate_(
       item.date
     );
-
 
   const location =
     [
@@ -2388,7 +1882,6 @@ function renderTodayAttendanceCard_(item){
     ]
     .filter(Boolean)
     .join(', ');
-
 
   const distance =
     item.distance !== undefined &&
@@ -2408,7 +1901,6 @@ function renderTodayAttendanceCard_(item){
           ' meter dari titik kantor'
         )
       : 'Jarak tidak tersedia';
-
 
   return `
 
@@ -2438,7 +1930,6 @@ function renderTodayAttendanceCard_(item){
 
       </div>
 
-
       <div class="today-grid">
 
         <div class="today-info">
@@ -2453,7 +1944,6 @@ function renderTodayAttendanceCard_(item){
 
         </div>
 
-
         <div class="today-info">
 
           <div class="today-label">
@@ -2465,7 +1955,6 @@ function renderTodayAttendanceCard_(item){
           </div>
 
         </div>
-
 
         <div class="today-info">
 
@@ -2484,7 +1973,6 @@ function renderTodayAttendanceCard_(item){
 
         </div>
 
-
         <div class="today-info">
 
           <div class="today-label">
@@ -2498,7 +1986,6 @@ function renderTodayAttendanceCard_(item){
           </div>
 
         </div>
-
 
         <div class="today-info full">
 
@@ -2539,11 +2026,6 @@ function renderTodayAttendanceCard_(item){
 
 }
 
-
-/* =========================================================
-   RENDER HISTORY
-========================================================= */
-
 function renderHistory(items){
 
   items =
@@ -2551,10 +2033,8 @@ function renderHistory(items){
       ? items
       : [];
 
-
   const today =
     jakartaToday_();
-
 
   const todayItems =
     items
@@ -2578,7 +2058,6 @@ function renderHistory(items){
           )
       );
 
-
   const masuk =
     todayItems.find(
       x =>
@@ -2589,7 +2068,6 @@ function renderHistory(items){
         .toUpperCase() ===
         'MASUK'
     );
-
 
   const pulang =
     todayItems.find(
@@ -2602,15 +2080,12 @@ function renderHistory(items){
         'PULANG'
     );
 
-
   $('btnMasuk').disabled =
     !!masuk;
-
 
   $('btnPulang').disabled =
     !masuk ||
     !!pulang;
-
 
   if(
     masuk &&
@@ -2632,10 +2107,8 @@ function renderHistory(items){
 
   }
 
-
   const badge =
     $('statusBadge');
-
 
   if(
     masuk &&
@@ -2647,7 +2120,6 @@ function renderHistory(items){
 
     badge.className =
       'status-badge ok';
-
 
     $('statusSymbol').innerHTML = `
       <span class="material-symbols-rounded">
@@ -2663,7 +2135,6 @@ function renderHistory(items){
     badge.className =
       'status-badge ok';
 
-
     $('statusSymbol').innerHTML = `
       <span class="material-symbols-rounded">
         check_circle
@@ -2678,7 +2149,6 @@ function renderHistory(items){
     badge.className =
       'status-badge';
 
-
     $('statusSymbol').innerHTML = `
       <span class="material-symbols-rounded">
         login
@@ -2686,7 +2156,6 @@ function renderHistory(items){
     `;
 
   }
-
 
   if(
     todayItems.length
@@ -2724,7 +2193,6 @@ function renderHistory(items){
 
   }
 
-
   if(
     items.length
   ){
@@ -2739,7 +2207,6 @@ function renderHistory(items){
                 x.date
               );
 
-
             const location =
               [
                 x.district,
@@ -2747,7 +2214,6 @@ function renderHistory(items){
               ]
               .filter(Boolean)
               .join(', ');
-
 
             const distance =
               x.distance !== undefined &&
@@ -2768,12 +2234,10 @@ function renderHistory(items){
                   )
                 : '';
 
-
             const typeInfo =
               attendanceTypeInfo_(
                 x.type
               );
-
 
             return `
 
@@ -2786,7 +2250,6 @@ function renderHistory(items){
                   </span>
 
                 </div>
-
 
                 <div class="history-main">
 
@@ -2822,7 +2285,6 @@ function renderHistory(items){
                   </div>
 
                 </div>
-
 
                 <div class="history-right">
 
@@ -2876,11 +2338,6 @@ function renderHistory(items){
 
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
 function escapeHtml(value){
 
   return String(
@@ -2912,11 +2369,6 @@ function escapeHtml(value){
 
 }
 
-
-/* =========================================================
-   OPEN CAMERA
-========================================================= */
-
 async function openCamera(type){
 
   if(
@@ -2926,7 +2378,6 @@ async function openCamera(type){
     return;
 
   }
-
 
   if(
     !currentLocation
@@ -2942,7 +2393,6 @@ async function openCamera(type){
 
   }
 
-
   attendanceType =
     String(
       type ||
@@ -2950,10 +2400,8 @@ async function openCamera(type){
     )
     .toUpperCase();
 
-
   capturedDataUrl =
     '';
-
 
   $('cameraTitle')
     .textContent =
@@ -2961,19 +2409,15 @@ async function openCamera(type){
       ? 'Absen Masuk'
       : 'Absen Pulang';
 
-
   resetCameraUI_();
-
 
   $('cameraModal')
     .classList.add(
       'show'
     );
 
-
   document.body.style.overflow =
     'hidden';
-
 
   try{
 
@@ -2986,9 +2430,7 @@ async function openCamera(type){
       error
     );
 
-
     closeCamera();
-
 
     showToast(
       'Kamera tidak dapat dibuka. Pastikan izin kamera diberikan.'
@@ -2997,11 +2439,6 @@ async function openCamera(type){
   }
 
 }
-
-
-/* =========================================================
-   RESET CAMERA UI
-========================================================= */
 
 function resetCameraUI_(){
 
@@ -3020,14 +2457,12 @@ function resetCameraUI_(){
   const switchButton =
     $('switchCameraBtn');
 
-
   if(video){
 
     video.style.display =
       'block';
 
   }
-
 
   if(preview){
 
@@ -3039,7 +2474,6 @@ function resetCameraUI_(){
     );
 
   }
-
 
   if(capture){
 
@@ -3054,7 +2488,6 @@ function resetCameraUI_(){
     `;
 
   }
-
 
   if(submit){
 
@@ -3073,7 +2506,6 @@ function resetCameraUI_(){
 
   }
 
-
   if(switchButton){
 
     switchButton.disabled =
@@ -3090,11 +2522,6 @@ function resetCameraUI_(){
 
 }
 
-
-/* =========================================================
-   START CAMERA
-========================================================= */
-
 async function startCamera(){
 
   if(
@@ -3108,9 +2535,7 @@ async function startCamera(){
 
   }
 
-
   stopCamera();
-
 
   let constraints = {
 
@@ -3135,7 +2560,6 @@ async function startCamera(){
 
   };
 
-
   try{
 
     cameraStream =
@@ -3150,7 +2574,6 @@ async function startCamera(){
       'Kamera utama gagal:',
       firstError
     );
-
 
     try{
 
@@ -3174,7 +2597,6 @@ async function startCamera(){
         secondError
       );
 
-
       cameraStream =
         await navigator.mediaDevices
           .getUserMedia({
@@ -3189,22 +2611,17 @@ async function startCamera(){
 
   }
 
-
   const video =
     $('video');
-
 
   video.srcObject =
     cameraStream;
 
-
   video.muted =
     true;
 
-
   video.playsInline =
     true;
-
 
   try{
 
@@ -3220,11 +2637,6 @@ async function startCamera(){
   }
 
 }
-
-
-/* =========================================================
-   STOP CAMERA
-========================================================= */
 
 function stopCamera(){
 
@@ -3244,16 +2656,13 @@ function stopCamera(){
         }
       );
 
-
     cameraStream =
       null;
 
   }
 
-
   const video =
     $('video');
-
 
   if(video){
 
@@ -3263,18 +2672,12 @@ function stopCamera(){
 
     }catch(error){}
 
-
     video.srcObject =
       null;
 
   }
 
 }
-
-
-/* =========================================================
-   SWITCH CAMERA
-========================================================= */
 
 async function switchCamera(){
 
@@ -3286,20 +2689,16 @@ async function switchCamera(){
 
   }
 
-
   const previous =
     facingMode;
-
 
   facingMode =
     facingMode === 'user'
       ? 'environment'
       : 'user';
 
-
   const button =
     $('switchCameraBtn');
-
 
   if(button){
 
@@ -3315,7 +2714,6 @@ async function switchCamera(){
 
   }
 
-
   try{
 
     await startCamera();
@@ -3326,10 +2724,8 @@ async function switchCamera(){
       error
     );
 
-
     facingMode =
       previous;
-
 
     showToast(
       'Kamera tidak tersedia.'
@@ -3355,11 +2751,6 @@ async function switchCamera(){
 
 }
 
-
-/* =========================================================
-   CAPTURE PHOTO
-========================================================= */
-
 function capturePhoto(){
 
   if(
@@ -3370,13 +2761,11 @@ function capturePhoto(){
 
   }
 
-
   const video =
     $('video');
 
   const canvas =
     $('canvas');
-
 
   if(
     !video ||
@@ -3391,7 +2780,6 @@ function capturePhoto(){
 
   }
 
-
   if(
     !video.videoWidth ||
     !video.videoHeight
@@ -3405,23 +2793,18 @@ function capturePhoto(){
 
   }
 
-
   const maxWidth =
     800;
-
 
   const sourceWidth =
     video.videoWidth;
 
-
   const sourceHeight =
     video.videoHeight;
-
 
   const ratio =
     sourceHeight /
     sourceWidth;
-
 
   const width =
     Math.min(
@@ -3429,20 +2812,17 @@ function capturePhoto(){
       sourceWidth
     );
 
-
   const height =
     Math.round(
       width *
       ratio
     );
 
-
   canvas.width =
     width;
 
   canvas.height =
     height;
-
 
   const ctx =
     canvas.getContext(
@@ -3451,7 +2831,6 @@ function capturePhoto(){
         alpha:false
       }
     );
-
 
   if(!ctx){
 
@@ -3463,14 +2842,11 @@ function capturePhoto(){
 
   }
 
-
   ctx.imageSmoothingEnabled =
     true;
 
-
   ctx.imageSmoothingQuality =
     'high';
-
 
   ctx.drawImage(
     video,
@@ -3480,19 +2856,15 @@ function capturePhoto(){
     height
   );
 
-
   const MAX_CLIENT_BYTES =
     600 *
     1024;
 
-
   let quality =
     0.80;
 
-
   let dataUrl =
     '';
-
 
   for(
     let i = 0;
@@ -3506,13 +2878,11 @@ function capturePhoto(){
         quality
       );
 
-
     const estimatedBytes =
       Math.floor(
         dataUrl.length *
         0.75
       );
-
 
     if(
       estimatedBytes <=
@@ -3523,10 +2893,8 @@ function capturePhoto(){
 
     }
 
-
     quality -=
       0.06;
-
 
     if(
       quality < 0.35
@@ -3539,11 +2907,6 @@ function capturePhoto(){
 
   }
 
-
-  /*
-   * VALIDASI FOTO
-   */
-
   const validPhoto =
     /^data:image\/[^;]+;base64,/i
       .test(
@@ -3552,7 +2915,6 @@ function capturePhoto(){
           ''
         )
       );
-
 
   if(!validPhoto){
 
@@ -3564,13 +2926,11 @@ function capturePhoto(){
 
   }
 
-
   const finalPhoto =
     String(
       dataUrl
     )
     .trim();
-
 
   if(
     !finalPhoto ||
@@ -3585,31 +2945,17 @@ function capturePhoto(){
 
   }
 
-
-  /*
-   * PENTING:
-   * Simpan hasil foto ke GLOBAL.
-   */
-
   capturedDataUrl =
     finalPhoto;
-
-
-  /*
-   * PREVIEW
-   */
 
   $('preview').src =
     capturedDataUrl;
 
-
   $('video').style.display =
     'none';
 
-
   $('preview').style.display =
     'block';
-
 
   $('captureBtn').innerHTML = `
     <span class="material-symbols-rounded">
@@ -3618,15 +2964,8 @@ function capturePhoto(){
     Ambil Ulang
   `;
 
-
   $('submitPhotoBtn').style.display =
     'flex';
-
-
-  /*
-   * Kamera boleh tetap hidup
-   * sampai user submit/close.
-   */
 
   showToast(
     'Foto berhasil diambil. Periksa foto lalu tekan Gunakan Foto & Absen.'
@@ -3634,31 +2973,19 @@ function capturePhoto(){
 
 }
 
-
-/* =========================================================
-   CLOSE CAMERA
-========================================================= */
-
 function closeCamera(){
 
   stopCamera();
-
 
   $('cameraModal')
     .classList.remove(
       'show'
     );
 
-
   document.body.style.overflow =
     '';
 
 }
-
-
-/* =========================================================
-   SUBMIT ATTENDANCE
-========================================================= */
 
 function submitAttendance(){
 
@@ -3670,13 +2997,6 @@ function submitAttendance(){
 
   }
 
-
-  /*
-   * =====================================================
-   * FOTO DIAMBIL DARI GLOBAL TERLEBIH DAHULU
-   * =====================================================
-   */
-
   const photoToSend =
     String(
       capturedDataUrl ||
@@ -3684,19 +3004,11 @@ function submitAttendance(){
     )
     .trim();
 
-
-  /*
-   * =====================================================
-   * VALIDASI FOTO BASE64
-   * =====================================================
-   */
-
   const validPhoto =
     /^data:image\/[^;]+;base64,/i
       .test(
         photoToSend
       );
-
 
   if(
     !photoToSend ||
@@ -3710,13 +3022,6 @@ function submitAttendance(){
     return;
 
   }
-
-
-  /*
-   * =====================================================
-   * VALIDASI LOKASI
-   * =====================================================
-   */
 
   const locationToSend =
     currentLocation
@@ -3739,7 +3044,6 @@ function submitAttendance(){
 
         }
       : null;
-
 
   if(
     !locationToSend ||
@@ -3765,7 +3069,6 @@ function submitAttendance(){
 
   }
 
-
   if(
     locationToSend.accuracy <= 0
   ){
@@ -3778,20 +3081,11 @@ function submitAttendance(){
 
   }
 
-
-  /*
-   * =====================================================
-   * SIMPAN TIPE
-   * =====================================================
-   */
-
   const typeToSend =
     attendanceType;
 
-
   attendanceProcessing =
     true;
-
 
   const submitButton =
     $('submitPhotoBtn');
@@ -3801,7 +3095,6 @@ function submitAttendance(){
 
   const switchButton =
     $('switchCameraBtn');
-
 
   if(submitButton){
 
@@ -3817,14 +3110,12 @@ function submitAttendance(){
 
   }
 
-
   if(captureButton){
 
     captureButton.disabled =
       true;
 
   }
-
 
   if(switchButton){
 
@@ -3833,32 +3124,16 @@ function submitAttendance(){
 
   }
 
-
-  /*
-   * =====================================================
-   * SIMPAN FOTO LOKAL TERLEBIH DAHULU
-   * =====================================================
-   */
-
   const photoBackup =
     photoToSend;
 
-
-  /*
-   * Tutup kamera.
-   *
-   * capturedDataUrl TIDAK DIHAPUS.
-   */
-
   closeCamera();
-
 
   loading(
     true,
     'Menyimpan Absensi',
     'Mengirim foto, lokasi, dan data absensi...'
   );
-
 
   request(
     'attendance',
@@ -3884,83 +3159,47 @@ function submitAttendance(){
 
       loading(false);
 
-
       attendanceProcessing =
         false;
-
-
-      /*
-       * =================================================
-       * GAGAL
-       * =================================================
-       */
 
       if(
         !r ||
         !r.ok
       ){
 
-        /*
-         * FOTO TETAP DISIMPAN.
-         */
-
         capturedDataUrl =
           photoBackup;
-
 
         showToast(
           r?.error ||
           'Absen gagal. Silakan coba lagi.'
         );
 
-
-        /*
-         * Pulihkan tombol.
-         */
-
         restoreCameraAfterSubmitError_();
-
-
-        /*
-         * Buka modal kembali dalam mode preview.
-         */
 
         $('preview').src =
           capturedDataUrl;
 
-
         $('preview').style.display =
           'block';
-
 
         $('video').style.display =
           'none';
 
-
         $('submitPhotoBtn').style.display =
           'flex';
-
 
         $('cameraModal')
           .classList.add(
             'show'
           );
 
-
         document.body.style.overflow =
           'hidden';
-
 
         return;
 
       }
-
-
-      /*
-       * =================================================
-       * BERHASIL
-       * =================================================
-       */
 
       $('resultTime')
         .textContent =
@@ -3972,12 +3211,10 @@ function submitAttendance(){
         ) +
         ' WIB';
 
-
       $('resultDate')
         .textContent =
         r.date ||
         '-';
-
 
       $('resultLoc')
         .textContent =
@@ -3989,46 +3226,35 @@ function submitAttendance(){
         .join(', ') ||
         'Lokasi tercatat';
 
-
       $('resultPhoto')
         .src =
         photoBackup;
-
 
       $('resultModal')
         .classList.add(
           'show'
         );
 
-
       document.body.style.overflow =
         'hidden';
-
-
-      /*
-       * Foto baru boleh dihapus
-       * setelah server sukses.
-       */
 
       capturedDataUrl =
         '';
 
-
-      /*
-       * Refresh data.
-       */
-
-      refreshAll();
+      // Jangan memuat ulang profile + GPS setelah absensi. Cukup segarkan history.
+      cacheClear_('history');
+      request('history', {limit:60}, historyResult => {
+        if (historyResult?.ok) {
+          const items = historyResult.items || [];
+          cacheSet_('history', items);
+          renderHistory(items);
+        }
+      });
 
     }
   );
 
 }
-
-
-/* =========================================================
-   RESTORE CAMERA AFTER ERROR
-========================================================= */
 
 function restoreCameraAfterSubmitError_(){
 
@@ -4040,7 +3266,6 @@ function restoreCameraAfterSubmitError_(){
 
   const switchButton =
     $('switchCameraBtn');
-
 
   if(submit){
 
@@ -4056,7 +3281,6 @@ function restoreCameraAfterSubmitError_(){
 
   }
 
-
   if(capture){
 
     capture.disabled =
@@ -4071,7 +3295,6 @@ function restoreCameraAfterSubmitError_(){
 
   }
 
-
   if(switchButton){
 
     switchButton.disabled =
@@ -4081,11 +3304,6 @@ function restoreCameraAfterSubmitError_(){
 
 }
 
-
-/* =========================================================
-   CLOSE RESULT
-========================================================= */
-
 function closeResult(){
 
   $('resultModal')
@@ -4093,121 +3311,48 @@ function closeResult(){
       'show'
     );
 
-
   document.body.style.overflow =
     '';
-
 
   showPage(
     'home'
   );
 
-
-  refreshAll();
-
 }
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
 
 function showPage(page){
-
   [
-    'home',
-    'history',
-    'profile'
-  ]
-  .forEach(
-    p => {
-
-      const pageEl =
-        $(p + 'Page');
-
-
-      if(pageEl){
-
-        pageEl.classList.toggle(
-          'active',
-          p === page
-        );
-
-      }
-
-    }
-  );
-
-
-  [
-    'Home',
-    'History',
-    'Profile'
-  ]
-  .forEach(
-    p => {
-
-      const navEl =
-        $('nav' + p);
-
-
-      if(navEl){
-
-        navEl.classList.toggle(
-          'active',
-          p.toLowerCase() === page
-        );
-
-      }
-
-    }
-  );
-
-
-  window.scrollTo({
-
-    top:0,
-
-    behavior:
-      'smooth'
-
+    'home','history','request','assignment','profile'
+  ].forEach(p => {
+    const pageEl = $(p + 'Page');
+    if (pageEl) pageEl.classList.toggle('active', p === page);
   });
 
+  ['Home','History','Request','Assignment','Profile'].forEach(p => {
+    const navEl = $('nav' + p);
+    if (navEl) navEl.classList.toggle('active', p.toLowerCase() === page);
+  });
 
-  if(
-    page === 'history'
-  ){
+  window.scrollTo({ top:0, behavior:'auto' });
 
-    request(
-      'history',
-      {
-        limit:60
-      },
-      r => {
-
-        if(
-          r &&
-          r.ok
-        ){
-
-          renderHistory(
-            r.items ||
-            []
-          );
-
+  if (page === 'history') {
+    const cached = cacheGet_('history', CACHE_TTL.history);
+    if (cached) {
+      renderHistory(cached);
+    } else {
+      request('history', {limit:60}, r => {
+        if (r?.ok) {
+          const items = r.items || [];
+          cacheSet_('history', items);
+          renderHistory(items);
         }
-
-      }
-    );
-
+      });
+    }
   }
 
+  if (page === 'request') loadRequests();
+  if (page === 'assignment') loadAssignments();
 }
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
 
 async function logout(){
 
@@ -4223,37 +3368,11 @@ async function logout(){
 
   }
 
-
   loading(
     true,
     'Keluar dari Aplikasi',
     'Mengakhiri sesi login...'
   );
-
-
-  const tokenBeforeLogout = sessionToken;
-
-  try{
-
-    if(tokenBeforeLogout){
-      await new Promise(resolve => {
-        request(
-          'logout',
-          {},
-          () => resolve()
-        );
-      });
-    }
-
-  }catch(error){
-
-    console.warn(
-      'Server logout:',
-      error
-    );
-
-  }
-
 
   try{
 
@@ -4267,7 +3386,6 @@ async function logout(){
         await import(
           'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
         );
-
 
       await signOut(
         firebaseAuth
@@ -4284,43 +3402,63 @@ async function logout(){
 
   }
 
-
   localStorage.removeItem(
     'absen_session'
   );
 
+  cacheClearAll_();
+  currentLocation = null;
+  lastLocationAt = 0;
+  locationLookupKey = '';
 
   sessionToken =
     '';
 
-
   currentUser =
     null;
-
 
   capturedDataUrl =
     '';
 
-
   stopCamera();
-
 
   window.location.reload();
 
 }
 
 
-/* =========================================================
-   INITIALIZATION
-========================================================= */
 
-window.addEventListener(
-  'load',
+function esc_(value){return String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function setRequestType(type){const t=String(type||'IZIN').toUpperCase();$('requestType').value=t;$('requestTabIzin')?.classList.toggle('active',t==='IZIN');$('requestTabCuti')?.classList.toggle('active',t==='CUTI');const end=$('requestEndField');if(end)end.style.display=t==='IZIN'?'none':'';const input=$('requestEndDate');if(input){input.required=t==='CUTI';if(t==='IZIN')input.value=$('requestStartDate')?.value||'';}}
+function formatRequestDate(v){if(!v)return '-';const d=new Date(v+(String(v).length===10?'T00:00:00':''));return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat('id-ID',{day:'2-digit',month:'short',year:'numeric'}).format(d);}
+function requestStatusClass(s){s=String(s||'').toLowerCase();if(s.includes('setuju')||s.includes('approve')||s.includes('disetujui'))return'approved';if(s.includes('tolak')||s.includes('reject')||s.includes('ditolak'))return'rejected';return'pending';}
+function renderRequests(items){const el=$('requestList');if(!el)return;if(!Array.isArray(items)||!items.length){el.innerHTML='<div class="empty-today">Belum ada pengajuan.</div>';return;}el.innerHTML=items.map(i=>{const type=String(i.type||i.jenis||'PENGAJUAN').toUpperCase(),status=i.status||i.Status||'Menunggu',start=i.startDate||i.tanggalMulai||i.date||'',end=i.endDate||i.tanggalSelesai||'',reason=i.reason||i.alasan||i.keperluan||'-';return `<div class="request-item"><div class="request-item-head"><div><div class="request-item-title">${esc_(type)}</div><div class="request-item-meta">${esc_(formatRequestDate(start))}${end&&end!==start?' — '+esc_(formatRequestDate(end)):''}</div></div><span class="request-status ${requestStatusClass(status)}">${esc_(status)}</span></div><div class="request-item-meta">${esc_(reason)}</div></div>`}).join('');}
+async function loadRequests(){
+  if(!sessionToken)return;
+  const el=$('requestList');
+  const cached=cacheGet_('requests',CACHE_TTL.requests);
+  if(cached){renderRequests(cached);return;}
+  if(el)el.innerHTML='<div class="empty-today">Memuat pengajuan...</div>';
+  const r=await requestPromise_('requests',{limit:50});
+  if(r?.ok){const items=r.items||r.data?.items||r.requests||[];cacheSet_('requests',items);renderRequests(items);}
+  else if(el)el.innerHTML=`<div class="empty-today">${esc_(r?.error||'Belum dapat memuat pengajuan.')}</div>`;
+}
+async function submitRequestForm(e){e?.preventDefault();if(!sessionToken)return showToast('Sesi login tidak tersedia.');const type=$('requestType')?.value||'IZIN',startDate=$('requestStartDate')?.value||'',endDate=type==='IZIN'?startDate:($('requestEndDate')?.value||''),reason=$('requestReason')?.value.trim()||'';if(!startDate||!reason||(type==='CUTI'&&!endDate))return showToast('Lengkapi data pengajuan terlebih dahulu.');if(type==='CUTI'&&endDate<startDate)return showToast('Tanggal selesai tidak boleh sebelum tanggal mulai.');const b=$('submitRequestBtn');if(b){b.disabled=true;b.innerHTML='<span class="material-symbols-rounded">progress_activity</span>Mengirim...';}loading(true,'Mengirim Pengajuan','Menyimpan pengajuan Anda...');try{const r=await new Promise(resolve=>request('submitRequest',{type,startDate,endDate,reason},resolve));if(!r?.ok)throw new Error(r?.error||'Pengajuan gagal dikirim.');$('requestReason').value='';$('requestStartDate').value='';$('requestEndDate').value='';showToast('Pengajuan berhasil dikirim.');cacheClear_('requests');await loadRequests();}catch(err){console.error('SUBMIT REQUEST ERROR:',err);showToast(err?.message||'Pengajuan gagal dikirim.');}finally{loading(false);if(b){b.disabled=false;b.innerHTML='<span class="material-symbols-rounded">send</span>Kirim Pengajuan';}}}
+function renderAssignments(items){const el=$('assignmentList');if(!el)return;if(!Array.isArray(items)||!items.length){el.innerHTML='<div class="empty-today">Belum ada penugasan.</div>';return;}el.innerHTML=items.map(i=>{const title=i.title||i.judul||i.assignment||i.penugasan||'Penugasan',desc=i.description||i.deskripsi||i.detail||'',date=i.date||i.tanggal||i.startDate||'',status=i.status||'';return `<div class="assignment-item"><div class="assignment-item-head"><div class="assignment-item-title">${esc_(title)}</div>${status?`<span class="request-status ${requestStatusClass(status)}">${esc_(status)}</span>`:''}</div>${desc?`<div class="assignment-item-desc">${esc_(desc)}</div>`:''}${date?`<div class="assignment-item-date"><span class="material-symbols-rounded">event</span>${esc_(formatRequestDate(date))}</div>`:''}</div>`}).join('');}
+async function loadAssignments(){
+  if(!sessionToken)return;
+  const el=$('assignmentList');
+  const cached=cacheGet_('assignments',CACHE_TTL.assignments);
+  if(cached){renderAssignments(cached);return;}
+  if(el)el.innerHTML='<div class="empty-today">Memuat penugasan...</div>';
+  const r=await requestPromise_('assignments',{limit:50});
+  if(r?.ok){const items=r.items||r.data?.items||r.assignments||[];cacheSet_('assignments',items);renderAssignments(items);}
+  else if(el)el.innerHTML=`<div class="empty-today">${esc_(r?.error||'Belum dapat memuat penugasan.')}</div>`;
+}
+
+document.addEventListener(
+  'DOMContentLoaded',
   async () => {
-
-    /*
-     * Loading sejak awal.
-     */
 
     loading(
       true,
@@ -4328,17 +3466,7 @@ window.addEventListener(
       'Memuat sistem absensi...'
     );
 
-
-    /*
-     * Firebase.
-     */
-
     await initFirebase();
-
-
-    /*
-     * Session lama.
-     */
 
     if(
       sessionToken
@@ -4346,19 +3474,16 @@ window.addEventListener(
 
       showApp();
 
-
       loading(
         true,
         'Memuat Absensi',
         'Memeriksa sesi login Anda...'
       );
 
-
       setTimeout(
         () => {
 
           refreshAll();
-
 
           setTimeout(
             () => {
@@ -4382,11 +3507,6 @@ window.addEventListener(
   }
 );
 
-
-/* =========================================================
-   CAMERA MODAL BACKDROP
-========================================================= */
-
 $('cameraModal')
   .addEventListener(
     'click',
@@ -4403,11 +3523,6 @@ $('cameraModal')
 
     }
   );
-
-
-/* =========================================================
-   RESULT MODAL BACKDROP
-========================================================= */
 
 $('resultModal')
   .addEventListener(
@@ -4426,11 +3541,6 @@ $('resultModal')
     }
   );
 
-
-/* =========================================================
-   VISIBILITY
-========================================================= */
-
 document.addEventListener(
   'visibilitychange',
   () => {
@@ -4447,11 +3557,6 @@ document.addEventListener(
   }
 );
 
-
-/* =========================================================
-   BEFORE UNLOAD
-========================================================= */
-
 window.addEventListener(
   'beforeunload',
   () => {
@@ -4461,11 +3566,6 @@ window.addEventListener(
   }
 );
 
-
-/* =========================================================
-   PREVENT HORIZONTAL GESTURE
-========================================================= */
-
 document.addEventListener(
   'touchstart',
   () => {},
@@ -4474,20 +3574,4 @@ document.addEventListener(
   }
 );
 
-
-
-/* =========================================================
-   GLOBAL HANDLERS FOR HTML ONCLICK
-========================================================= */
-window.loginWithFirebase = loginWithFirebase;
-window.logout = logout;
-window.openCamera = openCamera;
-window.closeCamera = closeCamera;
-window.capturePhoto = capturePhoto;
-window.submitAttendance = submitAttendance;
-window.switchCamera = switchCamera;
-window.closeResult = closeResult;
-window.showPage = showPage;
-window.getLocation = getLocation;
-window.setRequestType = setRequestType;
-window.submitRequestForm = submitRequestForm;
+setRequestType('IZIN');
