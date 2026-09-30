@@ -4567,22 +4567,22 @@ document.addEventListener(
     passive:true
   }
 );
-
-
-
 /* =========================================================
-   PUBLIC API UNTUK INLINE HTML HANDLERS
+   GLOBAL WINDOW EXPORT
 ========================================================= */
 
 window.loginWithFirebase = loginWithFirebase;
 window.logout = logout;
+
 window.openCamera = openCamera;
 window.closeCamera = closeCamera;
 window.capturePhoto = capturePhoto;
 window.submitAttendance = submitAttendance;
 window.switchCamera = switchCamera;
 window.closeResult = closeResult;
+
 window.showPage = showPage;
 window.getLocation = getLocation;
+
 window.setRequestType = setRequestType;
 window.submitRequestForm = submitRequestForm;
