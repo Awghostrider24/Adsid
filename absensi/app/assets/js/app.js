@@ -4,12 +4,34 @@
    CONFIG
 ========================================================= */
 
-const CONFIG = window.CONFIG;
+const CONFIG = {
 
-if (!CONFIG) {
-  console.error('CONFIG tidak ditemukan. Pastikan config.js dimuat sebelum app.js.');
-  throw new Error('config.js belum dimuat sebelum app.js.');
-}
+  WEB_APP_URL:
+    'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
+
+  FIREBASE_CONFIG: {
+
+    apiKey:
+      'AIzaSyAHU_FdW5CGZ_iR19sx9QyPhpem5YbLQe8',
+
+    authDomain:
+      'absensiamil.firebaseapp.com',
+
+    projectId:
+      'absensiamil',
+
+    storageBucket:
+      'absensiamil.firebasestorage.app',
+
+    messagingSenderId:
+      '962926272481',
+
+    appId:
+      '1:962926272481:web:d6d5bae6d890ebecc2bca0'
+
+  }
+
+};
 
 
 /* =========================================================
@@ -196,46 +218,47 @@ function loading(
 
 async function initFirebase(){
 
-  try {
+  loading(
+    true,
+    'Menyiapkan Login',
+    'Menghubungkan sistem autentikasi...'
+  );
 
-    const valid = await validConfig();
+  if(
+    !await validConfig()
+  ){
 
-    if (!valid) {
+    loading(false);
 
-      console.error(
-        'Konfigurasi Firebase / Apps Script tidak valid.'
-      );
+    showToast(
+      'Konfigurasi Firebase belum lengkap.'
+    );
 
-      restoreLoginButton_();
+    return false;
 
-      showToast(
-        'Konfigurasi aplikasi tidak valid.'
-      );
+  }
 
-      return false;
-    }
-
-    const firebaseAppModule =
-      await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
-      );
-
-    const firebaseAuthModule =
-      await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-      );
+  try{
 
     const {
       initializeApp,
       getApps
-    } = firebaseAppModule;
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
+      );
+
 
     const {
       getAuth,
       GoogleAuthProvider,
       onAuthStateChanged,
       getRedirectResult
-    } = firebaseAuthModule;
+    } =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
 
     firebaseApp =
       getApps().length
@@ -244,61 +267,61 @@ async function initFirebase(){
             CONFIG.FIREBASE_CONFIG
           );
 
+
     firebaseAuth =
       getAuth(
         firebaseApp
       );
 
+
     firebaseGoogleProvider =
       new GoogleAuthProvider();
 
-    firebaseGoogleProvider.setCustomParameters({
-      prompt: 'select_account'
-    });
 
-    firebaseReady = true;
+    firebaseGoogleProvider
+      .setCustomParameters({
+        prompt:'select_account'
+      });
 
-    const loginButton = $('firebaseLoginButton');
 
-    if (loginButton) {
-      loginButton.disabled = false;
-      loginButton.style.pointerEvents = 'auto';
-      loginButton.innerHTML = `
-        <span class="google-icon">
-          G
-        </span>
-        <span>
-          Masuk dengan Google
-        </span>
-      `;
-    }
+    firebaseReady =
+      true;
 
-    try {
+
+    try{
+
       await getRedirectResult(
         firebaseAuth
       );
-    } catch (error) {
+
+    }catch(error){
+
       console.warn(
-        'Firebase redirect result:',
+        'Redirect result:',
         error
       );
+
     }
+
 
     onAuthStateChanged(
       firebaseAuth,
       async user => {
 
-        if (!user || sessionToken) {
+        if(
+          !user ||
+          loginProcessing ||
+          sessionToken
+        ){
+
           return;
+
         }
 
-        if (loginProcessing) {
-          return;
-        }
+        try{
 
-        try {
-
-          loginProcessing = true;
+          loginProcessing =
+            true;
 
           loading(
             true,
@@ -310,45 +333,49 @@ async function initFirebase(){
             user
           );
 
-        } catch (error) {
+        }catch(error){
 
           console.error(
-            'Auth State Error:',
             error
           );
 
-          loginProcessing = false;
+          loginProcessing =
+            false;
 
           loading(false);
-          restoreLoginButton_();
 
           showToast(
-            firebaseErrorMessage_(error)
+            error.message ||
+            'Login Firebase gagal.'
           );
+
         }
+
       }
     );
 
+
+    loading(false);
+
     return true;
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       'Firebase Init Error:',
       error
     );
 
-    firebaseReady = false;
-
     loading(false);
-    restoreLoginButton_();
 
     showToast(
-      'Firebase gagal dimuat. Periksa koneksi dan Authorized Domains Firebase.'
+      'Firebase gagal dimuat. Periksa Authorized Domains.'
     );
 
     return false;
+
   }
+
 }
 
 
@@ -356,55 +383,63 @@ async function initFirebase(){
    LOGIN
 ========================================================= */
 
+// Expose login immediately for HTML onclick handlers.
+window.loginWithFirebase = loginWithFirebase;
+
 async function loginWithFirebase(){
 
-  if(loginProcessing){
+  if(
+    loginProcessing
+  ){
     return;
   }
 
-  if(!firebaseReady){
+
+  if(
+    !firebaseReady
+  ){
 
     const ready =
       await initFirebase();
 
     if(!ready){
-      showToast(
-        'Sistem login belum siap. Silakan coba lagi.'
-      );
       return;
     }
+
   }
 
-  if(!firebaseAuth || !firebaseGoogleProvider){
 
-    showToast(
-      'Firebase Authentication belum siap.'
-    );
+  loginProcessing =
+    true;
 
-    return;
-  }
 
-  loginProcessing = true;
+  const button =
+    $('firebaseLoginButton');
 
-  const button = $('firebaseLoginButton');
 
   if(button){
-    button.disabled = true;
+
+    button.disabled =
+      true;
+
     button.innerHTML = `
       <span class="material-symbols-rounded">
         progress_activity
       </span>
       Menghubungkan...
     `;
+
   }
+
 
   loading(
     true,
-    'Login Google',
-    'Membuka akun Google...'
+    'Memverifikasi Akun',
+    'Menghubungkan akun Google dengan data pegawai...'
   );
 
-  try {
+
+  try{
 
     const {
       signInWithPopup,
@@ -414,36 +449,41 @@ async function loginWithFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
       );
 
-    try {
 
-      const result =
+    let credentialResult;
+
+
+    try{
+
+      credentialResult =
         await signInWithPopup(
           firebaseAuth,
           firebaseGoogleProvider
         );
 
-      if(result?.user){
-        await completeFirebaseLogin_(
-          result.user
-        );
-      }
-
-    } catch(popupError) {
+    }catch(popupError){
 
       console.warn(
-        'Google popup error:',
+        'Popup login gagal:',
         popupError
       );
 
-      const code =
-        String(
-          popupError?.code || ''
-        );
 
       if(
-        code === 'auth/popup-blocked' ||
-        code === 'auth/popup-closed-by-user' ||
-        code === 'auth/cancelled-popup-request'
+
+        popupError?.code ===
+          'auth/popup-blocked'
+
+        ||
+
+        popupError?.code ===
+          'auth/popup-closed-by-user'
+
+        ||
+
+        popupError?.code ===
+          'auth/cancelled-popup-request'
+
       ){
 
         loading(
@@ -452,33 +492,53 @@ async function loginWithFirebase(){
           'Silakan pilih akun Google Anda...'
         );
 
+
         await signInWithRedirect(
           firebaseAuth,
           firebaseGoogleProvider
         );
 
+
         return;
+
       }
 
+
       throw popupError;
+
     }
 
-  } catch(error) {
+
+    if(
+      credentialResult?.user
+    ){
+
+      await completeFirebaseLogin_(
+        credentialResult.user
+      );
+
+    }
+
+  }catch(error){
+
+    loginProcessing =
+      false;
+
+    restoreLoginButton_();
+
+    loading(false);
 
     console.error(
       'Firebase Login Error:',
       error
     );
 
-    loginProcessing = false;
-
-    loading(false);
-    restoreLoginButton_();
-
     showToast(
       firebaseErrorMessage_(error)
     );
+
   }
+
 }
 
 
@@ -4258,37 +4318,34 @@ window.addEventListener(
   'load',
   async () => {
 
-    console.log(
-      '[ABSENSI] Aplikasi dimulai.'
+    /*
+     * Loading sejak awal.
+     */
+
+    loading(
+      true,
+      'Menyiapkan Aplikasi',
+      'Memuat sistem absensi...'
     );
 
-    const loginButton =
-      $('firebaseLoginButton');
 
-    if(loginButton){
+    /*
+     * Firebase.
+     */
 
-      loginButton.disabled = true;
-      loginButton.style.pointerEvents = 'none';
+    await initFirebase();
 
-      loginButton.innerHTML = `
-        <span class="material-symbols-rounded">
-          progress_activity
-        </span>
-        Menyiapkan Login...
-      `;
-    }
 
-    const firebaseInitialized =
-      await initFirebase();
+    /*
+     * Session lama.
+     */
 
-    console.log(
-      '[ABSENSI] Firebase ready:',
-      firebaseInitialized
-    );
-
-    if(sessionToken){
+    if(
+      sessionToken
+    ){
 
       showApp();
+
 
       loading(
         true,
@@ -4296,14 +4353,18 @@ window.addEventListener(
         'Memeriksa sesi login Anda...'
       );
 
+
       setTimeout(
         () => {
 
           refreshAll();
 
+
           setTimeout(
             () => {
+
               loading(false);
+
             },
             700
           );
@@ -4312,34 +4373,12 @@ window.addEventListener(
         200
       );
 
-      return;
+    }else{
+
+      loading(false);
+
     }
 
-    loading(false);
-
-    if(loginButton){
-
-      loginButton.disabled = false;
-      loginButton.style.pointerEvents = 'auto';
-
-      loginButton.innerHTML = firebaseInitialized
-        ? `
-          <span class="google-icon">
-            G
-          </span>
-          <span>
-            Masuk dengan Google
-          </span>
-        `
-        : `
-          <span class="google-icon">
-            G
-          </span>
-          <span>
-            Coba Login Lagi
-          </span>
-        `;
-    }
   }
 );
 
@@ -4348,36 +4387,44 @@ window.addEventListener(
    CAMERA MODAL BACKDROP
 ========================================================= */
 
-const cameraModal = $('cameraModal');
-
-if(cameraModal){
-  cameraModal.addEventListener(
+$('cameraModal')
+  .addEventListener(
     'click',
     event => {
-      if(event.target === cameraModal){
+
+      if(
+        event.target ===
+        $('cameraModal')
+      ){
+
         closeCamera();
+
       }
+
     }
   );
-}
 
 
 /* =========================================================
    RESULT MODAL BACKDROP
 ========================================================= */
 
-const resultModal = $('resultModal');
-
-if(resultModal){
-  resultModal.addEventListener(
+$('resultModal')
+  .addEventListener(
     'click',
     event => {
-      if(event.target === resultModal){
+
+      if(
+        event.target ===
+        $('resultModal')
+      ){
+
         closeResult();
+
       }
+
     }
   );
-}
 
 
 /* =========================================================
@@ -4430,9 +4477,8 @@ document.addEventListener(
 
 
 /* =========================================================
-   GLOBAL WINDOW EXPORT
+   GLOBAL HANDLERS FOR HTML ONCLICK
 ========================================================= */
-
 window.loginWithFirebase = loginWithFirebase;
 window.logout = logout;
 window.openCamera = openCamera;
