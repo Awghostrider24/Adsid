@@ -6,7 +6,7 @@
 window.CONFIG = {
 
   WEB_APP_URL:
-    'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlYqfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
+    'https://script.google.com/macros/s/AKfycbwgDEVMNm9RccxlqYfIek-8JU7asOyqBTiRohKQUV8FgYLW7uxhNAcr-nvabQxhxuBW/exec',
 
   FIREBASE_CONFIG: {
 
