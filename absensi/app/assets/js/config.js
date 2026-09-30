@@ -1,4 +1,4 @@
-// Konfigurasi aplikasi Absensi Pegawai
+
 const CONFIG = {
 
   WEB_APP_URL:
