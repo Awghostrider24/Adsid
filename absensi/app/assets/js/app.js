@@ -1,4 +1,15 @@
 /* =========================================================
+   CONFIG
+========================================================= */
+
+const CONFIG = window.CONFIG;
+
+if (!CONFIG) {
+  console.error('CONFIG tidak ditemukan. Pastikan config.js dimuat sebelum app.js.');
+  throw new Error('config.js belum dimuat sebelum app.js.');
+}
+
+/* =========================================================
    GLOBAL STATE
 ========================================================= */
 
