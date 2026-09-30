@@ -4481,10 +4481,6 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   CAMERA MODAL BACKDROP
-========================================================= */
-
 const cameraModal = $('cameraModal');
 
 if(cameraModal){
