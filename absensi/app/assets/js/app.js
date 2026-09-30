@@ -157,15 +157,16 @@ async function loginWithFirebase() {
     );
 
     const response =
-      await apiRequest(
-        'login',
-        {
-          email: user.email,
-          uid: user.uid,
-          name: user.displayName || '',
-          photo: user.photoURL || ''
-        }
-      );
+      const firebaseIdToken =
+  await user.getIdToken(true);
+
+const response =
+  await apiRequest(
+    'firebaseLogin',
+    {
+      firebaseIdToken
+    }
+  );
 
     console.log(
       'Response login:',
@@ -1632,10 +1633,57 @@ async function logout() {
       firebase.auth
     ) {
 
-      await firebase.auth()
-        .signOut();
+      async function logout() {
 
+  try {
+
+    showLoading(
+      'Keluar...',
+      'Menghapus sesi login.'
+    );
+
+    if (sessionToken) {
+      try {
+        await apiRequest('logout', {
+          sessionToken
+        });
+      } catch (error) {
+        console.error(
+          'Server logout:',
+          error
+        );
+      }
     }
+
+    if (
+      window.firebase &&
+      firebase.auth
+    ) {
+      await firebase.auth().signOut();
+    }
+
+  } catch (error) {
+
+    console.error(
+      'Firebase logout:',
+      error
+    );
+
+  } finally {
+
+    clearSession();
+
+    hideLoading();
+
+    showLogin();
+
+    showToast(
+      'Anda telah keluar.'
+    );
+
+  }
+
+}
 
   } catch (error) {
 
