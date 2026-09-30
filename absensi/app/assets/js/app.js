@@ -2,7 +2,6 @@ let sessionToken =
   localStorage.getItem(
     'absen_session'
   ) || '';
-
 let currentUser =
   null;
 
