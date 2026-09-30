@@ -1,3 +1,5 @@
+
+
 /* =========================================================
    CONFIG
 ========================================================= */
@@ -8,6 +10,7 @@ if (!CONFIG) {
   console.error('CONFIG tidak ditemukan. Pastikan config.js dimuat sebelum app.js.');
   throw new Error('config.js belum dimuat sebelum app.js.');
 }
+
 
 /* =========================================================
    GLOBAL STATE
@@ -193,53 +196,46 @@ function loading(
 
 async function initFirebase(){
 
-  loading(
-    true,
-    'Menyiapkan Login',
-    'Menghubungkan sistem autentikasi...'
-  );
+  try {
 
-  if(
-    !await validConfig()
-  ){
+    const valid = await validConfig();
 
-    loading(false);
+    if (!valid) {
 
-const loginButton = $('firebaseLoginButton');
+      console.error(
+        'Konfigurasi Firebase / Apps Script tidak valid.'
+      );
 
-if (loginButton) {
-  loginButton.disabled = false;
-  loginButton.style.pointerEvents = 'auto';
-  loginButton.innerHTML = `
-    <span class="google-icon">G</span>
-    <span>Masuk dengan Google</span>
-  `;
+      restoreLoginButton_();
 
-    return false;
+      showToast(
+        'Konfigurasi aplikasi tidak valid.'
+      );
 
-  }
+      return false;
+    }
 
-  try{
-
-    const {
-      initializeApp,
-      getApps
-    } =
+    const firebaseAppModule =
       await import(
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'
       );
 
+    const firebaseAuthModule =
+      await import(
+        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
+      );
+
+    const {
+      initializeApp,
+      getApps
+    } = firebaseAppModule;
 
     const {
       getAuth,
       GoogleAuthProvider,
       onAuthStateChanged,
       getRedirectResult
-    } =
-      await import(
-        'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
-      );
-
+    } = firebaseAuthModule;
 
     firebaseApp =
       getApps().length
@@ -248,61 +244,61 @@ if (loginButton) {
             CONFIG.FIREBASE_CONFIG
           );
 
-
     firebaseAuth =
       getAuth(
         firebaseApp
       );
 
-
     firebaseGoogleProvider =
       new GoogleAuthProvider();
 
+    firebaseGoogleProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
 
-    firebaseGoogleProvider
-      .setCustomParameters({
-        prompt:'select_account'
-      });
+    firebaseReady = true;
 
+    const loginButton = $('firebaseLoginButton');
 
-    firebaseReady =
-      true;
+    if (loginButton) {
+      loginButton.disabled = false;
+      loginButton.style.pointerEvents = 'auto';
+      loginButton.innerHTML = `
+        <span class="google-icon">
+          G
+        </span>
+        <span>
+          Masuk dengan Google
+        </span>
+      `;
+    }
 
-
-    try{
-
+    try {
       await getRedirectResult(
         firebaseAuth
       );
-
-    }catch(error){
-
+    } catch (error) {
       console.warn(
-        'Redirect result:',
+        'Firebase redirect result:',
         error
       );
-
     }
-
 
     onAuthStateChanged(
       firebaseAuth,
       async user => {
 
-        if(
-          !user ||
-          loginProcessing ||
-          sessionToken
-        ){
-
+        if (!user || sessionToken) {
           return;
-
         }
 
-        try{
+        if (loginProcessing) {
+          return;
+        }
 
-          loginProcessing =
-            true;
+        try {
+
+          loginProcessing = true;
 
           loading(
             true,
@@ -314,49 +310,45 @@ if (loginButton) {
             user
           );
 
-        }catch(error){
+        } catch (error) {
 
           console.error(
+            'Auth State Error:',
             error
           );
 
-          loginProcessing =
-            false;
+          loginProcessing = false;
 
           loading(false);
+          restoreLoginButton_();
 
           showToast(
-            error.message ||
-            'Login Firebase gagal.'
+            firebaseErrorMessage_(error)
           );
-
         }
-
       }
     );
 
-
-    loading(false);
-
     return true;
 
-  }catch(error){
+  } catch (error) {
 
     console.error(
       'Firebase Init Error:',
       error
     );
 
+    firebaseReady = false;
+
     loading(false);
+    restoreLoginButton_();
 
     showToast(
-      'Firebase gagal dimuat. Periksa Authorized Domains.'
+      'Firebase gagal dimuat. Periksa koneksi dan Authorized Domains Firebase.'
     );
 
     return false;
-
   }
-
 }
 
 
@@ -366,58 +358,53 @@ if (loginButton) {
 
 async function loginWithFirebase(){
 
-  if(
-    loginProcessing
-  ){
+  if(loginProcessing){
     return;
   }
 
-
-  if(
-    !firebaseReady
-  ){
+  if(!firebaseReady){
 
     const ready =
       await initFirebase();
 
     if(!ready){
+      showToast(
+        'Sistem login belum siap. Silakan coba lagi.'
+      );
       return;
     }
-
   }
 
+  if(!firebaseAuth || !firebaseGoogleProvider){
 
-  loginProcessing =
-    true;
+    showToast(
+      'Firebase Authentication belum siap.'
+    );
 
+    return;
+  }
 
-  const button =
-    $('firebaseLoginButton');
+  loginProcessing = true;
 
+  const button = $('firebaseLoginButton');
 
   if(button){
-
-    button.disabled =
-      true;
-
+    button.disabled = true;
     button.innerHTML = `
       <span class="material-symbols-rounded">
         progress_activity
       </span>
       Menghubungkan...
     `;
-
   }
-
 
   loading(
     true,
-    'Memverifikasi Akun',
-    'Menghubungkan akun Google dengan data pegawai...'
+    'Login Google',
+    'Membuka akun Google...'
   );
 
-
-  try{
+  try {
 
     const {
       signInWithPopup,
@@ -427,41 +414,36 @@ async function loginWithFirebase(){
         'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'
       );
 
+    try {
 
-    let credentialResult;
-
-
-    try{
-
-      credentialResult =
+      const result =
         await signInWithPopup(
           firebaseAuth,
           firebaseGoogleProvider
         );
 
-    }catch(popupError){
+      if(result?.user){
+        await completeFirebaseLogin_(
+          result.user
+        );
+      }
+
+    } catch(popupError) {
 
       console.warn(
-        'Popup login gagal:',
+        'Google popup error:',
         popupError
       );
 
+      const code =
+        String(
+          popupError?.code || ''
+        );
 
       if(
-
-        popupError?.code ===
-          'auth/popup-blocked'
-
-        ||
-
-        popupError?.code ===
-          'auth/popup-closed-by-user'
-
-        ||
-
-        popupError?.code ===
-          'auth/cancelled-popup-request'
-
+        code === 'auth/popup-blocked' ||
+        code === 'auth/popup-closed-by-user' ||
+        code === 'auth/cancelled-popup-request'
       ){
 
         loading(
@@ -470,53 +452,33 @@ async function loginWithFirebase(){
           'Silakan pilih akun Google Anda...'
         );
 
-
         await signInWithRedirect(
           firebaseAuth,
           firebaseGoogleProvider
         );
 
-
         return;
-
       }
 
-
       throw popupError;
-
     }
 
-
-    if(
-      credentialResult?.user
-    ){
-
-      await completeFirebaseLogin_(
-        credentialResult.user
-      );
-
-    }
-
-  }catch(error){
-
-    loginProcessing =
-      false;
-
-    restoreLoginButton_();
-
-    loading(false);
+  } catch(error) {
 
     console.error(
       'Firebase Login Error:',
       error
     );
 
+    loginProcessing = false;
+
+    loading(false);
+    restoreLoginButton_();
+
     showToast(
       firebaseErrorMessage_(error)
     );
-
   }
-
 }
 
 
@@ -4092,231 +4054,94 @@ function closeResult(){
 
 function showPage(page){
 
-  const pages = [
+  [
     'home',
     'history',
-    'request',
-    'assignment',
     'profile'
-  ];
+  ]
+  .forEach(
+    p => {
 
-  pages.forEach(p => {
-    const pageEl = $(p + 'Page');
-    if(pageEl){
-      pageEl.classList.toggle('active', p === page);
+      const pageEl =
+        $(p + 'Page');
+
+
+      if(pageEl){
+
+        pageEl.classList.toggle(
+          'active',
+          p === page
+        );
+
+      }
+
     }
+  );
+
+
+  [
+    'Home',
+    'History',
+    'Profile'
+  ]
+  .forEach(
+    p => {
+
+      const navEl =
+        $('nav' + p);
+
+
+      if(navEl){
+
+        navEl.classList.toggle(
+          'active',
+          p.toLowerCase() === page
+        );
+
+      }
+
+    }
+  );
+
+
+  window.scrollTo({
+
+    top:0,
+
+    behavior:
+      'smooth'
+
   });
 
-  pages.forEach(p => {
-    const navEl = $('nav' + p.charAt(0).toUpperCase() + p.slice(1));
-    if(navEl){
-      navEl.classList.toggle('active', p === page);
-    }
-  });
 
-  window.scrollTo({top:0, behavior:'smooth'});
+  if(
+    page === 'history'
+  ){
 
-  if(page === 'history'){
-    loadHistory_();
-  }else if(page === 'request'){
-    loadRequestHistory_();
-  }else if(page === 'assignment'){
-    loadAssignments_();
-  }
-}
+    request(
+      'history',
+      {
+        limit:60
+      },
+      r => {
 
+        if(
+          r &&
+          r.ok
+        ){
 
-/* =========================================================
-   PENGAJUAN IZIN / CUTI
-========================================================= */
+          renderHistory(
+            r.items ||
+            []
+          );
 
-function setRequestType(type){
+        }
 
-  const normalized = String(type || 'IZIN').toUpperCase() === 'CUTI' ? 'CUTI' : 'IZIN';
-  const typeInput = $('requestType');
-  const start = $('requestStartDate');
-  const end = $('requestEndDate');
-  const endField = $('requestEndField');
-  const izinTab = $('requestTabIzin');
-  const cutiTab = $('requestTabCuti');
+      }
+    );
 
-  if(typeInput) typeInput.value = normalized;
-  izinTab?.classList.toggle('active', normalized === 'IZIN');
-  cutiTab?.classList.toggle('active', normalized === 'CUTI');
-
-  if(normalized === 'IZIN'){
-    if(endField) endField.style.display = '';
-    if(start && end){
-      if(start.value) end.value = start.value;
-      end.required = true;
-    }
-  }else{
-    if(endField) endField.style.display = '';
-    if(end) end.required = true;
-  }
-}
-
-function submitRequestForm(event){
-  event?.preventDefault();
-
-  if(!sessionToken){
-    showToast('Sesi login tidak ditemukan. Silakan login kembali.');
-    return;
   }
 
-  const type = String($('requestType')?.value || 'IZIN').toUpperCase();
-  const startDate = $('requestStartDate')?.value || '';
-  const endDate = $('requestEndDate')?.value || startDate;
-  const reason = ($('requestReason')?.value || '').trim();
-  const button = $('submitRequestBtn');
-
-  if(!startDate || !endDate || !reason){
-    showToast('Lengkapi tanggal dan alasan pengajuan.');
-    return;
-  }
-
-  if(type === 'IZIN' && endDate !== startDate){
-    showToast('Pengajuan izin hanya untuk satu tanggal.');
-    if($('requestEndDate')) $('requestEndDate').value = startDate;
-    return;
-  }
-
-  if(endDate < startDate){
-    showToast('Tanggal selesai tidak boleh sebelum tanggal mulai.');
-    return;
-  }
-
-  if(reason.length > 500){
-    showToast('Alasan maksimal 500 karakter.');
-    return;
-  }
-
-  if(button){
-    button.disabled = true;
-    button.dataset.originalText = button.innerHTML;
-    button.innerHTML = '<span class="material-symbols-rounded">progress_activity</span>Mengirim...';
-  }
-
-  loading(true, 'Mengirim Pengajuan', 'Menyimpan pengajuan izin/cuti...');
-
-  request('submitRequest', {type, startDate, endDate, reason}, result => {
-    if(result?.ok){
-      if($('requestReason')) $('requestReason').value = '';
-      if($('requestStartDate')) $('requestStartDate').value = '';
-      if($('requestEndDate')) $('requestEndDate').value = '';
-      showToast('Pengajuan berhasil dikirim.');
-      loadRequestHistory_();
-    }else{
-      showToast(result?.error || result?.message || 'Pengajuan gagal dikirim.');
-    }
-
-    loading(false);
-    if(button){
-      button.disabled = false;
-      button.innerHTML = button.dataset.originalText || '<span class="material-symbols-rounded">send</span>Kirim Pengajuan';
-    }
-  });
-}
-
-function loadRequestHistory_(){
-  const list = $('requestList');
-  if(!list || !sessionToken) return;
-  list.innerHTML = '<div class="empty-today">Memuat pengajuan...</div>';
-
-  request('requests', {limit:50}, result => {
-    if(!result?.ok){
-      list.innerHTML = '<div class="empty-today">Gagal memuat pengajuan.</div>';
-      return;
-    }
-    renderRequestHistory_(result.items || result.requests || result.data || []);
-  });
-}
-
-function renderRequestHistory_(items){
-  const list = $('requestList');
-  if(!list) return;
-
-  if(!items.length){
-    list.innerHTML = '<div class="empty-today">Belum ada pengajuan.</div>';
-    return;
-  }
-
-  list.innerHTML = items.map(item => {
-    const status = String(item.status || 'Menunggu');
-    const statusUpper = status.toUpperCase();
-    const statusClass = statusUpper === 'DISETUJUI' || statusUpper === 'DISETUJUI' ? 'status-done' : (statusUpper === 'DITOLAK' ? 'status-rejected' : 'status-assignment');
-    const type = escapeHtml(item.type || '-');
-    const start = escapeHtml(formatBusinessDate_(item.startDate));
-    const end = escapeHtml(formatBusinessDate_(item.endDate));
-    const reason = escapeHtml(item.reason || '-');
-    const note = item.reviewNote ? '<div class="sub">Catatan: ' + escapeHtml(item.reviewNote) + '</div>' : '';
-    return `<div class="request-item">
-      <div class="request-item-head"><strong>${type}</strong><span class="status-pill ${statusClass}">${escapeHtml(status)}</span></div>
-      <div class="request-item-date">${start}${end && end !== start ? ' – ' + end : ''} · ${escapeHtml(String(item.days ?? 1))} hari</div>
-      <div class="request-item-reason">${reason}</div>
-      ${note}
-    </div>`;
-  }).join('');
-}
-
-function formatBusinessDate_(value){
-  if(!value) return '-';
-  const raw = String(value).trim();
-  const m = raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-  if(!m) return raw;
-  const d = new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
-  if(Number.isNaN(d.getTime())) return raw;
-  return new Intl.DateTimeFormat('id-ID',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Jakarta'}).format(d);
-}
-
-/* =========================================================
-   PENUGASAN
-========================================================= */
-
-function loadAssignments_(){
-  const list = $('assignmentList');
-  if(!list || !sessionToken) return;
-  list.innerHTML = '<div class="empty-today">Memuat penugasan...</div>';
-
-  request('assignments', {limit:50, includeCompleted:'false'}, result => {
-    if(!result?.ok){
-      list.innerHTML = '<div class="empty-today">Gagal memuat penugasan.</div>';
-      return;
-    }
-    renderAssignments_(result.items || result.assignments || result.data || []);
-  });
-}
-
-function renderAssignments_(items){
-  const list = $('assignmentList');
-  if(!list) return;
-
-  if(!items.length){
-    list.innerHTML = '<div class="empty-today">Belum ada penugasan aktif.</div>';
-    return;
-  }
-
-  list.innerHTML = items.map(item => {
-    const status = String(item.status || 'Diberikan');
-    const statusUpper = status.toUpperCase();
-    const statusClass = statusUpper === 'SELESAI' ? 'status-done' : 'status-assignment';
-    const dates = item.startDate ? formatBusinessDate_(item.startDate) + (item.endDate && item.endDate !== item.startDate ? ' – ' + formatBusinessDate_(item.endDate) : '') : '';
-    return `<div class="assignment-item">
-      <div class="request-item-head"><strong>${escapeHtml(item.title || 'Penugasan')}</strong><span class="status-pill ${statusClass}">${escapeHtml(status)}</span></div>
-      ${dates ? '<div class="request-item-date">' + escapeHtml(dates) + '</div>' : ''}
-      ${item.location ? '<div class="sub">Lokasi: ' + escapeHtml(item.location) + '</div>' : ''}
-      <div class="request-item-reason">${escapeHtml(item.description || '-')}</div>
-      ${item.priority ? '<div class="sub">Prioritas: ' + escapeHtml(item.priority) + '</div>' : ''}
-      ${item.assignedBy ? '<div class="sub">Diberikan oleh: ' + escapeHtml(item.assignedBy) + '</div>' : ''}
-      ${item.notes ? '<div class="sub">Catatan: ' + escapeHtml(item.notes) + '</div>' : ''}
-    </div>`;
-  }).join('');
-}
-
-function loadHistory_(){
-  request('history', {limit:60}, r => {
-    if(r?.ok) renderHistory(r.items || r.data || []);
-  });
 }
 
 
@@ -4433,34 +4258,37 @@ window.addEventListener(
   'load',
   async () => {
 
-    /*
-     * Loading sejak awal.
-     */
-
-    loading(
-      true,
-      'Menyiapkan Aplikasi',
-      'Memuat sistem absensi...'
+    console.log(
+      '[ABSENSI] Aplikasi dimulai.'
     );
 
+    const loginButton =
+      $('firebaseLoginButton');
 
-    /*
-     * Firebase.
-     */
+    if(loginButton){
 
-    await initFirebase();
+      loginButton.disabled = true;
+      loginButton.style.pointerEvents = 'none';
 
+      loginButton.innerHTML = `
+        <span class="material-symbols-rounded">
+          progress_activity
+        </span>
+        Menyiapkan Login...
+      `;
+    }
 
-    /*
-     * Session lama.
-     */
+    const firebaseInitialized =
+      await initFirebase();
 
-    if(
-      sessionToken
-    ){
+    console.log(
+      '[ABSENSI] Firebase ready:',
+      firebaseInitialized
+    );
+
+    if(sessionToken){
 
       showApp();
-
 
       loading(
         true,
@@ -4468,18 +4296,14 @@ window.addEventListener(
         'Memeriksa sesi login Anda...'
       );
 
-
       setTimeout(
         () => {
 
           refreshAll();
 
-
           setTimeout(
             () => {
-
               loading(false);
-
             },
             700
           );
@@ -4488,31 +4312,53 @@ window.addEventListener(
         200
       );
 
-    }else{
-
-      loading(false);
-
+      return;
     }
 
+    loading(false);
+
+    if(loginButton){
+
+      loginButton.disabled = false;
+      loginButton.style.pointerEvents = 'auto';
+
+      loginButton.innerHTML = firebaseInitialized
+        ? `
+          <span class="google-icon">
+            G
+          </span>
+          <span>
+            Masuk dengan Google
+          </span>
+        `
+        : `
+          <span class="google-icon">
+            G
+          </span>
+          <span>
+            Coba Login Lagi
+          </span>
+        `;
+    }
   }
 );
 
 
+/* =========================================================
+   CAMERA MODAL BACKDROP
+========================================================= */
+
 const cameraModal = $('cameraModal');
 
 if(cameraModal){
-
   cameraModal.addEventListener(
     'click',
     event => {
-
       if(event.target === cameraModal){
         closeCamera();
       }
-
     }
   );
-
 }
 
 
@@ -4523,18 +4369,14 @@ if(cameraModal){
 const resultModal = $('resultModal');
 
 if(resultModal){
-
   resultModal.addEventListener(
     'click',
     event => {
-
       if(event.target === resultModal){
         closeResult();
       }
-
     }
   );
-
 }
 
 
@@ -4584,22 +4426,22 @@ document.addEventListener(
     passive:true
   }
 );
+
+
+
 /* =========================================================
    GLOBAL WINDOW EXPORT
 ========================================================= */
 
 window.loginWithFirebase = loginWithFirebase;
 window.logout = logout;
-
 window.openCamera = openCamera;
 window.closeCamera = closeCamera;
 window.capturePhoto = capturePhoto;
 window.submitAttendance = submitAttendance;
 window.switchCamera = switchCamera;
 window.closeResult = closeResult;
-
 window.showPage = showPage;
 window.getLocation = getLocation;
-
 window.setRequestType = setRequestType;
 window.submitRequestForm = submitRequestForm;
